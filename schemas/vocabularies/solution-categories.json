@@ -1,0 +1,265 @@
+{
+  "_source": "solution_taxonomy table in Supabase (is_active = true)",
+  "_usage": "identity.solution_category.category_id and subcategory_id",
+  "_note": "framework_mappings added Sprint 3. c40_action_categories: C40 Cities adaptation intervention labels. gcom_hazard_focus: primary GCoM CRF hazard categories these solutions address. ipcc_action_types: IPCC AR6 WGII action classification. iclei_milestone: primary ICLEI milestone (all solutions primarily = D.Implement).",
+  "categories": [
+    {
+      "id": "water",
+      "name": "Water",
+      "framework_mappings": {
+        "c40_action_categories": [
+          "Urban Flood Risk Management",
+          "Drought & Water Stress Management",
+          "Coastal & Sea Level Rise Adaptation"
+        ],
+        "gcom_hazard_focus": ["flood", "water_scarcity", "wave_action", "precipitation"],
+        "ipcc_action_types": ["structural_physical", "institutional"],
+        "iclei_milestone": "D. Implement"
+      },
+      "subcategories": [
+        { "id": "desalination_and_brackish_water_treatment", "name": "Desalination and Brackish Water Treatment" },
+        { "id": "engineered_flood_defenses_(seawalls,_levees,_revet", "name": "Engineered Flood Defenses (Seawalls, Levees, Revetments, Breakwaters, Surge Barriers)" },
+        { "id": "groundwater_recharge,_watershed_protection,_aquife", "name": "Groundwater Recharge, Watershed Protection, Aquifer Restoration" },
+        { "id": "hydrological_modeling,_simulation_and_forecasting", "name": "Hydrological Modeling, Simulation and Forecasting" },
+        { "id": "integrated_water_resource_management_(iwrm)", "name": "Integrated Water Resource Management (IWRM)" },
+        { "id": "leak_detection,_water_efficiency,_and_evaporation_", "name": "Leak Detection, Water Efficiency, and Evaporation Protection" },
+        { "id": "pipeline_rehabilitation,_subsurface_inspection_and", "name": "Pipeline Rehabilitation, Subsurface Inspection and Repair" },
+        { "id": "stormwater_drainage_systems", "name": "Stormwater Drainage Systems" },
+        { "id": "usage_metering,_conservation_tools_and_water_risk_", "name": "Usage Metering, Conservation Tools and Water Risk Monitoring" },
+        { "id": "wastewater_reclamation_and_grey_water_recycling", "name": "Wastewater Reclamation and Grey Water Recycling" },
+        { "id": "water_harvesting_(rainwater_collection,_atmospheri", "name": "Water Harvesting (Rainwater Collection, Atmospheric Water Generation)" },
+        { "id": "water_level_monitoring_and_alerting_(flood,_river_", "name": "Water Level Monitoring and Alerting (Flood, River Flow, Sea Level, Sewer Overflow)" },
+        { "id": "water_quality_monitoring,_pollution_control_and_re", "name": "Water Quality Monitoring, Pollution Control and Remediation" },
+        { "id": "water_storage,_pumping_systems_and_pressure_manage", "name": "Water Storage, Pumping Systems and Pressure Management" },
+        { "id": "water_treatment,_filtration,_and_distributed_treat", "name": "Water Treatment, Filtration, and Distributed Treatment Facilities" }
+      ]
+    },
+    {
+      "id": "food",
+      "name": "Food",
+      "framework_mappings": {
+        "c40_action_categories": [
+          "Food Systems Resilience"
+        ],
+        "gcom_hazard_focus": ["water_scarcity", "extreme_temperature_hot", "flood", "precipitation"],
+        "ipcc_action_types": ["structural_physical", "institutional", "ecosystem_based"],
+        "iclei_milestone": "D. Implement"
+      },
+      "subcategories": [
+        { "id": "climate-resilient_crop_traits_and_crop_protection", "name": "Climate-Resilient Crop Traits and Crop Protection" },
+        { "id": "cold_chain_and_food_storage", "name": "Cold Chain And Food Storage" },
+        { "id": "drought_monitoring", "name": "Drought Monitoring" },
+        { "id": "farm_digitization,_agronomics,_and_soil_health_mon", "name": "Farm Digitization, Agronomics, and Soil Health Monitoring" },
+        { "id": "food_waste_reduction", "name": "Food Waste Reduction" },
+        { "id": "hyperlocal_weather_stations", "name": "Hyperlocal Weather Stations" },
+        { "id": "precision_agriculture,_efficient_irrigation_system", "name": "Precision Agriculture, Efficient Irrigation Systems and Fertilizer Efficiency" },
+        { "id": "urban_food_production_(controlled_environment_agri", "name": "Urban Food Production (Controlled Environment Agriculture, Rooftop, Urban Pollinators)" }
+      ]
+    },
+    {
+      "id": "buildings",
+      "name": "Buildings",
+      "framework_mappings": {
+        "c40_action_categories": [
+          "Building & Housing Resilience",
+          "Urban Heat Island Mitigation & Cooling"
+        ],
+        "gcom_hazard_focus": ["extreme_temperature_hot", "flood", "wind", "wild_fire", "extreme_temperature_cold"],
+        "ipcc_action_types": ["structural_physical"],
+        "iclei_milestone": "D. Implement"
+      },
+      "subcategories": [
+        { "id": "building_code_and_permit_management,_code_enforcem", "name": "Building Code and Permit Management, Code Enforcement, and Land Use Planning" },
+        { "id": "building_management_systems_for_energy_efficiency_", "name": "Building Management Systems for Energy Efficiency and Demand Response" },
+        { "id": "climate-resilient_building_materials_(fire_resista", "name": "Climate-Resilient Building Materials (Fire Resistant, Waterproof, Insulation)" },
+        { "id": "damage_recovery_(flood,_fire,_cyclone)", "name": "Damage Recovery (Flood, Fire, Cyclone)" },
+        { "id": "efficient_cooling_systems_(heat_pumps,_efficient_f", "name": "Efficient Cooling Systems (Heat Pumps, Efficient Fans)" },
+        { "id": "modular_and_prefabricated_resilient_housing", "name": "Modular and Prefabricated Resilient Housing" },
+        { "id": "reflective_coatings_(cool_roof,_green_roof)", "name": "Reflective Coatings (Cool Roof, Green Roof)" },
+        { "id": "resilient_building_design,_planning_and_constructi", "name": "Resilient Building Design, Planning and Construction" },
+        { "id": "shade_structures_(outdoor_cooling,_misting)", "name": "Shade Structures (Outdoor Cooling, Misting)" },
+        { "id": "ventilation,_passive_cooling_and_air_filtration", "name": "Ventilation, Passive Cooling and Air Filtration" },
+        { "id": "wildfire_resilience_systems", "name": "Wildfire Resilience Systems" }
+      ]
+    },
+    {
+      "id": "infrastructure",
+      "name": "Infrastructure",
+      "framework_mappings": {
+        "c40_action_categories": [
+          "Critical Infrastructure Resilience"
+        ],
+        "gcom_hazard_focus": ["flood", "wind", "extreme_temperature_hot", "wild_fire", "mass_movement"],
+        "ipcc_action_types": ["structural_physical"],
+        "iclei_milestone": "D. Implement",
+        "_note": "Cross-cutting category — infrastructure solutions address nearly all hazard types"
+      },
+      "subcategories": [
+        { "id": "climate-ready_manufacturing,_warehouses,_logistics", "name": "Climate-Ready Manufacturing, Warehouses, Logistics Hubs, Data Centers" },
+        { "id": "infrastructure_inspection_and_hardening", "name": "Infrastructure Inspection and Hardening" },
+        { "id": "infrastructure_monitoring", "name": "Infrastructure Monitoring" },
+        { "id": "infrastructure_planning_and_relocation", "name": "Infrastructure Planning and Relocation" },
+        { "id": "permeable_surfaces", "name": "Permeable Surfaces" },
+        { "id": "predictive_maintenance_and_repair", "name": "Predictive Maintenance and Repair" },
+        { "id": "smart_city_systems_and_digital_twins", "name": "Smart City Systems and Digital Twins" },
+        { "id": "waste_management,_smart_waste_collection,_recyclin", "name": "Waste Management, Smart Waste Collection, Recycling and Circular Economy" }
+      ]
+    },
+    {
+      "id": "energy",
+      "name": "Energy",
+      "framework_mappings": {
+        "c40_action_categories": [
+          "Energy System Resilience & Security"
+        ],
+        "gcom_hazard_focus": ["wind", "flood", "extreme_temperature_hot", "wild_fire", "extreme_temperature_cold"],
+        "ipcc_action_types": ["structural_physical"],
+        "iclei_milestone": "D. Implement"
+      },
+      "subcategories": [
+        { "id": "battery_storage_backup_power_for_residential_and_c", "name": "Battery Storage Backup Power for Residential and Commercial" },
+        { "id": "energy_asset_and_distribution_grid_hardening", "name": "Energy Asset and Distribution Grid Hardening" },
+        { "id": "grid_monitoring,_stability_and_outage_detection", "name": "Grid Monitoring, Stability and Outage Detection" },
+        { "id": "microgrid_systems_and_controllers", "name": "Microgrid Systems and Controllers" },
+        { "id": "transmission_line_undergrounding", "name": "Transmission Line Undergrounding" },
+        { "id": "vegetation_management", "name": "Vegetation Management" },
+        { "id": "vehicle_to_grid_and_vehicle_to_building", "name": "Vehicle to Grid and Vehicle to Building" },
+        { "id": "virtual_power_plants,_distributed_energy_resource_", "name": "Virtual Power Plants, Distributed Energy Resource Management Systems (DERMS)" }
+      ]
+    },
+    {
+      "id": "transportation",
+      "name": "Transportation",
+      "framework_mappings": {
+        "c40_action_categories": [
+          "Transport System Resilience"
+        ],
+        "gcom_hazard_focus": ["flood", "extreme_temperature_hot", "wind", "wild_fire", "precipitation"],
+        "ipcc_action_types": ["structural_physical"],
+        "iclei_milestone": "D. Implement"
+      },
+      "subcategories": [
+        { "id": "disaster_response_logistics", "name": "Disaster Response Logistics" },
+        { "id": "fleet_electrification_and_charging_systems", "name": "Fleet Electrification and Charging Systems" },
+        { "id": "hardening_of_roads,_bridges,_tunnels,_maritime_and", "name": "Hardening of Roads, Bridges, Tunnels, Maritime and Rail" },
+        { "id": "high_albedo_pavement_and_surfaces", "name": "High Albedo Pavement and Surfaces" },
+        { "id": "micromobility_systems", "name": "Micromobility Systems" },
+        { "id": "resilient_mass_transit_systems", "name": "Resilient Mass Transit Systems" },
+        { "id": "supply_chain_agility_and_visibility", "name": "Supply Chain Agility and Visibility" },
+        { "id": "traffic_management,_curb_management,_congestion_re", "name": "Traffic Management, Curb Management, Congestion Reduction" },
+        { "id": "transportation_monitoring", "name": "Transportation Monitoring" }
+      ]
+    },
+    {
+      "id": "nature",
+      "name": "Nature",
+      "framework_mappings": {
+        "c40_action_categories": [
+          "Green & Blue Infrastructure",
+          "Nature-Based Solutions",
+          "Coastal & Shoreline Protection"
+        ],
+        "gcom_hazard_focus": ["flood", "extreme_temperature_hot", "water_scarcity", "wave_action", "wild_fire", "chemical_change"],
+        "ipcc_action_types": ["ecosystem_based"],
+        "iclei_milestone": "D. Implement",
+        "_note": "Strongest GCoM/C40 category alignment — nature-based solutions are a primary focus of both frameworks' adaptation guidance"
+      },
+      "subcategories": [
+        { "id": "biodiversity_protection,_ecosystem_monitoring_and_", "name": "Biodiversity Protection, Ecosystem Monitoring and Rehabilitation" },
+        { "id": "invasive_species,_pest_and_vector_control", "name": "Invasive Species, Pest and Vector Control" },
+        { "id": "natural_coastal_protection_(reefs,_mangroves)", "name": "Natural Coastal Protection (Reefs, Mangroves)" },
+        { "id": "natural_water_drainage_(bioswales,_rain_gardens,_w", "name": "Natural Water Drainage (Bioswales, Rain Gardens, Wetlands)" },
+        { "id": "riparian_zone_protection,_erosion_control", "name": "Riparian Zone Protection, Erosion Control" },
+        { "id": "shoreline_restoration_and_stabilization", "name": "Shoreline Restoration and Stabilization" },
+        { "id": "urban_greening_(green_spaces,_street_trees,_parks,", "name": "Urban Greening (Green Spaces, Street Trees, Parks, Reforestation)" }
+      ]
+    },
+    {
+      "id": "health",
+      "name": "Health",
+      "framework_mappings": {
+        "c40_action_categories": [
+          "Public Health & Emergency Response",
+          "Urban Heat & Health"
+        ],
+        "gcom_hazard_focus": ["extreme_temperature_hot", "insects_and_microorganisms", "chemical_change", "flood"],
+        "ipcc_action_types": ["social", "structural_physical"],
+        "iclei_milestone": "D. Implement"
+      },
+      "subcategories": [
+        { "id": "air_quality_measurement_and_filtration", "name": "Air Quality Measurement and Filtration" },
+        { "id": "disease_surveillance,_pathogen_detection_and_respo", "name": "Disease Surveillance, Pathogen Detection and Response" },
+        { "id": "emergency_response_equipment,_mobile_units,_shelte", "name": "Emergency Response Equipment, Mobile Units, Shelter, Sanitation" },
+        { "id": "heat_stress_monitoring", "name": "Heat Stress Monitoring" },
+        { "id": "public_cooling_facilities", "name": "Public Cooling Facilities" },
+        { "id": "wearable_cooling_devices_and_heat_stress_protectiv", "name": "Wearable Cooling Devices and Heat Stress Protective Gear" }
+      ]
+    },
+    {
+      "id": "finance",
+      "name": "Finance",
+      "framework_mappings": {
+        "c40_action_categories": [
+          "Climate Finance & Risk Transfer",
+          "Resilience Investment & Insurance"
+        ],
+        "gcom_hazard_focus": ["cross-cutting"],
+        "ipcc_action_types": ["institutional"],
+        "iclei_milestone": "D. Implement",
+        "_note": "GCoM CRF specifically tracks financing mechanisms — strong alignment with FinancingSource and FinancialInstrument node types"
+      },
+      "subcategories": [
+        { "id": "adaptation_finance_mechanisms", "name": "Adaptation Finance Mechanisms" },
+        { "id": "asset_risk_modeling,_vulnerability_analysis_and_re", "name": "Asset Risk Modeling, Vulnerability Analysis And Reporting" },
+        { "id": "climate_insurance_(parametric,_drought,_flood,_pro", "name": "Climate Insurance (Parametric, Drought, Flood, Project Insurance)" },
+        { "id": "insurtech_solutions", "name": "Insurtech Solutions" },
+        { "id": "resilience_lending_and_incentives_programs_for_res", "name": "Resilience Lending and Incentives Programs for Residential, SMEs" }
+      ]
+    },
+    {
+      "id": "planning_and_monitoring",
+      "name": "Planning And Monitoring",
+      "framework_mappings": {
+        "c40_action_categories": [
+          "Climate Risk Assessment & Planning",
+          "Monitoring, Evaluation & Reporting"
+        ],
+        "gcom_hazard_focus": ["cross-cutting"],
+        "ipcc_action_types": ["institutional"],
+        "iclei_milestone": "B. Investigate / C. Plan / E. Monitor",
+        "_note": "Uniquely spans multiple ICLEI milestones — planning tools support the full planning cycle, not just implementation. Aligns with GCoM's B.4 (monitoring) and B.3 (vulnerability assessment) reporting sections."
+      },
+      "subcategories": [
+        { "id": "climate_analytics,_hazard_forecasting_and_weather_", "name": "Climate Analytics, Hazard Forecasting and Weather Monitoring" },
+        { "id": "climate_data_exchanges_and_standards", "name": "Climate Data Exchanges and Standards" },
+        { "id": "decision_support_for_climate_adaptation_planning_a", "name": "Decision Support for Climate Adaptation Planning and Urban Planning" },
+        { "id": "drone-based_observation_and_analytics", "name": "Drone-based Observation and Analytics" },
+        { "id": "integrated_sensor_networks", "name": "Integrated Sensor Networks" },
+        { "id": "migration_and_resettlement_management", "name": "Migration and Resettlement Management" },
+        { "id": "remote_sensing_and_geospatial_data_(earth_observat", "name": "Remote Sensing and Geospatial Data (Earth Observation Platforms)" },
+        { "id": "urban_heat_island_mapping_and_planning", "name": "Urban Heat Island Mapping and Planning" },
+        { "id": "wildfire_prediction,_detection_and_suppression", "name": "Wildfire Prediction, Detection And Suppression" }
+      ]
+    },
+    {
+      "id": "communication_and_community",
+      "name": "Communication And Community",
+      "framework_mappings": {
+        "c40_action_categories": [
+          "Emergency Preparedness & Response",
+          "Community Resilience & Social Equity"
+        ],
+        "gcom_hazard_focus": ["cross-cutting"],
+        "ipcc_action_types": ["social", "institutional"],
+        "iclei_milestone": "A. Initiate / D. Implement",
+        "_note": "Social and institutional action types — most directly addresses IPCC AR6's social adaptation category. Community engagement tools support ICLEI Milestone A (stakeholder participation)."
+      },
+      "subcategories": [
+        { "id": "commmunity_engagement_platforms_for_planning,_educ", "name": "Commmunity Engagement Platforms for Planning, Education / Training and Crowd-Sourcing" },
+        { "id": "early_warning_systems_and_alerts_(heat,_wildfire,_", "name": "Early Warning Systems And Alerts (Heat, Wildfire, Air Quality, Flood, Water)" },
+        { "id": "first_responder_and_public_safety_tech", "name": "First Responder and Public Safety Tech" },
+        { "id": "telecommunication_and_connectivity_hardening", "name": "Telecommunication And Connectivity Hardening" }
+      ]
+    }
+  ]
+}

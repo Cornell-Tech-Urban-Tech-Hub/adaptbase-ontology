@@ -1,0 +1,1179 @@
+{
+  "company_name": "",
+  "key_documents": {
+    "sustainability_report": {
+      "title": "",
+      "date": "",
+      "url": ""
+    },
+    "climate_transition_plan": {
+      "title": "",
+      "date": "",
+      "url": "",
+      "is_standalone_document": null,
+      "notes": ""
+    },
+    "annual_report": {
+      "title": "",
+      "date": "",
+      "url": ""
+    },
+    "integrated_financial_report": {
+      "title": "",
+      "date": "",
+      "url": ""
+    },
+    "investor_presentation": {
+      "title": "",
+      "date": "",
+      "url": ""
+    },
+    "supplier_requirements": {
+      "title": "",
+      "date": "",
+      "url": ""
+    },
+    "sustainability_web_pages": [
+      {
+        "title": "",
+        "url": "",
+        "description": ""
+      }
+    ],
+    "innovation_strategy": {
+      "title": "",
+      "date": "",
+      "url": ""
+    },
+    "other_documents": [
+      {
+        "title": "",
+        "type": "",
+        "date": "",
+        "url": ""
+      }
+    ]
+  },
+  "company_profile": {
+    "_guidance": {
+      "description": "Basic company information and business structure",
+      "look_in": [
+        "annual_report",
+        "investor_presentation",
+        "sustainability_report",
+        "company_website"
+      ],
+      "keywords": [
+        "revenue",
+        "employees",
+        "headquarters",
+        "business unit",
+        "segment",
+        "division",
+        "brand"
+      ]
+    },
+    "URL": "",
+    "description": "",
+    "industry": "",
+    "sector": "",
+    "headquarters": "",
+    "employees": null,
+    "annual_revenue_usd": null,
+    "business_units": [
+      {
+        "name": "",
+        "description": "",
+        "revenue_share_pct": null,
+        "source_url": ""
+      }
+    ]
+  },
+  "business_strategy": {
+    "_guidance": {
+      "description": "Growth plans, strategic priorities, and innovation focus areas",
+      "look_in": [
+        "annual_report",
+        "investor_presentation",
+        "strategy_documents",
+        "earnings_call_transcripts",
+        "press_releases"
+      ],
+      "keywords": [
+        "growth",
+        "strategy",
+        "priority",
+        "innovation",
+        "investment",
+        "expansion",
+        "digital",
+        "transformation",
+        "R&D",
+        "capex",
+        "capital allocation"
+      ]
+    },
+    "growth_agenda": {
+      "description": "",
+      "priorities": [
+        {
+          "priority": "",
+          "description": "",
+          "source_url": ""
+        }
+      ],
+      "source_url": ""
+    },
+    "innovation_priorities": {
+      "description": "",
+      "priorities": [
+        {
+          "priority": "",
+          "description": "",
+          "source_url": ""
+        }
+      ],
+      "source_url": ""
+    }
+  },
+  "sustainability_governance": {
+    "_guidance": {
+      "description": "How sustainability is governed at board and management level",
+      "look_in": [
+        "sustainability_report",
+        "annual_report",
+        "corporate_governance_report",
+        "proxy_statement"
+      ],
+      "keywords": [
+        "board",
+        "committee",
+        "oversight",
+        "governance",
+        "executive",
+        "compensation",
+        "remuneration",
+        "incentive",
+        "carbon price",
+        "internal price",
+        "shadow price",
+        "ESG metrics",
+        "sustainability committee"
+      ]
+    },
+    "board_oversight": {
+      "description": "",
+      "responsible_body": "",
+      "source_url": ""
+    },
+    "management_responsibility": {
+      "description": "",
+      "responsible_role": "",
+      "source_url": ""
+    },
+    "executive_compensation_tied_to_sustainability": {
+      "is_tied": null,
+      "description": "",
+      "metrics_used": [],
+      "weighting_pct": null,
+      "source_url": ""
+    },
+    "internal_carbon_price": {
+      "has_internal_price": null,
+      "price_type": "",
+      "amount_usd": null,
+      "unit": "",
+      "description": "",
+      "source_url": ""
+    }
+  },
+  "emissions_profile": {
+    "_guidance": {
+      "description": "Current GHG emissions across all scopes with breakdown by source",
+      "look_in": [
+        "sustainability_report",
+        "climate_transition_plan",
+        "CDP_response",
+        "GRI_index"
+      ],
+      "keywords": [
+        "scope 1",
+        "scope 2",
+        "scope 3",
+        "emissions",
+        "GHG",
+        "CO2",
+        "carbon footprint",
+        "location-based",
+        "market-based",
+        "category",
+        "tCO2e",
+        "mtCO2e"
+      ]
+    },
+    "reporting_year": "",
+    "scope1": {
+      "total_mtco2e": null,
+      "main_sources": [
+        {
+          "source": "",
+          "description": "",
+          "share_pct": null
+        }
+      ],
+      "source_url": ""
+    },
+    "scope2": {
+      "total_mtco2e_location_based": null,
+      "total_mtco2e_market_based": null,
+      "main_sources": [
+        {
+          "source": "",
+          "description": "",
+          "share_pct": null
+        }
+      ],
+      "source_url": ""
+    },
+    "scope3": {
+      "total_mtco2e": null,
+      "categories_reported": [
+        {
+          "category_number": null,
+          "category_name": "",
+          "mtco2e": null,
+          "share_of_scope3_pct": null,
+          "description": ""
+        }
+      ],
+      "categories_not_reported": [],
+      "main_drivers": [
+        {
+          "driver": "",
+          "description": ""
+        }
+      ],
+      "source_url": ""
+    }
+  },
+  "sustainability_targets": {
+    "_guidance": {
+      "description": "All emissions reduction targets, renewable energy targets, and other environmental commitments",
+      "look_in": [
+        "sustainability_report",
+        "climate_transition_plan",
+        "net_zero_commitment",
+        "SBTi_target_documentation"
+      ],
+      "keywords": [
+        "target",
+        "goal",
+        "commitment",
+        "2030",
+        "2040",
+        "2050",
+        "net zero",
+        "carbon neutral",
+        "science-based",
+        "SBTi",
+        "reduction",
+        "renewable",
+        "RE100",
+        "baseline",
+        "base year"
+      ]
+    },
+    "emissions_targets": {
+      "has_science_based_target": null,
+      "sbt_status": "",
+      "sbt_alignment": "",
+      "net_zero_target": {
+        "has_target": null,
+        "target_year": "",
+        "scope_coverage": "",
+        "description": "",
+        "source_url": ""
+      },
+      "scope1_targets": [
+        {
+          "target_description": "",
+          "target_value": "",
+          "target_year": "",
+          "base_year": "",
+          "interim_milestones": [],
+          "source_url": ""
+        }
+      ],
+      "scope2_targets": [
+        {
+          "target_description": "",
+          "target_value": "",
+          "target_year": "",
+          "base_year": "",
+          "interim_milestones": [],
+          "source_url": ""
+        }
+      ],
+      "scope3_targets": [
+        {
+          "target_description": "",
+          "target_value": "",
+          "target_year": "",
+          "base_year": "",
+          "scope3_categories_covered": [],
+          "interim_milestones": [],
+          "source_url": ""
+        }
+      ]
+    },
+    "renewable_energy_targets": [
+      {
+        "target_description": "",
+        "target_value": "",
+        "target_year": "",
+        "base_year": "",
+        "source_url": ""
+      }
+    ],
+    "other_environmental_targets": [
+      {
+        "category": "",
+        "target_name": "",
+        "target_description": "",
+        "target_value": "",
+        "target_year": "",
+        "base_year": "",
+        "source_url": ""
+      }
+    ],
+    "sustainable_revenue_target": {
+      "has_target": null,
+      "target_description": "",
+      "target_pct": null,
+      "target_year": "",
+      "current_pct": null,
+      "current_year": "",
+      "products_services_included": [],
+      "source_url": ""
+    }
+  },
+  "target_progress": {
+    "_guidance": {
+      "description": "Progress made toward stated targets - actual performance vs targets",
+      "look_in": [
+        "sustainability_report",
+        "climate_transition_plan",
+        "annual_report",
+        "investor_presentation"
+      ],
+      "keywords": [
+        "progress",
+        "achievement",
+        "performance",
+        "vs target",
+        "on track",
+        "reduction achieved",
+        "year-over-year",
+        "compared to baseline"
+      ]
+    },
+    "emissions_progress": {
+      "scope1_scope2_combined": {
+        "current_value": "",
+        "current_year": "",
+        "reduction_from_base_year_pct": null,
+        "narrative": "",
+        "source_url": ""
+      },
+      "scope3": {
+        "current_value": "",
+        "current_year": "",
+        "reduction_from_base_year_pct": null,
+        "narrative": "",
+        "source_url": ""
+      }
+    },
+    "renewable_energy_progress": {
+      "current_value": "",
+      "current_year": "",
+      "narrative": "",
+      "source_url": ""
+    },
+    "other_target_progress": [
+      {
+        "target_name": "",
+        "category": "",
+        "current_value": "",
+        "current_year": "",
+        "progress_pct": null,
+        "narrative": "",
+        "source_url": ""
+      }
+    ]
+  },
+  "materiality_assessment": {
+    "_guidance": {
+      "description": "Company's materiality or double materiality assessment identifying priority sustainability topics",
+      "look_in": [
+        "sustainability_report",
+        "materiality_assessment_document",
+        "stakeholder_engagement_report"
+      ],
+      "keywords": [
+        "materiality",
+        "material topic",
+        "double materiality",
+        "stakeholder",
+        "priority",
+        "significant",
+        "impact",
+        "risk",
+        "opportunity",
+        "assessment matrix"
+      ]
+    },
+    "has_materiality_assessment": null,
+    "assessment_year": "",
+    "assessment_type": "",
+    "material_topics": [
+      {
+        "topic": "",
+        "description": ""
+      }
+    ],
+    "source_url": ""
+  },
+  "sustainability_strategy_integration": {
+    "_guidance": {
+      "description": "How sustainability is embedded in business strategy, portfolio transformation, and low-carbon offerings",
+      "look_in": [
+        "sustainability_report",
+        "annual_report",
+        "climate_transition_plan",
+        "investor_presentation"
+      ],
+      "keywords": [
+        "integration",
+        "embedded",
+        "strategic pillar",
+        "business model",
+        "portfolio",
+        "transformation",
+        "low carbon",
+        "green product",
+        "sustainable product",
+        "avoided emissions",
+        "enabled emissions"
+      ]
+    },
+    "is_embedded_in_business_strategy": null,
+    "narrative": "",
+    "portfolio_transformation": "",
+    "low_carbon_products_services": [
+      {
+        "name": "",
+        "description": "",
+        "emissions_avoided_enabled": "",
+        "source_url": ""
+      }
+    ],
+    "source_url": ""
+  },
+  "decarbonization_initiatives": {
+    "_guidance": {
+      "description": "Specific projects and programs to reduce emissions - energy, operations, supply chain, transport",
+      "look_in": [
+        "climate_transition_plan",
+        "sustainability_report",
+        "annual_report",
+        "press_releases"
+      ],
+      "keywords": [
+        "initiative",
+        "project",
+        "program",
+        "pilot",
+        "investment",
+        "electrification",
+        "efficiency",
+        "renewable",
+        "decarbonization",
+        "transition",
+        "roadmap",
+        "pathway",
+        "action plan"
+      ]
+    },
+    "climate_transition_plan_status": {
+      "has_ctp": null,
+      "source_url": ""
+    },
+    "initiatives": [
+      {
+        "initiative_name": "",
+        "category": "",
+        "description": "",
+        "status": "",
+        "timeline": "",
+        "investment_amount": "",
+        "expected_impact": "",
+        "source_url": ""
+      }
+    ]
+  },
+  "cost_efficiency_initiatives": {
+    "_guidance": {
+      "description": "Programs focused on operating cost reduction and efficiency improvements, including energy, process, and digital initiatives",
+      "look_in": [
+        "annual_report",
+        "investor_presentation",
+        "earnings_call_transcripts",
+        "press_releases",
+        "sustainability_report"
+      ],
+      "keywords": [
+        "cost efficiency",
+        "cost savings",
+        "efficiency",
+        "productivity",
+        "optimization",
+        "lean",
+        "process improvement",
+        "energy efficiency",
+        "automation",
+        "digital",
+        "OPEX",
+        "margin",
+        "savings program"
+      ]
+    },
+    "initiatives": [
+      {
+        "initiative_name": "",
+        "category": "",
+        "description": "",
+        "status": "",
+        "timeline": "",
+        "investment_amount": "",
+        "expected_savings": "",
+        "source_url": ""
+      }
+    ]
+  },
+  "scope3_supplier_engagement": {
+    "_guidance": {
+      "description": "Programs to engage suppliers on emissions reduction and sustainability",
+      "look_in": [
+        "sustainability_report",
+        "climate_transition_plan",
+        "supplier_code_of_conduct",
+        "supply_chain_report"
+      ],
+      "keywords": [
+        "supplier",
+        "vendor",
+        "value chain",
+        "engagement",
+        "requirement",
+        "code of conduct",
+        "audit",
+        "assessment",
+        "CDP supply chain",
+        "scope 3",
+        "upstream",
+        "procurement"
+      ]
+    },
+    "has_supplier_engagement_program": null,
+    "program_description": "",
+    "initiatives": [
+      {
+        "initiative_name": "",
+        "description": "",
+        "source_url": ""
+      }
+    ],
+    "supplier_targets": [
+      {
+        "target": "",
+        "description": "",
+        "source_url": ""
+      }
+    ],
+    "source_url": ""
+  },
+  "nature_biodiversity": {
+    "_guidance": {
+      "description": "Nature-related strategies, biodiversity commitments, and TNFD/SBTN alignment",
+      "look_in": [
+        "sustainability_report",
+        "biodiversity_policy",
+        "nature_strategy",
+        "TNFD_report"
+      ],
+      "keywords": [
+        "biodiversity",
+        "nature",
+        "ecosystem",
+        "habitat",
+        "deforestation",
+        "forest",
+        "land use",
+        "TNFD",
+        "SBTN",
+        "nature positive",
+        "restoration",
+        "conservation",
+        "natural capital"
+      ]
+    },
+    "has_nature_strategy": null,
+    "tnfd_aligned": null,
+    "sbtn_member": null,
+    "initiatives": [
+      {
+        "initiative_name": "",
+        "type": "",
+        "description": "",
+        "location": "",
+        "impact_metrics": "",
+        "source_url": ""
+      }
+    ],
+    "deforestation_commitment": {
+      "has_commitment": null,
+      "description": "",
+      "target_year": "",
+      "source_url": ""
+    },
+    "source_url": ""
+  },
+  "carbon_credits_removals": {
+    "_guidance": {
+      "description": "Use of carbon credits, offsets, and removal projects",
+      "look_in": [
+        "sustainability_report",
+        "climate_transition_plan",
+        "net_zero_strategy"
+      ],
+      "keywords": [
+        "carbon credit",
+        "offset",
+        "removal",
+        "sequestration",
+        "capture",
+        "CDR",
+        "BECCS",
+        "DAC",
+        "nature-based",
+        "registry",
+        "Verra",
+        "Gold Standard",
+        "neutralization",
+        "compensation"
+      ]
+    },
+    "uses_carbon_credits": null,
+    "strategy_description": "",
+    "total_volume_reporting_year": "",
+    "reporting_year": "",
+    "purchases": [
+      {
+        "type": "",
+        "provider_or_project": "",
+        "volume": "",
+        "year": "",
+        "registry_standard": "",
+        "description": "",
+        "source_url": ""
+      }
+    ],
+    "source_url": ""
+  },
+  "sustainable_procurement": {
+    "_guidance": {
+      "description": "Procurement of renewable energy, sustainable materials, and industrial decarbonization solutions",
+      "look_in": [
+        "sustainability_report",
+        "climate_transition_plan",
+        "annual_report",
+        "press_releases",
+        "company_website"
+      ],
+      "keywords_renewable_energy": [
+        "PPA",
+        "VPPA",
+        "power purchase agreement",
+        "renewable",
+        "solar",
+        "wind",
+        "offtake",
+        "RE100",
+        "green electricity",
+        "certificate",
+        "REC",
+        "EAC",
+        "I-REC",
+        "GO"
+      ],
+      "keywords_materials": [
+        "sustainable material",
+        "recycled",
+        "bio-based",
+        "certified",
+        "FSC",
+        "sustainable sourcing",
+        "circular",
+        "low-carbon material"
+      ],
+      "keywords_industrial_decarb": [
+        "electrification",
+        "heat pump",
+        "green hydrogen",
+        "efficiency",
+        "process heat",
+        "industrial",
+        "CCUS",
+        "carbon capture",
+        "boiler",
+        "furnace",
+        "kiln"
+      ]
+    },
+    "renewable_energy_procurement": {
+      "total_procured_mwh": null,
+      "total_procured_capacity_mw": null,
+      "reporting_year": "",
+      "re100_member": null,
+      "procurement_strategy": "",
+      "energy_deals": [
+        {
+          "energy_type": "",
+          "capacity_mw": null,
+          "supplier_or_developer": "",
+          "location": "",
+          "onsite_or_offsite": "",
+          "description": "",
+          "source_url": ""
+        }
+      ],
+      "renewable_energy_certificates": {
+        "uses_recs": null,
+        "bundled_recs_mwh": null,
+        "unbundled_recs_mwh": null,
+        "total_recs_mwh": null,
+        "rec_providers": [],
+        "description": "",
+        "source_url": ""
+      }
+    },
+    "energy_storage": {
+      "deployments": [
+        {
+          "storage_type": "",
+          "capacity_mwh": null,
+          "supplier_or_developer": "",
+          "description": "",
+          "source_url": ""
+        }
+      ]
+    },
+    "sustainable_materials_procurement": {
+      "deals": [
+        {
+          "material_description": "",
+          "supplier": "",
+          "volume_or_quantity": "",
+          "description": "",
+          "source_url": ""
+        }
+      ]
+    },
+    "industrial_decarbonization_procurement": {
+      "deployments": [
+        {
+          "technology_type": "",
+          "supplier_or_provider": "",
+          "description": "",
+          "source_url": ""
+        }
+      ]
+    }
+  },
+  "ai_sustainability_initiatives": [
+    {
+      "description": "",
+      "expected_impact": "",
+      "source_url": ""
+    }
+  ],
+  "_guidance_ai_sustainability_initiatives": {
+    "description": "Use of AI and digital technology for sustainability improvements",
+    "look_in": [
+      "sustainability_report",
+      "annual_report",
+      "innovation_report",
+      "press_releases",
+      "company_website"
+    ],
+    "keywords": [
+      "AI",
+      "artificial intelligence",
+      "machine learning",
+      "digital",
+      "automation",
+      "optimization",
+      "predictive",
+      "analytics",
+      "smart",
+      "IoT",
+      "sensor",
+      "monitoring"
+    ]
+  },
+  "financial_commitment": {
+    "_guidance": {
+      "description": "Financial investments in sustainability - capex, green bonds, transition finance",
+      "look_in": [
+        "sustainability_report",
+        "annual_report",
+        "investor_presentation",
+        "climate_transition_plan",
+        "green_bond_framework"
+      ],
+      "keywords": [
+        "investment",
+        "capex",
+        "capital expenditure",
+        "green bond",
+        "sustainability-linked",
+        "transition finance",
+        "climate finance",
+        "allocation",
+        "budget",
+        "funding",
+        "billion",
+        "million"
+      ]
+    },
+    "sustainability_capex": {
+      "total_amount_usd": "",
+      "time_period": "",
+      "description": "",
+      "investment_areas": [
+        {
+          "area": "",
+          "amount": "",
+          "description": ""
+        }
+      ],
+      "source_url": ""
+    },
+    "green_financing": {
+      "has_green_bonds": null,
+      "has_sustainability_linked_loans": null,
+      "instruments": [
+        {
+          "type": "",
+          "amount": "",
+          "year": "",
+          "use_of_proceeds": "",
+          "source_url": ""
+        }
+      ]
+    },
+    "transition_finance": {
+      "description": "",
+      "instruments": [],
+      "source_url": ""
+    }
+  },
+  "sustainability_opportunities": [
+    {
+      "opportunity": "",
+      "type": "",
+      "description": "",
+      "time_horizon": "",
+      "financial_impact": "",
+      "strategic_response": "",
+      "source_url": ""
+    }
+  ],
+  "_guidance_sustainability_opportunities": {
+    "description": "Climate-related and sustainability opportunities the company has identified - market growth, efficiency gains, new products, reputation benefits",
+    "look_in": [
+      "sustainability_report",
+      "climate_transition_plan",
+      "annual_report",
+      "TCFD_report",
+      "investor_presentation"
+    ],
+    "keywords": [
+      "opportunity",
+      "opportunities",
+      "growth",
+      "market demand",
+      "customer preference",
+      "efficiency",
+      "cost saving",
+      "new product",
+      "new market",
+      "competitive advantage",
+      "brand",
+      "reputation",
+      "resource efficiency",
+      "revenue opportunity",
+      "green revenue"
+    ]
+  },
+  "climate_risks": {
+    "_guidance": {
+      "description": "Physical and transition risks from climate change identified by the company",
+      "look_in": [
+        "sustainability_report",
+        "climate_transition_plan",
+        "TCFD_report",
+        "annual_report",
+        "CDP_response"
+      ],
+      "keywords": [
+        "risk",
+        "physical risk",
+        "transition risk",
+        "acute",
+        "chronic",
+        "policy",
+        "regulatory",
+        "technology",
+        "market",
+        "reputation",
+        "legal",
+        "stranded asset",
+        "scenario",
+        "resilience",
+        "vulnerability"
+      ]
+    },
+    "physical_risks": [
+      {
+        "risk": "",
+        "description": "",
+        "assets_operations_affected": "",
+        "financial_impact": "",
+        "mitigation_measures": "",
+        "source_url": ""
+      }
+    ],
+    "transition_risks": [
+      {
+        "risk_type": "",
+        "risk": "",
+        "description": "",
+        "financial_impact": "",
+        "mitigation_measures": "",
+        "source_url": ""
+      }
+    ],
+    "supply_chain_risks": [
+      {
+        "risk": "",
+        "description": "",
+        "mitigation_measures": "",
+        "source_url": ""
+      }
+    ],
+    "scenario_analysis": {
+      "has_conducted": null,
+      "scenarios_used": [],
+      "key_findings": "",
+      "source_url": ""
+    }
+  },
+  "challenges_constraints": {
+    "_guidance": {
+      "description": "Internal and external challenges, barriers, and constraints to achieving sustainability goals",
+      "look_in": [
+        "climate_transition_plan",
+        "sustainability_report",
+        "annual_report",
+        "investor_presentation",
+        "earnings_call_transcripts"
+      ],
+      "keywords": [
+        "challenge",
+        "barrier",
+        "constraint",
+        "limitation",
+        "difficulty",
+        "obstacle",
+        "gap",
+        "uncertainty",
+        "dependency",
+        "complexity",
+        "cost",
+        "technology readiness",
+        "infrastructure",
+        "supply chain",
+        "regulatory"
+      ]
+    },
+    "internal_challenges": [
+      {
+        "challenge": "",
+        "category": "",
+        "description": "",
+        "source_url": ""
+      }
+    ],
+    "external_challenges": [
+      {
+        "challenge": "",
+        "category": "",
+        "description": "",
+        "source_url": ""
+      }
+    ]
+  },
+  "external_perspectives": {
+    "investors": {
+      "_guidance": {
+        "description": "Shareholders engaging with the company on sustainability. Example: investors submitting resolutions related to climate and sustainability. Example sites: asyousow.org, transitionpathwayinitiative.org, trellis.net, esgtoday.com, climateaction100.org, esgdive.com",
+        "look_in": [
+          "shareholder_resolutions",
+          "web_search"
+        ],
+        "keywords": [
+          "shareholder resolution",
+          "proxy",
+          "climate",
+          "sustainability",
+          "ESG"
+        ]
+      },
+      "entries": [
+        {
+          "organization": "",
+          "description": "",
+          "year": "",
+          "source_url": ""
+        }
+      ]
+    },
+    "organizations": {
+      "_guidance": {
+        "description": "Environmental groups, NGOs, and climate philanthropies; industry reports from non-profits on sustainability materiality areas relevant to the company's industry.",
+        "look_in": [
+          "NGO_reports",
+          "non_profit_reports",
+          "industry_reports",
+          "press_releases",
+          "web_search"
+        ],
+        "keywords": [
+          "NGO",
+          "non-profit",
+          "environmental group",
+          "climate philanthropy",
+          "sustainability",
+          "climate",
+          "scorecard",
+          "campaign"
+        ]
+      },
+      "entries": [
+        {
+          "organization": "",
+          "description": "",
+          "year": "",
+          "source_url": ""
+        }
+      ]
+    }
+  },
+  "policy_regulatory_engagement": {
+    "_guidance": {
+      "description": "Policy positions, lobbying activities, and trade association memberships",
+      "look_in": [
+        "sustainability_report",
+        "annual_report",
+        "lobbying_disclosures",
+        "web_search"
+      ],
+      "keywords": [
+        "policy",
+        "regulation",
+        "lobbying",
+        "advocacy",
+        "trade association",
+        "industry group",
+        "advocacy",
+        "engagement",
+        "position",
+        "support",
+        "climate policy"
+      ]
+    },
+    "has_policy_engagement": null,
+    "lobbying_disclosure": {
+      "has_disclosure": null,
+      "source_url": ""
+    },
+    "trade_association_memberships": [
+      {
+        "association": "",
+        "climate_alignment_status": "",
+        "source_url": ""
+      }
+    ],
+    "policy_positions": [
+      {
+        "policy_area": "",
+        "position": "",
+        "description": "",
+        "source_url": ""
+      }
+    ],
+    "advocacy_initiatives": [
+      {
+        "initiative": "",
+        "description": "",
+        "source_url": ""
+      }
+    ]
+  },
+  "company_partnerships": {
+    "_guidance": {
+      "description": "Sustainability partnerships, coalitions, and collaborative initiatives",
+      "look_in": [
+        "sustainability_report",
+        "annual_report",
+        "press_releases",
+        "company_website",
+        "partnership_pages"
+      ],
+      "keywords": [
+        "partnership",
+        "collaboration",
+        "coalition",
+        "alliance",
+        "consortium",
+        "initiative",
+        "member",
+        "signatory",
+        "pledge",
+        "commitment",
+        "joint",
+        "working group",
+        "pilot"
+      ]
+    },
+    "partnerships": [
+      {
+        "partner_name": "",
+        "description": "",
+        "progress": "",
+        "source_url": ""
+      }
+    ]
+  }
+}

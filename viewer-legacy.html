@@ -1,0 +1,1969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Resilience Ontology Viewer</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.9/dist/vis-network.min.js"></script>
+
+<!-- Urban Tech Hub Design System Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    /* Urban Tech Hub Color System */
+    --carnelian:         #B31B1B;
+    --carnelian-deep:    #8C1515;
+    --carnelian-bright:  #E4002B;
+
+    --ink:               #121417;
+    --ink-2:             #2A2D33;
+    --graphite:          #4A4F57;
+    --concrete:          #8A8F98;
+    --mist:              #C7CAD1;
+    --stone:             #E3E5E9;
+    --fog:               #EFF0F3;
+    --paper:             #F7F6F2;
+    --paper-2:           #FBFAF6;
+    --white:             #FFFFFF;
+
+    --blueprint:         #1E4DD8;
+    --blueprint-soft:    #D9E1F7;
+    --sodium:            #F4A02C;
+    --sodium-soft:       #FBE8C6;
+    --chlorophyll:       #2E7D4F;
+    --chlorophyll-soft:  #D4E4D8;
+    --slate-blue:        #2B3A55;
+
+    --fg-1:              var(--ink);
+    --fg-2:              var(--ink-2);
+    --fg-3:              var(--graphite);
+    --fg-4:              var(--concrete);
+    --fg-brand:          var(--carnelian);
+
+    --bg-1:              var(--paper);
+    --bg-2:              var(--paper-2);
+    --bg-3:              var(--fog);
+    --bg-4:              var(--stone);
+
+    --border-hair:       rgba(18, 20, 23, 0.08);
+    --border-soft:       rgba(18, 20, 23, 0.14);
+    --border-firm:       rgba(18, 20, 23, 0.24);
+
+    /* Typography */
+    --font-display:  'Fraunces', 'Times New Roman', Georgia, serif;
+    --font-sans:     'Inter Tight', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+    --font-mono:     'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    --font-accent:   'Instrument Serif', 'Fraunces', Georgia, serif;
+
+    /* Spacing */
+    --sp-1:   0.25rem;
+    --sp-2:   0.5rem;
+    --sp-3:   0.75rem;
+    --sp-4:   1rem;
+    --sp-5:   1.5rem;
+    --sp-6:   2rem;
+
+    /* Radii */
+    --r-sm:   2px;
+    --r-md:   4px;
+    --r-lg:   8px;
+    --r-pill: 999px;
+
+    /* Shadows */
+    --shadow-1: 0 1px 0 rgba(18,20,23,0.04), 0 1px 2px rgba(18,20,23,0.04);
+    --shadow-2: 0 1px 0 rgba(18,20,23,0.04), 0 6px 16px -6px rgba(18,20,23,0.10);
+    --shadow-3: 0 2px 0 rgba(18,20,23,0.04), 0 18px 40px -12px rgba(18,20,23,0.18);
+
+    /* Motion */
+    --dur-fast:      120ms;
+    --dur-base:      220ms;
+    --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Legacy mappings for backwards compatibility */
+    --bg: var(--bg-1);
+    --panel: var(--bg-2);
+    --panel-light: var(--bg-3);
+    --border: var(--border-soft);
+    --border-light: var(--border-hair);
+    --text: var(--fg-1);
+    --text-dim: var(--fg-3);
+    --accent: var(--carnelian);
+    --accent-dim: var(--carnelian-bright);
+    --node: var(--blueprint);
+    --danger: var(--carnelian-bright);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg-1);
+    color: var(--fg-1);
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 360px 1fr 360px;
+    grid-template-rows: 52px 1fr;
+    font-size: 13px;
+    -webkit-font-smoothing: antialiased;
+  }
+  header {
+    grid-column: 1 / -1;
+    background: var(--bg-1);
+    border-bottom: 1px solid var(--border-hair);
+    display: flex;
+    align-items: center;
+    padding: 0 var(--sp-5);
+    gap: var(--sp-4);
+  }
+  header h1 {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 500;
+    font-variation-settings: "opsz" 24;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    color: var(--fg-1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  header h1::before {
+    content: "◆";
+    color: var(--carnelian);
+    font-size: 14px;
+  }
+  header .spacer { flex: 1; }
+  header button, header label, header .dropdown {
+    background: transparent;
+    color: var(--fg-2);
+    border: 1px solid var(--border-soft);
+    padding: 8px 14px;
+    border-radius: var(--r-sm);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    white-space: nowrap;
+    transition: background var(--dur-fast) var(--ease-standard),
+                color var(--dur-fast) var(--ease-standard),
+                border-color var(--dur-fast) var(--ease-standard);
+  }
+  header button:hover, header label:hover {
+    background: rgba(18,20,23,0.06);
+    color: var(--fg-1);
+    border-color: var(--border-firm);
+  }
+  .dropdown { position: relative; display: inline-block; }
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background: var(--bg-2);
+    min-width: 420px;
+    box-shadow: var(--shadow-2);
+    z-index: 100;
+    border: 1px solid var(--border-soft);
+    border-radius: var(--r-md);
+    margin-top: 6px;
+    overflow: hidden;
+    right: 0;
+  }
+  .dropdown-content button {
+    display: block;
+    width: 100%;
+    padding: 12px var(--sp-4);
+    text-align: left;
+    border: none;
+    background: none;
+    border-bottom: 1px solid var(--border-hair);
+    line-height: 1.5;
+    font-size: 13px;
+    color: var(--fg-2);
+    transition: background var(--dur-fast) var(--ease-standard),
+                color var(--dur-fast) var(--ease-standard);
+  }
+  .dropdown-content button strong {
+    display: block;
+    color: var(--fg-1);
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .dropdown-content button span {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--fg-4);
+    display: block;
+    margin-top: 4px;
+  }
+  .dropdown-content button:last-child { border-bottom: none; }
+  .dropdown-content button:hover {
+    background: var(--bg-3);
+    color: var(--fg-1);
+  }
+  .dropdown-content button.active {
+    background: rgba(179, 27, 27, 0.08);
+    color: var(--carnelian);
+    font-weight: 600;
+    border-left: 3px solid var(--carnelian);
+    padding-left: calc(var(--sp-4) - 3px);
+  }
+  .dropdown.show .dropdown-content { display: block; }
+
+  /* Sidebars */
+  .sidebar {
+    background: var(--bg-2);
+    border-right: 1px solid var(--border-hair);
+    overflow-y: auto;
+    padding: var(--sp-4);
+    min-height: 0;
+  }
+  .sidebar h2 {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    color: var(--fg-3);
+    letter-spacing: 0.14em;
+    margin: var(--sp-4) 0 var(--sp-2);
+    font-weight: 600;
+  }
+  .sidebar h2:first-child { margin-top: 0; }
+  .filter-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--text);
+  }
+  .filter-item:hover { background: var(--panel-light); }
+  .filter-item input { cursor: pointer; }
+
+  /* Nav sections */
+  .nav-section { margin-bottom: var(--sp-2); }
+  .nav-header {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    padding: 8px 10px;
+    background: var(--bg-3);
+    border: 1px solid var(--border-hair);
+    border-radius: var(--r-sm);
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--fg-1);
+    transition: background var(--dur-fast) var(--ease-standard),
+                border-color var(--dur-fast) var(--ease-standard);
+  }
+  .nav-header:hover {
+    background: var(--bg-4);
+    border-color: var(--border-soft);
+  }
+  .nav-header .arrow {
+    font-size: 9px;
+    transition: transform var(--dur-base) var(--ease-standard);
+    color: var(--fg-3);
+  }
+  .nav-header.collapsed .arrow { transform: rotate(-90deg); }
+  .nav-header .count {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--fg-4);
+    font-weight: 500;
+  }
+  .nav-items {
+    overflow-y: auto;
+    border-left: 2px solid var(--border-hair);
+    margin-left: var(--sp-2);
+    margin-top: var(--sp-1);
+  }
+  .nav-items.collapsed { display: none; }
+  .type-item {
+    padding: 8px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border-hair);
+    color: var(--fg-2);
+    line-height: 1.4;
+    transition: background var(--dur-fast) var(--ease-standard),
+                color var(--dur-fast) var(--ease-standard);
+  }
+  .type-item:last-child { border-bottom: none; }
+  .type-item:hover {
+    background: var(--bg-3);
+    color: var(--fg-1);
+  }
+  .type-item.selected {
+    background: rgba(179, 27, 27, 0.08);
+    color: var(--carnelian);
+    font-weight: 600;
+    border-left: 3px solid var(--carnelian);
+    padding-left: calc(10px - 3px);
+  }
+  .type-item.type-highlight {
+    border-left: 3px solid var(--carnelian);
+    background: var(--bg-3);
+    padding-left: calc(10px - 3px);
+  }
+
+  /* Graph */
+  #graph {
+    background: var(--bg-1);
+    overflow: hidden;
+    position: relative;
+    min-height: 0;
+  }
+
+  /* Faint blueprint grid on paper background */
+  #graph::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(18,20,23,0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(18,20,23,0.035) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 95%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 95%);
+    z-index: 0;
+  }
+
+  /* Inspector / right panel */
+  .inspector {
+    background: var(--bg-2);
+    border-left: 1px solid var(--border-hair);
+    overflow-y: auto;
+    padding: var(--sp-5);
+    min-height: 0;
+  }
+  .inspector .empty {
+    color: var(--fg-3);
+    text-align: left;
+    padding: var(--sp-6) var(--sp-4);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* Field */
+  .field { margin-bottom: var(--sp-4); }
+  .field > label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    color: var(--fg-3);
+    letter-spacing: 0.14em;
+    margin-bottom: var(--sp-2);
+    font-weight: 600;
+  }
+  .field input, .field select {
+    width: 100%;
+    background: var(--bg-1);
+    border: 1px solid var(--border-soft);
+    color: var(--fg-1);
+    padding: 8px 10px;
+    border-radius: var(--r-sm);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    transition: border-color var(--dur-fast) var(--ease-standard),
+                box-shadow var(--dur-fast) var(--ease-standard);
+  }
+  .field textarea {
+    width: 100%;
+    background: var(--bg-1);
+    border: 1px solid var(--border-soft);
+    color: var(--fg-1);
+    padding: 8px 10px;
+    border-radius: var(--r-sm);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    resize: vertical;
+    min-height: 80px;
+    overflow: hidden;
+    line-height: 1.5;
+    transition: border-color var(--dur-fast) var(--ease-standard),
+                box-shadow var(--dur-fast) var(--ease-standard);
+  }
+  .field input:focus, .field textarea:focus, .field select:focus {
+    outline: none;
+    border-color: var(--carnelian);
+    box-shadow: 0 0 0 2px rgba(179, 27, 27, 0.15);
+  }
+
+  /* Inspector header */
+  .inspector h3 {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 500;
+    font-variation-settings: "opsz" 36;
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+    margin-bottom: var(--sp-4);
+    padding-bottom: var(--sp-3);
+    border-bottom: 1px solid var(--border-hair);
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    flex-wrap: wrap;
+    color: var(--fg-1);
+  }
+  .inspector-divider {
+    border: none;
+    border-top: 1px solid var(--border-light);
+    margin: 14px 0;
+  }
+
+  /* Badges */
+  .badge {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    padding: 3px 8px;
+    border-radius: var(--r-pill);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .badge.relationship {
+    background: transparent;
+    color: var(--carnelian);
+    border: 1px solid var(--carnelian);
+  }
+  .badge.vocab {
+    background: var(--chlorophyll-soft);
+    color: var(--chlorophyll);
+    border: 1px solid var(--chlorophyll);
+  }
+
+  /* Properties table */
+  .prop-table { margin-bottom: var(--sp-2); }
+  .prop-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: var(--sp-2);
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-hair);
+    font-size: 12px;
+  }
+  .prop-row:last-child { border-bottom: none; }
+  .prop-name {
+    font-family: var(--font-mono);
+    color: var(--carnelian);
+    font-weight: 600;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .prop-meta {
+    font-family: var(--font-mono);
+    color: var(--fg-4);
+    font-size: 10px;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .prop-req {
+    font-family: var(--font-mono);
+    color: var(--fg-4);
+    font-size: 10px;
+  }
+  .prop-del-btn {
+    background: none;
+    border: none;
+    color: var(--fg-4);
+    cursor: pointer;
+    padding: 0 4px;
+    font-size: 12px;
+    line-height: 1;
+    transition: color var(--dur-fast) var(--ease-standard);
+  }
+  .prop-del-btn:hover { color: var(--carnelian-bright); }
+
+  /* Vocab mappings row */
+  .vocab-mappings {
+    padding: 6px 0 2px;
+    border-top: 1px dashed var(--border);
+    margin-top: 4px;
+    font-size: 11px;
+    color: var(--text-dim);
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .vocab-mappings .vm-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+
+  /* Chips */
+  .chip {
+    display: inline-block;
+    font-family: var(--font-mono);
+    background: var(--bg-3);
+    border: 1px solid var(--border-hair);
+    padding: 4px 8px;
+    border-radius: var(--r-pill);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    margin: 2px 4px 2px 0;
+    color: var(--fg-2);
+    transition: background var(--dur-fast) var(--ease-standard),
+                border-color var(--dur-fast) var(--ease-standard);
+  }
+  .chip.vocab-chip {
+    border-color: var(--chlorophyll);
+    background: var(--chlorophyll-soft);
+    color: var(--chlorophyll);
+    cursor: pointer;
+  }
+  .chip.vocab-chip:hover {
+    background: rgba(46, 125, 79, 0.2);
+  }
+  .chip.vocab-chip.external {
+    border-color: var(--blueprint);
+    background: var(--blueprint-soft);
+    color: var(--blueprint);
+  }
+  .chip.vocab-chip.external:hover {
+    background: rgba(30, 77, 216, 0.2);
+  }
+  .chip.case-chip {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--fg-4);
+    border-color: var(--border-hair);
+    background: var(--bg-1);
+  }
+  .chips-row { padding: var(--sp-1) 0; }
+
+  /* Buttons */
+  .btn-row {
+    display: flex;
+    gap: var(--sp-2);
+    margin-top: var(--sp-4);
+  }
+  .btn-row button {
+    flex: 1;
+    background: transparent;
+    color: var(--fg-1);
+    border: 1px solid var(--border-soft);
+    padding: 10px 14px;
+    border-radius: var(--r-sm);
+    font-size: 13px;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    transition: background var(--dur-fast) var(--ease-standard),
+                color var(--dur-fast) var(--ease-standard),
+                border-color var(--dur-fast) var(--ease-standard);
+  }
+  .btn-row button:hover {
+    background: rgba(18,20,23,0.06);
+    border-color: var(--border-firm);
+  }
+  .btn-row button.primary {
+    background: var(--carnelian);
+    color: white;
+    border-color: var(--carnelian);
+  }
+  .btn-row button.primary:hover {
+    background: var(--carnelian-deep);
+    border-color: var(--carnelian-deep);
+  }
+  .btn-row button.danger {
+    color: var(--carnelian-bright);
+    border-color: var(--carnelian-bright);
+  }
+  .btn-row button.danger:hover {
+    background: rgba(228, 0, 43, 0.08);
+    border-color: var(--carnelian-deep);
+  }
+
+  .add-btn {
+    background: none;
+    border: 1px dashed var(--border-soft);
+    color: var(--fg-3);
+    padding: 8px 12px;
+    border-radius: var(--r-sm);
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: var(--sp-2);
+    width: 100%;
+    text-align: left;
+    transition: background var(--dur-fast) var(--ease-standard),
+                color var(--dur-fast) var(--ease-standard),
+                border-color var(--dur-fast) var(--ease-standard);
+  }
+  .add-btn:hover {
+    background: var(--bg-3);
+    border-color: var(--carnelian);
+    color: var(--carnelian);
+    border-style: solid;
+  }
+
+  .status {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--fg-3);
+    padding: 3px 0;
+    letter-spacing: 0.02em;
+  }
+
+  /* Modals */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background: rgba(18, 20, 23, 0.5);
+    align-items: center;
+    justify-content: center;
+  }
+  .modal.show { display: flex; }
+  .modal-content {
+    background: var(--bg-2);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--r-lg);
+    padding: var(--sp-6);
+    max-width: 540px;
+    width: 92%;
+    box-shadow: var(--shadow-3);
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal-content.wide { max-width: 720px; }
+  .modal-content h3 {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 500;
+    font-variation-settings: "opsz" 36;
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+    margin: 0 0 var(--sp-2) 0;
+    color: var(--fg-1);
+  }
+  .modal-content .modal-sub {
+    font-size: 14px;
+    color: var(--fg-3);
+    margin-bottom: var(--sp-5);
+    line-height: 1.5;
+  }
+  .modal-buttons {
+    display: flex;
+    gap: var(--sp-2);
+    margin-top: var(--sp-5);
+  }
+  .modal-buttons button {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid var(--border-soft);
+    border-radius: var(--r-sm);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    background: transparent;
+    color: var(--fg-1);
+    transition: background var(--dur-fast) var(--ease-standard),
+                color var(--dur-fast) var(--ease-standard),
+                border-color var(--dur-fast) var(--ease-standard);
+  }
+  .modal-buttons button:hover {
+    background: rgba(18,20,23,0.06);
+    border-color: var(--border-firm);
+  }
+  .modal-buttons button.primary {
+    background: var(--carnelian);
+    color: white;
+    border-color: var(--carnelian);
+  }
+  .modal-buttons button.primary:hover {
+    background: var(--carnelian-deep);
+    border-color: var(--carnelian-deep);
+  }
+
+  /* Vocab modal terms */
+  .vocab-terms {
+    margin-top: 14px;
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+  }
+  .vocab-terms-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text-dim);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .vocab-terms-list {
+    max-height: 320px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg);
+  }
+  .vt-category {
+    padding: 6px 10px 2px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text);
+    border-bottom: 1px solid var(--border-light);
+    background: var(--panel-light);
+  }
+  .vt-category:first-child { border-top: none; }
+  .vt-item {
+    padding: 3px 16px;
+    font-size: 11px;
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--border-light);
+    line-height: 1.4;
+  }
+  .vt-item:last-child { border-bottom: none; }
+  .vt-item-name { color: var(--text); }
+  .vt-flat-item {
+    padding: 4px 10px;
+    font-size: 11px;
+    color: var(--text);
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+  .vt-flat-item:last-child { border-bottom: none; }
+  .vt-flat-desc { color: var(--text-dim); font-size: 10px; }
+  .vt-loading { padding: 12px; font-size: 11px; color: var(--text-dim); text-align: center; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Resilience Ontology</h1>
+  <span class="status" id="status">No ontology loaded</span>
+  <div class="spacer"></div>
+  <div class="dropdown" id="file-dropdown">
+    <button id="file-menu-btn">Version ▾</button>
+    <div class="dropdown-content" id="file-menu"></div>
+  </div>
+  <button id="reload-current">↻ Reload</button>
+  <button id="view-vocabularies">Vocabularies</button>
+  <button id="add-type">+ Type</button>
+  <button id="add-rel">+ Relationship</button>
+  <button id="export">Export JSON</button>
+  <button id="toggle-physics" title="Toggle physics simulation">Physics: ON</button>
+  <button id="load-sample" title="Load sample instance data">Sample Data</button>
+</header>
+
+<aside class="sidebar" id="left-sidebar">
+  <h2>Filter</h2>
+  <div class="filter-item">
+    <input type="checkbox" id="filter-vocab-only">
+    <label for="filter-vocab-only" style="cursor:pointer">Vocab-linked only</label>
+  </div>
+
+  <h2>Types</h2>
+  <div id="type-list"></div>
+
+  <h2>Relationships</h2>
+  <div id="rel-list"></div>
+
+  <h2>Stats</h2>
+  <div class="status" id="stats"></div>
+</aside>
+
+<div id="graph"></div>
+
+<aside class="inspector" id="inspector">
+  <div class="empty">Click a type or relationship to inspect and edit.<br><br>Use Load File to open an ontology JSON.</div>
+</aside>
+
+
+<div class="modal" id="vocab-modal">
+  <div class="modal-content wide">
+    <h3 id="vocab-modal-title">Vocabulary</h3>
+    <div id="vocab-modal-content"></div>
+    <div class="modal-buttons">
+      <button id="vocab-modal-close" class="primary">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// Resilience Ontology Viewer
+// ============================================================
+
+const DOMAIN = "urban-climate-adaptation";
+const NODE_COLOR = "#1E4DD8"; // blueprint blue from Urban Tech Hub palette
+
+const INSTANCE_COLORS = {
+  Solution: "#3b82f6",
+  Hazard: "#ef4444",
+  Vulnerability: "#f97316",
+  ExposureUnit: "#f59e0b",
+  UrbanSystem: "#10b981",
+  Mechanism: "#8b5cf6",
+  Stakeholder: "#06b6d4",
+  Location: "#6366f1",
+  ResilienceGoal: "#22c55e",
+  Outcome: "#14b8a6",
+  Indicator: "#64748b",
+  Plan: "#a855f7",
+  EnablingCondition: "#84cc16",
+  Barrier: "#dc2626",
+  FinancingSource: "#eab308",
+  FinancialInstrument: "#f59e0b",
+  Supplier: "#78716c",
+};
+
+const SAMPLE_INDEX = "extractions/miami/index.json";
+
+let sampleData = null;
+let viewMode = "ontology"; // "ontology" or "instances"
+
+let ontology = {
+  version: "0.1",
+  updated: new Date().toISOString(),
+  domain: DOMAIN,
+  types: [],
+  relationships: [],
+  vocabularies: []
+};
+let selected = null;
+let network = null;
+let nodesDS, edgesDS;
+
+// Map vocab IDs to term files (relative to viewer.html)
+const VOCAB_TERM_FILES = {
+  "hazards": "schemas/vocabularies/hazards.json",
+  "urban-systems": "schemas/vocabularies/urban-systems.json",
+  "solution-categories": "schemas/vocabularies/solution-categories.json",
+  "crf-goals": "schemas/vocabularies/crf-goals.json",
+  "enums": "schemas/vocabularies/enums.json",
+  "resilience-attributes": "schemas/vocabularies/resilience-attributes.json",
+  "vulnerable-populations": "schemas/vocabularies/vulnerable-populations.json",
+};
+
+// --------- Graph rendering ----------
+function renderGraph() {
+  const vocabOnlyFilter = document.getElementById("filter-vocab-only").checked;
+
+  let visibleTypes = vocabOnlyFilter
+    ? ontology.types.filter(t => t.vocabulary_bindings && t.vocabulary_bindings.length > 0)
+    : ontology.types.slice();
+
+  const visibleIds = new Set(visibleTypes.map(t => t.id));
+
+  const nodes = visibleTypes.map(t => {
+    const hasVocabBindings = t.vocabulary_bindings && t.vocabulary_bindings.length > 0;
+    const vocabLabel = hasVocabBindings ? `${t.label} ◈` : t.label;
+    const vocabTooltip = hasVocabBindings
+      ? `${t.label}\n\nVocabulary bindings:\n${t.vocabulary_bindings.map(b => `  • ${b.vocab}`).join('\n')}`
+      : t.label;
+
+    return {
+      id: t.id,
+      label: vocabLabel,
+      title: vocabTooltip,
+      color: {
+        background: NODE_COLOR,
+        border: hasVocabBindings ? "#2E7D4F" : "rgba(18,20,23,0.2)",
+        highlight: {
+          background: "#4A7FEB",
+          border: hasVocabBindings ? "#2E7D4F" : "rgba(18,20,23,0.35)"
+        },
+        hover: {
+          background: "#4A7FEB",
+          border: hasVocabBindings ? "#2E7D4F" : "rgba(18,20,23,0.3)"
+        }
+      },
+      font: {
+        color: "#FBFAF6",
+        face: "Inter Tight, system-ui",
+        size: 20,
+        bold: true
+      },
+      shape: "box",
+      margin: { top: 12, bottom: 12, left: 16, right: 16 },
+      borderWidth: hasVocabBindings ? 3 : 2,
+    };
+  });
+
+  const edges = ontology.relationships
+    .filter(r => visibleIds.has(r.source) && visibleIds.has(r.target))
+    .map(r => ({
+      id: r.id,
+      from: r.source,
+      to: r.target,
+      label: r.label,
+      arrows: { to: { enabled: true, scaleFactor: 0.7 } },
+      color: {
+        color: "#8A8F98",
+        highlight: "#B31B1B",
+        hover: "#4A4F57"
+      },
+      font: {
+        color: "#2A2D33",
+        face: "Inter Tight, system-ui",
+        size: 15,
+        strokeWidth: 3,
+        strokeColor: "#F7F6F2",
+        align: "middle"
+      },
+      smooth: { type: "curvedCW", roundness: 0.15 },
+      width: 1.5,
+      length: 300,
+    }));
+
+  if (!network) {
+    nodesDS = new vis.DataSet(nodes);
+    edgesDS = new vis.DataSet(edges);
+    const container = document.getElementById("graph");
+    network = new vis.Network(container, { nodes: nodesDS, edges: edgesDS }, {
+      physics: {
+        solver: "forceAtlas2Based",
+        forceAtlas2Based: {
+          gravitationalConstant: -200,
+          centralGravity: 0.005,
+          springLength: 280,
+          springConstant: 0.03,
+          avoidOverlap: 1.0,
+          damping: 0.6
+        },
+        stabilization: { iterations: 500, updateInterval: 25 }
+      },
+      interaction: { hover: true, tooltipDelay: 150 },
+      layout: { improvedLayout: true }
+    });
+    network.on("click", params => {
+      if (params.nodes.length) {
+        selected = { kind: "type", id: params.nodes[0] };
+        renderInspector();
+        renderSidebar();
+      } else if (params.edges.length) {
+        selected = { kind: "relationship", id: params.edges[0] };
+        renderInspector();
+        renderSidebar();
+      }
+    });
+  } else {
+    nodesDS.clear(); nodesDS.add(nodes);
+    edgesDS.clear(); edgesDS.add(edges);
+    network.stabilize();
+  }
+}
+
+// --------- Instance graph rendering ----------
+function renderInstanceGraph() {
+  if (!sampleData) return;
+
+  function humanize(s) {
+    if (!s || typeof s !== 'string') return s;
+    return s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+  function instanceLabel(node) {
+    const p = node.properties || {};
+    const raw = p.name || p.plan_name || p.hazard_name || p.supplier_name
+      || p.system_id || p.outcome_type || p.affected_group
+      || p.vuln_type || p.condition || p.barrier
+      || p.mechanism_type || p.indicator_name
+      || p.source_name || p.instrument_type
+      || p.goal_id || p.description || node.id;
+    return humanize(raw);
+  }
+
+  function truncate(s, n) { return s.length > n ? s.slice(0, n) + "…" : s; }
+
+  const nodes = sampleData.nodes.map(n => {
+    const color = INSTANCE_COLORS[n.type] || "#94a3b8";
+    const label = truncate(instanceLabel(n), 40);
+    const tooltip = `[${n.type}] ${instanceLabel(n)}\n\n${JSON.stringify(n.properties, null, 2).slice(0, 400)}`;
+    return {
+      id: n.id,
+      label: label,
+      title: tooltip,
+      group: n.type,
+      color: {
+        background: color,
+        border: "rgba(0,0,0,0.15)",
+        highlight: { background: color, border: "rgba(0,0,0,0.4)" },
+        hover: { background: color, border: "rgba(0,0,0,0.3)" },
+      },
+      font: { color: "#fff", face: "system-ui", size: 14, bold: true },
+      shape: "box",
+      margin: { top: 10, bottom: 10, left: 14, right: 14 },
+      borderWidth: 2,
+    };
+  });
+
+  const nodeIds = new Set(sampleData.nodes.map(n => n.id));
+  const edges = sampleData.edges
+    .filter(e => nodeIds.has(e.source) && nodeIds.has(e.target))
+    .map(e => {
+      const relDef = ontology.relationships.find(r => r.id === e.type);
+      const label = relDef ? relDef.label : e.type;
+      return {
+        id: e.id,
+        from: e.source,
+        to: e.target,
+        label: label,
+        arrows: { to: { enabled: true, scaleFactor: 0.6 } },
+        color: { color: "#94a3b8", highlight: "#4a9eff", hover: "#64748b" },
+        font: { color: "#475569", face: "system-ui", size: 11, strokeWidth: 3, strokeColor: "#ffffff" },
+        smooth: { type: "curvedCW", roundness: 0.15 },
+        width: 1.2,
+        length: 250,
+      };
+    });
+
+  if (!network) {
+    nodesDS = new vis.DataSet(nodes);
+    edgesDS = new vis.DataSet(edges);
+    const container = document.getElementById("graph");
+    network = new vis.Network(container, { nodes: nodesDS, edges: edgesDS }, {
+      physics: {
+        solver: "forceAtlas2Based",
+        forceAtlas2Based: {
+          gravitationalConstant: -300,
+          centralGravity: 0.005,
+          springLength: 200,
+          springConstant: 0.04,
+          avoidOverlap: 1.0,
+          damping: 0.5,
+        },
+        stabilization: { iterations: 600, updateInterval: 25 },
+      },
+      interaction: { hover: true, tooltipDelay: 150 },
+      layout: { improvedLayout: true },
+    });
+    network.on("click", params => {
+      if (params.nodes.length) {
+        const nodeId = params.nodes[0];
+        const node = sampleData.nodes.find(n => n.id === nodeId);
+        if (node) {
+          selected = { kind: "instance", id: nodeId, data: node };
+          renderInstanceInspector(node);
+          renderInstanceSidebar();
+        }
+      } else if (params.edges.length) {
+        const edgeId = params.edges[0];
+        const edge = sampleData.edges.find(e => e.id === edgeId);
+        if (edge) {
+          selected = { kind: "instance-edge", id: edgeId, data: edge };
+          renderInstanceEdgeInspector(edge);
+          renderInstanceSidebar();
+        }
+      }
+    });
+  } else {
+    nodesDS.clear(); nodesDS.add(nodes);
+    edgesDS.clear(); edgesDS.add(edges);
+    network.stabilize();
+  }
+}
+
+function renderInstanceInspector(node) {
+  const inspector = document.getElementById("inspector");
+  const propsHtml = Object.entries(node.properties || {})
+    .map(([k, v]) => {
+      const val = typeof v === "object" ? JSON.stringify(v) : String(v);
+      return `<tr><td style="font-weight:600;padding:3px 8px 3px 0;vertical-align:top;white-space:nowrap;color:var(--text-dim)">${escapeHtml(k)}</td><td style="padding:3px 0;word-break:break-word">${escapeHtml(val.slice(0, 200))}</td></tr>`;
+    }).join("");
+
+  const connectedEdges = sampleData.edges.filter(e => e.source === node.id || e.target === node.id);
+  const edgesHtml = connectedEdges.map(e => {
+    const relDef = ontology.relationships.find(r => r.id === e.type);
+    const label = relDef ? relDef.label : e.type;
+    const other = e.source === node.id ? e.target : e.source;
+    const otherNode = sampleData.nodes.find(n => n.id === other);
+    const otherName = otherNode ? (otherNode.properties.name || otherNode.properties.plan_name || otherNode.id) : other;
+    const dir = e.source === node.id ? "→" : "←";
+    return `<div style="font-size:12px;padding:2px 0">${dir} <span style="color:var(--accent)">${escapeHtml(label)}</span> ${escapeHtml(String(otherName).slice(0, 50))} <span style="color:var(--text-dim)">(${otherNode?.type || "?"})</span></div>`;
+  }).join("");
+
+  inspector.innerHTML = `
+    <div style="padding:12px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <span style="background:${INSTANCE_COLORS[node.type] || '#94a3b8'};color:#fff;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600">${node.type}</span>
+        <span style="font-size:11px;color:var(--text-dim)">${node.id}</span>
+      </div>
+      <table style="font-size:12px;width:100%;border-collapse:collapse">${propsHtml}</table>
+      ${connectedEdges.length ? `<div style="margin-top:12px;border-top:1px solid var(--border);padding-top:8px"><div style="font-size:10px;text-transform:uppercase;color:var(--text-dim);font-weight:600;margin-bottom:4px">Connections (${connectedEdges.length})</div>${edgesHtml}</div>` : ""}
+    </div>`;
+}
+
+function renderInstanceEdgeInspector(edge) {
+  const inspector = document.getElementById("inspector");
+  const relDef = ontology.relationships.find(r => r.id === edge.type);
+  const sourceNode = sampleData.nodes.find(n => n.id === edge.source);
+  const targetNode = sampleData.nodes.find(n => n.id === edge.target);
+  const propsHtml = Object.entries(edge.properties || {})
+    .map(([k, v]) => `<tr><td style="font-weight:600;padding:3px 8px 3px 0;color:var(--text-dim)">${escapeHtml(k)}</td><td style="padding:3px 0;word-break:break-word">${escapeHtml(String(v).slice(0, 200))}</td></tr>`)
+    .join("");
+
+  inspector.innerHTML = `
+    <div style="padding:12px">
+      <div style="font-weight:600;font-size:14px;margin-bottom:8px">${relDef ? relDef.label : edge.type}</div>
+      <div style="font-size:12px;margin-bottom:8px">
+        <span style="background:${INSTANCE_COLORS[sourceNode?.type] || '#94a3b8'};color:#fff;padding:1px 6px;border-radius:3px;font-size:10px">${sourceNode?.type}</span>
+        ${escapeHtml((sourceNode?.properties?.name || edge.source).slice(0, 40))}
+        → <span style="background:${INSTANCE_COLORS[targetNode?.type] || '#94a3b8'};color:#fff;padding:1px 6px;border-radius:3px;font-size:10px">${targetNode?.type}</span>
+        ${escapeHtml((targetNode?.properties?.name || edge.target).slice(0, 40))}
+      </div>
+      ${propsHtml ? `<table style="font-size:12px;width:100%;border-collapse:collapse">${propsHtml}</table>` : ""}
+    </div>`;
+}
+
+function renderInstanceSidebar() {
+  const tl = document.getElementById("type-list");
+  const typeGroups = {};
+  for (const n of sampleData.nodes) {
+    (typeGroups[n.type] = typeGroups[n.type] || []).push(n);
+  }
+
+  function nodeName(n) {
+    const p = n.properties || {};
+    return p.name || p.plan_name || p.hazard_name || p.goal_id || p.condition || p.barrier || n.id;
+  }
+
+  const sections = Object.entries(typeGroups).sort((a, b) => a[0].localeCompare(b[0]));
+  tl.innerHTML = sections.map(([type, items]) => `
+    <div class="nav-section">
+      <div class="nav-header" data-section="${type}">
+        <span class="arrow">▼</span>
+        <span style="display:inline-flex;align-items:center;gap:6px">
+          <span style="background:${INSTANCE_COLORS[type] || '#94a3b8'};width:10px;height:10px;border-radius:2px;display:inline-block"></span>
+          ${type}
+        </span>
+        <span class="count">${items.length}</span>
+      </div>
+      <div class="nav-items" data-items="${type}">
+        ${items.map(n => `<div class="type-item ${selected?.id === n.id ? 'selected' : ''}" data-id="${n.id}">${escapeHtml(String(nodeName(n)).slice(0, 50))}</div>`).join("")}
+      </div>
+    </div>`).join("");
+
+  tl.querySelectorAll(".type-item").forEach(el => {
+    el.onclick = () => {
+      const node = sampleData.nodes.find(n => n.id === el.dataset.id);
+      if (node) {
+        selected = { kind: "instance", id: node.id, data: node };
+        renderInstanceInspector(node);
+        renderInstanceSidebar();
+        if (network) network.selectNodes([node.id]);
+      }
+    };
+  });
+
+  tl.querySelectorAll(".nav-header").forEach(h => {
+    h.onclick = () => {
+      const items = h.parentElement.querySelector(".nav-items");
+      const arrow = h.querySelector(".arrow");
+      if (items.style.display === "none") {
+        items.style.display = ""; arrow.textContent = "▼";
+      } else {
+        items.style.display = "none"; arrow.textContent = "▶";
+      }
+    };
+  });
+
+  // Stats
+  const statsEl = document.getElementById("sidebar-stats");
+  if (statsEl) {
+    statsEl.innerHTML = `${sampleData.nodes.length} instances · ${sampleData.edges.length} edges<br><span style="font-size:10px;color:var(--text-dim)">${sampleData.source?.plan || ""}</span>`;
+  }
+}
+
+async function loadSampleData(path) {
+  try {
+    const r = await fetch(path + "?t=" + Date.now());
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    sampleData = await r.json();
+    viewMode = "instances";
+    selected = null;
+    network = null;
+    document.getElementById("graph").innerHTML = "";
+    const label = sampleData.solution_summary?.category || sampleData.source?.plan || path;
+    document.getElementById("status").textContent = `Sample: ${label} (${sampleData.nodes.length} nodes, ${sampleData.edges.length} edges)`;
+    document.getElementById("load-sample").textContent = "← Ontology";
+    renderInstanceGraph();
+    renderInstanceSidebar();
+    document.getElementById("inspector").innerHTML = '<div class="status" style="padding:12px">Click a node to inspect</div>';
+  } catch (e) {
+    console.error("Failed to load sample data:", e);
+    document.getElementById("status").textContent = `Error: ${e.message}`;
+  }
+}
+
+function switchToOntologyView() {
+  viewMode = "ontology";
+  sampleData = null;
+  selected = null;
+  network = null;
+  document.getElementById("graph").innerHTML = "";
+  document.getElementById("load-sample").textContent = "Sample Data";
+  document.getElementById("sample-picker").style.display = "none";
+  loadOntologyFile(ONTOLOGY_FILES[0].path);
+}
+
+async function showSamplePicker() {
+  let picker = document.getElementById("sample-picker");
+  if (!picker) {
+    picker = document.createElement("div");
+    picker.id = "sample-picker";
+    picker.style.cssText = "position:absolute;top:48px;right:120px;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:8px;z-index:100;box-shadow:0 4px 12px rgba(0,0,0,0.15);max-width:400px";
+    document.body.appendChild(picker);
+  }
+
+  if (picker.style.display === "block") {
+    picker.style.display = "none";
+    return;
+  }
+
+  picker.innerHTML = '<div style="font-size:11px;color:var(--text-dim);padding:4px">Loading...</div>';
+  picker.style.display = "block";
+
+  try {
+    const r = await fetch(SAMPLE_INDEX + "?t=" + Date.now());
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const index = await r.json();
+    const dir = SAMPLE_INDEX.replace("/index.json", "");
+
+    picker.innerHTML = `
+      <div style="font-size:11px;text-transform:uppercase;color:var(--text-dim);font-weight:600;padding:4px 4px 8px;letter-spacing:.05em">${index.plan || "Sample Data"} — ${index.city || ""}</div>
+      ${index.files.map((f, i) => {
+        const label = f.replace("miami-", "").replace(".json", "").replace(/-/g, " ").replace(/^\d+\s*/, "");
+        return `<div class="type-item" style="cursor:pointer;padding:6px 8px;font-size:13px;border-radius:4px" data-path="${dir}/${f}">${i + 1}. ${label}</div>`;
+      }).join("")}
+    `;
+
+    picker.querySelectorAll(".type-item").forEach(el => {
+      el.onclick = () => {
+        picker.style.display = "none";
+        loadSampleData(el.dataset.path);
+      };
+    });
+  } catch (e) {
+    picker.innerHTML = `<div style="color:#dc2626;font-size:12px;padding:4px">Error: ${e.message}</div>`;
+  }
+}
+
+// --------- Sample data button ----------
+document.getElementById("load-sample").onclick = () => {
+  if (viewMode === "instances") {
+    switchToOntologyView();
+  } else {
+    showSamplePicker();
+  }
+};
+
+// --------- Physics toggle ----------
+document.getElementById("toggle-physics").onclick = () => {
+  if (!network) return;
+  const btn = document.getElementById("toggle-physics");
+  const enabled = btn.textContent.includes("ON");
+  network.setOptions({ physics: { enabled: !enabled } });
+  btn.textContent = enabled ? "Physics: OFF" : "Physics: ON";
+};
+
+// --------- Sidebar rendering ----------
+function renderSidebar() {
+  const vocabOnlyFilter = document.getElementById("filter-vocab-only").checked;
+
+  const visibleTypes = vocabOnlyFilter
+    ? ontology.types.filter(t => t.vocabulary_bindings && t.vocabulary_bindings.length > 0)
+    : ontology.types.slice();
+
+  const tl = document.getElementById("type-list");
+
+  if (visibleTypes.length === 0) {
+    tl.innerHTML = '<div class="status" style="padding:6px 8px">No types visible</div>';
+  } else {
+    tl.innerHTML = `
+      <div class="nav-section">
+        <div class="nav-header" data-section="types">
+          <span class="arrow">▼</span>
+          <span>Types</span>
+          <span class="count">${visibleTypes.length}</span>
+        </div>
+        <div class="nav-items" data-items="types">
+          ${visibleTypes.map(t => {
+            const hasVocab = t.vocabulary_bindings && t.vocabulary_bindings.length > 0;
+            return `<div class="type-item ${selected?.kind==='type' && selected.id===t.id ? 'selected' : ''}" data-id="${t.id}">
+              ${escapeHtml(t.label)}${hasVocab ? ' <span style="opacity:0.55;font-size:10px">◈</span>' : ''}
+            </div>`;
+          }).join("")}
+        </div>
+      </div>`;
+  }
+
+  tl.querySelectorAll(".type-item").forEach(el => {
+    el.onclick = () => { selected = { kind: "type", id: el.dataset.id }; renderInspector(); renderSidebar(); };
+  });
+  tl.querySelectorAll(".nav-header").forEach(header => {
+    header.onclick = () => {
+      const items = tl.querySelector(`[data-items="${header.dataset.section}"]`);
+      header.classList.toggle("collapsed");
+      items.classList.toggle("collapsed");
+    };
+  });
+
+  const visibleIds = new Set(visibleTypes.map(t => t.id));
+  const allVisibleRels = ontology.relationships.filter(r =>
+    visibleIds.has(r.source) && visibleIds.has(r.target)
+  );
+
+  // Cross-filter: when a type is selected, show only its relationships
+  const selectedTypeId = selected?.kind === 'type' ? selected.id : null;
+  const visibleRels = selectedTypeId
+    ? allVisibleRels.filter(r => r.source === selectedTypeId || r.target === selectedTypeId)
+    : allVisibleRels;
+
+  // Cross-highlight: when a relationship is selected, mark its source/target types
+  const highlightTypeIds = new Set();
+  if (selected?.kind === 'relationship') {
+    const selRel = ontology.relationships.find(x => x.id === selected.id);
+    if (selRel) { highlightTypeIds.add(selRel.source); highlightTypeIds.add(selRel.target); }
+  }
+
+  // Re-render type items with highlight class
+  tl.querySelectorAll(".type-item").forEach(el => {
+    if (highlightTypeIds.has(el.dataset.id)) el.classList.add("type-highlight");
+  });
+
+  const relHeaderLabel = selectedTypeId
+    ? `${visibleRels.length} of ${allVisibleRels.length}`
+    : `${visibleRels.length}`;
+
+  const rl = document.getElementById("rel-list");
+  if (visibleRels.length > 0) {
+    rl.innerHTML = `
+      <div class="nav-section">
+        <div class="nav-header" data-section="relationships">
+          <span class="arrow">▼</span>
+          <span>${selectedTypeId ? 'Connected' : 'All'}</span>
+          <span class="count">${relHeaderLabel}</span>
+        </div>
+        <div class="nav-items" data-items="relationships">
+          ${visibleRels.map(r =>
+            `<div class="type-item ${selected?.kind==='relationship' && selected.id===r.id ? 'selected' : ''}" data-id="${r.id}">
+              <span style="font-size:11px">${escapeHtml(r.source)} → ${escapeHtml(r.target)}</span><br>
+              <span style="color:var(--text-dim);font-size:10px">${escapeHtml(r.label)}</span>
+            </div>`
+          ).join("")}
+        </div>
+      </div>`;
+
+    rl.querySelectorAll(".type-item").forEach(el => {
+      el.onclick = () => { selected = { kind: "relationship", id: el.dataset.id }; renderInspector(); renderSidebar(); };
+    });
+    rl.querySelectorAll(".nav-header").forEach(header => {
+      header.onclick = () => {
+        const items = rl.querySelector(`[data-items="${header.dataset.section}"]`);
+        header.classList.toggle("collapsed");
+        items.classList.toggle("collapsed");
+      };
+    });
+  } else {
+    rl.innerHTML = '<div class="status" style="padding:6px 8px">No relationships visible</div>';
+  }
+
+  const vocabLinkedCount = ontology.types.filter(t =>
+    t.vocabulary_bindings && t.vocabulary_bindings.length > 0
+  ).length;
+  const externalVocabs = ontology.vocabularies?.filter(v => v.type === 'external').length || 0;
+  const vocabSummary = ontology.vocabularies?.length
+    ? `${ontology.vocabularies.length} vocabs (${externalVocabs} ext)`
+    : '—';
+
+  document.getElementById("stats").innerHTML =
+    `${visibleTypes.length}/${ontology.types.length} types · ${visibleRels.length}/${ontology.relationships.length} rels<br>${vocabSummary} · ${vocabLinkedCount} ◈ vocab-linked`;
+}
+
+// --------- Inspector rendering ----------
+function renderInspector() {
+  const panel = document.getElementById("inspector");
+  if (!selected) {
+    panel.innerHTML = '<div class="empty">Click a type or relationship to inspect and edit.</div>';
+    return;
+  }
+
+  if (selected.kind === "type") {
+    const t = ontology.types.find(x => x.id === selected.id);
+    if (!t) { selected = null; renderInspector(); return; }
+
+    const hasVocabBindings = t.vocabulary_bindings && t.vocabulary_bindings.length > 0;
+    const props = t.properties || [];
+    const cases = t.evidence_cases || [];
+    const bindings = t.vocabulary_bindings || [];
+
+    // Build properties rows
+    const propRowsHtml = props.length > 0
+      ? props.map((p, i) => {
+          const vocabInfo = p.vocabulary ? getVocabularyInfo(p.vocabulary) : null;
+          const isEnum = (p.type || "").includes('enum');
+          let typeHtml = escapeHtml(p.type || "");
+          if (isEnum && p.vocabulary) {
+            const vLabel = vocabInfo ? vocabInfo.label : p.vocabulary;
+            typeHtml += ` · <span style="color:var(--accent);cursor:pointer" onclick="showVocabularyModal('${escapeHtml(p.vocabulary)}')" title="View vocabulary">${escapeHtml(vLabel)}</span>`;
+          } else if (p.values) {
+            typeHtml += ` · [${p.values.map(v => escapeHtml(v)).join(', ')}]`;
+          }
+          return `
+            <div class="prop-row">
+              <span class="prop-name" title="${escapeHtml(p.id)}">${escapeHtml(p.id)}</span>
+              <span class="prop-meta">${typeHtml}</span>
+              <span class="prop-req">${p.required ? 'req' : ''}</span>
+              <button class="prop-del-btn" data-pi="${i}" title="Remove property">✕</button>
+            </div>`;
+        }).join("")
+      : `<div class="status" style="padding:4px 0">No properties defined</div>`;
+
+    // Type-level vocab mappings footer
+    const vocabMappingsHtml = bindings.length > 0
+      ? `<div class="vocab-mappings">
+          <span class="vm-label">Maps to:</span>
+          ${bindings.map(b => {
+            const vi = getVocabularyInfo(b.vocab);
+            const isExt = vi?.type === 'external';
+            const label = vi ? vi.label : b.vocab;
+            return `<span class="chip vocab-chip ${isExt ? 'external' : ''}" onclick="showVocabularyModal('${escapeHtml(b.vocab)}')" title="${escapeHtml(label)}">${escapeHtml(b.vocab)}${b.term && b.term !== '*' ? `: ${escapeHtml(b.term)}` : ''}</span>`;
+          }).join("")}
+        </div>` : '';
+
+    // Source cases
+    const casesHtml = cases.length > 0
+      ? `<hr class="inspector-divider">
+         <div class="field">
+           <label>Evidence cases <span style="font-weight:normal;text-transform:none;letter-spacing:0;color:var(--text-dim);font-size:9px">— source document IDs</span></label>
+           <div class="chips-row">${cases.map(c => `<span class="chip case-chip">${escapeHtml(c)}</span>`).join("")}</div>
+         </div>`
+      : '';
+
+    panel.innerHTML = `
+      <h3>
+        ${escapeHtml(t.label)}
+        ${hasVocabBindings ? '<span class="badge vocab">◈ Vocab</span>' : ''}
+      </h3>
+
+      <div class="field"><label>ID</label><input id="f-id" value="${escapeHtml(t.id)}"></div>
+      <div class="field"><label>Label</label><input id="f-label" value="${escapeHtml(t.label)}"></div>
+
+      <div class="field">
+        <label>Definition</label>
+        <textarea id="f-def" rows="4">${escapeHtml(t.definition || "")}</textarea>
+      </div>
+
+      <div class="field">
+        <label>Properties (${props.length})</label>
+        <div class="prop-table">
+          ${propRowsHtml}
+        </div>
+        ${vocabMappingsHtml}
+        <button class="add-btn" id="add-prop">+ Add property</button>
+      </div>
+
+      ${casesHtml}
+
+      <hr class="inspector-divider">
+      <div class="field">
+        <label>Notes</label>
+        <textarea id="f-notes" rows="3">${escapeHtml(t.notes || "")}</textarea>
+      </div>
+
+      <div class="btn-row">
+        <button id="save-type">Save changes</button>
+        <button id="delete-type" class="danger">Delete type</button>
+      </div>
+    `;
+
+    initAutoResize();
+
+    document.getElementById("save-type").onclick = () => {
+      const newId = document.getElementById("f-id").value.trim();
+      const idChanged = newId !== t.id;
+      if (idChanged && ontology.types.some(x => x.id === newId)) { alert("ID already exists"); return; }
+      const oldId = t.id;
+      t.id = newId;
+      t.label = document.getElementById("f-label").value;
+      t.definition = document.getElementById("f-def").value;
+      t.notes = document.getElementById("f-notes").value;
+      if (idChanged) {
+        ontology.relationships.forEach(r => {
+          if (r.source === oldId) r.source = newId;
+          if (r.target === oldId) r.target = newId;
+        });
+        selected.id = newId;
+      }
+      ontology.updated = new Date().toISOString();
+      refreshAll();
+    };
+
+    document.getElementById("delete-type").onclick = () => {
+      const relCount = ontology.relationships.filter(r => r.source === t.id || r.target === t.id).length;
+      if (!confirm(`Delete type "${t.label}"?${relCount > 0 ? ` This also removes ${relCount} relationship(s).` : ''}`)) return;
+      ontology.types = ontology.types.filter(x => x.id !== t.id);
+      ontology.relationships = ontology.relationships.filter(r => r.source !== t.id && r.target !== t.id);
+      selected = null;
+      ontology.updated = new Date().toISOString();
+      refreshAll();
+    };
+
+    document.getElementById("add-prop").onclick = () => {
+      const name = prompt("Property name (id):");
+      if (!name) return;
+      const ptype = prompt("Property type (string, number, date, enum, duration, money-range, ...):", "string") || "string";
+      t.properties = t.properties || [];
+      t.properties.push({ id: name, type: ptype, required: false });
+      ontology.updated = new Date().toISOString();
+      renderInspector();
+    };
+
+    panel.querySelectorAll(".prop-del-btn").forEach(btn => {
+      btn.onclick = () => {
+        const i = parseInt(btn.dataset.pi, 10);
+        t.properties.splice(i, 1);
+        renderInspector();
+      };
+    });
+
+  } else {
+    // Relationship inspector
+    const r = ontology.relationships.find(x => x.id === selected.id);
+    if (!r) { selected = null; renderInspector(); return; }
+
+    const cases = r.evidence_cases || [];
+    const casesHtml = cases.length > 0
+      ? `<div class="field">
+           <label>Evidence cases <span style="font-weight:normal;text-transform:none;letter-spacing:0;color:var(--text-dim);font-size:9px">— source document IDs</span></label>
+           <div class="chips-row">${cases.map(c => `<span class="chip case-chip">${escapeHtml(c)}</span>`).join("")}</div>
+         </div>`
+      : '';
+
+    panel.innerHTML = `
+      <h3>${escapeHtml(r.label)} <span class="badge relationship">Relationship</span></h3>
+      <div class="field"><label>ID</label><input id="f-id" value="${escapeHtml(r.id)}"></div>
+      <div class="field"><label>Label</label><input id="f-label" value="${escapeHtml(r.label)}"></div>
+      <div class="field"><label>Source type</label>
+        <select id="f-source">${ontology.types.map(t =>
+          `<option value="${escapeHtml(t.id)}" ${r.source === t.id ? 'selected' : ''}>${escapeHtml(t.label)}</option>`
+        ).join("")}</select>
+      </div>
+      <div class="field"><label>Target type</label>
+        <select id="f-target">${ontology.types.map(t =>
+          `<option value="${escapeHtml(t.id)}" ${r.target === t.id ? 'selected' : ''}>${escapeHtml(t.label)}</option>`
+        ).join("")}</select>
+      </div>
+      <div class="field">
+        <label>Definition</label>
+        <textarea id="f-def" rows="4">${escapeHtml(r.definition || "")}</textarea>
+      </div>
+      ${casesHtml}
+      <div class="btn-row">
+        <button id="save-rel">Save changes</button>
+        <button id="delete-rel" class="danger">Delete</button>
+      </div>
+    `;
+
+    initAutoResize();
+
+    document.getElementById("save-rel").onclick = () => {
+      const newId = document.getElementById("f-id").value.trim();
+      if (newId !== r.id && ontology.relationships.some(x => x.id === newId)) { alert("ID exists"); return; }
+      r.id = newId;
+      r.label = document.getElementById("f-label").value;
+      r.source = document.getElementById("f-source").value;
+      r.target = document.getElementById("f-target").value;
+      r.definition = document.getElementById("f-def").value;
+      selected.id = newId;
+      ontology.updated = new Date().toISOString();
+      refreshAll();
+    };
+
+    document.getElementById("delete-rel").onclick = () => {
+      if (!confirm(`Delete relationship "${r.label}"?`)) return;
+      ontology.relationships = ontology.relationships.filter(x => x.id !== r.id);
+      selected = null;
+      ontology.updated = new Date().toISOString();
+      refreshAll();
+    };
+  }
+}
+
+// --------- Auto-resize textareas ----------
+function autoResizeTA(el) {
+  el.style.height = "auto";
+  el.style.height = (el.scrollHeight + 2) + "px";
+}
+function initAutoResize() {
+  document.querySelectorAll("#inspector textarea").forEach(ta => {
+    autoResizeTA(ta);
+    ta.addEventListener("input", () => autoResizeTA(ta));
+  });
+}
+
+// --------- Refresh ----------
+function refreshAll() {
+  renderGraph();
+  renderSidebar();
+  renderInspector();
+  const fileName = currentFile ? currentFile.split('/').pop() : 'No file loaded';
+  document.getElementById("status").textContent =
+    `${fileName} · ${ontology.types.length} types · ${ontology.relationships.length} rels`;
+}
+
+function escapeHtml(s) {
+  return String(s || "").replace(/[&<>"']/g, c =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])
+  );
+}
+
+// --------- File loading ----------
+const ONTOLOGY_FILES = [
+  { path: "ontology/ontology-v0.1.1.json", label: "v0.1.1 — Current (Phase P: Plan expansion)" },
+  { path: "ontology/ontology-v0.1.json", label: "v0.1 — Initial release" }
+];
+
+let currentFile = null;
+
+function renderFileList() {
+  const fileMenu = document.getElementById("file-menu");
+  fileMenu.innerHTML = ONTOLOGY_FILES.map(file =>
+    `<button class="${currentFile === file.path ? 'active' : ''}" data-path="${file.path}">
+      <strong>${escapeHtml(file.label)}</strong>
+      <span>${escapeHtml(file.path)}</span>
+    </button>`
+  ).join("");
+
+  fileMenu.querySelectorAll("button").forEach(btn => {
+    btn.onclick = () => {
+      loadOntologyFile(btn.dataset.path);
+      document.getElementById("file-dropdown").classList.remove("show");
+    };
+  });
+}
+
+document.getElementById("file-menu-btn").onclick = (e) => {
+  e.stopPropagation();
+  document.getElementById("file-dropdown").classList.toggle("show");
+};
+document.addEventListener("click", () => {
+  document.getElementById("file-dropdown").classList.remove("show");
+});
+
+async function loadOntologyFile(path) {
+  try {
+    const response = await fetch(path + "?t=" + Date.now());
+    if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    const parsed = await response.json();
+
+    if (!parsed.types && !parsed.relationships) {
+      throw new Error("Invalid ontology format: missing 'types' or 'relationships'");
+    }
+
+    ontology = {
+      version: parsed.version || "0.1",
+      updated: parsed.updated || new Date().toISOString(),
+      domain: parsed.domain || DOMAIN,
+      types: parsed.types || [],
+      relationships: parsed.relationships || [],
+      vocabularies: parsed.vocabularies || ontology.vocabularies || []
+    };
+
+    currentFile = path;
+    selected = null;
+
+    // Auto-load vocabularies from canonical file if not already present
+    if (!ontology.vocabularies || ontology.vocabularies.length === 0) {
+      try {
+        const vr = await fetch("ontology/ontology-v0.1.json?t=" + Date.now());
+        if (vr.ok) {
+          const vd = await vr.json();
+          ontology.vocabularies = vd.vocabularies || [];
+        }
+      } catch (e) { /* silently skip */ }
+    }
+
+    refreshAll();
+    renderFileList();
+  } catch (err) {
+    console.error("Load error:", err);
+    alert(`Failed to load ${path}:\n${err.message}`);
+  }
+}
+
+// --------- Actions ----------
+document.getElementById("reload-current").onclick = () => {
+  if (!currentFile) { alert("No file loaded. Use 'Load File' to select a file."); return; }
+  loadOntologyFile(currentFile);
+};
+
+document.getElementById("view-vocabularies").onclick = async () => {
+  if (!ontology.vocabularies || ontology.vocabularies.length === 0) {
+    try {
+      const r = await fetch("ontology/ontology-v0.1.json?t=" + Date.now());
+      if (r.ok) { const d = await r.json(); ontology.vocabularies = d.vocabularies || []; }
+    } catch (e) { /* skip */ }
+  }
+  renderVocabulariesView();
+};
+
+document.getElementById("export").onclick = () => {
+  const blob = new Blob([JSON.stringify(ontology, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `ontology-${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
+document.getElementById("add-type").onclick = () => {
+  const label = prompt("New type label:");
+  if (!label) return;
+  const id = label.replace(/[^A-Za-z0-9]/g, "");
+  if (!id) { alert("Label must contain at least one alphanumeric character"); return; }
+  if (ontology.types.some(t => t.id === id)) { alert("Type exists"); return; }
+  ontology.types.push({
+    id, label, definition: "", properties: [],
+    vocabulary_bindings: [], evidence_cases: [], notes: ""
+  });
+  selected = { kind: "type", id };
+  ontology.updated = new Date().toISOString();
+  refreshAll();
+};
+
+document.getElementById("add-rel").onclick = () => {
+  if (ontology.types.length < 2) { alert("Need at least 2 types first"); return; }
+  const label = prompt("Relationship label (e.g., 'mitigates'):");
+  if (!label) return;
+  const id = label.replace(/[^A-Za-z0-9]/g, "_") + "_" + Date.now().toString(36);
+  ontology.relationships.push({
+    id, label,
+    source: ontology.types[0].id,
+    target: ontology.types[1].id,
+    definition: "", properties: [], evidence_cases: []
+  });
+  selected = { kind: "relationship", id };
+  ontology.updated = new Date().toISOString();
+  refreshAll();
+};
+
+document.getElementById("filter-vocab-only").onchange = () => { renderGraph(); renderSidebar(); };
+
+// --------- Vocabularies view ----------
+function renderVocabulariesView() {
+  const panel = document.getElementById("inspector");
+  const vocabs = ontology.vocabularies || [];
+
+  if (vocabs.length === 0) {
+    panel.innerHTML = '<div class="empty">No vocabularies loaded.<br><br>Load vocabularies.json to view controlled vocabularies.</div>';
+    document.getElementById("status").textContent = "No vocabularies loaded";
+    return;
+  }
+
+  const external = vocabs.filter(v => v.type === 'external');
+  const internal = vocabs.filter(v => v.type === 'internal');
+
+  const makeVocabCard = (v) => {
+    const isExt = v.type === 'external';
+    return `
+      <div style="background:var(--bg);border:1px solid ${isExt ? 'var(--accent)' : 'var(--border)'};border-radius:6px;padding:12px;margin-bottom:8px;cursor:pointer"
+           onclick="showVocabularyModal('${escapeHtml(v.id)}')">
+        <div style="font-weight:600;color:${isExt ? 'var(--accent)' : 'var(--text)'};margin-bottom:3px;font-size:13px">${escapeHtml(v.label)}</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;line-height:1.5">${escapeHtml(v.description)}</div>
+        ${v.terms_count ? `<span class="chip">${v.terms_count} terms</span>` : ''}
+        ${v.url ? `<span style="font-size:10px;color:var(--accent)">↗ reference</span>` : ''}
+      </div>`;
+  };
+
+  panel.innerHTML = `
+    <h3>Vocabularies Registry</h3>
+    ${external.length > 0 ? `
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text-dim);font-weight:600;margin-bottom:8px">External (${external.length})</div>
+      ${external.map(makeVocabCard).join('')}
+    ` : ''}
+    ${internal.length > 0 ? `
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text-dim);font-weight:600;margin:14px 0 8px">Internal (${internal.length})</div>
+      ${internal.map(makeVocabCard).join('')}
+    ` : ''}
+  `;
+
+  document.getElementById("status").textContent = `${vocabs.length} vocabularies (${external.length} external, ${internal.length} internal)`;
+}
+
+// --------- Vocabulary modal ----------
+async function showVocabularyModal(vocabId) {
+  const vocab = ontology.vocabularies.find(v => v.id === vocabId);
+  if (!vocab) return;
+
+  const modal = document.getElementById('vocab-modal');
+  const title = document.getElementById('vocab-modal-title');
+  const content = document.getElementById('vocab-modal-content');
+
+  const isExternal = vocab.type === 'external';
+
+  title.innerHTML = `${escapeHtml(vocab.label)}`;
+
+  content.innerHTML = `
+    <div style="margin-bottom:12px;display:flex;align-items:center;gap:8px">
+      <span class="badge ${isExternal ? 'relationship' : ''}" style="${isExternal ? '' : 'background:var(--panel-light);color:var(--text-dim);border:1px solid var(--border)'}">
+        ${isExternal ? 'External' : 'Internal'}
+      </span>
+      ${vocab.terms_count ? `<span style="font-size:11px;color:var(--text-dim)">${vocab.terms_count} terms</span>` : ''}
+    </div>
+
+    <div style="font-size:13px;line-height:1.6;color:var(--text);margin-bottom:12px">
+      ${escapeHtml(vocab.description)}
+    </div>
+
+    ${vocab.url ? `
+      <div style="margin-bottom:12px">
+        <label style="font-size:10px;text-transform:uppercase;color:var(--text-dim);display:block;margin-bottom:3px;font-weight:600;letter-spacing:.07em">Reference</label>
+        <a href="${escapeHtml(vocab.url)}" target="_blank" style="color:var(--accent);text-decoration:none;font-size:12px">
+          ${escapeHtml(vocab.url)} ↗
+        </a>
+      </div>
+    ` : ''}
+
+    ${vocab.bound_to && vocab.bound_to.length > 0 ? `
+      <div style="margin-bottom:12px">
+        <label style="font-size:10px;text-transform:uppercase;color:var(--text-dim);display:block;margin-bottom:3px;font-weight:600;letter-spacing:.07em">Bound to fields</label>
+        <div>${vocab.bound_to.map(f => `<span class="chip">${escapeHtml(f)}</span>`).join('')}</div>
+      </div>
+    ` : ''}
+
+    ${vocab.note ? `
+      <div style="padding:8px 10px;background:var(--panel-light);border-left:3px solid var(--accent);font-size:11px;color:var(--text-dim);line-height:1.5;border-radius:0 4px 4px 0;margin-bottom:12px">
+        ${escapeHtml(vocab.note)}
+      </div>
+    ` : ''}
+
+    <div id="vocab-terms-container"><div class="vocab-terms"><div class="vt-loading">Loading terms…</div></div></div>
+  `;
+
+  modal.classList.add('show');
+
+  // Fetch and render terms
+  const termFile = VOCAB_TERM_FILES[vocabId];
+  const container = document.getElementById('vocab-terms-container');
+  if (termFile) {
+    try {
+      const r = await fetch(termFile + "?t=" + Date.now());
+      if (r.ok) {
+        const data = await r.json();
+        const termsHtml = renderVocabTerms(data);
+        if (termsHtml) {
+          container.innerHTML = `
+            <div class="vocab-terms">
+              <div class="vocab-terms-label">Terms</div>
+              <div class="vocab-terms-list">${termsHtml}</div>
+            </div>`;
+        } else {
+          container.innerHTML = '';
+        }
+      } else {
+        container.innerHTML = '';
+      }
+    } catch (e) {
+      container.innerHTML = '';
+    }
+  } else {
+    container.innerHTML = '';
+  }
+}
+
+function renderVocabTerms(data) {
+  // hazards.json: categories[].hazards[]
+  if (data.categories && data.categories[0]?.hazards) {
+    return data.categories.map(cat =>
+      `<div class="vt-category">${escapeHtml(cat.name)}</div>` +
+      cat.hazards.map(h => `<div class="vt-item"><span class="vt-item-name">${escapeHtml(h.name)}</span></div>`).join('')
+    ).join('');
+  }
+  // solution-categories.json: categories[].subcategories[]
+  if (data.categories && data.categories[0]?.subcategories) {
+    return data.categories.map(cat =>
+      `<div class="vt-category">${escapeHtml(cat.name)}</div>` +
+      cat.subcategories.map(s => `<div class="vt-item"><span class="vt-item-name">${escapeHtml(s.name)}</span></div>`).join('')
+    ).join('');
+  }
+  // urban-systems.json: sectors[].subsectors[]
+  if (data.sectors) {
+    return data.sectors.map(sec =>
+      `<div class="vt-category">${escapeHtml(sec.name)}</div>` +
+      (sec.subsectors || []).map(sub =>
+        `<div class="vt-item"><span class="vt-item-name">${escapeHtml(sub.name)}</span></div>`
+      ).join('')
+    ).join('');
+  }
+  // crf-goals.json: dimensions[].goals[]
+  if (data.dimensions) {
+    return data.dimensions.map(dim =>
+      `<div class="vt-category">${escapeHtml(dim.name)}</div>` +
+      dim.goals.map(g => `<div class="vt-item"><span class="vt-item-name">${escapeHtml(g.name)}</span></div>`).join('')
+    ).join('');
+  }
+  // resilience-attributes.json: attributes[]
+  if (data.attributes) {
+    return data.attributes.map(a =>
+      `<div class="vt-flat-item"><span class="vt-item-name">${escapeHtml(a.name)}</span></div>`
+    ).join('');
+  }
+  // vulnerable-populations.json: populations[]
+  if (data.populations) {
+    return data.populations.map(p =>
+      `<div class="vt-flat-item">
+        <span class="vt-item-name">${escapeHtml(p.name)}</span>
+        ${p.description ? `<span class="vt-flat-desc">${escapeHtml(p.description)}</span>` : ''}
+      </div>`
+    ).join('');
+  }
+  // enums.json: { key: { values: [{ id, name, description? }] } }
+  const enumKeys = Object.keys(data).filter(k => !k.startsWith('_') && Array.isArray(data[k]?.values));
+  if (enumKeys.length > 0) {
+    return enumKeys.map(key =>
+      `<div class="vt-category">${escapeHtml(key)}</div>` +
+      data[key].values.map(v =>
+        `<div class="vt-flat-item">
+          <span class="vt-item-name">${escapeHtml(v.name || v.id)}</span>
+          ${v.description ? `<span class="vt-flat-desc">${escapeHtml(v.description)}</span>` : ''}
+        </div>`
+      ).join('')
+    ).join('');
+  }
+  return null;
+}
+
+function getVocabularyInfo(vocabId) {
+  return ontology.vocabularies?.find(v => v.id === vocabId);
+}
+
+// Initialize modal handlers
+document.getElementById('vocab-modal-close').onclick = () => {
+  document.getElementById('vocab-modal').classList.remove('show');
+};
+document.getElementById('vocab-modal').onclick = (e) => {
+  if (e.target.id === 'vocab-modal') {
+    document.getElementById('vocab-modal').classList.remove('show');
+  }
+};
+
+// Initial render — auto-load canonical file
+renderFileList();
+loadOntologyFile(ONTOLOGY_FILES[0].path);
+</script>
+</body>
+</html>

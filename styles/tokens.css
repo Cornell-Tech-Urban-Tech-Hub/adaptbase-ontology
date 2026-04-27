@@ -1,0 +1,328 @@
+/* =========================================================================
+   Urban Tech Hub — Design System
+   Colors + Typography foundations
+   ========================================================================= */
+
+/* --- Fonts (Google Fonts — see fonts/README.md for substitution notes) --- */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  /* =====================================================================
+     COLOR SYSTEM
+     Philosophy: Carnelian anchors the brand (Cornell heritage).
+     Ink + concrete greys evoke architecture + city.
+     Accent hues (blueprint, sodium, chlorophyll) come from urban
+     infrastructure — wayfinding, street lamps, park canopies.
+     ===================================================================== */
+
+  /* --- Brand core --- */
+  --carnelian:         #B31B1B;  /* Cornell's signature red */
+  --carnelian-deep:    #8C1515;  /* Shadow / hover */
+  --carnelian-bright:  #E4002B;  /* Electric moment — sparingly */
+
+  /* --- Neutrals: ink → paper --- */
+  --ink:               #121417;  /* Near-black, warm-cool neutral */
+  --ink-2:             #2A2D33;  /* Body text on light */
+  --graphite:          #4A4F57;  /* Secondary text */
+  --concrete:          #8A8F98;  /* Tertiary, muted */
+  --mist:              #C7CAD1;  /* Hairlines, disabled */
+  --stone:             #E3E5E9;  /* Panel dividers */
+  --fog:               #EFF0F3;  /* Subtle surface */
+  --paper:             #F7F6F2;  /* Warm off-white — primary canvas */
+  --paper-2:           #FBFAF6;  /* Elevated surface */
+  --white:             #FFFFFF;
+
+  /* --- Urban accents (use w/ intention, one per composition) --- */
+  --blueprint:         #1E4DD8;  /* Civic blue, wayfinding */
+  --blueprint-soft:    #D9E1F7;
+  --sodium:            #F4A02C;  /* Streetlamp amber */
+  --sodium-soft:       #FBE8C6;
+  --chlorophyll:       #2E7D4F;  /* Park / sustainability */
+  --chlorophyll-soft:  #D4E4D8;
+  --slate-blue:        #2B3A55;  /* Night skyline */
+
+  /* --- Semantic fg/bg --- */
+  --fg-1:              var(--ink);
+  --fg-2:              var(--ink-2);
+  --fg-3:              var(--graphite);
+  --fg-4:              var(--concrete);
+  --fg-inverse:        var(--paper);
+  --fg-brand:          var(--carnelian);
+  --fg-link:           var(--carnelian-deep);
+
+  --bg-1:              var(--paper);      /* Page */
+  --bg-2:              var(--paper-2);    /* Card */
+  --bg-3:              var(--fog);        /* Subtle zone */
+  --bg-4:              var(--stone);      /* Divider zone */
+  --bg-inverse:        var(--ink);
+  --bg-brand:          var(--carnelian);
+
+  /* --- Status --- */
+  --status-info:       var(--blueprint);
+  --status-success:    var(--chlorophyll);
+  --status-warning:    var(--sodium);
+  --status-danger:     var(--carnelian-bright);
+
+  /* --- Borders --- */
+  --border-hair:       rgba(18, 20, 23, 0.08);
+  --border-soft:       rgba(18, 20, 23, 0.14);
+  --border-firm:       rgba(18, 20, 23, 0.24);
+  --border-ink:        var(--ink);
+
+  /* =====================================================================
+     TYPOGRAPHY
+     Display: Fraunces (variable serif, slight opticals — editorial warmth)
+     UI/Body: Inter Tight (neutral, legible, architecture-friendly)
+     Mono:    JetBrains Mono (research / data)
+     Accent:  Instrument Serif (italic, rare — pull-quotes + taglines)
+     ===================================================================== */
+
+  --font-display:  'Fraunces', 'Times New Roman', Georgia, serif;
+  --font-sans:     'Inter Tight', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono:     'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --font-accent:   'Instrument Serif', 'Fraunces', Georgia, serif;
+
+  /* --- Type scale (fluid-ish, set in rem; 1rem = 16px) --- */
+  --fs-xs:    0.75rem;    /* 12 */
+  --fs-sm:    0.875rem;   /* 14 */
+  --fs-base:  1rem;       /* 16 */
+  --fs-md:    1.125rem;   /* 18 */
+  --fs-lg:    1.375rem;   /* 22 */
+  --fs-xl:    1.75rem;    /* 28 */
+  --fs-2xl:   2.25rem;    /* 36 */
+  --fs-3xl:   3rem;       /* 48 */
+  --fs-4xl:   4rem;       /* 64 */
+  --fs-5xl:   5.5rem;     /* 88 */
+  --fs-6xl:   7.5rem;     /* 120 — hero only */
+
+  /* --- Weights --- */
+  --fw-regular: 400;
+  --fw-medium:  500;
+  --fw-semi:    600;
+  --fw-bold:    700;
+  --fw-black:   800;
+
+  /* --- Line heights --- */
+  --lh-tight:   1.02;
+  --lh-snug:    1.15;
+  --lh-normal:  1.35;
+  --lh-body:    1.55;
+  --lh-loose:   1.75;
+
+  /* --- Letter spacing --- */
+  --ls-tight:   -0.03em;
+  --ls-snug:    -0.015em;
+  --ls-normal:  0;
+  --ls-wide:    0.04em;
+  --ls-eyebrow: 0.14em;   /* UPPERCASE eyebrows */
+
+  /* =====================================================================
+     SPACING — 4px base, linear then exponential
+     ===================================================================== */
+  --sp-0:   0;
+  --sp-1:   0.25rem;   /* 4  */
+  --sp-2:   0.5rem;    /* 8  */
+  --sp-3:   0.75rem;   /* 12 */
+  --sp-4:   1rem;      /* 16 */
+  --sp-5:   1.5rem;    /* 24 */
+  --sp-6:   2rem;      /* 32 */
+  --sp-7:   3rem;      /* 48 */
+  --sp-8:   4rem;      /* 64 */
+  --sp-9:   6rem;      /* 96 */
+  --sp-10:  8rem;      /* 128 */
+
+  /* =====================================================================
+     RADII — mostly square; capsules reserved for tags/pills
+     ===================================================================== */
+  --r-0:    0;
+  --r-sm:   2px;
+  --r-md:   4px;
+  --r-lg:   8px;
+  --r-xl:   14px;
+  --r-pill: 999px;
+
+  /* =====================================================================
+     SHADOWS — low-contrast; paper-on-paper feel
+     ===================================================================== */
+  --shadow-0: none;
+  --shadow-1: 0 1px 0 rgba(18,20,23,0.04), 0 1px 2px rgba(18,20,23,0.04);
+  --shadow-2: 0 1px 0 rgba(18,20,23,0.04), 0 6px 16px -6px rgba(18,20,23,0.10);
+  --shadow-3: 0 2px 0 rgba(18,20,23,0.04), 0 18px 40px -12px rgba(18,20,23,0.18);
+  --shadow-inset: inset 0 0 0 1px var(--border-soft);
+
+  /* =====================================================================
+     MOTION
+     ===================================================================== */
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out:      cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in:       cubic-bezier(0.5, 0, 1, 1);
+  --dur-fast:      120ms;
+  --dur-base:      220ms;
+  --dur-slow:      420ms;
+
+  /* =====================================================================
+     LAYOUT
+     ===================================================================== */
+  --container-narrow: 720px;
+  --container:        1120px;
+  --container-wide:   1360px;
+  --rule-w:           1px;
+}
+
+/* =========================================================================
+   SEMANTIC TYPE STYLES
+   ========================================================================= */
+
+.eyebrow, [data-type="eyebrow"] {
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semi);
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--fg-brand);
+}
+
+.display, [data-type="display"],
+h1.display {
+  font-family: var(--font-display);
+  font-size: var(--fs-5xl);
+  font-weight: 500;
+  font-variation-settings: "opsz" 144, "SOFT" 30;
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+  color: var(--fg-1);
+  text-wrap: balance;
+}
+
+h1, [data-type="h1"] {
+  font-family: var(--font-display);
+  font-size: var(--fs-4xl);
+  font-weight: 500;
+  font-variation-settings: "opsz" 96;
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+  color: var(--fg-1);
+  text-wrap: balance;
+}
+
+h2, [data-type="h2"] {
+  font-family: var(--font-display);
+  font-size: var(--fs-3xl);
+  font-weight: 500;
+  font-variation-settings: "opsz" 48;
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-snug);
+  color: var(--fg-1);
+  text-wrap: balance;
+}
+
+h3, [data-type="h3"] {
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-semi);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-snug);
+  color: var(--fg-1);
+}
+
+h4, [data-type="h4"] {
+  font-family: var(--font-sans);
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-semi);
+  line-height: var(--lh-snug);
+  color: var(--fg-1);
+}
+
+h5, [data-type="h5"] {
+  font-family: var(--font-sans);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semi);
+  line-height: var(--lh-normal);
+  color: var(--fg-1);
+}
+
+h6, [data-type="h6"] {
+  font-family: var(--font-sans);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-semi);
+  line-height: var(--lh-normal);
+  color: var(--fg-1);
+}
+
+p, [data-type="p"] {
+  font-family: var(--font-sans);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-body);
+  color: var(--fg-2);
+}
+
+.lede, [data-type="lede"] {
+  font-family: var(--font-sans);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-normal);
+  color: var(--fg-2);
+  text-wrap: pretty;
+}
+
+.small, [data-type="small"] {
+  font-family: var(--font-sans);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-body);
+  color: var(--fg-3);
+}
+
+.caption, [data-type="caption"] {
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
+  line-height: var(--lh-normal);
+  color: var(--fg-4);
+  letter-spacing: 0.01em;
+}
+
+code, .code, [data-type="code"] {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  font-weight: var(--fw-medium);
+  color: var(--fg-2);
+}
+
+.quote, [data-type="quote"] {
+  font-family: var(--font-accent);
+  font-style: italic;
+  font-size: var(--fs-2xl);
+  font-weight: 400;
+  line-height: var(--lh-snug);
+  letter-spacing: -0.01em;
+  color: var(--fg-1);
+  text-wrap: balance;
+}
+
+.mono-eyebrow, [data-type="mono-eyebrow"] {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+
+/* --- Links --- */
+a, [data-type="link"] {
+  color: var(--fg-link);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  transition: color var(--dur-fast) var(--ease-standard);
+}
+a:hover { color: var(--carnelian-bright); }
+
+/* =========================================================================
+   UTILITIES
+   ========================================================================= */
+.bg-paper   { background: var(--bg-1); color: var(--fg-1); }
+.bg-ink     { background: var(--bg-inverse); color: var(--fg-inverse); }
+.bg-carnelian { background: var(--bg-brand); color: var(--white); }
+.rule       { height: 1px; background: var(--border-soft); border: 0; }
+.rule-firm  { height: 1px; background: var(--border-ink); border: 0; }

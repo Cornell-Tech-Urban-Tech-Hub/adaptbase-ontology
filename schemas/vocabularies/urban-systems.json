@@ -1,0 +1,544 @@
+{
+  "_source": "Advanced urban systems taxonomy for climate adaptation. Multi-tiered hierarchy mapping physical, ecological, and socio-economic urban subsystems.",
+  "_usage": "urban_systems.systems_affected[].system_id and sector",
+  "_sync_with": "None - conceptual taxonomy for classification",
+  "_note": "This taxonomy enables precise classification of where a solution is deployed and what it protects. Supports interdependency analysis and critical bottleneck identification.",
+  "sectors": [
+    {
+      "id": "built_environment",
+      "name": "Built Environment & Land Use",
+      "description": "Physical structures and spatial zoning. Solutions involve retrofitting, managed retreat, or building code changes.",
+      "subsectors": [
+        {
+          "id": "residential_fabric",
+          "name": "Residential Fabric",
+          "systems": [
+            {
+              "id": "high_density_residential",
+              "name": "High-Density / Multi-Family",
+              "examples": "Apartment blocks, high-rises"
+            },
+            {
+              "id": "low_density_residential",
+              "name": "Low-Density / Single-Family",
+              "examples": "Suburban tracts"
+            },
+            {
+              "id": "informal_settlements",
+              "name": "Informal Settlements / Slums",
+              "examples": "Highly vulnerable areas lacking formal infrastructure"
+            }
+          ]
+        },
+        {
+          "id": "commercial_industrial",
+          "name": "Commercial & Industrial Zones",
+          "systems": [
+            {
+              "id": "central_business_districts",
+              "name": "Central Business Districts (CBDs)",
+              "examples": "Downtown commercial cores"
+            },
+            {
+              "id": "heavy_industry",
+              "name": "Heavy Industry / Manufacturing",
+              "examples": "Industrial parks, factories"
+            },
+            {
+              "id": "logistics_warehousing",
+              "name": "Logistics & Warehousing",
+              "examples": "Distribution centers, storage facilities"
+            }
+          ]
+        },
+        {
+          "id": "civic_institutional",
+          "name": "Civic & Institutional (Critical Hubs)",
+          "systems": [
+            {
+              "id": "healthcare_facilities",
+              "name": "Healthcare Facilities",
+              "examples": "Hospitals, clinics, emergency medical centers"
+            },
+            {
+              "id": "educational_facilities",
+              "name": "Educational Facilities",
+              "examples": "Schools, universities, research centers"
+            },
+            {
+              "id": "government_emergency",
+              "name": "Government & Emergency Response",
+              "examples": "Municipal buildings, fire stations, police stations, EOCs"
+            }
+          ]
+        },
+        {
+          "id": "land_use_topology",
+          "name": "Land Use & Topology (The Substrate)",
+          "systems": [
+            {
+              "id": "floodplains_coastal",
+              "name": "Floodplains & Low-Lying Coastal Zones",
+              "examples": "High flood risk areas"
+            },
+            {
+              "id": "steep_slopes",
+              "name": "Steep Slopes",
+              "examples": "Landslide and erosion risk zones"
+            },
+            {
+              "id": "brownfields_reclaimed",
+              "name": "Brownfields & Reclaimed Land",
+              "examples": "Former industrial sites, landfills"
+            },
+            {
+              "id": "subsurface_space",
+              "name": "Subsurface Space",
+              "examples": "Basements, underground parking, tunnels"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mobility_transport",
+      "name": "Mobility & Transport Networks",
+      "description": "Systems for moving people and goods. Solutions maintain flow during extreme events and prevent material degradation.",
+      "subsectors": [
+        {
+          "id": "surface_transportation",
+          "name": "Surface Transportation",
+          "systems": [
+            {
+              "id": "arterial_roads",
+              "name": "Arterial Roads & Highways",
+              "examples": "Major roadways, expressways"
+            },
+            {
+              "id": "local_streets",
+              "name": "Local/Municipal Street Networks",
+              "examples": "Neighborhood streets, collector roads"
+            },
+            {
+              "id": "bridges_tunnels",
+              "name": "Bridges, Tunnels, and Viaducts",
+              "examples": "Critical crossing infrastructure"
+            },
+            {
+              "id": "active_mobility",
+              "name": "Active Mobility Networks",
+              "examples": "Pedestrian paths, cycling infrastructure, greenways"
+            }
+          ]
+        },
+        {
+          "id": "mass_transit",
+          "name": "Mass Transit Systems",
+          "systems": [
+            {
+              "id": "rail_networks",
+              "name": "Rail Networks",
+              "examples": "Subway/Underground, light rail, commuter rail"
+            },
+            {
+              "id": "bus_systems",
+              "name": "Bus Rapid Transit (BRT) & Surface Bus",
+              "examples": "Bus lanes, bus networks"
+            },
+            {
+              "id": "transit_nodes",
+              "name": "Transit Nodes",
+              "examples": "Stations, terminals, depots, maintenance yards"
+            }
+          ]
+        },
+        {
+          "id": "freight_logistics",
+          "name": "Freight & Macro-Logistics",
+          "systems": [
+            {
+              "id": "maritime_ports",
+              "name": "Maritime Ports & Harbors",
+              "examples": "Seaports highly exposed to sea-level rise"
+            },
+            {
+              "id": "airports",
+              "name": "Airports",
+              "examples": "Runways, terminal infrastructure"
+            },
+            {
+              "id": "freight_rail",
+              "name": "Freight Rail Yards",
+              "examples": "Cargo rail terminals"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hydrological_water",
+      "name": "Hydrological & Water Infrastructure",
+      "description": "Water sourcing, distribution, and management. Most heavily impacted by climate change.",
+      "subsectors": [
+        {
+          "id": "potable_water",
+          "name": "Potable / Drinking Water Supply",
+          "systems": [
+            {
+              "id": "source_water",
+              "name": "Source Water",
+              "examples": "Reservoirs, aquifers, surface catchments"
+            },
+            {
+              "id": "treatment_facilities",
+              "name": "Treatment Facilities",
+              "examples": "Desalination plants, purification centers, water treatment plants"
+            },
+            {
+              "id": "distribution_networks",
+              "name": "Distribution Networks",
+              "examples": "Pumping stations, water mains, storage tanks"
+            }
+          ]
+        },
+        {
+          "id": "stormwater_management",
+          "name": "Stormwater Management",
+          "systems": [
+            {
+              "id": "collection_networks",
+              "name": "Collection Networks",
+              "examples": "Storm sewers, combined sewer systems"
+            },
+            {
+              "id": "outfalls_discharge",
+              "name": "Outfalls & Discharge Points",
+              "examples": "Stormwater discharge infrastructure"
+            },
+            {
+              "id": "surface_conveyance",
+              "name": "Surface Conveyance",
+              "examples": "Culverts, drainage channels, swales"
+            }
+          ]
+        },
+        {
+          "id": "wastewater_sanitation",
+          "name": "Wastewater / Sanitation",
+          "systems": [
+            {
+              "id": "wastewater_treatment",
+              "name": "Wastewater Treatment Plants (WWTPs)",
+              "examples": "Sewage treatment facilities"
+            },
+            {
+              "id": "sanitary_sewers",
+              "name": "Sanitary Sewer Networks",
+              "examples": "Underground sewer pipes"
+            },
+            {
+              "id": "decentralized_sanitation",
+              "name": "Decentralized Sanitation",
+              "examples": "Septic systems, localized treatment"
+            }
+          ]
+        },
+        {
+          "id": "coastal_riverine_defenses",
+          "name": "Coastal & Riverine Defenses",
+          "systems": [
+            {
+              "id": "hard_engineering",
+              "name": "Hard Engineering",
+              "examples": "Seawalls, levees, tidal barrages, dikes"
+            },
+            {
+              "id": "managed_waterways",
+              "name": "Managed Waterways",
+              "examples": "Canals, dredged channels, flood control structures"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "energy_telecom",
+      "name": "Energy & Telecommunications",
+      "description": "The nervous system. Solutions prevent cascading failures from flooded substations affecting hospitals and communications.",
+      "subsectors": [
+        {
+          "id": "energy_generation",
+          "name": "Energy Generation",
+          "systems": [
+            {
+              "id": "centralized_power",
+              "name": "Centralized Power Plants",
+              "examples": "Fossil fuel, nuclear, large-scale hydro"
+            },
+            {
+              "id": "distributed_generation",
+              "name": "Decentralized / Distributed Generation",
+              "examples": "Rooftop solar, micro-turbines, CHP"
+            },
+            {
+              "id": "district_systems",
+              "name": "District Heating & Cooling",
+              "examples": "Centralized thermal distribution systems"
+            }
+          ]
+        },
+        {
+          "id": "energy_transmission",
+          "name": "Energy Transmission & Distribution",
+          "systems": [
+            {
+              "id": "transmission_lines",
+              "name": "High-Voltage Transmission",
+              "examples": "Transmission lines, towers, overhead cables"
+            },
+            {
+              "id": "substations",
+              "name": "Substations & Transformers",
+              "examples": "High vulnerability to flooding"
+            },
+            {
+              "id": "local_grid",
+              "name": "Local Grid / Last-Mile Distribution",
+              "examples": "Distribution lines, underground cables"
+            },
+            {
+              "id": "energy_storage",
+              "name": "Energy Storage",
+              "examples": "Grid-scale batteries, pumped hydro"
+            }
+          ]
+        },
+        {
+          "id": "telecommunications",
+          "name": "Telecommunications & Data",
+          "systems": [
+            {
+              "id": "data_centers",
+              "name": "Data Centers",
+              "examples": "High cooling needs, heatwave vulnerability"
+            },
+            {
+              "id": "physical_networks",
+              "name": "Physical Networks",
+              "examples": "Fiber optics, underground cables"
+            },
+            {
+              "id": "wireless_networks",
+              "name": "Wireless Networks",
+              "examples": "Cell towers, emergency radio repeaters"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "urban_ecology",
+      "name": "Urban Ecology & Natural Capital",
+      "description": "Urban nature as functional infrastructure providing ecosystem services (cooling, water retention).",
+      "subsectors": [
+        {
+          "id": "managed_green_spaces",
+          "name": "Managed Green Spaces",
+          "systems": [
+            {
+              "id": "parks_plazas",
+              "name": "Public Parks & Plazas",
+              "examples": "Urban parks, squares, recreational areas"
+            },
+            {
+              "id": "streetscapes_canopies",
+              "name": "Streetscapes & Urban Canopies",
+              "examples": "Street trees, parklets, boulevard plantings"
+            },
+            {
+              "id": "institutional_grounds",
+              "name": "Institutional Grounds",
+              "examples": "Cemeteries, golf courses, campus landscapes"
+            }
+          ]
+        },
+        {
+          "id": "blue_green_infrastructure",
+          "name": "Blue-Green Infrastructure (BGI)",
+          "systems": [
+            {
+              "id": "constructed_wetlands",
+              "name": "Constructed Wetlands & Bioswales",
+              "examples": "Engineered natural filtration systems"
+            },
+            {
+              "id": "permeable_surfaces",
+              "name": "Permeable Surfaces",
+              "examples": "Pervious pavement, infiltration areas"
+            },
+            {
+              "id": "green_roofs_walls",
+              "name": "Green Roofs & Vertical Gardens",
+              "examples": "Building-integrated vegetation"
+            }
+          ]
+        },
+        {
+          "id": "periurban_wildland",
+          "name": "Peri-Urban & Wildland Interfaces",
+          "systems": [
+            {
+              "id": "urban_forests",
+              "name": "Urban Forests & Greenbelts",
+              "examples": "Protected woodland areas, buffer zones"
+            },
+            {
+              "id": "coastal_buffers",
+              "name": "Coastal Buffers",
+              "examples": "Mangroves, salt marshes, dune systems"
+            },
+            {
+              "id": "riparian_zones",
+              "name": "Riparian Zones",
+              "examples": "Riverbanks, floodplains, stream corridors"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "socioeconomic_health",
+      "name": "Socio-Economic & Public Health Systems",
+      "description": "Operational and social systems. Solutions include early warning systems, cooling centers, and community networks.",
+      "subsectors": [
+        {
+          "id": "public_health",
+          "name": "Public Health",
+          "systems": [
+            {
+              "id": "vulnerable_populations",
+              "name": "Vulnerable Population Demographics",
+              "examples": "Elderly, low-income, disabled communities"
+            },
+            {
+              "id": "disease_monitoring",
+              "name": "Vector-Borne Disease Monitoring",
+              "examples": "Surveillance systems, prevention programs"
+            },
+            {
+              "id": "emergency_medical",
+              "name": "Emergency Medical Services (EMS)",
+              "examples": "Ambulance capacity, first responders"
+            }
+          ]
+        },
+        {
+          "id": "economic_systems",
+          "name": "Economic Systems",
+          "systems": [
+            {
+              "id": "supply_chains",
+              "name": "Local Supply Chains",
+              "examples": "Food security, essential goods distribution"
+            },
+            {
+              "id": "retail_services",
+              "name": "Retail & Service Sectors",
+              "examples": "Commercial activity, local businesses"
+            },
+            {
+              "id": "informal_economies",
+              "name": "Informal Economies",
+              "examples": "Street vendors, unregistered labor - highly vulnerable"
+            }
+          ]
+        },
+        {
+          "id": "social_capital",
+          "name": "Social Capital",
+          "systems": [
+            {
+              "id": "community_networks",
+              "name": "Community Networks & NGOs",
+              "examples": "Local organizations, civic groups"
+            },
+            {
+              "id": "resilience_hubs",
+              "name": "Resilience Hubs",
+              "examples": "Community centers equipped for off-grid survival"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "governance_finance",
+      "name": "Governance, Policy & Finance",
+      "description": "Rules of the game. Many adaptation solutions are purely administrative or financial interventions.",
+      "subsectors": [
+        {
+          "id": "regulatory_frameworks",
+          "name": "Regulatory Frameworks",
+          "systems": [
+            {
+              "id": "building_codes",
+              "name": "Building Codes & Standards",
+              "examples": "Construction regulations, energy codes"
+            },
+            {
+              "id": "zoning_planning",
+              "name": "Zoning & Spatial Planning",
+              "examples": "Land use regulations, development controls"
+            }
+          ]
+        },
+        {
+          "id": "financial_risk",
+          "name": "Financial & Risk Mechanisms",
+          "systems": [
+            {
+              "id": "municipal_finance",
+              "name": "Municipal Finance",
+              "examples": "Green bonds, resilience budgets, climate funds"
+            },
+            {
+              "id": "insurance_markets",
+              "name": "Insurance Markets",
+              "examples": "Parametric insurance, property risk markets"
+            }
+          ]
+        },
+        {
+          "id": "emergency_management",
+          "name": "Emergency Management Operations",
+          "systems": [
+            {
+              "id": "early_warning",
+              "name": "Early Warning Systems (EWS)",
+              "examples": "Alert systems, monitoring networks"
+            },
+            {
+              "id": "evacuation_sheltering",
+              "name": "Evacuation & Sheltering",
+              "examples": "Evacuation protocols, emergency shelters"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "agriculture__food_systems",
+      "name": "Agriculture & Food Systems",
+      "description": "Climate adaptation actions focused on agricultural practices, crop management, livestock improvement, paludiculture, and food production systems. Includes technological interventions (crop varieties, genetic techniques), behavioral changes (cropping practices, agroecology), and agricultural extension services.",
+      "subsectors": [],
+      "source": "corpus_mining_distribution_v0"
+    },
+    {
+      "id": "emergency__disaster_management",
+      "name": "Emergency & Disaster Management",
+      "description": "Actions focused on disaster planning, preparedness, emergency response protocols, and scenario exercises for climate-related hazards. Distinct from general governance by emphasizing operational readiness and emergency coordination.",
+      "subsectors": [],
+      "source": "corpus_mining_distribution_v0"
+    }
+  ]
+}

@@ -1,0 +1,138 @@
+{
+  "_source": "IPCC AR6 WGII (vulnerable groups), UNDRR Sendai Framework (at-risk populations), EDF equity framework (Shi 2024 rubric), and existing case library demographic analysis",
+  "_usage": "Solution.target_populations[], Vulnerability.affected_group[], ExposureUnit.affected_group[]",
+  "_note": "Controlled vocabulary for population groups facing disproportionate climate vulnerability. Groups are socially-defined (not geographic) to support equity analysis across justice dimensions. Used to bind previously free-text affected_group fields. Sprint 5 addition — designed for EDF/Cornell AI equity impact study.",
+  "populations": [
+    {
+      "id": "low_income_households",
+      "name": "Low-Income Households",
+      "description": "Households below poverty line or in lowest income quintiles; limited financial buffers for adaptation or recovery",
+      "ipcc_ar6": true,
+      "undrr": true
+    },
+    {
+      "id": "renters",
+      "name": "Renters / Non-Homeowners",
+      "description": "Renters and non-homeowners who lack control over housing upgrades, face displacement risk, and may be excluded from property-tied adaptation programs",
+      "ipcc_ar6": false,
+      "undrr": false,
+      "_note": "Documented in EDF equity framing as a distinct group from low-income; renters are vulnerable even when not poor"
+    },
+    {
+      "id": "informal_settlement_residents",
+      "name": "Informal Settlement Residents",
+      "description": "Residents of informal, unplanned, or self-built settlements with insecure tenure, limited services, and high physical exposure",
+      "ipcc_ar6": true,
+      "undrr": true
+    },
+    {
+      "id": "elderly",
+      "name": "Elderly / Older Adults",
+      "description": "Adults 65+ with elevated health vulnerability to extreme heat, cold, and disasters; may have mobility limitations and social isolation",
+      "ipcc_ar6": true,
+      "undrr": true
+    },
+    {
+      "id": "children_and_youth",
+      "name": "Children and Youth",
+      "description": "Children and young people (under 18) with heightened physiological sensitivity to heat and air quality and long time horizons for climate impact",
+      "ipcc_ar6": true,
+      "undrr": true
+    },
+    {
+      "id": "people_with_disabilities",
+      "name": "People with Disabilities",
+      "description": "Persons with physical, cognitive, or sensory disabilities facing accessibility barriers in evacuation, early-warning systems, and recovery programs",
+      "ipcc_ar6": true,
+      "undrr": true
+    },
+    {
+      "id": "outdoor_workers",
+      "name": "Outdoor Workers",
+      "description": "Agricultural workers, construction workers, delivery workers, and others with occupational heat and weather exposure; often low-wage and without benefits",
+      "ipcc_ar6": true,
+      "undrr": false
+    },
+    {
+      "id": "indigenous_communities",
+      "name": "Indigenous and Tribal Communities",
+      "description": "Indigenous peoples with place-based climate vulnerability, land rights issues, and cultural practices at risk; recognized in IPCC AR6 and Sendai as a priority group",
+      "ipcc_ar6": true,
+      "undrr": true
+    },
+    {
+      "id": "racial_ethnic_minorities",
+      "name": "Racial / Ethnic Minorities",
+      "description": "Communities of color and ethnic minorities facing compounded climate and social vulnerabilities rooted in historical discrimination and structural inequity",
+      "ipcc_ar6": true,
+      "undrr": false,
+      "_note": "Particularly relevant in US context for EDF/Cornell study; IPCC AR6 Chapter 8 documents intersection of race and climate vulnerability"
+    },
+    {
+      "id": "migrants_and_refugees",
+      "name": "Migrants and Refugees",
+      "description": "Internal and international migrants, asylum seekers, and refugees with limited legal status, social networks, and access to services",
+      "ipcc_ar6": true,
+      "undrr": true
+    },
+    {
+      "id": "limited_english_proficiency",
+      "name": "Limited English Proficiency / Non-English Speakers",
+      "description": "Individuals with limited English proficiency who face barriers to accessing early warnings, services, and participation in planning processes",
+      "ipcc_ar6": false,
+      "undrr": false,
+      "_note": "Critical for procedural and epistemic justice dimensions; early-warning systems often fail this group"
+    },
+    {
+      "id": "single_parent_households",
+      "name": "Single-Parent Households",
+      "description": "Single-parent families with constrained financial and time resources for adaptation; predominantly headed by women",
+      "ipcc_ar6": false,
+      "undrr": true
+    },
+    {
+      "id": "public_housing_residents",
+      "name": "Public Housing Residents",
+      "description": "Residents of public or subsidized housing with concentrated exposure and limited individual control over adaptation investments",
+      "ipcc_ar6": false,
+      "undrr": false
+    },
+    {
+      "id": "unhoused_populations",
+      "name": "Unhoused / Houseless Populations",
+      "description": "Persons experiencing homelessness with maximum physical exposure to extreme weather events and minimal adaptive capacity",
+      "ipcc_ar6": true,
+      "undrr": true
+    },
+    {
+      "id": "small_scale_farmers",
+      "name": "Small-Scale / Subsistence Farmers",
+      "description": "Smallholder and subsistence farmers with direct livelihood exposure to climate hazards and limited resources for adaptation",
+      "ipcc_ar6": true,
+      "undrr": true
+    },
+    {
+      "id": "women_and_girls",
+      "name": "Women and Girls",
+      "description": "Women and girls facing gender-differentiated climate vulnerability through unequal resource access, gendered domestic roles, and exclusion from decision-making",
+      "ipcc_ar6": true,
+      "undrr": true,
+      "_note": "Use when source document explicitly documents gender-differentiated impacts; avoid when gender is not a documented dimension"
+    },
+    {
+      "id": "medically_vulnerable",
+      "name": "Medically Vulnerable Persons",
+      "description": "Persons with chronic illness, immunocompromised conditions, or medical equipment dependency with elevated health risk from power outages, heat, and air quality events",
+      "ipcc_ar6": true,
+      "undrr": true
+    },
+    {
+      "id": "environmental_justice_communities",
+      "name": "Frontline Environmental Justice Communities",
+      "description": "Communities bearing a disproportionate cumulative environmental burden (pollution, hazard exposure, underinvestment) — aggregate term for EJ screening contexts. Use when source uses EJ framing explicitly.",
+      "ipcc_ar6": false,
+      "undrr": false,
+      "_note": "Aggregate EJ term; prefer more specific groups when documented. Aligns with EPA EJScreen, US Justice40 criteria, and EDF equity framing."
+    }
+  ]
+}

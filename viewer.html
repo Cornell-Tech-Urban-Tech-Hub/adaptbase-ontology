@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Resilience Scanner — Ontology Viewer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles/tokens.css" />
+<link rel="stylesheet" href="styles/app.css" />
+<script src="https://unpkg.com/d3-selection@3"></script>
+<script src="https://unpkg.com/d3-force@3"></script>
+<script src="https://unpkg.com/d3-drag@3"></script>
+<script src="https://unpkg.com/d3-zoom@3"></script>
+<script src="https://unpkg.com/d3-quadtree@3"></script>
+<script src="https://unpkg.com/d3-dispatch@3"></script>
+<script src="https://unpkg.com/d3-timer@3"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="brand-lockup">
+    <div class="brand-title">
+      <span class="project-name">Resilience Scanner</span>
+    </div>
+  </div>
+
+  <div class="meta-strip">
+    <span>Updated <b id="updated-date">—</b></span>
+  </div>
+
+  <div class="header-actions">
+    <select id="version-selector" class="btn btn-ghost" style="appearance:auto; padding-right:24px;">
+      <option value="">Loading…</option>
+    </select>
+    <button class="btn btn-ghost" id="btn-reload">↻ Reload</button>
+    <button class="btn btn-ghost" id="btn-vocabularies">Vocabularies</button>
+    <button class="btn btn-ghost" id="btn-sample">Sample Data</button>
+    <button class="btn btn-ghost" id="btn-download">Export JSON</button>
+    <button class="btn btn-ghost" id="btn-add-entity" style="display:none;">+ New Entity</button>
+    <button class="btn btn-secondary" id="btn-save" style="display:none;">💾 Save as New Version</button>
+    <button class="btn btn-ghost" id="btn-discard" style="display:none;">✕ Discard</button>
+    <button class="btn btn-primary" id="btn-edit-mode">Edit</button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="eyebrow">Urban Climate Adaptation &amp; Resilience Solutions</div>
+      <h1>An ontology for <em>how cities adapt</em> — and how we know it's working.</h1>
+      <p class="lede">
+        <span id="hero-type-count">—</span> entity types and <span id="hero-rel-count">—</span> relationships organize the evidence base for urban climate adaptation — from hazards and exposure pathways through solutions, financing, implementation, and measured outcomes. Explore the graph below, inspect any node or edge, and leave review comments.
+      </p>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="num" id="stat-types">—</span><span class="lbl">Entity types</span></div>
+      <div class="stat"><span class="num" id="stat-rels">—</span><span class="lbl">Relationships</span></div>
+      <div class="stat"><span class="num" id="stat-vocabs">—</span><span class="lbl">Vocabularies</span></div>
+    </div>
+  </div>
+  <div class="hero-search">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="search" type="text" placeholder="Search entities and relationships…" autocomplete="off" />
+    <div class="search-results" id="search-results"></div>
+  </div>
+</section>
+
+<main class="workspace">
+  <div class="graph-pane" id="graph-pane">
+    <canvas class="graph-canvas" id="graph"></canvas>
+
+    <div class="graph-overlay graph-legend" id="legend">
+      <h4>Entity clusters</h4>
+    </div>
+
+    <div class="graph-overlay graph-controls">
+      <div class="control-row">
+        <label title="Enable force-directed spring layout">Force</label>
+        <div class="toggle" id="toggle-physics" role="switch" aria-checked="false" title="Off: nodes are pinned. On: spring physics lets nodes float freely."></div>
+      </div>
+      <div class="control-row">
+        <label>Zoom</label>
+        <div class="zoom-btns">
+          <button class="zoom-btn" id="zoom-out" title="Zoom out">−</button>
+          <button class="zoom-btn" id="zoom-reset" title="Reset">⊙</button>
+          <button class="zoom-btn" id="zoom-in" title="Zoom in">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="graph-hint">
+      <span><kbd>Click</kbd> inspect</span>
+      <span><kbd>Drag</kbd> move node</span>
+      <span><kbd>Scroll</kbd> zoom</span>
+    </div>
+  </div>
+
+  <aside class="inspector" id="inspector">
+    <!-- filled by JS -->
+  </aside>
+</main>
+
+<!-- Vocabulary Modal -->
+<div class="modal" id="vocab-modal">
+  <div class="modal-content wide">
+    <h3 id="vocab-modal-title">Vocabulary</h3>
+    <div id="vocab-modal-content"></div>
+    <div class="modal-buttons">
+      <button id="vocab-modal-close" class="primary">Close</button>
+    </div>
+  </div>
+</div>
+
+<script src="scripts/ontology-adapter.js"></script>
+<script src="scripts/comments.js"></script>
+<script src="scripts/graph.js"></script>
+<script src="scripts/inspector.js"></script>
+<script src="scripts/app.js"></script>
+
+</body>
+</html>

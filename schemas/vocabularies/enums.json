@@ -1,0 +1,202 @@
+{
+  "_description": "Non-table-backed controlled vocabularies used across the extraction schema",
+
+  "ipcc_action_type": {
+    "_source": "IPCC AR6 Chapter 14 adaptation action typology",
+    "_usage": "identity.ipcc_action_type.values",
+    "values": [
+      { "id": "structural_physical", "name": "Structural/Physical", "description": "Engineered and built environment, technological, ecosystem-based adaptation" },
+      { "id": "social", "name": "Social", "description": "Educational, informational, behavioral" },
+      { "id": "institutional", "name": "Institutional", "description": "Economic, laws/regulations, government policies and programs" },
+      { "id": "ecosystem_based", "name": "Ecosystem-based", "description": "Nature-based solutions, green infrastructure, ecological restoration" }
+    ]
+  },
+
+  "implementing_actor_type": {
+    "_source": "Derived from case library and CDP data analysis",
+    "_usage": "identity.implementing_actor_types.values, implementation.key_actors[].type",
+    "_note": "Use multiple actor types in arrays instead of 'multi_stakeholder' to preserve specific actor information",
+    "values": [
+      { "id": "municipal_government", "name": "Municipal Government" },
+      { "id": "regional_government", "name": "Regional Government" },
+      { "id": "national_government", "name": "National Government" },
+      { "id": "utility", "name": "Utility" },
+      { "id": "private_sector", "name": "Private Sector" },
+      { "id": "ngo", "name": "NGO" },
+      { "id": "community", "name": "Community" },
+      { "id": "academic", "name": "Academic / Research" },
+      { "id": "international_organization", "name": "International Organization" }
+    ]
+  },
+
+  "scale_of_deployment": {
+    "_usage": "implementation.scale_of_deployment.value",
+    "values": [
+      { "id": "site", "name": "Site" },
+      { "id": "building", "name": "Building" },
+      { "id": "neighborhood", "name": "Neighborhood" },
+      { "id": "district", "name": "District" },
+      { "id": "city", "name": "City" },
+      { "id": "regional", "name": "Regional" },
+      { "id": "national", "name": "National" },
+      { "id": "multi_city", "name": "Multi-city" }
+    ]
+  },
+
+  "implementation_status": {
+    "_usage": "implementation.implementation_status.value",
+    "values": [
+      { "id": "proposed", "name": "Proposed" },
+      { "id": "scoping", "name": "Scoping" },
+      { "id": "pilot", "name": "Pilot" },
+      { "id": "operational", "name": "Operational" },
+      { "id": "scaling", "name": "Scaling" },
+      { "id": "completed", "name": "Completed" }
+    ]
+  },
+
+  "evidence_level": {
+    "_usage": "outcomes.evidence_level.value",
+    "values": [
+      { "id": "anecdotal", "name": "Anecdotal", "description": "Qualitative reports without systematic measurement" },
+      { "id": "measured", "name": "Measured", "description": "Quantitative data collected but not rigorously controlled" },
+      { "id": "rigorously_evaluated", "name": "Rigorously Evaluated", "description": "Controlled studies, peer-reviewed evaluations" }
+    ]
+  },
+
+  "enabling_condition_type": {
+    "_usage": "context.enabling_conditions[].type, context.barriers[].type",
+    "values": [
+      { "id": "regulatory", "name": "Regulatory" },
+      { "id": "financial", "name": "Financial" },
+      { "id": "technical", "name": "Technical" },
+      { "id": "social", "name": "Social" },
+      { "id": "institutional", "name": "Institutional" },
+      { "id": "political", "name": "Political" }
+    ]
+  },
+
+  "co_benefit_category": {
+    "_source": "Aligned with CDP action_cobenefits categories",
+    "_usage": "outcomes.co_benefits[].category",
+    "values": [
+      { "id": "economic", "name": "Economic" },
+      { "id": "public_health", "name": "Public Health" },
+      { "id": "environmental", "name": "Environmental" },
+      { "id": "social", "name": "Social" },
+      { "id": "governance", "name": "Governance" },
+      { "id": "mitigation", "name": "Mitigation (GHG reduction co-benefit)" }
+    ]
+  },
+
+  "claim_source_type": {
+    "_usage": "All claim objects: source_type",
+    "values": [
+      { "id": "case_library", "name": "Case Library", "description": "Curated research from the existing 200+ case library" },
+      { "id": "cdp", "name": "CDP", "description": "City self-reported data from CDP disclosure" },
+      { "id": "academic", "name": "Academic", "description": "Peer-reviewed journal articles, conference papers" },
+      { "id": "government", "name": "Government", "description": "Government reports, plans, policy documents" },
+      { "id": "news", "name": "News", "description": "News articles, press releases" },
+      { "id": "ngo", "name": "NGO", "description": "Reports from NGOs, international organizations" },
+      { "id": "other", "name": "Other" }
+    ]
+  },
+
+  "claim_confidence": {
+    "_usage": "All claim objects: confidence",
+    "values": [
+      { "id": "measured", "name": "Measured", "description": "Quantitative data from direct measurement" },
+      { "id": "modeled", "name": "Modeled", "description": "Output from simulation or modeling" },
+      { "id": "anecdotal", "name": "Anecdotal", "description": "Qualitative or informal observation" },
+      { "id": "self_reported", "name": "Self-reported", "description": "CDP and similar self-disclosure. Default for CDP data." },
+      { "id": "expert_assessment", "name": "Expert Assessment", "description": "Professional judgment without systematic data" }
+    ]
+  },
+
+  "mechanism_seed_vocabulary": {
+    "_description": "Seed vocabulary for mechanisms dimension. Free text — these are suggestions, not constraints. Expanded in Sprint 4 to include tech-native mechanism types alongside original eight. Will be further formalized through corpus clustering in Month 2.",
+    "_usage": "mechanisms.primary_mechanism.value, mechanisms.secondary_mechanisms[].value",
+    "_note": "Sprint 4: added sense_and_detect, forecast_and_model, automate_and_control, inform_and_alert. 'monitor' is retained for general observation but now complemented by these more specific digital-process types. The distinction: 'monitor' = ongoing observation (often human-led or passive); 'sense_and_detect' = active digital sensing with discrete event detection; 'automate_and_control' = closed-loop machine actuation. See decisions-log.md §15.",
+    "values": [
+      { "id": "absorb", "name": "Absorb", "description": "Buffer, attenuate, or absorb the impact (e.g., green infrastructure absorbing stormwater)" },
+      { "id": "redirect", "name": "Redirect", "description": "Divert, channel, or redistribute the hazard (e.g., flood channels)" },
+      { "id": "harden", "name": "Harden", "description": "Strengthen, fortify, or protect against impact (e.g., building hardening)" },
+      { "id": "monitor", "name": "Monitor", "description": "Observe, measure, or track conditions over time without automated response (e.g., manual sensor readings, periodic surveys, environmental monitoring programs)" },
+      { "id": "govern", "name": "Govern", "description": "Regulate, plan, coordinate, or incentivize (e.g., building codes, zoning)" },
+      { "id": "shift_risk", "name": "Shift Risk", "description": "Transfer, insure, or redistribute risk (e.g., parametric insurance)" },
+      { "id": "adapt_behavior", "name": "Adapt Behavior", "description": "Change practices, educate, or build awareness (e.g., demand response)" },
+      { "id": "restore_regenerate", "name": "Restore/Regenerate", "description": "Rehabilitate, restore, or regenerate natural or built systems (e.g., ecosystem restoration)" },
+      { "id": "sense_and_detect", "name": "Sense and Detect", "description": "Actively sense environmental or system conditions and detect discrete events or threshold crossings using digital sensors, IoT devices, or remote sensing (e.g., flood sensors triggering alerts, wildfire detection cameras, structural health monitoring)" },
+      { "id": "forecast_and_model", "name": "Forecast and Model", "description": "Use computational models, AI/ML, or simulation to produce forward-looking predictions or scenario analyses (e.g., hydrological models forecasting flood depth, digital twins simulating heat distribution, ML-based drought prediction)" },
+      { "id": "automate_and_control", "name": "Automate and Control", "description": "Execute closed-loop machine actuation or automated system control in response to sensed conditions without requiring human decision in the loop (e.g., automated pump activation during storm events, DERMS load balancing, smart irrigation responding to soil moisture sensors)" },
+      { "id": "inform_and_alert", "name": "Inform and Alert", "description": "Disseminate information, warnings, or targeted communications to populations, responders, or decision-makers to trigger human action (e.g., heat-wave SMS alerts, early-warning broadcasts, real-time dashboard for emergency managers). Distinct from automate_and_control — the response is human." }
+    ]
+  },
+
+  "financing_model": {
+    "_source": "CDP project_financing_model and action_funding_sources fields",
+    "_usage": "implementation.financing.financing_model.value",
+    "values": [
+      { "id": "grants", "name": "Grants", "description": "Grant funding from government, foundations, or international organizations" },
+      { "id": "municipal_budget", "name": "Municipal Budget", "description": "City's own budget and resources" },
+      { "id": "national_government", "name": "National Government Funding", "description": "National-level public finance" },
+      { "id": "regional_funds", "name": "Regional Funds and Programmes", "description": "Regional development banks, EU funds, etc." },
+      { "id": "public_private_partnership", "name": "Public-Private Partnership (PPP)", "description": "Structured partnership between public and private sectors" },
+      { "id": "commercial_loans", "name": "Commercial Bank Loans", "description": "Loans from commercial banking sector" },
+      { "id": "development_banks", "name": "Development Bank Financing", "description": "World Bank, regional development banks, etc." },
+      { "id": "climate_funds", "name": "Climate Funds", "description": "Green Climate Fund, Adaptation Fund, etc." },
+      { "id": "green_bonds", "name": "Green Bonds", "description": "Municipal or corporate green bonds" },
+      { "id": "blended_finance", "name": "Blended Finance", "description": "Mix of public, private, and philanthropic capital" },
+      { "id": "private_sector", "name": "Private Sector Investment", "description": "Direct private investment" },
+      { "id": "international_oda", "name": "International ODA", "description": "Official development assistance" }
+    ]
+  },
+
+  "financing_status": {
+    "_source": "CDP project_financing_status field",
+    "_usage": "implementation.financing.financing_status.value",
+    "values": [
+      { "id": "fully_funded", "name": "Fully Funded", "description": "Complete funding secured" },
+      { "id": "partially_funded", "name": "Partially Funded", "description": "Some funding secured, seeking additional" },
+      { "id": "seeking_full_funding", "name": "Seeking Full Funding", "description": "No funding secured, seeking complete funding" },
+      { "id": "seeking_partial_funding", "name": "Seeking Partial Funding", "description": "No funding secured, seeking partial funding" },
+      { "id": "feasibility_stage", "name": "Feasibility Stage", "description": "Feasibility studies and finance-ready project preparation in progress" },
+      { "id": "not_applicable", "name": "Not Applicable", "description": "Financing not required or not relevant" }
+    ]
+  },
+
+  "equity_focus": {
+    "_source": "EDF equity framework (Shi 2024 rubric) — adapted for solution-level classification",
+    "_usage": "solution.equity_focus",
+    "values": [
+      { "id": "none", "name": "None", "description": "No equity framing documented in the solution" },
+      { "id": "co_benefit", "name": "Co-Benefit", "description": "Equity benefits are secondary — not the design target, but documented as a co-benefit for vulnerable populations" },
+      { "id": "primary_target", "name": "Primary Target", "description": "Solution is explicitly designed to serve, protect, or empower vulnerable populations" }
+    ]
+  },
+
+  "justice_dimension": {
+    "_source": "Shi (2024) equity rubric — four justice dimensions for climate adaptation outcomes",
+    "_usage": "outcome.justice_dimension[]",
+    "_note": "Applied to Outcome nodes to characterize what type of equity impact is documented. Multiple dimensions can apply to a single outcome. See decisions-log.md §16.",
+    "values": [
+      { "id": "distributive", "name": "Distributive", "description": "Who bears the costs and who receives the benefits — distributional fairness of outcomes and burdens" },
+      { "id": "procedural", "name": "Procedural", "description": "Who participates in and shapes decisions — fairness of decision-making processes" },
+      { "id": "recognitional", "name": "Recognitional", "description": "Whose knowledge, history, and lived experience are acknowledged and meaningfully incorporated" },
+      { "id": "epistemic", "name": "Epistemic", "description": "How knowledge is produced, what counts as valid evidence, and whose expertise is legitimized" }
+    ]
+  },
+
+  "governance_relationship_type": {
+    "_source": "Student's ontology schema (ruowen-climate-adaptation.py)",
+    "_usage": "context.governance_relationships.policies_enabling[].relationship_type, context.governance_relationships.policies_hindering[].relationship_type",
+    "values": [
+      { "id": "MANDATES", "description": "Policy mandates or requires the action" },
+      { "id": "FACILITATED_BY", "description": "Policy or mechanism enables or supports the action" },
+      { "id": "ISSUED_BY", "description": "Policy issued by an actor" },
+      { "id": "IMPLEMENTS", "description": "Actor implements the action" },
+      { "id": "HINDERED_BY", "description": "Policy or condition blocks or constrains the action" },
+      { "id": "CONSTRAINED_BY", "description": "Action constrained by regulation or resource limitation" }
+    ]
+  }
+}

@@ -1,0 +1,164 @@
+[
+  {
+    "proposal_id": "9",
+    "dimension": "mechanism",
+    "status": "rejected",
+    "name": "Provide Integrated Climate Decision-Support Tools",
+    "definition": "Develops and deploys digital platforms or tools that synthesize climate projections, vulnerability data, health/community impact evidence, and adaptation options into accessible formats for local decision-makers. These tools enable users to understand localized climate risks, identify vulnerable populations, and receive evidence-based recommendations for adaptation actions tailored to their geographic context.",
+    "rationale": "these all seem to be the same example, and it doesnt make sense to add a mechanism for one example. this can also be classified under forecast_and_model",
+    "timestamp": "2026-04-25T19:59:50.975516+00:00"
+  },
+  {
+    "proposal_id": "247",
+    "dimension": "mechanism",
+    "status": "rejected",
+    "name": "Deploy Integrated Urban Resilience Assessment Tools",
+    "definition": "Implements software frameworks and modeling tools that integrate water-centered and multi-sectoral (water, transport, energy, waste) simulations to assess, plan, and manage urban resilience under current and projected climate scenarios. These tools enable systematic evaluation of cascading impacts across interdependent urban systems, supporting evidence-based decision-making for climate adaptation through scenario analysis and vulnerability mapping.",
+    "rationale": "can be put under forecast_and_model\nForecast and Model",
+    "timestamp": "2026-04-25T20:00:04.471650+00:00"
+  },
+  {
+    "proposal_id": "98",
+    "dimension": "mechanism",
+    "status": "rejected",
+    "name": "Assess Urban Resilience Using Integrated Models",
+    "definition": "Employs specialized software tools and methodologies (e.g., HAZUR\u00ae, RESCCUE framework) to systematically evaluate urban system resilience across multiple sectors by modeling interdependencies, cascading effects, and vulnerabilities under current and projected climate change scenarios with multiple hazards. The assessment integrates sectoral models (water, energy, transport, health) to identify critical dependencies and inform strategic investment decisions for resilience building.",
+    "rationale": "categorize under forecast_and_model\nForecast and Model",
+    "timestamp": "2026-04-25T20:00:16.127992+00:00"
+  },
+  {
+    "proposal_id": "588",
+    "dimension": "mechanism",
+    "status": "rejected",
+    "name": "Model Urban Drainage Systems",
+    "definition": "Apply computational hydraulic models (one-dimensional and two-dimensional) to simulate the behavior of wastewater and stormwater infrastructure under various precipitation and flow scenarios. This mechanism enables prediction of system performance, identification of flood-prone areas, and evaluation of infrastructure capacity to inform design improvements and operational strategies for climate-resilient urban water management.",
+    "rationale": "categorize under forecast_and_model\nForecast and Model",
+    "timestamp": "2026-04-25T20:00:28.119962+00:00"
+  },
+  {
+    "proposal_id": "228",
+    "dimension": "mechanism",
+    "status": "rejected",
+    "name": "Generate Evidence-Based Adaptation Recommendations",
+    "definition": "A decision-support tool (LCAT - Local Climate Adaptation Tool) systematically analyzes local climate vulnerabilities and synthesizes peer-reviewed scientific evidence to produce tailored recommendations for adaptation approaches. The tool translates best available evidence into actionable guidance that decision-makers can use to select appropriate adaptation interventions for protecting community health and wellbeing.",
+    "rationale": "categorize under forecast_and_model",
+    "timestamp": "2026-04-25T20:00:31.878701+00:00"
+  },
+  {
+    "proposal_id": "432",
+    "dimension": "mechanism",
+    "status": "rejected",
+    "name": "Train Staff in Climate Modeling Tools",
+    "definition": "Building institutional capacity by providing technical training to government or organizational staff on the use of specialized climate and environmental modeling software (e.g., InVEST, climate scenario tools). This mechanism enhances the ability of institutions to conduct evidence-based climate vulnerability assessments, ecosystem service valuations, and adaptation planning through improved technical competencies in spatial analysis and predictive modeling.",
+    "rationale": "categorize under forecast_and_model",
+    "timestamp": "2026-04-25T20:00:38.618175+00:00"
+  },
+  {
+    "proposal_id": "48",
+    "dimension": "mechanism",
+    "status": "rejected",
+    "name": "Maintain Vulnerable Population Registry",
+    "definition": "Establishes and continuously updates a protected database of residents with functional needs or vulnerabilities who may require assistance during emergencies. The registry collects contact information, medical needs, mobility limitations, and emergency contacts, and uses geospatial mapping to enable targeted outreach and resource deployment during climate-related or other hazard events.",
+    "rationale": "categorize under monitor and/or govern",
+    "timestamp": "2026-04-25T20:01:10.675801+00:00"
+  },
+  {
+    "proposal_id": "302",
+    "dimension": "mechanism",
+    "status": "rejected",
+    "name": "Monitor Hydrological Conditions",
+    "definition": "Deploys automated sensing equipment (water level loggers, conductivity sensors) at strategic locations in rivers, outfalls, or flood-prone areas to continuously measure and record hydrological parameters such as water levels, flow dynamics, and salinity. This real-time or periodic data collection enables flood forecasting, hydraulic model calibration, early warning system development, and evidence-based flood risk management decisions.",
+    "rationale": "categorize under monitor",
+    "timestamp": "2026-04-25T20:01:22.352465+00:00"
+  },
+  {
+    "proposal_id": "114",
+    "dimension": "mechanism",
+    "status": "rejected",
+    "name": "Provide Backup Power via Distributed Energy Storage",
+    "definition": "Local renewable energy generation systems (typically solar photovoltaic) coupled with battery storage capture and store electrical energy during normal grid operations, then automatically disconnect from the main grid during outages to form islanded microgrids that maintain power supply to critical loads and facilities. This mechanism enables continuous operation of essential services independent of centralized grid infrastructure during climate-related disruptions such as storms, extreme heat events, or cascading failures.",
+    "rationale": "categorize under harden",
+    "timestamp": "2026-04-25T20:01:45.976621+00:00"
+  },
+  {
+    "proposal_id": "10",
+    "dimension": "mechanism",
+    "status": "rejected",
+    "name": "Disseminate Real-Time Environmental Data",
+    "definition": "Makes near-real-time or frequently updated environmental monitoring data publicly accessible through digital platforms (websites, mobile applications, interactive maps) to enable timely awareness and decision-making. The mechanism transforms sensor network outputs into user-accessible information products with standardized classifications, hourly updates, and spatial visualization tools.",
+    "rationale": "categorize under monitor and / or inform_and_alert",
+    "timestamp": "2026-04-25T20:02:10.022849+00:00"
+  },
+  {
+    "proposal_id": "37",
+    "dimension": "mechanism",
+    "status": "rejected",
+    "name": "Disseminate Emergency Alerts",
+    "definition": "Distributes time-sensitive warnings and notifications to registered residents through multiple communication channels (text messages, email, telephone, fax) regarding climate-related hazards, severe weather events, and other emergencies. This mechanism enables rapid information flow from designated municipal personnel to the public, allowing individuals to take protective actions in response to imminent threats.",
+    "rationale": "categorize under inform_and_alert",
+    "timestamp": "2026-04-25T20:02:24.353246+00:00"
+  },
+  {
+    "proposal_id": "53",
+    "dimension": "mechanism",
+    "status": "rejected",
+    "name": "Assess Resilience Using Standardized Index",
+    "definition": "Systematically measures and quantifies urban resilience across multiple dimensions using a structured framework of indicators, goals, and assessment questions. The mechanism employs a standardized scoring methodology (e.g., City Resilience Index with 52 indicators across 12 goals and 4 dimensions) to create comparable, evidence-based assessments that inform investment priorities and programming decisions.",
+    "rationale": "categoriize under monitor and/or govern",
+    "timestamp": "2026-04-25T20:02:53.433296+00:00"
+  },
+  {
+    "proposal_id": "124",
+    "dimension": "mechanism",
+    "status": "rejected",
+    "name": "Downscale Climate Projections",
+    "definition": "Translates coarse-resolution global or regional climate model outputs to finer spatial scales relevant to local decision-making by applying statistical or dynamical methods (e.g., regional regression models) that relate large-scale climate patterns to local weather station observations. This process reduces uncertainty by accounting for local topography, land use, and other factors that mediate how global climate signals manifest at specific locations.",
+    "rationale": "categorize under forecast_and_model",
+    "timestamp": "2026-04-25T20:03:05.176370+00:00"
+  },
+  {
+    "proposal_id": "170",
+    "dimension": "mechanism",
+    "status": "rejected",
+    "name": "Deploy Decision-Support Tools",
+    "definition": "Provides stakeholders with integrated digital platforms or tools that synthesize scientific models, empirical data, case studies, and guidelines to inform climate adaptation planning and implementation decisions. These tools enable evidence-based decision-making by consolidating complex information into accessible formats for policy development, urban design, and infrastructure planning.",
+    "rationale": "categorize under forecast_and_model and/or govern",
+    "timestamp": "2026-04-25T20:03:33.637051+00:00"
+  },
+  {
+    "proposal_id": "237",
+    "dimension": "mechanism",
+    "status": "rejected",
+    "name": "Model Economic Impacts of Disruptions",
+    "definition": "Uses integrated spatial decision-support tools to quantitatively assess and estimate the economic and socio-economic consequences of infrastructure failures, service disruptions, and shock events across sectors, space, and time. Enables resilience planners to evaluate cascading economic impacts, business responses, and wellbeing effects to inform investment prioritization and preparedness strategies.",
+    "rationale": "categorize under forecast_and_model",
+    "timestamp": "2026-04-25T20:03:37.384718+00:00"
+  },
+  {
+    "proposal_id": "326",
+    "dimension": "mechanism",
+    "status": "deferred",
+    "name": "Deploy Geothermal Heat Pumps",
+    "definition": "Installation and operation of high-efficiency heat pump systems that extract thermal energy from groundwater or subsurface aquifers to provide heating and cooling for buildings or district energy networks. The mechanism leverages the stable temperature of groundwater as a renewable heat source/sink, often integrated with supplementary renewable energy sources (e.g., solar) to enhance system efficiency and reduce fossil fuel dependence for climate control.",
+    "rationale": "categorize under harden (for now)",
+    "timestamp": "2026-04-25T20:04:15.181952+00:00"
+  },
+  {
+    "proposal_id": "445",
+    "dimension": "mechanism",
+    "status": "rejected",
+    "name": "Establish Performance Targets for Planning Controls",
+    "definition": "Development and implementation of quantitative performance indices or metrics that enable government authorities to set measurable targets for planning regulations and development controls. These indices translate complex environmental impacts (such as urban heat island effects) into actionable planning standards that guide land use decisions, building codes, and urban design requirements to achieve specific climate adaptation outcomes.",
+    "rationale": "categorize under monitor and /or govern",
+    "timestamp": "2026-04-25T20:04:32.058867+00:00"
+  },
+  {
+    "proposal_id": "4",
+    "dimension": "mechanism",
+    "status": "rejected",
+    "name": "Harden Critical Infrastructure Against Flooding",
+    "definition": "Protects essential building systems and operational spaces from flood damage through a combination of elevation strategies (relocating critical functions above flood levels), physical barriers (flood walls, internal flood barriers, concealed fabric barriers), and structural hardening (wind-resistant envelopes, hurricane-resistant glazing). This multi-layered approach ensures continuity of critical services during and after flood events by preventing water intrusion and protecting vulnerable equipment and spaces.",
+    "rationale": "categorize under harden",
+    "timestamp": "2026-04-25T20:04:42.768877+00:00"
+  }
+]

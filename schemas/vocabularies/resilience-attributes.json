@@ -1,0 +1,26 @@
+{
+  "_description": "Resilience attribute framework based on ARUP City Resilience Index. Flat list of 19 values as observed in CDP Cities adaptation disclosure data.",
+  "_source": "ARUP City Resilience Index / CDP Cities Adaptation Disclosure",
+  "_usage": "mechanisms.resilience_attributes[].attribute_id",
+  "attributes": [
+    { "id": "planning_strategy", "cdp_label": "Planning & strategy", "name": "Planning & Strategy" },
+    { "id": "anticipation_preparedness", "cdp_label": "Anticipation & preparedness", "name": "Anticipation & Preparedness" },
+    { "id": "natural_resources", "cdp_label": "Natural resources", "name": "Natural Resources" },
+    { "id": "community_participation", "cdp_label": "Community participation", "name": "Community Participation" },
+    { "id": "infrastructural_assets", "cdp_label": "Infrastructural assets", "name": "Infrastructural Assets" },
+    { "id": "coordination_governance", "cdp_label": "Coordination & governance", "name": "Coordination & Governance" },
+    { "id": "basic_services", "cdp_label": "Basic services", "name": "Basic Services" },
+    { "id": "decision_making_capacity", "cdp_label": "Decision-making capacity", "name": "Decision-Making Capacity" },
+    { "id": "social_connections", "cdp_label": "Social connections", "name": "Social Connections" },
+    { "id": "informal_learning", "cdp_label": "Informal learning", "name": "Informal Learning" },
+    { "id": "formal_learning", "cdp_label": "Formal learning", "name": "Formal Learning" },
+    { "id": "leadership", "cdp_label": "Leadership", "name": "Leadership" },
+    { "id": "backup_resources_strategies", "cdp_label": "Backup resources and strategies", "name": "Backup Resources & Strategies" },
+    { "id": "finance_resource_management", "cdp_label": "Finance & resource management", "name": "Finance & Resource Management" },
+    { "id": "distributive_equity", "cdp_label": "Distributive equity", "name": "Distributive Equity" },
+    { "id": "inclusive_access", "cdp_label": "Inclusive access to goods and services", "name": "Inclusive Access to Goods & Services" },
+    { "id": "technology_assets", "cdp_label": "Technology assets", "name": "Technology Assets" },
+    { "id": "availability_diverse_options", "cdp_label": "Availability of diverse options", "name": "Availability of Diverse Options" },
+    { "id": "self_determination", "cdp_label": "Self-determination", "name": "Self-Determination" }
+  ]
+}

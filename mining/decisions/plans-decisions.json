@@ -1,0 +1,200 @@
+[
+  {
+    "proposal_id": "prop:plan_title",
+    "dimension": "plan_property",
+    "status": "approved",
+    "name": "Plan Title",
+    "definition": "Official title of the resilience plan document as published by the authoring organization.",
+    "rationale": null,
+    "timestamp": "2026-04-26T14:10:40.056315+00:00"
+  },
+  {
+    "proposal_id": "prop:plan_type",
+    "dimension": "plan_property",
+    "status": "approved",
+    "name": "Plan Type",
+    "definition": "Classification of the plan document indicating its primary focus area or strategic purpose.",
+    "rationale": null,
+    "timestamp": "2026-04-26T14:10:53.014898+00:00"
+  },
+  {
+    "proposal_id": "prop:adoption_year",
+    "dimension": "plan_property",
+    "status": "approved",
+    "name": "Adoption Year",
+    "definition": "Year in which the plan was officially adopted, approved, or published by the responsible authority.",
+    "rationale": null,
+    "timestamp": "2026-04-26T14:10:55.513687+00:00"
+  },
+  {
+    "proposal_id": "prop:planning_horizon_years",
+    "dimension": "plan_property",
+    "status": "approved",
+    "name": "Planning Horizon (Years)",
+    "definition": "Number of years from adoption that the plan is designed to cover, representing the intended implementation timeframe.",
+    "rationale": null,
+    "timestamp": "2026-04-26T14:10:58.063935+00:00"
+  },
+  {
+    "proposal_id": "prop:total_actions",
+    "dimension": "plan_property",
+    "status": "approved",
+    "name": "Total Actions",
+    "definition": "Total count of discrete actions, initiatives, or interventions specified within the plan document.",
+    "rationale": null,
+    "timestamp": "2026-04-26T14:11:01.230396+00:00"
+  },
+  {
+    "proposal_id": "prop:total_budget_mentioned",
+    "dimension": "plan_property",
+    "status": "approved",
+    "name": "Total Budget Mentioned",
+    "definition": "Budget or financial resources mentioned in the plan, captured as free text due to varying formats and contexts.",
+    "rationale": null,
+    "timestamp": "2026-04-26T14:11:06.634165+00:00"
+  },
+  {
+    "proposal_id": "prop:monitoring_approach",
+    "dimension": "plan_property",
+    "status": "approved",
+    "name": "Monitoring Approach",
+    "definition": "Description of how the plan's implementation and outcomes will be monitored, evaluated, or reported over time.",
+    "rationale": null,
+    "timestamp": "2026-04-26T14:11:18.047415+00:00"
+  },
+  {
+    "proposal_id": "prop:plan_uri",
+    "dimension": "plan_property",
+    "status": "approved",
+    "name": "Plan URI",
+    "definition": "Unique resource identifier or persistent URL where the plan document can be accessed.",
+    "rationale": null,
+    "timestamp": "2026-04-26T14:11:21.196949+00:00"
+  },
+  {
+    "proposal_id": "prop:document_url",
+    "dimension": "plan_property",
+    "status": "approved",
+    "name": "Document URL",
+    "definition": "Direct URL to the published PDF or web version of the plan document.",
+    "rationale": null,
+    "timestamp": "2026-04-26T14:11:23.062929+00:00"
+  },
+  {
+    "proposal_id": "prop:plan_status",
+    "dimension": "plan_property",
+    "status": "approved",
+    "name": "Plan Status",
+    "definition": "Current status of the plan in its lifecycle (draft, adopted, active, completed, superseded).",
+    "rationale": null,
+    "timestamp": "2026-04-26T14:11:31.162476+00:00"
+  },
+  {
+    "proposal_id": "rel:AUTHORED_BY",
+    "dimension": "plan_relationship",
+    "status": "approved",
+    "name": "AUTHORED_BY",
+    "definition": "Organization that created, wrote, or commissioned the development of the plan document.",
+    "rationale": null,
+    "timestamp": "2026-04-26T14:11:33.095819+00:00"
+  },
+  {
+    "proposal_id": "rel:IMPLEMENTED_BY",
+    "dimension": "plan_relationship",
+    "status": "approved",
+    "name": "IMPLEMENTED_BY",
+    "definition": "Agency, department, or organization responsible for executing or overseeing implementation of the plan.",
+    "rationale": null,
+    "timestamp": "2026-04-26T14:11:36.996268+00:00"
+  },
+  {
+    "proposal_id": "rel:ALIGNS_WITH",
+    "dimension": "plan_relationship",
+    "status": "approved",
+    "name": "ALIGNS_WITH",
+    "definition": "External framework, standard, or methodology that the plan explicitly references or aligns with.",
+    "rationale": null,
+    "timestamp": "2026-04-26T14:11:39.963836+00:00"
+  },
+  {
+    "proposal_id": "rel:SUPERSEDES",
+    "dimension": "plan_relationship",
+    "status": "approved",
+    "name": "SUPERSEDES",
+    "definition": "Previous version or earlier plan that this plan replaces or updates.",
+    "rationale": null,
+    "timestamp": "2026-04-26T14:11:42.129700+00:00"
+  },
+  {
+    "proposal_id": "rel:SUPERSEDED_BY",
+    "dimension": "plan_relationship",
+    "status": "approved",
+    "name": "SUPERSEDED_BY",
+    "definition": "Newer version or updated plan that replaces this plan.",
+    "rationale": null,
+    "timestamp": "2026-04-26T14:11:43.162856+00:00"
+  },
+  {
+    "proposal_id": "rel:COVERS_LOCATION",
+    "dimension": "plan_relationship",
+    "status": "approved",
+    "name": "COVERS_LOCATION",
+    "definition": "Geographic area, jurisdiction, or place that the plan addresses.",
+    "rationale": null,
+    "timestamp": "2026-04-26T14:12:25.114496+00:00"
+  },
+  {
+    "proposal_id": "prop:geographic_scope",
+    "dimension": "plan_property",
+    "status": "rejected",
+    "name": "Geographic Scope",
+    "definition": "Geographic area or jurisdiction covered by the plan (city, region, state, etc).",
+    "rationale": "redundant with the geogrpahy relationship",
+    "timestamp": "2026-04-26T14:12:50.084703+00:00"
+  },
+  {
+    "proposal_id": "rel:CONTAINS_ACTION",
+    "dimension": "plan_relationship",
+    "status": "approved",
+    "name": "CONTAINS_ACTION",
+    "definition": "Specific action, initiative, or intervention defined within the plan.",
+    "rationale": null,
+    "timestamp": "2026-04-26T14:13:14.647890+00:00"
+  },
+  {
+    "proposal_id": "rel:ADDRESSES_HAZARD",
+    "dimension": "plan_relationship",
+    "status": "approved",
+    "name": "ADDRESSES_HAZARD",
+    "definition": "Climate hazard, risk, or threat that the plan is designed to address or mitigate.",
+    "rationale": null,
+    "timestamp": "2026-04-26T14:13:16.865074+00:00"
+  },
+  {
+    "proposal_id": "rel:TARGETS_SECTOR",
+    "dimension": "plan_relationship",
+    "status": "approved",
+    "name": "TARGETS_SECTOR",
+    "definition": "Economic or social sector that the plan focuses on or impacts.",
+    "rationale": "approve, but change to TARGETS_URBAN_SYSTEM and have it map to the urban systems node",
+    "timestamp": "2026-04-26T14:13:45.501919+00:00"
+  },
+  {
+    "proposal_id": "rel:REFERENCES",
+    "dimension": "plan_relationship",
+    "status": "approved",
+    "name": "REFERENCES",
+    "definition": "Another plan that this plan explicitly cites, builds upon, or coordinates with.",
+    "rationale": null,
+    "timestamp": "2026-04-26T14:13:49.696185+00:00"
+  },
+  {
+    "proposal_id": "rel:FUNDED_BY",
+    "dimension": "plan_relationship",
+    "status": "rejected",
+    "name": "FUNDED_BY",
+    "definition": "Organization or funding body that provided financial resources for plan development or implementation.",
+    "rationale": "these will almost all be funded by municpalities",
+    "timestamp": "2026-04-26T14:14:13.919447+00:00"
+  }
+]

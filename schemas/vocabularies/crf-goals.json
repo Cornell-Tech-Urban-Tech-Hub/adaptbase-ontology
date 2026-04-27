@@ -1,0 +1,145 @@
+{
+  "_source": "City Resilience Framework 2024 v2 (Resilient Cities Network). 4 dimensions, 22 goals for urban resilience.",
+  "_usage": "outcomes.resilience_goals[].goal_id",
+  "_sync_with": "None - CRF is external reference standard",
+  "dimensions": [
+    {
+      "id": "health_wellbeing",
+      "name": "Health & Wellbeing",
+      "description": "Meeting people's basic needs and supporting their physical, mental, and social wellbeing",
+      "goals": [
+        {
+          "id": "crf_goal_01",
+          "name": "Safe, adequate & affordable housing",
+          "dimension": "health_wellbeing"
+        },
+        {
+          "id": "crf_goal_02",
+          "name": "Clean, affordable & reliable energy",
+          "dimension": "health_wellbeing"
+        },
+        {
+          "id": "crf_goal_03",
+          "name": "Safe water & sanitation",
+          "dimension": "health_wellbeing"
+        },
+        {
+          "id": "crf_goal_04",
+          "name": "Secure, affordable & sustainable food supplies",
+          "dimension": "health_wellbeing"
+        },
+        {
+          "id": "crf_goal_05",
+          "name": "Sustainable waste & resource management",
+          "dimension": "health_wellbeing"
+        },
+        {
+          "id": "crf_goal_06",
+          "name": "Universal healthcare & social services",
+          "dimension": "health_wellbeing"
+        }
+      ]
+    },
+    {
+      "id": "economy_society",
+      "name": "Economy & Society",
+      "description": "Supporting social stability, economic prosperity, and vibrant culture",
+      "goals": [
+        {
+          "id": "crf_goal_07",
+          "name": "Effective education & skills",
+          "dimension": "economy_society"
+        },
+        {
+          "id": "crf_goal_08",
+          "name": "Community cohesion, equity & inclusion",
+          "dimension": "economy_society"
+        },
+        {
+          "id": "crf_goal_09",
+          "name": "Security & public safety",
+          "dimension": "economy_society"
+        },
+        {
+          "id": "crf_goal_10",
+          "name": "Sustainable economy & livelihoods",
+          "dimension": "economy_society"
+        },
+        {
+          "id": "crf_goal_11",
+          "name": "Fair rule of law",
+          "dimension": "economy_society"
+        }
+      ]
+    },
+    {
+      "id": "infrastructure_environment",
+      "name": "Infrastructure & Environment",
+      "description": "Providing and maintaining protective systems, built and natural",
+      "goals": [
+        {
+          "id": "crf_goal_12",
+          "name": "Healthy ecosystems, green spaces & biodiversity",
+          "dimension": "infrastructure_environment"
+        },
+        {
+          "id": "crf_goal_13",
+          "name": "Effective operation & maintenance of utilities",
+          "dimension": "infrastructure_environment"
+        },
+        {
+          "id": "crf_goal_14",
+          "name": "Sustainable transport & active mobility",
+          "dimension": "infrastructure_environment"
+        },
+        {
+          "id": "crf_goal_15",
+          "name": "Protective infrastructure",
+          "dimension": "infrastructure_environment"
+        },
+        {
+          "id": "crf_goal_16",
+          "name": "Accessible digital services",
+          "dimension": "infrastructure_environment"
+        }
+      ]
+    },
+    {
+      "id": "leadership_planning",
+      "name": "Leadership & Planning",
+      "description": "Ensuring effective leadership, management, and empowerment",
+      "goals": [
+        {
+          "id": "crf_goal_17",
+          "name": "Accountable local government",
+          "dimension": "leadership_planning"
+        },
+        {
+          "id": "crf_goal_18",
+          "name": "Inclusive civic engagement & participation",
+          "dimension": "leadership_planning"
+        },
+        {
+          "id": "crf_goal_19",
+          "name": "Robust municipal finance & city management",
+          "dimension": "leadership_planning"
+        },
+        {
+          "id": "crf_goal_20",
+          "name": "Secure & effective data management",
+          "dimension": "leadership_planning"
+        },
+        {
+          "id": "crf_goal_21",
+          "name": "Effective emergency preparedness",
+          "dimension": "leadership_planning"
+        },
+        {
+          "id": "crf_goal_22",
+          "name": "Evidence-based planning",
+          "dimension": "leadership_planning"
+        }
+      ]
+    }
+  ]
+}

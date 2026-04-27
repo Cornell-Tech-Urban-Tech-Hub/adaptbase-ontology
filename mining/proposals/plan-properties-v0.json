@@ -1,0 +1,223 @@
+{
+  "properties": [
+    {
+      "property_id": "plan_title",
+      "property_name": "Plan Title",
+      "data_type": "string",
+      "required": true,
+      "definition": "Official title of the resilience plan document as published by the authoring organization.",
+      "examples": [
+        "Lagos Resilience Strategy",
+        "Planning and Policies for Resilience in Dar es Salaam",
+        "Cooling Sydney Strategy"
+      ],
+      "notes": "Primary human-readable identifier for the plan. Should be stored exactly as published, including subtitle if part of official title."
+    },
+    {
+      "property_id": "plan_type",
+      "property_name": "Plan Type",
+      "data_type": "string",
+      "required": true,
+      "definition": "Classification of the plan document indicating its primary focus area or strategic purpose.",
+      "examples": [
+        "Resilience Strategy",
+        "Urban Heat Mitigation Strategy",
+        "Climate Action Plan"
+      ],
+      "notes": "Consider creating controlled vocabulary for common types. Enables filtering and comparison of similar plan types across jurisdictions."
+    },
+    {
+      "property_id": "adoption_year",
+      "property_name": "Adoption Year",
+      "data_type": "integer",
+      "required": true,
+      "definition": "Year in which the plan was officially adopted, approved, or published by the responsible authority.",
+      "examples": [
+        2020,
+        2023,
+        2019
+      ],
+      "notes": "High coverage (90%) and critical for temporal analysis. Store as integer year only. If only month/year available, use year."
+    },
+    {
+      "property_id": "planning_horizon_years",
+      "property_name": "Planning Horizon (Years)",
+      "data_type": "integer",
+      "required": false,
+      "definition": "Number of years from adoption that the plan is designed to cover, representing the intended implementation timeframe.",
+      "examples": [
+        31,
+        4,
+        10
+      ],
+      "notes": "74% coverage. Useful for calculating target_year (adoption_year + planning_horizon_years). Wide variance suggests different planning approaches (short-term tactical vs long-term strategic)."
+    },
+    {
+      "property_id": "total_actions",
+      "property_name": "Total Actions",
+      "data_type": "integer",
+      "required": false,
+      "definition": "Total count of discrete actions, initiatives, or interventions specified within the plan document.",
+      "examples": [
+        33,
+        2,
+        23
+      ],
+      "notes": "Only 42% coverage but valuable for plan scope analysis. May be derived from Action entity count if actions are modeled separately in graph."
+    },
+    {
+      "property_id": "total_budget_mentioned",
+      "property_name": "Total Budget Mentioned",
+      "data_type": "string",
+      "required": false,
+      "definition": "Budget or financial resources mentioned in the plan, captured as free text due to varying formats and contexts.",
+      "examples": [
+        "\u20ac285,000 / $300,000",
+        "$3.8 million in environmental grants since 2016",
+        "\u00a323.4m spent on flood defences since 2013"
+      ],
+      "notes": "Low coverage (14%) and highly inconsistent format (past spending vs future budget, different currencies, different scopes). Store as string; consider separate structured currency fields if standardization needed."
+    },
+    {
+      "property_id": "monitoring_approach",
+      "property_name": "Monitoring Approach",
+      "data_type": "string",
+      "required": false,
+      "definition": "Description of how the plan's implementation and outcomes will be monitored, evaluated, or reported over time.",
+      "examples": [
+        "Monitoring and Evaluation section mentioned in Chapter 5 with focus on mainstreaming",
+        "High-quality internal and external environmental reporting and communications",
+        "Review/update strategies taking into account scientific knowledge, progress of implementation"
+      ],
+      "notes": "78% coverage. Free text field capturing M&E methodology. Consider extracting structured monitoring_frequency or reporting_mechanism properties if patterns emerge."
+    },
+    {
+      "property_id": "plan_uri",
+      "property_name": "Plan URI",
+      "data_type": "string",
+      "required": false,
+      "definition": "Unique resource identifier or persistent URL where the plan document can be accessed.",
+      "examples": [
+        "https://example.org/plans/lagos-2020",
+        "urn:plan:sydney:cooling:2019"
+      ],
+      "notes": "Not in source data but recommended for linking to external resources and ensuring global uniqueness in federated knowledge graphs."
+    },
+    {
+      "property_id": "document_url",
+      "property_name": "Document URL",
+      "data_type": "string",
+      "required": false,
+      "definition": "Direct URL to the published PDF or web version of the plan document.",
+      "examples": [
+        "https://resilientcitiesnetwork.org/downloadable_resources/Network/Lagos-Resilience-Strategy-English.pdf"
+      ],
+      "notes": "Not in source data but critical for provenance and verification. Store multiple URLs if plan available in multiple formats."
+    },
+    {
+      "property_id": "geographic_scope",
+      "property_name": "Geographic Scope",
+      "data_type": "string",
+      "required": false,
+      "definition": "Geographic area or jurisdiction covered by the plan (city, region, state, etc).",
+      "examples": [
+        "Lagos",
+        "Dar es Salaam",
+        "Sydney"
+      ],
+      "notes": "Not explicitly in source data but derivable from plan_title. Should link to Location entity rather than store as string property."
+    },
+    {
+      "property_id": "plan_status",
+      "property_name": "Plan Status",
+      "data_type": "string",
+      "required": false,
+      "definition": "Current status of the plan in its lifecycle (draft, adopted, active, completed, superseded).",
+      "examples": [
+        "active",
+        "completed",
+        "superseded"
+      ],
+      "notes": "Not in source data but important for temporal queries. Consider controlled vocabulary: draft, adopted, active, under_review, completed, superseded, cancelled."
+    }
+  ],
+  "relationships": [
+    {
+      "relationship_type": "AUTHORED_BY",
+      "target_entity": "Organization",
+      "definition": "Organization that created, wrote, or commissioned the development of the plan document.",
+      "cardinality": "many",
+      "notes": "Source from authoring_organizations array (100% coverage). Multiple organizations often collaborate on plan development. Consider adding role property to distinguish lead author from contributors."
+    },
+    {
+      "relationship_type": "IMPLEMENTED_BY",
+      "target_entity": "Organization",
+      "definition": "Agency, department, or organization responsible for executing or overseeing implementation of the plan.",
+      "cardinality": "many",
+      "notes": "Source from implementing_agencies array (96% coverage). May overlap with AUTHORED_BY but represents operational responsibility. Useful for accountability mapping."
+    },
+    {
+      "relationship_type": "ALIGNS_WITH",
+      "target_entity": "Framework",
+      "definition": "External framework, standard, or methodology that the plan explicitly references or aligns with.",
+      "cardinality": "many",
+      "notes": "Source from external_frameworks array (96% coverage). Examples: 100RC City Resilience Framework, SDGs, Sendai Framework. Enables cross-plan comparison by framework adoption."
+    },
+    {
+      "relationship_type": "SUPERSEDES",
+      "target_entity": "Plan",
+      "definition": "Previous version or earlier plan that this plan replaces or updates.",
+      "cardinality": "one",
+      "notes": "Not in source data but critical for tracking plan evolution over time. Enables version history queries and longitudinal analysis of changing priorities."
+    },
+    {
+      "relationship_type": "SUPERSEDED_BY",
+      "target_entity": "Plan",
+      "definition": "Newer version or updated plan that replaces this plan.",
+      "cardinality": "one",
+      "notes": "Inverse of SUPERSEDES relationship. Useful for navigating to current version from historical plans."
+    },
+    {
+      "relationship_type": "COVERS_LOCATION",
+      "target_entity": "Location",
+      "definition": "Geographic area, jurisdiction, or place that the plan addresses.",
+      "cardinality": "many",
+      "notes": "Derivable from plan titles and context. Location entity should include city, region, country hierarchy. Enables geographic queries and spatial analysis."
+    },
+    {
+      "relationship_type": "CONTAINS_ACTION",
+      "target_entity": "Action",
+      "definition": "Specific action, initiative, or intervention defined within the plan.",
+      "cardinality": "many",
+      "notes": "If actions are modeled as separate entities, this relationship enables drilling down from plan to implementation details. Count of these relationships should match total_actions property."
+    },
+    {
+      "relationship_type": "ADDRESSES_HAZARD",
+      "target_entity": "Hazard",
+      "definition": "Climate hazard, risk, or threat that the plan is designed to address or mitigate.",
+      "cardinality": "many",
+      "notes": "Not in source data but critical for risk-based queries. Examples: flooding, heat waves, drought, sea level rise. Enables finding all plans addressing specific hazards."
+    },
+    {
+      "relationship_type": "TARGETS_SECTOR",
+      "target_entity": "Sector",
+      "definition": "Economic or social sector that the plan focuses on or impacts.",
+      "cardinality": "many",
+      "notes": "Not in source data but valuable for sector-specific analysis. Examples: transportation, energy, water, health, housing. Enables cross-sectoral resilience queries."
+    },
+    {
+      "relationship_type": "REFERENCES",
+      "target_entity": "Plan",
+      "definition": "Another plan that this plan explicitly cites, builds upon, or coordinates with.",
+      "cardinality": "many",
+      "notes": "Not in source data but important for understanding plan ecosystems. Enables network analysis of how plans reference and influence each other across jurisdictions."
+    },
+    {
+      "relationship_type": "FUNDED_BY",
+      "target_entity": "Organization",
+      "definition": "Organization or funding body that provided financial resources for plan development or implementation.",
+      "cardinality": "many",
+      "notes": "Not explicitly in source data but may be derivable from authoring_organizations or document text. Important for understanding resource flows and donor influence."
+    }
+  ]
+}

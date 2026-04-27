@@ -1,0 +1,116 @@
+{
+  "generated_at": "2026-04-24T14:15:25",
+  "proposals_by_dimension": {
+    "solution_category": [
+      {
+        "proposed_id": "waste_management",
+        "proposed_name": "Waste Management",
+        "definition": "Actions related to collection, disposal, recycling, and treatment of solid waste including landfill management, waste reduction strategies, composting programs, and circular economy initiatives. Encompasses both infrastructure for waste processing and service delivery for waste collection.",
+        "supporting_action_ids": [
+          102,
+          1286,
+          2094,
+          4180,
+          5495,
+          5870,
+          6668,
+          6808,
+          7626
+        ],
+        "external_vocab_match": "Waste management (IPCC sectoral category)",
+        "alternative": "infrastructure"
+      },
+      {
+        "proposed_id": "disaster_preparedness",
+        "proposed_name": "Disaster Preparedness and Emergency Response",
+        "definition": "Actions focused on preparing for and responding to natural disasters and climate emergencies, including civil defense equipment, emergency planning, and incident response capabilities. Distinct from general planning by focusing specifically on acute hazard events.",
+        "supporting_action_ids": [
+          5585,
+          6926
+        ],
+        "external_vocab_match": "Disaster Risk Reduction (UNDRR terminology)",
+        "alternative": "planning_and_monitoring"
+      }
+    ],
+    "hazard": [
+      {
+        "proposed_id": "rcc.waste_management_systems",
+        "proposed_name": "Waste Management Systems",
+        "definition": "Challenges related to municipal solid waste collection, recycling infrastructure, composting systems, and waste reduction programs. Includes inadequate waste management capacity, lack of recycling facilities, and food waste management.",
+        "supporting_action_ids": [
+          143,
+          150,
+          153,
+          158,
+          253,
+          265,
+          314
+        ],
+        "external_vocab_match": null,
+        "alternative": null
+      },
+      {
+        "proposed_id": "rcc.housing_vulnerability",
+        "proposed_name": "Housing Vulnerability / Inadequate Housing",
+        "definition": "Risks associated with substandard housing conditions, precarious settlements, and lack of climate-resilient housing for vulnerable populations. Includes need for housing improvements, building code updates, and social housing programs.",
+        "supporting_action_ids": [
+          106,
+          242,
+          256,
+          267
+        ],
+        "external_vocab_match": null,
+        "alternative": null
+      },
+      {
+        "proposed_id": "rcc.sustainable_mobility_infrastructure",
+        "proposed_name": "Sustainable Mobility Infrastructure",
+        "definition": "Gaps in low-carbon transportation infrastructure including bicycle lanes, pedestrian pathways, and public transit systems. Addresses need for alternatives to motorized vehicle dependence and integration with green infrastructure.",
+        "supporting_action_ids": [
+          152,
+          337,
+          465
+        ],
+        "external_vocab_match": null,
+        "alternative": null
+      }
+    ],
+    "urban_sector": [
+      {
+        "proposed_id": "agriculture_food",
+        "proposed_name": "Agriculture & Food Systems",
+        "definition": "Climate adaptation actions focused on agricultural practices, crop management, livestock improvement, paludiculture, and food production systems. Includes technological interventions (crop varieties, genetic techniques), behavioral changes (cropping practices, agroecology), and agricultural extension services.",
+        "supporting_action_ids": [
+          701,
+          1899,
+          6295,
+          6966,
+          9699
+        ],
+        "external_vocab_match": "IPCC WGII: Food, Fibre and Other Ecosystem Products sector",
+        "alternative": null
+      },
+      {
+        "proposed_id": "agricultural_finance_insurance",
+        "proposed_name": "Agricultural Finance & Risk Management",
+        "definition": "Economic and financial mechanisms specifically for agricultural climate risk management, including crop insurance schemes, weather-indexed insurance, subsidies, and financial incentives for climate-resilient farming practices.",
+        "supporting_action_ids": [
+          9306,
+          9896
+        ],
+        "external_vocab_match": "IPCC: Climate Risk Insurance",
+        "alternative": "governance_finance"
+      },
+      {
+        "proposed_id": "emergency_disaster_management",
+        "proposed_name": "Emergency & Disaster Management",
+        "definition": "Actions focused on disaster planning, preparedness, emergency response protocols, and scenario exercises for climate-related hazards. Distinct from general governance by emphasizing operational readiness and emergency coordination.",
+        "supporting_action_ids": [
+          3149
+        ],
+        "external_vocab_match": "UNDRR: Disaster Risk Reduction",
+        "alternative": "governance_finance"
+      }
+    ]
+  }
+}
