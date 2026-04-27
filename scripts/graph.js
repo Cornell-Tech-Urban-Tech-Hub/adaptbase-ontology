@@ -495,6 +495,7 @@
         for (const n of nodes) { n.fx = n.x; n.fy = n.y; }
         fitToView();
         draw();
+        setPhysics(true);
       });
   }
 
@@ -746,15 +747,15 @@
     const isHov = n === hoverNode;
 
     ctx.save();
-    ctx.font = `${isSel ? 600 : 500} ${isSel ? 13 : 12}px "Inter Tight", system-ui, sans-serif`;
+    ctx.font = `${isSel ? 600 : 500} ${isSel ? 18 : 16}px "Inter Tight", system-ui, sans-serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
 
     const label = n.label;
     const metrics = ctx.measureText(label);
-    const padX = 6, padY = 3;
+    const padX = 7, padY = 4;
     const lw = metrics.width + padX * 2;
-    const lh = 14 + padY * 2;
+    const lh = 19 + padY * 2;
     const ly = n.y + r + 6;
 
     // paper backdrop for label legibility
@@ -1007,7 +1008,7 @@
     transform = { x: 0, y: 0, k: 1 };
     physicsOn = false;
     const toggle = document.getElementById('toggle-physics');
-    if (toggle) { toggle.classList.remove('on'); toggle.setAttribute('aria-checked', 'false'); }
+    if (toggle) { toggle.classList.add('on'); toggle.setAttribute('aria-checked', 'true'); }
     setup(graphData);
     resize();
     fitToView();

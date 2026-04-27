@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Ontology Viewer",
+      "type": "firefox",
+      "request": "launch",
+      "url": "http://127.0.0.1:8765/viewer.html",
+      "webRoot": "${workspaceFolder}",
+      "preLaunchTask": "Start viewer server"
+    }
+  ]
+}

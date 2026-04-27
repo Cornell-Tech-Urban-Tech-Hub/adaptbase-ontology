@@ -20,7 +20,7 @@ Formalizing the Resilience Scanner extraction schema (v1.2) into an OWL ontology
 - `schemas/validation/` - Schema validation reports
 - `resources/` - Source documents (CDP data, CRF framework, student ontology)
 
-**Legacy documentation**: See `README-legacy-extraction-docs.md` for extraction schema architecture details.
+**Legacy documentation**: Extraction schema architecture details have been removed (file deleted).
 
 ---
 
@@ -88,52 +88,34 @@ Graph queries can traverse to source evidence: `MATCH (s:Solution)-[:MITIGATES]-
 ## Repository Structure
 
 ```
-packages/ontology/
-├── README.md                              # This file
-├── README-legacy-extraction-docs.md       # Legacy extraction schema docs
+adaptbase-ontology/
+├── README.md
+├── CLAUDE.md
+├── viewer.html                            # Public ontology viewer
+├── start-viewer.sh                        # Local dev server
+├── styles/                                # Viewer CSS
+├── scripts/                               # Viewer JS (graph, inspector, comments, app)
 ├── schemas/
 │   ├── extraction-schema-v1.json          # JSON Schema (source of truth for dimensions)
-│   ├── vocabularies/
-│   │   ├── README.md                      # Vocabulary integration strategy
-│   │   ├── solution-categories.json       # From solution_taxonomy table
-│   │   ├── hazards.json                   # C40/Arup → hazards table
-│   │   ├── crf-goals.json                 # City Resilience Framework 2024
-│   │   ├── urban-systems.json             # Hierarchical taxonomy (7 sectors, 50+ systems)
-│   │   ├── resilience-attributes.json     # ARUP City Resilience Index attributes
-│   │   └── enums.json                     # Multi-source enums (IPCC, CDP, custom)
-│   ├── prompts/
-│   │   ├── research-agent-prompt.md       # Deep researcher instructions
-│   │   └── synthesis-prompt.md            # Schema → narrative report
-│   └── validation/
-│       ├── schema-validation-published-solutions.md
-│       └── schema-validation-cdp-actions.md
-├── resources/
-│   ├── CDP_cities_adaptation_fact_table/  # 11,842 rows
-│   ├── city-resilience-framework-2024v2.pdf
-│   └── ruowen-climate-adaptation.py       # Student's schema (governance vocab source)
-├── papers/
-│   └── 2412.00608v3.pdf                   # OntoKGen methodology reference
+│   ├── vocabularies/                      # Controlled vocabularies
+│   ├── prompts/                           # Research agent + synthesis prompts
+│   └── validation/                        # Schema validation reports
+├── ontology/
+│   ├── ontology-v0.1.json
+│   ├── ontology-v0.1.1.json               # Current version
+│   ├── decisions-log.md                   # Design decisions log
+│   ├── TYPES-EXTRACTION-SUMMARY.md
+│   └── RELATIONSHIPS-EXTRACTION-SUMMARY.md
+├── resources/                             # Source documents (CDP data, CRF, etc.)
+├── papers/                                # Reference papers
 ├── plans/
-│   ├── ontology-build-brief.md            # Original brief (pre-schema discovery)
-│   └── firewall_project_context.md        # Project context
-├── ontology/                              # Formal ontology development (NEW)
-│   ├── draft-v0.json                      # Machine-readable ontology
-│   ├── draft-v0.md                        # Human-readable docs
-│   ├── types.json                         # Node types
-│   ├── relationships.json                 # Edge types
-│   ├── vocabularies.json                  # Vocabulary bindings
-│   └── decisions-log.md                   # Design decisions log
-├── alignment/                             # Mappings to external ontologies (NEW)
-│   ├── student-ontology-map.md
-│   ├── undrr-hazard-map.json
-│   ├── ipcc-ar6-map.json
-│   └── crf-2024-map.json
-├── extractions/                           # Case-level extractions (if re-extracting)
-│   └── v1/
-├── holdout/                               # Stress testing (NEW)
-│   └── extraction-results/
-└── cases/                                 # Sample cases (NEW)
-    └── raw/
+│   ├── SPRINT-PLAN.md                     # Active sprint plan
+│   ├── ontology-build-brief.md
+│   └── firewall_project_context.md
+├── alignment/                             # Mappings to external ontologies
+├── extractions/                           # Case-level sample extractions
+├── mining/                                # Corpus mining pipeline (Python)
+└── validation/                            # Held-out validation docs
 ```
 
 **Note**: Extraction schema and vocabularies already exist in `schemas/`. Ontology development adds formalization in `ontology/`, alignment in `alignment/`, and validation in `holdout/`.
@@ -349,6 +331,6 @@ This enables multi-hop queries: "Find solutions that mitigate coastal flooding b
 
 - **Extraction Schema**: `schemas/extraction-schema-v1.json`
 - **Vocabulary Strategy**: `schemas/vocabularies/README.md`
-- **Legacy Architecture Docs**: `README-legacy-extraction-docs.md`
+- **Decisions Log**: `ontology/decisions-log.md`
 - **OntoKGen Methodology**: `papers/2412.00608v3.pdf`
 - **Project Context**: `plans/firewall_project_context.md`

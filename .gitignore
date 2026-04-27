@@ -1,0 +1,24 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Python
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*.pyc
+.venv/
+*.egg-info/
+
+# Environment / secrets
+.env
+*.env
+.env.*
+
+# Mining corpus data (large/generated, pulled from Supabase)
+mining/corpus/breadth/
+mining/corpus/depth/
+mining/corpus/plans/
+
+# Editor
+.vscode/settings.json

@@ -83,17 +83,17 @@
   --font-accent:   'Instrument Serif', 'Fraunces', Georgia, serif;
 
   /* --- Type scale (fluid-ish, set in rem; 1rem = 16px) --- */
-  --fs-xs:    0.75rem;    /* 12 */
-  --fs-sm:    0.875rem;   /* 14 */
-  --fs-base:  1rem;       /* 16 */
-  --fs-md:    1.125rem;   /* 18 */
-  --fs-lg:    1.375rem;   /* 22 */
-  --fs-xl:    1.75rem;    /* 28 */
-  --fs-2xl:   2.25rem;    /* 36 */
-  --fs-3xl:   3rem;       /* 48 */
-  --fs-4xl:   4rem;       /* 64 */
-  --fs-5xl:   5.5rem;     /* 88 */
-  --fs-6xl:   7.5rem;     /* 120 — hero only */
+  --fs-xs:    0.8125rem;  /* 13 */
+  --fs-sm:    0.9375rem;  /* 15 */
+  --fs-base:  1.0625rem;  /* 17 */
+  --fs-md:    1.25rem;    /* 20 */
+  --fs-lg:    1.5rem;     /* 24 */
+  --fs-xl:    1.875rem;   /* 30 */
+  --fs-2xl:   2.375rem;   /* 38 */
+  --fs-3xl:   3.125rem;   /* 50 */
+  --fs-4xl:   4.25rem;    /* 68 */
+  --fs-5xl:   5.75rem;    /* 92 */
+  --fs-6xl:   7.75rem;    /* 124 — hero only */
 
   /* --- Weights --- */
   --fw-regular: 400;

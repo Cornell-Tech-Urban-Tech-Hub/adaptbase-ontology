@@ -53,7 +53,7 @@ body {
 }
 .brand-title .eyebrow-mono {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: var(--fs-xs);
   font-weight: 500;
   color: var(--fg-brand);
   letter-spacing: 0.14em;
@@ -62,7 +62,7 @@ body {
 .brand-title .project-name {
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: 17px;
+  font-size: var(--fs-md);
   color: var(--fg-1);
   font-variation-settings: "opsz" 24;
   margin-top: 2px;
@@ -74,7 +74,7 @@ body {
   display: flex;
   gap: var(--sp-5);
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--fs-xs);
   color: var(--fg-3);
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -92,7 +92,7 @@ body {
 
 .btn {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--fs-sm);
   font-weight: 600;
   line-height: 1;
   padding: 10px 14px;
@@ -145,10 +145,10 @@ body {
 }
 @media (max-height: 720px) {
   .hero { padding: 10px var(--sp-6); }
-  .hero h1 { font-size: 22px !important; margin-bottom: 2px !important; }
+  .hero h1 { font-size: var(--fs-lg) !important; margin-bottom: 2px !important; }
   .hero .lede { display: none; }
-  .hero .eyebrow { margin-bottom: 2px !important; font-size: 10px !important; }
-  .hero-stats .stat .num { font-size: 20px !important; }
+  .hero .eyebrow { margin-bottom: 2px !important; font-size: var(--fs-xs) !important; }
+  .hero-stats .stat .num { font-size: var(--fs-lg) !important; }
   .hero-stats { gap: var(--sp-5) !important; }
 }
 @media (max-width: 900px) {
@@ -158,7 +158,7 @@ body {
 }
 .hero .eyebrow {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--fs-xs);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--fg-brand);
@@ -166,7 +166,7 @@ body {
 }
 .hero h1 {
   font-family: var(--font-display);
-  font-size: 34px;
+  font-size: var(--fs-2xl);
   font-weight: 500;
   font-variation-settings: "opsz" 48;
   line-height: 1.05;
@@ -183,7 +183,7 @@ body {
 }
 .hero .lede {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: var(--fs-base);
   line-height: 1.55;
   color: var(--fg-3);
   max-width: none;
@@ -205,14 +205,14 @@ body {
 }
 .stat .num {
   font-family: var(--font-display);
-  font-size: 28px;
+  font-size: var(--fs-xl);
   font-weight: 500;
   font-variation-settings: "opsz" 36;
   color: var(--fg-1);
   letter-spacing: -0.02em;
 }
 .stat .lbl {
-  font-size: 10px;
+  font-size: var(--fs-xs);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--fg-4);
@@ -291,7 +291,7 @@ body {
 
 .graph-topbar .title {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: var(--fs-xs);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--fg-3);
@@ -308,7 +308,7 @@ body {
 .search-wrap input {
   width: 100%;
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--fs-sm);
   padding: 8px 10px 8px 30px;
   background: var(--bg-1);
   border: 1px solid var(--border-soft);
@@ -351,7 +351,7 @@ body {
 .hero-search input {
   width: 100%;
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--fs-sm);
   padding: 8px 12px 8px 32px;
   background: var(--bg-2);
   border: 1px solid var(--border-soft);
@@ -387,7 +387,7 @@ body {
 .search-results.open { display: block; }
 .search-results .result {
   padding: 8px 12px;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   cursor: pointer;
   border-bottom: 1px solid var(--border-hair);
   display: flex;
@@ -398,7 +398,7 @@ body {
 .search-results .result:hover { background: var(--fog); }
 .search-results .result .kind {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: var(--fs-xs);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--fg-4);
@@ -418,7 +418,7 @@ body {
 }
 .graph-legend h4 {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: var(--fs-xs);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--fg-3);
@@ -430,7 +430,7 @@ body {
   align-items: center;
   gap: 8px;
   padding: 4px 0;
-  font-size: 12px;
+  font-size: var(--fs-sm);
   color: var(--fg-2);
   cursor: pointer;
   user-select: none;
@@ -447,7 +447,7 @@ body {
 .legend-row .count {
   margin-left: auto;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: var(--fs-xs);
   color: var(--fg-4);
 }
 
@@ -464,13 +464,13 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 12px;
+  font-size: var(--fs-sm);
   color: var(--fg-2);
   white-space: nowrap;
 }
 .control-row label {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: var(--fs-xs);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--fg-3);
@@ -514,7 +514,7 @@ body {
   cursor: pointer;
   color: var(--fg-2);
   font-family: var(--font-mono);
-  font-size: 14px;
+  font-size: var(--fs-base);
   transition: background var(--dur-fast) var(--ease-standard), color var(--dur-fast) var(--ease-standard);
 }
 .zoom-btn:hover { background: var(--fog); color: var(--fg-1); }
@@ -528,7 +528,7 @@ body {
   transform: translateX(-50%);
   z-index: 2;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: var(--fs-xs);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--fg-4);
@@ -542,7 +542,7 @@ body {
   border: 1px solid var(--border-hair);
   border-radius: 3px;
   padding: 1px 5px;
-  font-size: 10px;
+  font-size: var(--fs-xs);
   color: var(--fg-2);
   margin-right: 4px;
 }
@@ -560,7 +560,7 @@ body {
   padding: var(--sp-7) var(--sp-6);
   color: var(--fg-3);
   text-align: left;
-  font-size: 14px;
+  font-size: var(--fs-base);
   line-height: 1.6;
   display: flex;
   flex-direction: column;
@@ -569,7 +569,7 @@ body {
 }
 .inspector-empty .mono-eyebrow {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: var(--fs-xs);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--fg-brand);
@@ -577,7 +577,7 @@ body {
 }
 .inspector-empty h3 {
   font-family: var(--font-display);
-  font-size: 24px;
+  font-size: var(--fs-xl);
   font-weight: 500;
   color: var(--fg-1);
   margin: 0;
@@ -598,7 +598,7 @@ body {
   background: var(--bg-1);
   border: 1px solid var(--border-hair);
   border-radius: var(--r-sm);
-  font-size: 13px;
+  font-size: var(--fs-sm);
   color: var(--fg-2);
   display: flex;
   gap: 10px;
@@ -612,7 +612,7 @@ body {
 }
 .inspector-empty li .num {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: var(--fs-xs);
   letter-spacing: 0.1em;
   color: var(--fg-brand);
   font-weight: 600;
@@ -644,7 +644,7 @@ body {
 }
 .inspector-header .kicker .kind-label {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: var(--fs-xs);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--fg-3);
@@ -652,7 +652,7 @@ body {
 }
 .inspector-header .kicker .cluster {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: var(--fs-xs);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--fg-brand);
@@ -660,7 +660,7 @@ body {
 }
 .inspector-header h2 {
   font-family: var(--font-display);
-  font-size: 28px;
+  font-size: var(--fs-xl);
   line-height: 1.1;
   letter-spacing: -0.015em;
   margin: 0;
@@ -676,7 +676,7 @@ body {
 }
 .inspector-header h2 .rel-endpoint {
   font-family: var(--font-sans);
-  font-size: 20px;
+  font-size: var(--fs-lg);
   font-weight: 600;
   letter-spacing: -0.01em;
   color: var(--fg-2);
@@ -684,7 +684,7 @@ body {
 .inspector-header .edge-label {
   font-family: var(--font-accent);
   font-style: italic;
-  font-size: 22px;
+  font-size: var(--fs-lg);
   color: var(--carnelian);
   font-weight: 400;
   display: block;
@@ -716,7 +716,7 @@ body {
 }
 .tab-btn {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--fs-sm);
   font-weight: 600;
   letter-spacing: -0.005em;
   padding: 12px 0;
@@ -738,7 +738,7 @@ body {
   margin-left: 5px;
   padding: 1px 6px;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: var(--fs-xs);
   background: var(--fog);
   color: var(--fg-3);
   border-radius: 999px;
@@ -759,7 +759,7 @@ body {
 
 .section h4 {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -769,7 +769,7 @@ body {
 
 .definition {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: var(--fs-base);
   line-height: 1.55;
   color: var(--fg-2);
   text-wrap: pretty;
@@ -783,7 +783,7 @@ body {
 }
 .chip {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: var(--fs-xs);
   font-weight: 500;
   letter-spacing: 0.06em;
   padding: 4px 8px;
@@ -812,17 +812,17 @@ body {
   gap: 8px 16px;
   padding: 10px 0;
   border-bottom: 1px solid var(--border-hair);
-  font-size: 13px;
+  font-size: var(--fs-sm);
 }
 .prop-item .name {
   font-family: var(--font-mono);
   font-weight: 600;
   color: var(--fg-1);
-  font-size: 12px;
+  font-size: var(--fs-sm);
 }
 .prop-item .type {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--fs-xs);
   color: var(--fg-4);
   text-align: right;
 }
@@ -830,7 +830,7 @@ body {
 .prop-item .note {
   grid-column: 1 / -1;
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--fs-sm);
   line-height: 1.5;
   color: var(--fg-3);
   margin-top: 2px;
@@ -845,7 +845,7 @@ body {
 }
 .prop-item .values .v {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: var(--fs-xs);
   padding: 2px 6px;
   background: var(--bg-1);
   border: 1px solid var(--border-hair);
@@ -878,19 +878,19 @@ body {
 .neighbor .label .rel {
   font-family: var(--font-accent);
   font-style: italic;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   color: var(--carnelian);
   display: block;
 }
 .neighbor .label .name {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--fs-sm);
   font-weight: 600;
   color: var(--fg-1);
 }
 .neighbor .label .dir {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: var(--fs-xs);
   color: var(--fg-4);
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -922,7 +922,7 @@ body {
   color: white;
   font-family: var(--font-sans);
   font-weight: 600;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -944,7 +944,7 @@ body {
   display: flex;
   align-items: baseline;
   gap: 6px;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   flex-wrap: wrap;
 }
 .comment .byline .name {
@@ -952,18 +952,18 @@ body {
   color: var(--fg-1);
 }
 .comment .byline .affil {
-  font-size: 11px;
+  font-size: var(--fs-xs);
   color: var(--fg-4);
 }
 .comment .byline .time {
   margin-left: auto;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: var(--fs-xs);
   color: var(--fg-4);
   letter-spacing: 0.06em;
 }
 .comment .body {
-  font-size: 14px;
+  font-size: var(--fs-base);
   line-height: 1.55;
   color: var(--fg-2);
   text-wrap: pretty;
@@ -980,7 +980,7 @@ body {
   gap: 14px;
   margin-top: 4px;
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--fs-sm);
 }
 .comment .actions a {
   color: var(--fg-3);
@@ -999,15 +999,15 @@ body {
   grid-template-columns: 28px 1fr;
   gap: 10px;
 }
-.comment-reply .avatar { width: 28px; height: 28px; font-size: 11px; }
-.comment-reply .bubble .byline { font-size: 12px; }
-.comment-reply .bubble .body { font-size: 13px; }
+.comment-reply .avatar { width: 28px; height: 28px; font-size: var(--fs-xs); }
+.comment-reply .bubble .byline { font-size: var(--fs-sm); }
+.comment-reply .bubble .body { font-size: var(--fs-sm); }
 
 .empty-comments {
   padding: var(--sp-5) 0;
   text-align: center;
   color: var(--fg-4);
-  font-size: 13px;
+  font-size: var(--fs-sm);
   line-height: 1.55;
   border: 1px dashed var(--border-soft);
   border-radius: var(--r-sm);
@@ -1028,7 +1028,7 @@ body {
   background: var(--ink);
   color: white;
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--fs-sm);
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -1041,7 +1041,7 @@ body {
 }
 .composer textarea {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--fs-sm);
   line-height: 1.5;
   padding: 10px 12px;
   border: 1px solid var(--border-soft);
@@ -1065,7 +1065,7 @@ body {
 }
 .composer .hint {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: var(--fs-xs);
   color: var(--fg-4);
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1105,7 +1105,7 @@ body {
 .modal-content.wide { max-width: 720px; }
 .modal-content h3 {
   font-family: var(--font-display);
-  font-size: 28px;
+  font-size: var(--fs-xl);
   font-weight: 500;
   font-variation-settings: "opsz" 36;
   letter-spacing: -0.015em;
@@ -1123,7 +1123,7 @@ body {
   padding: 10px 14px;
   border: 1px solid var(--border-soft);
   border-radius: var(--r-sm);
-  font-size: 13px;
+  font-size: var(--fs-sm);
   font-weight: 600;
   cursor: pointer;
   font-family: var(--font-sans);
@@ -1203,7 +1203,7 @@ input.field-editable:focus {
 
 input.field-editable.editable-title {
   font-family: var(--font-display);
-  font-size: 28px;
+  font-size: var(--fs-xl);
   font-weight: 500;
   font-variation-settings: "opsz" 36;
   padding: 4px 8px;
@@ -1212,7 +1212,7 @@ input.field-editable.editable-title {
 input.field-editable.editable-edge-label {
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: 18px;
+  font-size: var(--fs-md);
   font-weight: 500;
   padding: 2px 6px;
   display: inline-block;
@@ -1221,7 +1221,7 @@ input.field-editable.editable-edge-label {
 }
 
 .definition.field-editable {
-  font-size: 14px;
+  font-size: var(--fs-base);
   line-height: 1.6;
   color: var(--fg-2);
 }
@@ -1233,7 +1233,7 @@ select.field-editable {
   border-radius: var(--r-xs);
   background: var(--bg-2);
   font-family: inherit;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   color: inherit;
   cursor: pointer;
 }
@@ -1254,7 +1254,7 @@ select.field-editable:focus {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 13px;
+  font-size: var(--fs-sm);
 }
 
 .meta-label {
@@ -1293,7 +1293,7 @@ select.field-editable:focus {
 
 .prop-field {
   font-family: inherit;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   color: var(--fg-1);
   border: 1px solid var(--border-soft);
   border-radius: var(--r-xs);
@@ -1315,14 +1315,14 @@ select.field-editable:focus {
 .prop-field-id {
   flex: 1;
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: var(--fs-sm);
   font-weight: 500;
 }
 
 .prop-field-type {
   width: 140px;
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: var(--fs-sm);
   cursor: pointer;
 }
 
@@ -1331,7 +1331,7 @@ select.field-editable:focus {
   width: 100%;
   min-height: 50px;
   resize: vertical;
-  font-size: 12px;
+  font-size: var(--fs-sm);
   line-height: 1.5;
 }
 
@@ -1339,7 +1339,7 @@ select.field-editable:focus {
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 12px;
+  font-size: var(--fs-sm);
   color: var(--fg-3);
   cursor: pointer;
   white-space: nowrap;
@@ -1356,7 +1356,7 @@ select.field-editable:focus {
   border-radius: var(--r-xs);
   background: var(--bg-1);
   color: var(--fg-3);
-  font-size: 16px;
+  font-size: var(--fs-md);
   font-weight: 600;
   cursor: pointer;
   display: flex;
@@ -1374,7 +1374,7 @@ select.field-editable:focus {
 .prop-values-label,
 .prop-vocab-label {
   display: block;
-  font-size: 11px;
+  font-size: var(--fs-xs);
   color: var(--fg-3);
   margin-bottom: 4px;
   text-transform: uppercase;
@@ -1395,7 +1395,7 @@ select.field-editable:focus {
   border: 1px dashed var(--border-soft);
   border-radius: var(--r-sm);
   padding: 8px 16px;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   color: var(--fg-3);
   cursor: pointer;
   font-family: inherit;
@@ -1431,7 +1431,7 @@ select.field-editable:focus {
   border: 1px solid var(--carnelian);
   border-radius: var(--r-sm);
   padding: 8px 12px;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   color: var(--carnelian);
   cursor: pointer;
   font-family: inherit;
@@ -1452,7 +1452,7 @@ select.field-editable:focus {
 }
 
 .form-row label {
-  font-size: 11px;
+  font-size: var(--fs-xs);
   color: var(--fg-3);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -1467,7 +1467,7 @@ select.field-editable:focus {
   border-radius: var(--r-xs);
   background: var(--bg-2);
   font-family: inherit;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   color: var(--fg-1);
   outline: none;
   transition: border-color 0.15s;
