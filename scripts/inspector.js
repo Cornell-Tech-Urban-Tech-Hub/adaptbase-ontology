@@ -32,12 +32,9 @@
             const color = window.Graph.getClusterColor(n.cluster);
             return `
               <li data-featured="${f.id}">
-                <span class="num">${String(i+1).padStart(2,'0')}</span>
+                <span class="dot" style="width:8px; height:8px; border-radius:50%; background:${color}; display:inline-block; flex-shrink:0; margin-top:6px;"></span>
                 <span style="display:flex; flex-direction:column; gap:4px; flex:1;">
-                  <span style="display:flex; align-items:center; gap:8px;">
-                    <span class="dot" style="width:8px; height:8px; border-radius:50%; background:${color}; display:inline-block;"></span>
-                    <strong style="color:var(--fg-1);">${esc(n.label)}</strong>
-                  </span>
+                  <strong style="color:var(--fg-1);">${esc(n.label)}</strong>
                   <span style="color:var(--fg-3);">${esc(f.lede)}</span>
                 </span>
               </li>
@@ -90,15 +87,20 @@
     }
     return `
       <ul class="prop-list">
-        ${properties.map(p => `
+        ${properties.map(p => {
+          const isEnum = p.type && p.type.includes('enum');
+          const hasValues = p.values && p.values.length;
+          return `
           <li class="prop-item">
             <span class="name">${esc(p.id)}</span>
-            <span class="type">${esc(p.type)}${p.required ? '<span class="req">required</span>' : ''}</span>
+            <span class="type-group">
+              <span class="type">${esc(p.type)}${p.required ? '<span class="req">req</span>' : ''}</span>
+              ${isEnum && hasValues ? `<span class="enum-hover">${p.values.length}<span class="enum-tooltip">${p.values.map(v => `<span class="enum-val">${esc(v)}</span>`).join('')}</span></span>` : ''}
+            </span>
             ${p.note ? `<span class="note">${esc(p.note)}</span>` : ''}
-            ${p.values ? `<span class="values">${p.values.map(v => `<span class="v">${esc(v)}</span>`).join('')}</span>` : ''}
-            ${p.vocabulary ? `<span class="note">Bound to vocabulary <code>${esc(p.vocabulary)}</code></span>` : ''}
-          </li>
-        `).join('')}
+            ${p.vocabulary ? `<span class="vocab-tag" data-vocab="${esc(p.vocabulary)}">${esc(p.vocabulary)}</span>` : ''}
+          </li>`;
+        }).join('')}
       </ul>
     `;
   }
@@ -167,9 +169,17 @@
             <div class="section">
               <h4>Metadata</h4>
               <div class="chips">
-                <span class="chip">${n.properties.length} properties</span>
-                <span class="chip">${links.length} connections</span>
-                ${n.vocabulary_bindings && n.vocabulary_bindings.length ? `<span class="chip chip-carn">${n.vocabulary_bindings.length} vocab bindings</span>` : ''}
+                <span class="chip chip-hover">${n.properties.length} properties<span class="chip-tooltip">${n.properties.map(p => `<span>${esc(p.id)}</span>`).join('')}</span></span>
+                <span class="chip chip-hover">${links.length} connections<span class="chip-tooltip">${links.map(l => {
+                  const out = l.source.id === n.id;
+                  const other = out ? l.target : l.source;
+                  return `<span>${out ? '→' : '←'} ${esc(l.label)} ${esc(other.label)}</span>`;
+                }).join('')}</span></span>
+                ${n.vocabulary_bindings && n.vocabulary_bindings.length
+                  ? n.vocabulary_bindings.map(vb =>
+                      `<span class="chip chip-vocab" data-vocab="${esc(vb.vocab)}">${esc(vb.vocab)}</span>`
+                    ).join('')
+                  : ''}
               </div>
             </div>
 
@@ -210,6 +220,7 @@
     wireTabs();
     wireClose();
     wireNeighbors();
+    wireVocabTags();
   }
 
   function showEdge(l) {
@@ -331,6 +342,7 @@
     wireTabs();
     wireClose();
     wireNeighbors();
+    wireVocabTags();
     el().querySelectorAll('[data-ep]').forEach(ep => {
       ep.addEventListener('click', () => window.Graph.focusNode(ep.dataset.ep));
     });
@@ -362,6 +374,15 @@
   function wireNeighbors() {
     el().querySelectorAll('.neighbor').forEach(li => {
       li.addEventListener('click', () => window.Graph.focusNode(li.dataset.nid));
+    });
+  }
+
+  function wireVocabTags() {
+    el().querySelectorAll('[data-vocab]').forEach(tag => {
+      tag.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (window.APP.showVocabulary) window.APP.showVocabulary(tag.dataset.vocab);
+      });
     });
   }
 

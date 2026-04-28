@@ -206,6 +206,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     modal.classList.add('show');
+
+    return content;
+  }
+
+  function showVocabulary(vocabId) {
+    const content = showVocabulariesModal();
+    if (!content) return;
+    const card = content.querySelector(`.vocab-card[data-vocab-id="${vocabId}"]`);
+    if (card) {
+      card.querySelector('.vocab-header').click();
+      card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
   }
 
   function renderVocabData(vocabId, data) {
@@ -451,5 +463,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   window.APP = {
     loadVersion,
     getCurrentGraphData: () => currentGraphData,
+    showVocabulary,
   };
 });
