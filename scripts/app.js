@@ -90,9 +90,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (domainEl) domainEl.textContent = metadata.domain || '—';
 
     if (metadata.updated) {
-      const date = new Date(metadata.updated);
-      const formatted = date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
-      document.getElementById('updated-date').textContent = formatted;
+      const el = document.getElementById('updated-date');
+      if (el) {
+        const date = new Date(metadata.updated);
+        el.textContent = date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+      }
     }
   }
 

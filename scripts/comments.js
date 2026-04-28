@@ -44,7 +44,7 @@
   function newIssueUrl(key, label) {
     const issueTitle = encodeURIComponent(`[Review] ${label}`);
     const issueBody = encodeURIComponent(
-      `**Ontology element:** \`${key}\`\n**Label:** ${label}\n\n---\n\n_Your review comment here. Describe what you'd change, flag an ambiguity, or suggest an improvement._`
+      `**Ontology element:** \`${key}\`\n\n---\n\n_Your review comment here. Describe what you'd change, flag an ambiguity, or suggest an improvement._`
     );
     const issueLabel = encodeURIComponent(labelForKey(key));
     return `https://github.com/${REPO_OWNER}/${REPO_NAME}/issues/new?title=${issueTitle}&body=${issueBody}&labels=${issueLabel},review`;

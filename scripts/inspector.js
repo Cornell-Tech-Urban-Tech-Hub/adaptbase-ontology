@@ -23,8 +23,8 @@
     el().innerHTML = `
       <div class="inspector-empty">
         <span class="mono-eyebrow">Inspector</span>
-        <h3>Click a node or relationship in the graph to inspect its definition, properties, neighbors, and reviewer comments.</h3>
-        <p class="small" style="color:var(--fg-3); font-size:13px; line-height:1.55; margin:0;">Or start with one of the central entity types:</p>
+        <h3>Select a node or relationship to inspect it.</h3>
+        <p class="small" style="color:var(--fg-3); font-size:13px; line-height:1.55; margin:0;">Or start with one of these:</p>
         <ul>
           ${featured.map((f, i) => {
             const n = window.Graph.getNodeById(f.id);
