@@ -1,21 +1,11 @@
 #!/bin/bash
-# Start ontology viewer with local HTTP server
+# Start ontology viewer locally
 
 PORT=8765
 URL="http://127.0.0.1:${PORT}/viewer.html"
 
-echo "=========================================="
-echo "  Resilience Ontology Viewer"
-echo "=========================================="
-echo ""
-echo "Starting server on port ${PORT}..."
-echo "Viewer URL: ${URL}"
-echo ""
-echo "Press Ctrl+C to stop the server"
-echo ""
+(sleep 1 && open "${URL}") &
 
-# Open browser after a short delay
-(sleep 2 && open "${URL}") &
-
-# Start Python HTTP server in current directory
-python3 -m http.server ${PORT} --bind 127.0.0.1
+echo "  Ontology viewer  →  ${URL}"
+echo "  Ctrl-C to stop"
+python3 -m http.server ${PORT}

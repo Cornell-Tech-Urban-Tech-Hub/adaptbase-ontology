@@ -1,96 +1,70 @@
-// Bootstrap: orchestrates loading, version selection, edit mode, and UI wiring
 document.addEventListener('DOMContentLoaded', async () => {
-  let editMode = localStorage.getItem('editMode') === 'true';
   let currentGraphData = null;
-  let isDirty = false; // Track unsaved changes
 
-  // Initialize
   await init();
 
   async function init() {
+    await window.OntologyAdapter.loadVersions();
     renderVersionSelector();
-    updateEditModeUI();
     wireHeaderButtons();
     wireSearch();
 
-    // Initialize graph FIRST (sets up canvas and event listeners)
     window.Graph.init();
 
-    // Then load default version (latest)
     const versions = window.OntologyAdapter.getVersions();
     if (versions.length) {
       await loadVersion(versions[0].path);
     }
   }
 
-  function renderVersionSelector() {
+  async function renderVersionSelector() {
     const selector = document.getElementById('version-selector');
     const versions = window.OntologyAdapter.getVersions();
 
-    selector.innerHTML = versions.map(v =>
-      `<option value="${v.path}">${v.label}</option>`
+    const entries = await Promise.all(versions.map(async (v) => {
+      try {
+        const res = await fetch(v.path);
+        const data = await res.json();
+        const dateStr = data.updated
+          ? new Date(data.updated).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })
+          : '';
+        return { ...v, dateStr };
+      } catch {
+        return { ...v, dateStr: '' };
+      }
+    }));
+
+    selector.innerHTML = entries.map(v =>
+      `<option value="${v.path}">${v.label}${v.dateStr ? ' · ' + v.dateStr : ''}</option>`
     ).join('');
 
     selector.addEventListener('change', (e) => {
-      if (isDirty && !confirm('You have unsaved changes. Switch version anyway?')) {
-        // Revert selection
-        const currentVersion = window.OntologyAdapter.getCurrentVersion();
-        const versions = window.OntologyAdapter.getVersions();
-        const current = versions.find(v => v.value === currentVersion);
-        if (current) selector.value = current.path;
-        return;
-      }
       loadVersion(e.target.value);
-      markClean();
     });
   }
 
   async function loadVersion(versionPath) {
     try {
-      // Load ontology
       const ontology = await window.OntologyAdapter.loadOntology(versionPath);
-
-      // Convert to graph format
       currentGraphData = window.OntologyAdapter.ontologyToGraph(ontology);
-
-      // Load into graph
       window.Graph.load(currentGraphData);
-
-      // Update UI
       updateStats(currentGraphData);
       updateMeta(currentGraphData.metadata);
-
-      console.log('Loaded:', versionPath, currentGraphData);
     } catch (err) {
       console.error('Failed to load ontology:', err);
-      alert(`Failed to load ontology: ${err.message}`);
     }
-  }
-
-  // Reload graph from current in-memory ontology (preserves edits)
-  function reloadGraph() {
-    const ontology = window.OntologyAdapter.getCurrentOntology();
-    if (!ontology) return;
-
-    currentGraphData = window.OntologyAdapter.ontologyToGraph(ontology);
-    window.Graph.load(currentGraphData);
-    updateStats(currentGraphData);
-    updateMeta(currentGraphData.metadata);
   }
 
   function updateStats(graphData) {
     const numTypes = graphData.nodes.length;
-    // Use relationship count from source ontology (not rendered edges)
     const ontology = window.OntologyAdapter.getCurrentOntology();
     const numRels = ontology?.relationships?.filter(r => r.source && r.target).length || graphData.edges.length;
     const numVocabs = graphData.metadata.vocabularies?.length || 0;
 
-    // Update stat cards
     document.getElementById('stat-types').textContent = numTypes;
     document.getElementById('stat-rels').textContent = numRels;
     document.getElementById('stat-vocabs').textContent = numVocabs;
 
-    // Update hero text with spelled-out numbers
     document.getElementById('hero-type-count').textContent = numberToWord(numTypes);
     document.getElementById('hero-rel-count').textContent = numberToWord(numRels);
   }
@@ -106,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const ten = Math.floor(n / 10);
       return digit === 0 ? tens[ten] : `${tens[ten]}-${words[digit]}`;
     }
-    return n; // For numbers >= 100, just use the numeral
+    return n;
   }
 
   function updateMeta(metadata) {
@@ -122,125 +96,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  function updateEditModeUI() {
-    const btn = document.getElementById('btn-edit-mode');
-    const addEntityBtn = document.getElementById('btn-add-entity');
-
-    if (editMode) {
-      btn.textContent = 'Exit Edit';
-      btn.classList.remove('btn-primary');
-      btn.classList.add('btn-secondary');
-      if (addEntityBtn) addEntityBtn.style.display = 'inline-flex';
-    } else {
-      btn.textContent = 'Edit';
-      btn.classList.remove('btn-secondary');
-      btn.classList.add('btn-primary');
-      if (addEntityBtn) addEntityBtn.style.display = 'none';
-    }
-
-    // Show/hide save/discard buttons
-    updateSaveButtons();
-
-    // Notify inspector if it exists
-    if (window.Inspector && window.Inspector.setEditMode) {
-      window.Inspector.setEditMode(editMode);
-    }
-  }
-
-  function markDirty() {
-    isDirty = true;
-    updateSaveButtons();
-  }
-
-  function markClean() {
-    isDirty = false;
-    updateSaveButtons();
-  }
-
-  function updateSaveButtons() {
-    const saveBtn = document.getElementById('btn-save');
-    const discardBtn = document.getElementById('btn-discard');
-
-    if (editMode && isDirty) {
-      saveBtn.style.display = 'inline-flex';
-      discardBtn.style.display = 'inline-flex';
-    } else {
-      saveBtn.style.display = 'none';
-      discardBtn.style.display = 'none';
-    }
-  }
-
   function wireHeaderButtons() {
-    // Edit mode toggle
-    document.getElementById('btn-edit-mode').addEventListener('click', () => {
-      if (isDirty && !confirm('You have unsaved changes. Switch modes anyway?')) {
-        return;
-      }
-      editMode = !editMode;
-      localStorage.setItem('editMode', editMode);
-      updateEditModeUI();
-    });
-
-    // Save changes
-    document.getElementById('btn-save').addEventListener('click', async () => {
-      if (!confirm('Save changes as a new version? This will download a JSON file that you need to manually place in the ontology/ directory.')) {
-        return;
-      }
-      await saveAsNewVersion();
-    });
-
-    // Discard changes
-    document.getElementById('btn-discard').addEventListener('click', () => {
-      if (!confirm('Discard all unsaved changes?')) return;
-      const selector = document.getElementById('version-selector');
-      loadVersion(selector.value);
-      markClean();
-    });
-
-    // Reload
-    document.getElementById('btn-reload').addEventListener('click', () => {
-      if (isDirty && !confirm('You have unsaved changes. Reload anyway?')) {
-        return;
-      }
-      const selector = document.getElementById('version-selector');
-      loadVersion(selector.value);
-      markClean();
-    });
-
-    // Export JSON
-    document.getElementById('btn-download').addEventListener('click', () => {
-      const json = window.OntologyAdapter.exportOntologyJSON();
-      if (!json) {
-        alert('No ontology loaded');
-        return;
-      }
-
-      const blob = new Blob([json], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      const version = window.OntologyAdapter.getCurrentVersion() || 'ontology';
-      a.download = `ontology-${version}-${new Date().toISOString().slice(0, 10)}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
-    });
-
-    // Add new entity
-    document.getElementById('btn-add-entity').addEventListener('click', () => {
-      showAddEntityDialog();
-    });
-
-    // Vocabularies (modal - to be implemented)
     document.getElementById('btn-vocabularies').addEventListener('click', () => {
       showVocabulariesModal();
     });
 
-    // Sample data (to be implemented)
-    document.getElementById('btn-sample').addEventListener('click', () => {
-      alert('Sample data viewer coming soon!');
-    });
-
-    // Vocabulary modal close
     document.getElementById('vocab-modal-close').addEventListener('click', () => {
       document.getElementById('vocab-modal').classList.remove('show');
     });
@@ -252,91 +112,255 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  async function saveAsNewVersion() {
-    const ontology = window.OntologyAdapter.getCurrentOntology();
-    if (!ontology) {
-      alert('No ontology loaded');
-      return;
-    }
+  const vocabFileMap = {
+    'hazards': 'schemas/vocabularies/hazards.json',
+    'urban-systems': 'schemas/vocabularies/urban-systems.json',
+    'solution-categories': 'schemas/vocabularies/solution-categories.json',
+    'crf-goals': 'schemas/vocabularies/crf-goals.json',
+    'enums': 'schemas/vocabularies/enums.json',
+    'vulnerable-populations': 'schemas/vocabularies/vulnerable-populations.json',
+    'resilience-attributes': 'schemas/vocabularies/resilience-attributes.json',
+  };
+  const vocabCache = {};
 
-    // Parse current version and increment patch
-    const currentVersion = ontology.version || 'v0.1.0';
-    const match = currentVersion.match(/v(\d+)\.(\d+)\.(\d+)/);
-    if (!match) {
-      alert(`Cannot parse version "${currentVersion}". Expected format: v0.1.0`);
-      return;
-    }
-
-    const [, major, minor, patch] = match;
-    const newPatch = parseInt(patch) + 1;
-    const newVersion = `v${major}.${minor}.${newPatch}`;
-
-    // Update version in ontology
-    ontology.version = newVersion;
-    ontology.updated = new Date().toISOString();
-
-    // Export JSON
-    const json = JSON.stringify(ontology, null, 2);
-    const blob = new Blob([json], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `ontology-${newVersion}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-
-    // Show instructions
-    const instructions = `
-Version ${newVersion} has been downloaded.
-
-To use this version:
-1. Save the downloaded file to: packages/ontology/ontology/ontology-${newVersion}.json
-2. Add this line to ONTOLOGY_VERSIONS in ontology-adapter.js:
-   { path: 'ontology/ontology-${newVersion}.json', label: '${newVersion} — [description]', value: '${newVersion}' },
-3. Reload this page
-    `.trim();
-
-    alert(instructions);
-    markClean();
+  async function fetchVocabData(vocabId) {
+    if (vocabCache[vocabId]) return vocabCache[vocabId];
+    const path = vocabFileMap[vocabId];
+    if (!path) return null;
+    try {
+      const res = await fetch(path);
+      if (!res.ok) return null;
+      const data = await res.json();
+      vocabCache[vocabId] = data;
+      return data;
+    } catch { return null; }
   }
 
   function showVocabulariesModal() {
     const ontology = window.OntologyAdapter.getCurrentOntology();
-    if (!ontology || !ontology.vocabularies) {
-      alert('No vocabularies loaded');
-      return;
-    }
+    if (!ontology || !ontology.vocabularies) return;
 
     const modal = document.getElementById('vocab-modal');
     const content = document.getElementById('vocab-modal-content');
+    const vocabs = [...ontology.vocabularies].sort((a, b) => {
+      if (a.type === 'external' && b.type !== 'external') return -1;
+      if (a.type !== 'external' && b.type === 'external') return 1;
+      return 0;
+    });
 
-    const vocabs = ontology.vocabularies;
-    const external = vocabs.filter(v => v.type === 'external');
-    const internal = vocabs.filter(v => v.type === 'internal');
-
-    const makeCard = (v) => {
+    content.innerHTML = vocabs.map(v => {
       const isExt = v.type === 'external';
+      const bindings = (v.bound_to || []).filter(b => b !== 'various');
       return `
-        <div style="background:var(--bg-1);border:1px solid ${isExt ? 'var(--carnelian)' : 'var(--border-soft)'};border-radius:var(--r-sm);padding:var(--sp-4);margin-bottom:var(--sp-2);cursor:pointer">
-          <div style="font-weight:600;color:${isExt ? 'var(--carnelian)' : 'var(--fg-1)'};margin-bottom:4px;font-size:14px">${escapeHtml(v.label)}</div>
-          <div style="font-size:12px;color:var(--fg-3);margin-bottom:8px;line-height:1.5">${escapeHtml(v.description)}</div>
-          ${v.terms_count ? `<span style="font-family:var(--font-mono);font-size:10px;background:var(--bg-3);padding:3px 8px;border-radius:999px;color:var(--fg-3)">${v.terms_count} terms</span>` : ''}
-          ${v.url ? `<span style="font-size:11px;color:var(--carnelian);margin-left:8px">↗ reference</span>` : ''}
+        <div class="vocab-card ${isExt ? 'vocab-external' : ''}" data-vocab-id="${escapeHtml(v.id)}">
+          <div class="vocab-header">
+            <span class="vocab-chevron">▶</span>
+            <div class="vocab-summary">
+              <div class="vocab-label">${escapeHtml(v.label)}</div>
+              <div class="vocab-desc">${escapeHtml(v.description)}</div>
+              <div class="vocab-meta">
+                <span class="vocab-badge vocab-badge-type">${isExt ? 'external' : 'internal'}</span>
+                ${v.terms_count ? `<span class="vocab-badge">${v.terms_count} terms</span>` : ''}
+                ${v.url ? `<a href="${escapeHtml(v.url)}" target="_blank" rel="noopener" class="vocab-ref" onclick="event.stopPropagation()">↗ source</a>` : ''}
+              </div>
+              ${bindings.length ? `<div class="vocab-bindings">Binds to: ${bindings.map(b => `<code>${escapeHtml(b)}</code>`).join(', ')}</div>` : ''}
+            </div>
+          </div>
+          <div class="vocab-body" hidden>
+            <div class="vocab-loading">Loading…</div>
+          </div>
         </div>`;
-    };
+    }).join('');
 
-    content.innerHTML = `
-      ${external.length > 0 ? `
-        <div style="font-family:var(--font-mono);font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--fg-3);font-weight:600;margin-bottom:var(--sp-2)">External (${external.length})</div>
-        ${external.map(makeCard).join('')}
-      ` : ''}
-      ${internal.length > 0 ? `
-        <div style="font-family:var(--font-mono);font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--fg-3);font-weight:600;margin:var(--sp-4) 0 var(--sp-2)">Internal (${internal.length})</div>
-        ${internal.map(makeCard).join('')}
-      ` : ''}
-    `;
+    content.querySelectorAll('.vocab-card').forEach(card => {
+      const header = card.querySelector('.vocab-header');
+      const body = card.querySelector('.vocab-body');
+      const chevron = card.querySelector('.vocab-chevron');
+      let loaded = false;
+
+      header.addEventListener('click', async () => {
+        const isOpen = !body.hidden;
+        if (isOpen) {
+          body.hidden = true;
+          chevron.textContent = '▶';
+          card.classList.remove('vocab-open');
+          return;
+        }
+
+        body.hidden = false;
+        chevron.textContent = '▼';
+        card.classList.add('vocab-open');
+
+        if (!loaded) {
+          loaded = true;
+          const vocabId = card.dataset.vocabId;
+          const data = await fetchVocabData(vocabId);
+          if (!data) {
+            body.innerHTML = '<div class="vocab-empty">No detailed data available for this vocabulary.</div>';
+            return;
+          }
+          body.innerHTML = renderVocabData(vocabId, data);
+          wireVocabExpanders(body);
+        }
+      });
+    });
 
     modal.classList.add('show');
+  }
+
+  function renderVocabData(vocabId, data) {
+    if (vocabId === 'hazards') return renderHierarchy(data.categories, 'hazards');
+    if (vocabId === 'solution-categories') return renderHierarchy(data.categories, 'subcategories');
+    if (vocabId === 'urban-systems') return renderSectors(data.sectors);
+    if (vocabId === 'crf-goals') return renderCrfGoals(data.dimensions);
+    if (vocabId === 'enums') return renderEnums(data);
+    if (vocabId === 'vulnerable-populations') return renderFlatList(data.populations);
+    if (vocabId === 'resilience-attributes') return renderFlatList(data.attributes, 'cdp_label');
+    return '<div class="vocab-empty">Unknown vocabulary format.</div>';
+  }
+
+  function renderHierarchy(categories, childKey) {
+    if (!categories || !categories.length) return '<div class="vocab-empty">Empty.</div>';
+    return `<ul class="vocab-tree">${categories.map(cat => {
+      const children = cat[childKey] || cat.hazards || cat.subcategories || [];
+      return `
+        <li class="vocab-tree-node ${children.length ? 'has-children' : ''}">
+          <div class="vocab-tree-header" ${children.length ? 'data-expandable' : ''}>
+            ${children.length ? '<span class="vocab-tree-chevron">▶</span>' : '<span class="vocab-tree-leaf">·</span>'}
+            <span class="vocab-tree-name">${escapeHtml(cat.name)}</span>
+            ${children.length ? `<span class="vocab-tree-count">${children.length}</span>` : ''}
+          </div>
+          ${children.length ? `
+            <ul class="vocab-tree-children" hidden>
+              ${children.map(child => `
+                <li class="vocab-tree-node">
+                  <div class="vocab-tree-header">
+                    <span class="vocab-tree-leaf">·</span>
+                    <span class="vocab-tree-name">${escapeHtml(child.name)}</span>
+                    ${child.description ? `<span class="vocab-tree-note">${escapeHtml(child.description)}</span>` : ''}
+                  </div>
+                </li>
+              `).join('')}
+            </ul>
+          ` : ''}
+        </li>`;
+    }).join('')}</ul>`;
+  }
+
+  function renderSectors(sectors) {
+    if (!sectors || !sectors.length) return '<div class="vocab-empty">Empty.</div>';
+    return `<ul class="vocab-tree">${sectors.map(sector => {
+      const subs = sector.subsectors || [];
+      return `
+        <li class="vocab-tree-node ${subs.length ? 'has-children' : ''}">
+          <div class="vocab-tree-header" ${subs.length ? 'data-expandable' : ''}>
+            ${subs.length ? '<span class="vocab-tree-chevron">▶</span>' : '<span class="vocab-tree-leaf">·</span>'}
+            <span class="vocab-tree-name">${escapeHtml(sector.name)}</span>
+            ${sector.description ? `<span class="vocab-tree-note">${escapeHtml(sector.description)}</span>` : ''}
+            ${subs.length ? `<span class="vocab-tree-count">${subs.length}</span>` : ''}
+          </div>
+          ${subs.length ? `
+            <ul class="vocab-tree-children" hidden>
+              ${subs.map(sub => `
+                <li class="vocab-tree-node">
+                  <div class="vocab-tree-header">
+                    <span class="vocab-tree-leaf">·</span>
+                    <span class="vocab-tree-name">${escapeHtml(sub.name)}</span>
+                  </div>
+                </li>
+              `).join('')}
+            </ul>
+          ` : ''}
+        </li>`;
+    }).join('')}</ul>`;
+  }
+
+  function renderCrfGoals(dimensions) {
+    if (!dimensions || !dimensions.length) return '<div class="vocab-empty">Empty.</div>';
+    return `<ul class="vocab-tree">${dimensions.map(dim => {
+      const goals = dim.goals || [];
+      return `
+        <li class="vocab-tree-node ${goals.length ? 'has-children' : ''}">
+          <div class="vocab-tree-header" ${goals.length ? 'data-expandable' : ''}>
+            ${goals.length ? '<span class="vocab-tree-chevron">▶</span>' : '<span class="vocab-tree-leaf">·</span>'}
+            <span class="vocab-tree-name">${escapeHtml(dim.name)}</span>
+            ${dim.description ? `<span class="vocab-tree-note">${escapeHtml(dim.description)}</span>` : ''}
+            ${goals.length ? `<span class="vocab-tree-count">${goals.length}</span>` : ''}
+          </div>
+          ${goals.length ? `
+            <ul class="vocab-tree-children" hidden>
+              ${goals.map(g => `
+                <li class="vocab-tree-node">
+                  <div class="vocab-tree-header">
+                    <span class="vocab-tree-leaf">·</span>
+                    <span class="vocab-tree-name">${escapeHtml(g.name || g.id)}</span>
+                    ${g.description ? `<span class="vocab-tree-note">${escapeHtml(g.description)}</span>` : ''}
+                  </div>
+                </li>
+              `).join('')}
+            </ul>
+          ` : ''}
+        </li>`;
+    }).join('')}</ul>`;
+  }
+
+  function renderEnums(data) {
+    const skip = new Set(['_description']);
+    const keys = Object.keys(data).filter(k => !k.startsWith('_'));
+    if (!keys.length) return '<div class="vocab-empty">Empty.</div>';
+    return `<ul class="vocab-tree">${keys.map(key => {
+      const entry = data[key];
+      const values = entry.values || [];
+      const label = key.replace(/_/g, ' ');
+      return `
+        <li class="vocab-tree-node ${values.length ? 'has-children' : ''}">
+          <div class="vocab-tree-header" ${values.length ? 'data-expandable' : ''}>
+            ${values.length ? '<span class="vocab-tree-chevron">▶</span>' : '<span class="vocab-tree-leaf">·</span>'}
+            <span class="vocab-tree-name">${escapeHtml(label)}</span>
+            ${values.length ? `<span class="vocab-tree-count">${values.length}</span>` : ''}
+          </div>
+          ${values.length ? `
+            <ul class="vocab-tree-children" hidden>
+              ${values.map(v => `
+                <li class="vocab-tree-node">
+                  <div class="vocab-tree-header">
+                    <span class="vocab-tree-leaf">·</span>
+                    <span class="vocab-tree-name">${escapeHtml(v.name || v.id)}</span>
+                    ${v.description ? `<span class="vocab-tree-note">${escapeHtml(v.description)}</span>` : ''}
+                  </div>
+                </li>
+              `).join('')}
+            </ul>
+          ` : ''}
+        </li>`;
+    }).join('')}</ul>`;
+  }
+
+  function renderFlatList(items, nameKey) {
+    if (!items || !items.length) return '<div class="vocab-empty">Empty.</div>';
+    return `<ul class="vocab-tree">${items.map(item => `
+      <li class="vocab-tree-node">
+        <div class="vocab-tree-header">
+          <span class="vocab-tree-leaf">·</span>
+          <span class="vocab-tree-name">${escapeHtml(item[nameKey || 'name'] || item.name || item.id)}</span>
+          ${item.description ? `<span class="vocab-tree-note">${escapeHtml(item.description)}</span>` : ''}
+        </div>
+      </li>
+    `).join('')}</ul>`;
+  }
+
+  function wireVocabExpanders(container) {
+    container.querySelectorAll('[data-expandable]').forEach(header => {
+      header.addEventListener('click', () => {
+        const li = header.closest('.vocab-tree-node');
+        const children = li.querySelector('.vocab-tree-children');
+        const chevron = header.querySelector('.vocab-tree-chevron');
+        if (!children) return;
+        const open = !children.hidden;
+        children.hidden = open;
+        chevron.textContent = open ? '▶' : '▼';
+      });
+    });
   }
 
   function escapeHtml(s) {
@@ -345,7 +369,6 @@ To use this version:
     );
   }
 
-  // Search
   function wireSearch() {
     const input = document.getElementById('search');
     const results = document.getElementById('search-results');
@@ -398,7 +421,6 @@ To use this version:
           if (el.dataset.kind === 'node') {
             window.Graph.focusNode(el.dataset.id);
           } else {
-            // Focus edge by finding it
             const links = window.Graph.getLinks();
             const edge = links.find(l => l.id === el.dataset.eid);
             if (edge) window.Graph.selectEdge(edge);
@@ -426,128 +448,8 @@ To use this version:
     });
   }
 
-  // Expose for debugging and inter-module communication
   window.APP = {
     loadVersion,
-    reloadGraph,
-    getEditMode: () => editMode,
     getCurrentGraphData: () => currentGraphData,
-    markDirty,
-    showAddEntityDialog,
   };
-
-  function showAddEntityDialog() {
-    const ontology = window.OntologyAdapter.getCurrentOntology();
-    if (!ontology) {
-      alert('No ontology loaded');
-      return;
-    }
-
-    const html = `
-      <div class="modal show" id="add-entity-modal">
-        <div class="modal-content">
-          <h3>Create new entity type</h3>
-          <div class="form-row">
-            <label>ID (PascalCase, no spaces)</label>
-            <input type="text" id="new-entity-id" placeholder="MyNewEntity" />
-          </div>
-          <div class="form-row">
-            <label>Label (display name)</label>
-            <input type="text" id="new-entity-label" placeholder="My New Entity" />
-          </div>
-          <div class="form-row">
-            <label>Definition</label>
-            <textarea id="new-entity-definition" placeholder="What does this entity represent?"></textarea>
-          </div>
-          <div class="form-row">
-            <label>Connect to Solution as spoke?</label>
-            <select id="new-entity-connect">
-              <option value="yes" selected>Yes — create relationship to Solution</option>
-              <option value="no">No — orphan entity (you can add relationships later)</option>
-            </select>
-          </div>
-          <div class="form-row" id="new-entity-rel-row">
-            <label>Relationship label (verb)</label>
-            <input type="text" id="new-entity-rel-label" placeholder="relates to" />
-          </div>
-          <div class="modal-buttons">
-            <button id="cancel-add-entity">Cancel</button>
-            <button class="primary" id="confirm-add-entity">Create</button>
-          </div>
-        </div>
-      </div>
-    `;
-
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = html;
-    document.body.appendChild(tempDiv.firstElementChild);
-
-    const modal = document.getElementById('add-entity-modal');
-
-    document.getElementById('new-entity-connect').addEventListener('change', (e) => {
-      document.getElementById('new-entity-rel-row').style.display =
-        e.target.value === 'yes' ? '' : 'none';
-    });
-
-    document.getElementById('cancel-add-entity').addEventListener('click', () => modal.remove());
-    document.getElementById('confirm-add-entity').addEventListener('click', () => {
-      const id = document.getElementById('new-entity-id').value.trim();
-      const label = document.getElementById('new-entity-label').value.trim();
-      const definition = document.getElementById('new-entity-definition').value.trim();
-      const connect = document.getElementById('new-entity-connect').value;
-      const relLabel = document.getElementById('new-entity-rel-label').value.trim();
-
-      if (!id || !label) {
-        alert('ID and Label are required');
-        return;
-      }
-
-      if (!/^[A-Z][a-zA-Z0-9]*$/.test(id)) {
-        alert('ID must be PascalCase (e.g., MyEntity)');
-        return;
-      }
-
-      const ont = window.OntologyAdapter.getCurrentOntology();
-      if (ont.types.find(t => t.id === id)) {
-        alert(`An entity with id "${id}" already exists`);
-        return;
-      }
-
-      const newType = {
-        id,
-        label,
-        definition,
-        properties: [],
-        vocabulary_bindings: [],
-        evidence_cases: [],
-        notes: '',
-      };
-
-      window.OntologyAdapter.addTypeToOntology(newType);
-
-      // Optionally add a relationship to Solution
-      if (connect === 'yes' && relLabel) {
-        const relId = window.OntologyAdapter.generateRelationshipId(relLabel);
-        if (!ont.relationships.find(r => r.id === relId)) {
-          window.OntologyAdapter.addRelationshipToOntology({
-            id: relId,
-            label: relLabel,
-            source: 'Solution',
-            target: id,
-            definition: '',
-            properties: [],
-          });
-        }
-      }
-
-      markDirty();
-      modal.remove();
-      reloadGraph();
-
-      // Focus the new node
-      setTimeout(() => {
-        if (window.Graph.focusNode) window.Graph.focusNode(id);
-      }, 100);
-    });
-  }
 });

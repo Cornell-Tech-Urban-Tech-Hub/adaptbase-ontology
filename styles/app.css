@@ -124,6 +124,15 @@ body {
 }
 .btn-ghost:hover { background: rgba(18,20,23,0.06); color: var(--fg-1); }
 
+.version-select {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  appearance: auto;
+  padding-right: 24px;
+}
+
 /* ============ HERO STRIP (above the graph) ============ */
 .hero {
   padding: var(--sp-4) var(--sp-6) var(--sp-4);
@@ -1147,109 +1156,181 @@ body {
   border-color: var(--carnelian-deep);
 }
 
-/* ============ EDITABLE FIELDS ============ */
-.field-editable {
-  min-height: 1.5em;
-  outline: none;
-  transition: background 0.15s, border-color 0.15s;
-}
-
-.field-editable[contenteditable="true"] {
-  padding: 8px 10px;
-  border: 1px solid transparent;
-  border-radius: var(--r-xs);
-  background: var(--bg-2);
-}
-
-.field-editable[contenteditable="true"]:hover {
-  border-color: var(--border-soft);
+/* ============ VOCABULARY MODAL ============ */
+.vocab-card {
   background: var(--bg-1);
-}
-
-.field-editable[contenteditable="true"]:focus {
-  border-color: var(--carnelian);
-  background: var(--bg-1);
-  box-shadow: 0 0 0 3px rgba(179, 27, 27, 0.1);
-}
-
-.field-editable[contenteditable="true"]:empty:before {
-  content: attr(data-placeholder);
-  color: var(--fg-4);
-  font-style: italic;
-}
-
-input.field-editable {
-  width: 100%;
-  padding: 6px 10px;
   border: 1px solid var(--border-soft);
-  border-radius: var(--r-xs);
-  background: var(--bg-2);
-  font-family: inherit;
-  font-size: inherit;
-  color: inherit;
+  border-radius: var(--r-sm);
+  margin-bottom: var(--sp-3);
+  overflow: hidden;
 }
+.vocab-card.vocab-external { border-color: var(--carnelian); }
+.vocab-card.vocab-open { border-color: var(--border-firm); }
+.vocab-card.vocab-external.vocab-open { border-color: var(--carnelian); }
 
-input.field-editable:hover {
-  border-color: var(--border-hard);
-  background: var(--bg-1);
+.vocab-header {
+  display: flex;
+  gap: 10px;
+  padding: var(--sp-4);
+  cursor: pointer;
+  align-items: flex-start;
+  transition: background var(--dur-fast) var(--ease-standard);
 }
+.vocab-header:hover { background: var(--fog); }
 
-input.field-editable:focus {
-  outline: none;
-  border-color: var(--carnelian);
-  background: var(--bg-1);
-  box-shadow: 0 0 0 3px rgba(179, 27, 27, 0.1);
+.vocab-chevron {
+  font-size: 10px;
+  color: var(--fg-4);
+  width: 14px;
+  flex-shrink: 0;
+  padding-top: 3px;
+  transition: transform var(--dur-fast) var(--ease-standard);
 }
-
-input.field-editable.editable-title {
-  font-family: var(--font-display);
-  font-size: var(--fs-xl);
-  font-weight: 500;
-  font-variation-settings: "opsz" 36;
-  padding: 4px 8px;
+.vocab-summary { flex: 1; min-width: 0; }
+.vocab-label {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--fg-1);
+  margin-bottom: 4px;
 }
-
-input.field-editable.editable-edge-label {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: var(--fs-md);
-  font-weight: 500;
-  padding: 2px 6px;
-  display: inline-block;
-  width: auto;
-  min-width: 120px;
+.vocab-external .vocab-label { color: var(--carnelian); }
+.vocab-desc {
+  font-size: 12px;
+  color: var(--fg-3);
+  line-height: 1.5;
+  margin-bottom: 8px;
 }
-
-.definition.field-editable {
-  font-size: var(--fs-base);
+.vocab-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.vocab-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--fog);
+  color: var(--fg-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.vocab-badge-type { font-weight: 600; }
+.vocab-external .vocab-badge-type {
+  background: rgba(179, 27, 27, 0.08);
+  color: var(--carnelian);
+}
+.vocab-ref {
+  font-size: 11px;
+  color: var(--carnelian);
+  text-decoration: none;
+}
+.vocab-ref:hover { text-decoration: underline; }
+.vocab-bindings {
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--fg-4);
   line-height: 1.6;
+}
+.vocab-bindings code {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  background: var(--fog);
+  padding: 1px 5px;
+  border-radius: 3px;
   color: var(--fg-2);
 }
 
-/* Selects (cardinality, property type) */
-select.field-editable {
-  padding: 6px 10px;
-  border: 1px solid var(--border-soft);
-  border-radius: var(--r-xs);
-  background: var(--bg-2);
-  font-family: inherit;
+.vocab-body {
+  border-top: 1px solid var(--border-hair);
+  padding: var(--sp-3) var(--sp-4) var(--sp-4);
+  max-height: 360px;
+  overflow-y: auto;
+}
+.vocab-loading {
+  text-align: center;
+  color: var(--fg-4);
   font-size: var(--fs-sm);
-  color: inherit;
+  font-family: var(--font-mono);
+  padding: var(--sp-3) 0;
+}
+.vocab-empty {
+  text-align: center;
+  color: var(--fg-4);
+  font-size: var(--fs-sm);
+  padding: var(--sp-3) 0;
+}
+
+.vocab-tree {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.vocab-tree .vocab-tree {
+  padding-left: 20px;
+}
+.vocab-tree-node {
+  margin-bottom: 1px;
+}
+.vocab-tree-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 5px 6px;
+  border-radius: var(--r-xs);
+  font-size: var(--fs-sm);
+  line-height: 1.4;
+}
+.vocab-tree-header[data-expandable] {
   cursor: pointer;
 }
-
-select.field-editable:hover {
-  border-color: var(--border-firm);
-  background: var(--bg-1);
+.vocab-tree-header[data-expandable]:hover {
+  background: var(--fog);
+}
+.vocab-tree-chevron {
+  font-size: 9px;
+  color: var(--fg-4);
+  width: 12px;
+  flex-shrink: 0;
+  padding-top: 3px;
+}
+.vocab-tree-leaf {
+  color: var(--fg-4);
+  width: 12px;
+  flex-shrink: 0;
+  text-align: center;
+  font-weight: 600;
+}
+.vocab-tree-name {
+  color: var(--fg-1);
+  font-weight: 500;
+}
+.vocab-tree-count {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--fg-4);
+  background: var(--fog);
+  padding: 1px 6px;
+  border-radius: 999px;
+  margin-left: 4px;
+  flex-shrink: 0;
+}
+.vocab-tree-note {
+  display: block;
+  color: var(--fg-3);
+  font-size: 12px;
+  font-weight: 400;
+  margin-top: 2px;
+  line-height: 1.45;
+}
+.vocab-tree-children {
+  list-style: none;
+  margin: 0;
+  padding-left: 18px;
 }
 
-select.field-editable:focus {
-  outline: none;
-  border-color: var(--carnelian);
-  box-shadow: 0 0 0 3px rgba(179, 27, 27, 0.1);
-}
-
-/* Meta row (label + select pair) */
+/* Meta row (label + value pair) */
 .meta-row {
   display: flex;
   align-items: center;
@@ -1267,226 +1348,45 @@ select.field-editable:focus {
   color: var(--fg-2);
 }
 
-/* ============ PROPERTY EDITING ============ */
-.prop-list-editable {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.prop-item.prop-editable {
-  background: var(--bg-2);
-  border: 1px solid var(--border-soft);
-  border-radius: var(--r-sm);
-  padding: 12px;
-  margin-bottom: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.prop-row-1 {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.prop-field {
-  font-family: inherit;
+/* ============ COMMENTS LOADING ============ */
+.comments-loading {
+  padding: var(--sp-5) 0;
+  text-align: center;
+  color: var(--fg-4);
   font-size: var(--fs-sm);
-  color: var(--fg-1);
-  border: 1px solid var(--border-soft);
-  border-radius: var(--r-xs);
-  background: var(--bg-1);
-  padding: 6px 10px;
-  outline: none;
-  transition: border-color 0.15s;
-}
-
-.prop-field:hover {
-  border-color: var(--border-firm);
-}
-
-.prop-field:focus {
-  border-color: var(--carnelian);
-  box-shadow: 0 0 0 3px rgba(179, 27, 27, 0.1);
-}
-
-.prop-field-id {
-  flex: 1;
   font-family: var(--font-mono);
-  font-size: var(--fs-sm);
-  font-weight: 500;
+  letter-spacing: 0.06em;
 }
 
-.prop-field-type {
-  width: 140px;
-  font-family: var(--font-mono);
-  font-size: var(--fs-sm);
-  cursor: pointer;
-}
-
-.prop-field-note,
-.prop-field-values {
-  width: 100%;
-  min-height: 50px;
-  resize: vertical;
-  font-size: var(--fs-sm);
-  line-height: 1.5;
-}
-
-.prop-required-toggle {
-  display: flex;
+.comment-new-link {
+  display: inline-flex;
   align-items: center;
-  gap: 4px;
-  font-size: var(--fs-sm);
-  color: var(--fg-3);
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.prop-required-toggle input {
-  cursor: pointer;
-}
-
-.prop-delete-btn {
-  width: 24px;
-  height: 24px;
-  border: 1px solid var(--border-soft);
-  border-radius: var(--r-xs);
-  background: var(--bg-1);
-  color: var(--fg-3);
-  font-size: var(--fs-md);
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.15s, color 0.15s, border-color 0.15s;
-}
-
-.prop-delete-btn:hover {
-  background: var(--carnelian);
-  color: white;
-  border-color: var(--carnelian);
-}
-
-.prop-values-label,
-.prop-vocab-label {
-  display: block;
-  font-size: var(--fs-xs);
-  color: var(--fg-3);
-  margin-bottom: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-weight: 500;
-}
-
-.prop-add-row {
-  display: flex;
-  justify-content: center;
-  list-style: none;
-  margin-top: 8px;
-}
-
-.btn-add-prop,
-.btn-add-edge {
+  gap: 6px;
+  padding: 10px 16px;
   background: transparent;
   border: 1px dashed var(--border-soft);
   border-radius: var(--r-sm);
-  padding: 8px 16px;
   font-size: var(--fs-sm);
   color: var(--fg-3);
-  cursor: pointer;
-  font-family: inherit;
+  text-decoration: none;
   transition: all 0.15s;
+  width: 100%;
+  justify-content: center;
+  margin-top: var(--sp-3);
 }
-
-.btn-add-prop:hover,
-.btn-add-edge:hover {
+.comment-new-link:hover {
   border-color: var(--carnelian);
   color: var(--carnelian);
   background: rgba(179, 27, 27, 0.04);
 }
 
-.btn-add-edge {
-  display: block;
-  width: 100%;
+.comment-error {
+  padding: var(--sp-4);
   text-align: center;
-}
-
-/* ============ DANGER ZONE ============ */
-.danger-zone {
-  border-top: 1px solid var(--border-soft);
-  padding-top: 16px;
-  margin-top: 16px;
-}
-
-.danger-zone h4 {
-  color: var(--carnelian);
-}
-
-.btn-delete-entity {
-  background: transparent;
-  border: 1px solid var(--carnelian);
+  color: var(--fg-4);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  border: 1px dashed var(--border-soft);
   border-radius: var(--r-sm);
-  padding: 8px 12px;
-  font-size: var(--fs-sm);
-  color: var(--carnelian);
-  cursor: pointer;
-  font-family: inherit;
-  transition: all 0.15s;
-}
-
-.btn-delete-entity:hover {
-  background: var(--carnelian);
-  color: white;
-}
-
-/* ============ MODAL FORM ============ */
-.form-row {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-bottom: 12px;
-}
-
-.form-row label {
-  font-size: var(--fs-xs);
-  color: var(--fg-3);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-weight: 500;
-}
-
-.form-row input[type="text"],
-.form-row select,
-.form-row textarea {
-  padding: 8px 10px;
-  border: 1px solid var(--border-soft);
-  border-radius: var(--r-xs);
-  background: var(--bg-2);
-  font-family: inherit;
-  font-size: var(--fs-sm);
-  color: var(--fg-1);
-  outline: none;
-  transition: border-color 0.15s;
-}
-
-.form-row input[type="text"]:disabled {
-  background: var(--bg-3);
-  color: var(--fg-3);
-  cursor: not-allowed;
-}
-
-.form-row textarea {
-  min-height: 60px;
-  resize: vertical;
-}
-
-.form-row input:focus,
-.form-row select:focus,
-.form-row textarea:focus {
-  border-color: var(--carnelian);
-  box-shadow: 0 0 0 3px rgba(179, 27, 27, 0.1);
+  background: var(--bg-1);
 }

@@ -1,64 +1,227 @@
-// Seed reviewers + comments. Keyed by node id or edge id.
-// Deterministic for mock; could be swapped for a backend.
+(function () {
+  const REPO_OWNER = 'Cornell-Tech-Urban-Tech-Hub';
+  const REPO_NAME = 'adaptbase-ontology';
+  const API_BASE = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}`;
 
-window.REVIEWERS = {
-  ML:  { name: "Maya Leclerc",     affil: "Urban Tech Hub, Cornell Tech",      color: "carn" },
-  RP:  { name: "Ruowen Pan",       affil: "Cornell CRP · Student co-author",   color: "blue" },
-  JK:  { name: "Jordan Okafor",    affil: "NYC Mayor's Office of Climate",     color: "green" },
-  AT:  { name: "Aditi Tiwari",     affil: "Arup Advisory, NYC",                color: "slate" },
-  HB:  { name: "Henrik Bech",      affil: "C40 Cities, Knowledge Hub",         color: "amber" },
-  SG:  { name: "Sofía G. Ortega",  affil: "Environmental Defense Fund",        color: "blue" },
-};
-window.ME = { id: "ME", initials: "yo", name: "You", affil: "reviewer" };
+  const cache = new Map();
+  const CACHE_TTL = 5 * 60 * 1000;
 
-function initials(name) {
-  return name.split(/\s+/).map(w => w[0]).slice(0,2).join("").toUpperCase();
-}
-window.initialsOf = initials;
+  function esc(s) {
+    return String(s ?? '').replace(/[&<>"]/g, c => ({
+      '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;'
+    }[c]));
+  }
 
-// Comment threads. Each key is either a node id or an edge id (e.g. "MITIGATES:Solution:Hazard")
-window.THREADS = {
-  "Solution": [
-    { id:"c1", by:"ML", when:"2 days ago", body:"The <strong>maturity_level</strong> property is doing real work here — but I'm worried we'll never be able to populate it reliably from public reporting. Can we flag CQ-36 as a v0.2 falsifiability test rather than keeping the property?", replies:[
-      { id:"c1r1", by:"HB", when:"1 day ago", body:"Agree. C40 doesn't publish maturity at the solution class level, only deployment stage. Would vote to drop if evidence-level is duplicative." },
-      { id:"c1r2", by:"RP", when:"1 day ago", body:"Keep it. Planners ask \"is this a proven technique?\" all the time and evidence-level is per-outcome, not per-class." }
-    ]},
-    { id:"c2", by:"SG", when:"4 days ago", body:"Big +1 on adding <strong>equity_focus</strong> and <strong>target_populations</strong>. This is exactly what the EDF equity impact study needs to query." }
-  ],
-  "Hazard": [
-    { id:"c3", by:"HB", when:"yesterday", body:"Consider adding a <strong>time_horizon</strong> property (near / mid / long term). The C40 typology separates acute from chronic, and we lose that here.", replies:[
-      { id:"c3r1", by:"ML", when:"yesterday", body:"Could live on the MITIGATES edge instead — it's really a property of the claim, not the hazard itself. Thinking." }
-    ]}
-  ],
-  "Vulnerability": [
-    { id:"c4", by:"AT", when:"3 days ago", body:"The three IPCC AR6 components (exposure, sensitivity, adaptive capacity) are modeled as separate scores — makes sense — but we should note somewhere that these are meant to be relative/normalized, not absolute." }
-  ],
-  "UrbanSystem": [
-    { id:"c5", by:"JK", when:"6 hours ago", body:"Merging Infrastructure into UrbanSystem was the right call. For NYC data the distinction was impossible to maintain at extraction time." }
-  ],
-  "Plan": [
-    { id:"c6", by:"ML", when:"5 days ago", body:"Plan properties are placeholder — flagging this for the ontology WG. We need a vocabulary for plan_type (C40 has one; ICLEI diverges)." }
-  ],
-  "FinancialInstrument": [
-    { id:"c7", by:"AT", when:"2 days ago", body:"Adding <strong>grant</strong> and <strong>direct_allocation</strong> to instrument_type was pragmatic but it blurs the theoretical line. Worth a footnote in the schema doc." }
-  ],
+  function timeAgo(dateStr) {
+    const now = Date.now();
+    const then = new Date(dateStr).getTime();
+    const diff = now - then;
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return 'just now';
+    if (mins < 60) return `${mins}m ago`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    if (days < 30) return `${days}d ago`;
+    return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  }
 
-  // Edges keyed by "RELATIONSHIP_ID:source:target"
-  "MITIGATES:Solution:Hazard": [
-    { id:"e1", by:"HB", when:"2 days ago", body:"This is doing a lot of heavy lifting. I'd want to see <strong>mitigation_type</strong> on the edge — does the solution reduce intensity, frequency, or duration of the hazard? These have different policy implications." }
-  ],
-  "DEPENDS_ON:Solution:Solution": [
-    { id:"e2", by:"RP", when:"1 day ago", body:"Self-referential edges are going to be hell to extract cleanly from text. Do we have a plan for cycle detection in the pipeline?", replies:[
-      { id:"e2r1", by:"ML", when:"20 hours ago", body:"Weeks 7–8 corpus mining has a topological-sort sanity pass. Cycles get flagged, not silently accepted." }
-    ]}
-  ],
-  "CHANNELS_THROUGH:FinancingSource:FinancialInstrument": [
-    { id:"e3", by:"AT", when:"3 days ago", body:"Love that this is finally explicit. Blended finance queries were impossible before." }
-  ],
-  "CONTRIBUTES_TO:Solution:ResilienceGoal": [
-    { id:"e4", by:"SG", when:"yesterday", body:"Should this be renamed <strong>CLAIMS_TO_CONTRIBUTE</strong>? The naming hides that this is assertion-based, not evidence-based. DEMONSTRATES_PROGRESS_ON is the evidence edge." }
-  ],
-  "SHAPES:UrbanSystem:Vulnerability": [
-    { id:"e5", by:"JK", when:"4 hours ago", body:"This is my favorite new edge. Captures the \"aging infrastructure creates vulnerability\" story that AR6 keeps insisting on." }
-  ],
-};
+  function avatarColor(login) {
+    const colors = ['carn', 'blue', 'green', 'slate', 'amber'];
+    let hash = 0;
+    for (let i = 0; i < login.length; i++) hash = ((hash << 5) - hash + login.charCodeAt(i)) | 0;
+    return colors[Math.abs(hash) % colors.length];
+  }
+
+  function initials(name) {
+    return (name || '??').split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
+  }
+
+  function labelForKey(key) {
+    return `ontology:${key}`;
+  }
+
+  function newIssueUrl(key, label) {
+    const issueTitle = encodeURIComponent(`[Review] ${label}`);
+    const issueBody = encodeURIComponent(
+      `**Ontology element:** \`${key}\`\n**Label:** ${label}\n\n---\n\n_Your review comment here. Describe what you'd change, flag an ambiguity, or suggest an improvement._`
+    );
+    const issueLabel = encodeURIComponent(labelForKey(key));
+    return `https://github.com/${REPO_OWNER}/${REPO_NAME}/issues/new?title=${issueTitle}&body=${issueBody}&labels=${issueLabel},review`;
+  }
+
+  function viewIssuesUrl(key) {
+    const label = encodeURIComponent(labelForKey(key));
+    return `https://github.com/${REPO_OWNER}/${REPO_NAME}/issues?q=is%3Aissue+label%3A${label}`;
+  }
+
+  async function fetchIssues(key) {
+    const cached = cache.get(key);
+    if (cached && Date.now() - cached.time < CACHE_TTL) return cached.data;
+
+    const label = labelForKey(key);
+    const url = `${API_BASE}/issues?labels=${encodeURIComponent(label)}&state=open&sort=created&direction=desc&per_page=20`;
+
+    try {
+      const res = await fetch(url, {
+        headers: { 'Accept': 'application/vnd.github.v3+json' },
+      });
+
+      if (res.status === 403) {
+        const remaining = res.headers.get('x-ratelimit-remaining');
+        if (remaining === '0') {
+          return { error: 'rate-limited' };
+        }
+      }
+
+      if (!res.ok) return { error: `GitHub API returned ${res.status}` };
+
+      const issues = await res.json();
+      const result = { issues };
+      cache.set(key, { data: result, time: Date.now() });
+      return result;
+    } catch (err) {
+      return { error: err.message };
+    }
+  }
+
+  async function fetchIssueComments(issueNumber) {
+    const cacheKey = `comments:${issueNumber}`;
+    const cached = cache.get(cacheKey);
+    if (cached && Date.now() - cached.time < CACHE_TTL) return cached.data;
+
+    const url = `${API_BASE}/issues/${issueNumber}/comments?per_page=50`;
+    try {
+      const res = await fetch(url, {
+        headers: { 'Accept': 'application/vnd.github.v3+json' },
+      });
+      if (!res.ok) return [];
+      const comments = await res.json();
+      cache.set(cacheKey, { data: comments, time: Date.now() });
+      return comments;
+    } catch {
+      return [];
+    }
+  }
+
+  function renderIssueThread(issue, replies) {
+    const color = avatarColor(issue.user.login);
+    const ini = initials(issue.user.login);
+    const issueUrl = issue.html_url;
+
+    let html = `
+      <div class="comment c-${color}">
+        <div class="avatar">${ini}</div>
+        <div class="bubble">
+          <div class="byline">
+            <a href="${esc(issue.user.html_url)}" target="_blank" rel="noopener" class="name" style="text-decoration:none;color:inherit;">${esc(issue.user.login)}</a>
+            <span class="time">${timeAgo(issue.created_at)}</span>
+          </div>
+          <div class="body"><strong>${esc(issue.title.replace(/^\[Review\]\s*/, ''))}</strong></div>
+          <div class="body">${renderMarkdownSimple(issue.body || '')}</div>
+          <div class="actions">
+            <a href="${esc(issueUrl)}" target="_blank" rel="noopener">View on GitHub</a>
+            <a href="${esc(issueUrl)}" target="_blank" rel="noopener">Reply</a>
+          </div>
+        </div>
+      </div>
+    `;
+
+    for (const reply of replies) {
+      const rColor = avatarColor(reply.user.login);
+      const rIni = initials(reply.user.login);
+      html += `
+        <div class="comment comment-reply c-${rColor}">
+          <div class="avatar">${rIni}</div>
+          <div class="bubble">
+            <div class="byline">
+              <a href="${esc(reply.user.html_url)}" target="_blank" rel="noopener" class="name" style="text-decoration:none;color:inherit;">${esc(reply.user.login)}</a>
+              <span class="time">${timeAgo(reply.created_at)}</span>
+            </div>
+            <div class="body">${renderMarkdownSimple(reply.body || '')}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    return html;
+  }
+
+  function renderMarkdownSimple(text) {
+    text = text.replace(/^---\s*$/gm, '');
+
+    return esc(text)
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/`([^`]+)`/g, '<code style="background:var(--sodium-soft);padding:1px 3px;border-radius:2px;">$1</code>')
+      .replace(/\n/g, '<br>');
+  }
+
+  async function loadComments(containerEl) {
+    const key = containerEl.dataset.commentKey;
+    const label = containerEl.dataset.commentLabel;
+    if (!key) return;
+
+    containerEl.innerHTML = '<div class="comments-loading">Loading comments…</div>';
+
+    const result = await fetchIssues(key);
+
+    if (result.error) {
+      const isRateLimit = result.error === 'rate-limited';
+      containerEl.innerHTML = `
+        <div class="comment-error">
+          ${isRateLimit
+            ? 'GitHub API rate limit reached.<br>Comments will reload shortly.'
+            : 'Could not load comments.'}
+        </div>
+        <a class="comment-new-link" href="${esc(viewIssuesUrl(key))}" target="_blank" rel="noopener">
+          View discussions on GitHub
+        </a>
+        <a class="comment-new-link" href="${esc(newIssueUrl(key, label))}" target="_blank" rel="noopener">
+          + Start a new review thread
+        </a>
+      `;
+      return;
+    }
+
+    const issues = result.issues || [];
+
+    if (issues.length === 0) {
+      containerEl.innerHTML = `
+        <div class="empty-comments">
+          No review comments yet on this ${key.includes(':') ? 'relationship' : 'entity'}.<br>
+          Be the first — your feedback shapes the next version.
+        </div>
+        <a class="comment-new-link" href="${esc(newIssueUrl(key, label))}" target="_blank" rel="noopener">
+          + Start a new review thread on GitHub
+        </a>
+      `;
+
+      const badge = document.querySelector('.tab-btn[data-tab="comments"] .badge');
+      if (badge) badge.textContent = '0';
+      return;
+    }
+
+    let totalComments = issues.length;
+    let threadsHtml = '';
+
+    for (const issue of issues) {
+      const replies = issue.comments > 0 ? await fetchIssueComments(issue.number) : [];
+      totalComments += replies.length;
+      threadsHtml += renderIssueThread(issue, replies);
+    }
+
+    containerEl.innerHTML = `
+      <div class="comment-thread">
+        ${threadsHtml}
+      </div>
+      <a class="comment-new-link" href="${esc(newIssueUrl(key, label))}" target="_blank" rel="noopener">
+        + Start a new review thread on GitHub
+      </a>
+    `;
+
+    const badge = document.querySelector('.tab-btn[data-tab="comments"] .badge');
+    if (badge) badge.textContent = String(totalComments);
+  }
+
+  window.Comments = { loadComments };
+})();

@@ -31,17 +31,10 @@
   </div>
 
   <div class="header-actions">
-    <select id="version-selector" class="btn btn-ghost" style="appearance:auto; padding-right:24px;">
+    <select id="version-selector" class="btn btn-ghost version-select">
       <option value="">Loading…</option>
     </select>
-    <button class="btn btn-ghost" id="btn-reload">↻ Reload</button>
     <button class="btn btn-ghost" id="btn-vocabularies">Vocabularies</button>
-    <button class="btn btn-ghost" id="btn-sample">Sample Data</button>
-    <button class="btn btn-ghost" id="btn-download">Export JSON</button>
-    <button class="btn btn-ghost" id="btn-add-entity" style="display:none;">+ New Entity</button>
-    <button class="btn btn-secondary" id="btn-save" style="display:none;">💾 Save as New Version</button>
-    <button class="btn btn-ghost" id="btn-discard" style="display:none;">✕ Discard</button>
-    <button class="btn btn-primary" id="btn-edit-mode">Edit</button>
   </div>
 </header>
 
@@ -90,11 +83,6 @@
       </div>
     </div>
 
-    <div class="graph-hint">
-      <span><kbd>Click</kbd> inspect</span>
-      <span><kbd>Drag</kbd> move node</span>
-      <span><kbd>Scroll</kbd> zoom</span>
-    </div>
   </div>
 
   <aside class="inspector" id="inspector">
