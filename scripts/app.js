@@ -461,7 +461,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
       }
       for (const l of window.Graph.getLinks()) {
-        if (l.label.toLowerCase().includes(q) || l.id.toLowerCase().includes(q)) {
+        const srcLabel = (l.source?.label || '').toLowerCase();
+        const tgtLabel = (l.target?.label || '').toLowerCase();
+        if (l.label.toLowerCase().includes(q) || l.id.toLowerCase().includes(q) ||
+            srcLabel.includes(q) || tgtLabel.includes(q)) {
           out.push({ kind: 'edge', l });
         }
       }
