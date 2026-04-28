@@ -26,7 +26,7 @@ MINING_ROOT = Path(__file__).resolve().parents[1]
 CORPUS_DEPTH = MINING_ROOT / "corpus" / "depth"
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from _llm import HAIKU_MODEL, chat_json  # noqa: E402
+from research.mining.scripts._llm import HAIKU_MODEL, chat_json  # noqa: E402
 
 SEED_VERBS = [
     "absorb",

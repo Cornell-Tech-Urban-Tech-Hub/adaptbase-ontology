@@ -26,7 +26,7 @@ MINING_ROOT = Path(__file__).resolve().parents[1]
 CORPUS_PLANS = MINING_ROOT / "corpus" / "plans"
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from _llm import chat_json, SONNET_MODEL  # noqa: E402
+from research.mining.scripts._llm import chat_json, SONNET_MODEL  # noqa: E402
 
 EXTRACTION_PROMPT = """Analyze this resilience plan and extract the following specific fields.
 Return ONLY valid JSON with no markdown formatting or explanation.

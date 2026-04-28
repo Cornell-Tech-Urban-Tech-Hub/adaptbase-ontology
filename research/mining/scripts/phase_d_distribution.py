@@ -40,7 +40,7 @@ REPORTS = MINING_ROOT / "reports"
 PROPOSALS = MINING_ROOT / "proposals"
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from _llm import HAIKU_MODEL, SONNET_MODEL, chat_json  # noqa: E402
+from research.mining.scripts._llm import HAIKU_MODEL, SONNET_MODEL, chat_json  # noqa: E402
 
 # ----------------------------------------------------------------------------
 # Vocabulary loading

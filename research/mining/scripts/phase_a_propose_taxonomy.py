@@ -27,7 +27,7 @@ CORPUS_DEPTH = MINING_ROOT / "corpus" / "depth"
 PROPOSALS = MINING_ROOT / "proposals"
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from _llm import SONNET_MODEL, chat_json  # noqa: E402
+from research.mining.scripts._llm import SONNET_MODEL, chat_json  # noqa: E402
 
 PROPOSE_SYSTEM = """\
 You are a climate adaptation ontologist creating a controlled vocabulary of \

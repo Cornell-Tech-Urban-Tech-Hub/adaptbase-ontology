@@ -24,7 +24,7 @@ CORPUS_PLANS = MINING_ROOT / "corpus" / "plans"
 PROPOSALS = MINING_ROOT / "proposals"
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from _llm import chat_json, SONNET_MODEL  # noqa: E402
+from research.mining.scripts._llm import chat_json, SONNET_MODEL  # noqa: E402
 
 PROPOSAL_PROMPT = """You are designing a knowledge graph schema for resilience plans based on real-world data.
 

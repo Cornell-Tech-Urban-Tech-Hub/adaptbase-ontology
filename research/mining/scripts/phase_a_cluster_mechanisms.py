@@ -26,7 +26,7 @@ CORPUS_DEPTH = MINING_ROOT / "corpus" / "depth"
 REPORTS = MINING_ROOT / "reports"
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from _llm import embed_texts  # noqa: E402
+from research.mining.scripts._llm import embed_texts  # noqa: E402
 
 
 def cluster_mechanisms(
