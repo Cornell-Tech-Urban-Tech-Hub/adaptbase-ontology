@@ -18,7 +18,7 @@ Formalizing the Resilience Scanner extraction schema (v1.2) into an OWL ontology
 - `schemas/vocabularies/` - Controlled vocabulary files (see [Vocabulary Integration](schemas/vocabularies/README.md))
 - `schemas/prompts/` - Research agent and synthesis prompts
 - `schemas/validation/` - Schema validation reports
-- `resources/` - Source documents (CDP data, CRF framework, student ontology)
+- `research/resources/` - Source documents (CDP data, CRF framework, student ontology)
 
 **Legacy documentation**: Extraction schema architecture details have been removed (file deleted).
 
@@ -106,19 +106,18 @@ adaptbase-ontology/
 │   ├── decisions-log.md                   # Design decisions log
 │   ├── TYPES-EXTRACTION-SUMMARY.md
 │   └── RELATIONSHIPS-EXTRACTION-SUMMARY.md
-├── resources/                             # Source documents (CDP data, CRF, etc.)
-├── papers/                                # Reference papers
-├── plans/
-│   ├── SPRINT-PLAN.md                     # Active sprint plan
-│   ├── ontology-build-brief.md
-│   └── firewall_project_context.md
-├── alignment/                             # Mappings to external ontologies
-├── extractions/                           # Case-level sample extractions
 ├── mining/                                # Corpus mining pipeline (Python)
-└── validation/                            # Held-out validation docs
+├── docs/                                  # Design and planning documents
+│   ├── alignment/                         # Mappings to external ontologies
+│   ├── plans/                             # Planning and design docs
+│   └── validation/                        # Validation templates and docs
+└── research/                              # Reference material and raw data
+    ├── extractions/                        # Case-level sample extractions
+    ├── papers/                             # Reference papers
+    └── resources/                          # Source documents (CDP data, CRF, etc.)
 ```
 
-**Note**: Extraction schema and vocabularies already exist in `schemas/`. Ontology development adds formalization in `ontology/`, alignment in `alignment/`, and validation in `holdout/`.
+**Note**: Extraction schema and vocabularies already exist in `schemas/`. Ontology development adds formalization in `ontology/`, alignment in `docs/alignment/`, and validation docs in `docs/validation/`.
 
 ---
 
@@ -332,5 +331,5 @@ This enables multi-hop queries: "Find solutions that mitigate coastal flooding b
 - **Extraction Schema**: `schemas/extraction-schema-v1.json`
 - **Vocabulary Strategy**: `schemas/vocabularies/README.md`
 - **Decisions Log**: `ontology/decisions-log.md`
-- **OntoKGen Methodology**: `papers/2412.00608v3.pdf`
-- **Project Context**: `plans/firewall_project_context.md`
+- **OntoKGen Methodology**: `research/papers/2412.00608v3.pdf`
+- **Project Context**: `docs/plans/firewall_project_context.md`

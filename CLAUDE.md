@@ -65,7 +65,7 @@ No build step — plain HTML/CSS/JS with D3 loaded from unpkg CDN.
 3. **Branding / naming cleanup**
    - Several places still say "Resilience Scanner" (header, hero text, HTML title) — decide whether to update to "AdaptBase" before going public
 
-4. **Sensitive files audit** — check nothing in `resources/` or `plans/` should stay private
+4. **Sensitive files audit** — check nothing in `research/resources/` or `docs/plans/` should stay private
 
 ### What's already safe for public
 - All ontology JSON files in `ontology/`
