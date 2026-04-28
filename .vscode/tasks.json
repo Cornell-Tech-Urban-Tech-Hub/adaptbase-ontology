@@ -21,6 +21,27 @@
           "endsPattern": "Ctrl-C to stop"
         }
       }
+    },
+    {
+      "label": "Start editor server",
+      "type": "shell",
+      "command": "./start-editor.sh",
+      "isBackground": true,
+      "presentation": {
+        "reveal": "silent",
+        "panel": "dedicated",
+        "label": "Ontology Editor"
+      },
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".",
+          "endsPattern": "Ctrl-C to stop"
+        }
+      }
     }
   ]
 }
