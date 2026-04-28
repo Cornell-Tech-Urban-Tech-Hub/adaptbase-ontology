@@ -99,10 +99,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   function wireHeaderButtons() {
-    document.getElementById('btn-vocabularies').addEventListener('click', () => {
-      showVocabulariesModal();
-    });
-
     document.getElementById('vocab-modal-close').addEventListener('click', () => {
       document.getElementById('vocab-modal').classList.remove('show');
     });
@@ -112,6 +108,74 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('vocab-modal').classList.remove('show');
       }
     });
+
+    document.getElementById('stat-vocabs-link').addEventListener('click', () => {
+      showVocabulariesModal();
+    });
+
+    document.getElementById('stat-types-link').addEventListener('click', () => {
+      showEntityTypesModal();
+    });
+
+    document.getElementById('stat-rels-link').addEventListener('click', () => {
+      showRelationshipsModal();
+    });
+  }
+
+  function showEntityTypesModal() {
+    if (!currentGraphData) return;
+    const modal = document.getElementById('vocab-modal');
+    const title = document.getElementById('vocab-modal-title');
+    const content = document.getElementById('vocab-modal-content');
+
+    title.textContent = 'Entity Types';
+    const nodes = [...currentGraphData.nodes].sort((a, b) => a.label.localeCompare(b.label));
+    content.innerHTML = `<ul class="stat-list">${nodes.map(n => {
+      const color = window.Graph.getClusterColor(n.cluster);
+      return `<li class="stat-list-item" data-node-id="${escapeHtml(n.id)}">
+        <span class="swatch" style="background:${color}"></span>
+        <span class="stat-list-name">${escapeHtml(n.label)}</span>
+        <span class="stat-list-meta">${escapeHtml(n.cluster)}</span>
+      </li>`;
+    }).join('')}</ul>`;
+
+    content.querySelectorAll('.stat-list-item[data-node-id]').forEach(li => {
+      li.addEventListener('click', () => {
+        modal.classList.remove('show');
+        window.Graph.focusNode(li.dataset.nodeId);
+      });
+    });
+
+    modal.classList.add('show');
+  }
+
+  function showRelationshipsModal() {
+    const ontology = window.OntologyAdapter.getCurrentOntology();
+    if (!ontology) return;
+    const modal = document.getElementById('vocab-modal');
+    const title = document.getElementById('vocab-modal-title');
+    const content = document.getElementById('vocab-modal-content');
+
+    title.textContent = 'Relationships';
+    const rels = [...ontology.relationships].filter(r => r.source && r.target).sort((a, b) => a.label.localeCompare(b.label));
+    content.innerHTML = `<ul class="stat-list">${rels.map(r => {
+      return `<li class="stat-list-item" data-rel-id="${escapeHtml(r.id)}">
+        <span class="swatch" style="background:var(--carnelian)"></span>
+        <em class="stat-list-name" style="font-family:var(--font-accent); font-style:italic; color:var(--carnelian);">${escapeHtml(r.label)}</em>
+        <span class="stat-list-meta">${escapeHtml(r.source)} → ${escapeHtml(r.target)}</span>
+      </li>`;
+    }).join('')}</ul>`;
+
+    content.querySelectorAll('.stat-list-item[data-rel-id]').forEach(li => {
+      li.addEventListener('click', () => {
+        modal.classList.remove('show');
+        const links = window.Graph.getLinks();
+        const edge = links.find(l => l.id === li.dataset.relId);
+        if (edge) window.Graph.selectEdge(edge);
+      });
+    });
+
+    modal.classList.add('show');
   }
 
   const vocabFileMap = {

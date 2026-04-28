@@ -1,0 +1,87 @@
+Topology summary
+- Types: 18
+- Relationships: 36
+- Vocabularies: 6
+- Diameter (undirected type graph): 4
+- Dead-end/leaf types (degree<=1): ['Mechanism', 'Indicator', 'EnablingCondition', 'Barrier', 'FinancingSource', 'Supplier', 'PlanningData']
+
+Degree table
+- Solution: out=14 in=4 undirected=15
+- Hazard: out=1 in=1 undirected=2
+- UrbanSystem: out=1 in=2 undirected=2
+- Mechanism: out=0 in=1 undirected=1
+- Stakeholder: out=2 in=1 undirected=2
+- Location: out=1 in=2 undirected=2
+- ResilienceGoal: out=0 in=3 undirected=3
+- Outcome: out=2 in=1 undirected=3
+- Indicator: out=0 in=1 undirected=1
+- Plan: out=3 in=1 undirected=4
+- EnablingCondition: out=0 in=1 undirected=1
+- Barrier: out=0 in=1 undirected=1
+- FinancingSource: out=1 in=0 undirected=1
+- FinancialInstrument: out=0 in=2 undirected=2
+- Supplier: out=1 in=0 undirected=1
+- Vulnerability: out=0 in=3 undirected=3
+- ExposureUnit: out=1 in=2 undirected=3
+- PlanningData: out=0 in=1 undirected=1
+
+Inverse-pair coverage
+- Directional pairs without reverse counterpart: 22
+  - Solution -> Hazard: MITIGATES
+  - Solution -> UrbanSystem: OPERATES_ON, IMPROVES
+  - Solution -> Mechanism: WORKS_BY
+  - Solution -> Location: IMPLEMENTED_IN
+  - Solution -> ResilienceGoal: CONTRIBUTES_TO
+  - Plan -> ResilienceGoal: SETS_GOAL
+  - Outcome -> ResilienceGoal: DEMONSTRATES_PROGRESS_ON
+  - Solution -> Outcome: PRODUCES
+  - Outcome -> Indicator: MEASURED_BY
+  - Solution -> EnablingCondition: REQUIRES
+  - Solution -> Barrier: FACES
+  - Plan -> Solution: PRESCRIBES
+  - Solution -> FinancialInstrument: USES_INSTRUMENT
+  - Supplier -> Solution: SUPPLIES
+  - Solution -> Vulnerability: REDUCES
+  - Stakeholder -> Plan: ISSUES
+  - Hazard -> ExposureUnit: EXPOSES
+  - ExposureUnit -> Vulnerability: EXPERIENCES
+  - FinancingSource -> FinancialInstrument: CHANNELS_THROUGH
+  - UrbanSystem -> Vulnerability: SHAPES
+  - Solution -> ExposureUnit: REDUCES_EXPOSURE
+  - Plan -> PlanningData: INFORMS
+
+Validation results
+- Errors: 18
+  - Relationship AUTHORED_BY source type missing: None
+  - Relationship AUTHORED_BY target type missing: None
+  - Relationship ALIGNS_WITH source type missing: None
+  - Relationship ALIGNS_WITH target type missing: None
+  - Relationship SUPERSEDES source type missing: None
+  - Relationship SUPERSEDES target type missing: None
+  - Relationship SUPERSEDED_BY source type missing: None
+  - Relationship SUPERSEDED_BY target type missing: None
+  - Relationship COVERS_LOCATION source type missing: None
+  - Relationship COVERS_LOCATION target type missing: None
+  - Relationship CONTAINS_ACTION source type missing: None
+  - Relationship CONTAINS_ACTION target type missing: None
+  - Relationship ADDRESSES_HAZARD source type missing: None
+  - Relationship ADDRESSES_HAZARD target type missing: None
+  - Relationship TARGETS_URBAN_SYSTEM source type missing: None
+  - Relationship TARGETS_URBAN_SYSTEM target type missing: None
+  - Relationship REFERENCES source type missing: None
+  - Relationship REFERENCES target type missing: None
+- Warnings: 14
+  - Missing explicit required flag: Solution.ipcc_action_types
+  - Relationship IMPLEMENTED_BY has nonstandard cardinality: many
+  - Relationship missing cardinality: SHAPES
+  - Relationship missing cardinality: REDUCES_EXPOSURE
+  - Relationship AUTHORED_BY has nonstandard cardinality: many
+  - Relationship ALIGNS_WITH has nonstandard cardinality: many
+  - Relationship SUPERSEDES has nonstandard cardinality: many
+  - Relationship SUPERSEDED_BY has nonstandard cardinality: many
+  - Relationship COVERS_LOCATION has nonstandard cardinality: many
+  - Relationship CONTAINS_ACTION has nonstandard cardinality: many
+  - Relationship ADDRESSES_HAZARD has nonstandard cardinality: many
+  - Relationship TARGETS_URBAN_SYSTEM has nonstandard cardinality: many
+  - Relationship REFERENCES has nonstandard cardinality: many
+  - Relationship missing cardinality: INFORMS
