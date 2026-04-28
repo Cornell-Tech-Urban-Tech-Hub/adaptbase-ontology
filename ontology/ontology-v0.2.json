@@ -1,0 +1,2000 @@
+{
+  "version": "v0.2",
+  "updated": "2026-04-28T22:00:00.000Z",
+  "update_note": "Public release: cleaned all text for external audience, added extraction hints, structural normalization",
+  "domain": "urban-climate-adaptation",
+  "domain_label": "Urban Climate Adaptation and Resilience Solutions",
+  "types": [
+    {
+      "id": "Solution",
+      "label": "Solution",
+      "definition": "A climate adaptation intervention, technology, or approach deployed or proposed to reduce vulnerability or increase adaptive capacity. Classified by identity (what it IS), not function (expressed via typed relationships).",
+      "properties": [
+        {
+          "id": "name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "id": "alternative_names",
+          "type": "array<string>",
+          "required": false
+        },
+        {
+          "id": "description",
+          "type": "string",
+          "required": false
+        },
+        {
+          "id": "category_id",
+          "type": "string",
+          "required": true,
+          "vocabulary": "solution-categories"
+        },
+        {
+          "id": "subcategory_id",
+          "type": "string",
+          "required": false,
+          "vocabulary": "solution-categories"
+        },
+        {
+          "id": "ipcc_action_types",
+          "type": "array<enum>",
+          "values": [
+            "structural_physical",
+            "social",
+            "institutional",
+            "ecosystem_based"
+          ]
+        },
+        {
+          "id": "year_of_deployment",
+          "type": "integer",
+          "required": false
+        },
+        {
+          "id": "maturity_level",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "emerging",
+            "demonstrated",
+            "established"
+          ],
+          "note": "Solution-class maturity. emerging = pilot/prototype/first-of-kind; demonstrated = working reference deployments, not yet mainstream; established = standard practice with broad replication. Distinct from Outcome.evidence_level (strength of evidence for a specific outcome)."
+        },
+        {
+          "id": "equity_focus",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "none",
+            "co_benefit",
+            "primary_target"
+          ],
+          "note": "Whether equity is a primary design target (primary_target), a documented secondary benefit (co_benefit), or not addressed (none). Distinct from whether equity outcomes are documented in Outcome nodes — this classifies the solution's design intent."
+        },
+        {
+          "id": "target_populations",
+          "type": "array<string>",
+          "required": false,
+          "vocabulary": "vulnerable-populations",
+          "note": "Specific vulnerable population groups the solution is designed to serve or has demonstrated benefits for. Bound to vulnerable-populations vocabulary."
+        }
+      ],
+      "vocabulary_bindings": [
+        {
+          "vocab": "solution-categories",
+          "field": "category_id, subcategory_id"
+        },
+        {
+          "vocab": "enums",
+          "field": "ipcc_action_types, equity_focus"
+        },
+        {
+          "vocab": "vulnerable-populations",
+          "field": "target_populations"
+        }
+      ],
+      "notes": "Solutions are reusable classes of intervention, independent of any specific deployment location or plan. Function is expressed through relationships: MITIGATES (hazards), OPERATES_ON (urban systems), WORKS_BY (mechanisms), PRODUCES (outcomes).",
+      "extract_hint": "Look for named interventions, technologies, programs, or projects described as addressing climate risks — e.g., 'green roof program', 'flood early warning system', 'mangrove restoration initiative'."
+    },
+    {
+      "id": "Hazard",
+      "label": "Hazard",
+      "definition": "A climate-related threat or stressor that adaptation solutions address. Bound to the C40/Arup Climate Hazard Typology (13 categories, 31 specific hazards), with optional extension for non-climate acute shocks from the Resilient Cities Network taxonomy.",
+      "properties": [
+        {
+          "id": "hazard_id",
+          "type": "string",
+          "required": true,
+          "vocabulary": "hazards"
+        },
+        {
+          "id": "hazard_name",
+          "type": "string",
+          "required": true,
+          "vocabulary": "hazards"
+        },
+        {
+          "id": "hazard_category",
+          "type": "enum",
+          "required": true,
+          "vocabulary": "hazards",
+          "values": [
+            "chemical_change",
+            "extreme_temperature_cold",
+            "extreme_temperature_hot",
+            "flood",
+            "fog",
+            "insects_and_microorganisms",
+            "lightning",
+            "mass_movement",
+            "precipitation",
+            "water_scarcity",
+            "wave_action",
+            "wild_fire",
+            "wind"
+          ]
+        },
+        {
+          "id": "hazard_source",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "c40_arup",
+            "rcc"
+          ],
+          "note": "Vocabulary source. c40_arup = climate hazards (default); rcc = non-climate acute shocks from Resilient Cities Network taxonomy."
+        },
+        {
+          "id": "frequency",
+          "type": "string",
+          "required": false,
+          "note": "How often the hazard occurs (e.g., 'annual', 'decadal', '1-in-50-year'). Free-text to accommodate diverse source formats."
+        },
+        {
+          "id": "severity",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "low",
+            "moderate",
+            "high",
+            "severe"
+          ],
+          "note": "General severity level of this hazard as documented or assessed."
+        },
+        {
+          "id": "trend",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "increasing",
+            "stable",
+            "decreasing",
+            "uncertain"
+          ],
+          "note": "Projected or observed trend in hazard frequency/severity under climate change."
+        },
+        {
+          "id": "return_period",
+          "type": "string",
+          "required": false,
+          "note": "Statistical return interval for extreme events (e.g., '1-in-100-year', '1-in-20-year'). Free-text."
+        }
+      ],
+      "vocabulary_bindings": [
+        {
+          "vocab": "hazards",
+          "field": "hazard_id, hazard_name, hazard_category",
+          "note": "C40/Arup Climate Hazard Typology - primary vocabulary for climate hazards"
+        },
+        {
+          "vocab": "hazards",
+          "field": "hazard_id, hazard_name",
+          "note": "RCC non-climate acute shocks (hazard_source=rcc). See alignment/framework-crosswalk.md §4.1."
+        }
+      ],
+      "notes": "Primary vocabulary: C40/Arup climate hazard typology. Secondary vocabulary: RCC non-climate acute shocks (cyber attack, earthquake, disease outbreak) via hazard_source=rcc. Slow-onset stresses (sea level rise, environmental degradation) also map here.",
+      "extract_hint": "Look for named climate threats, weather extremes, or environmental stressors — e.g., 'urban heat island', 'coastal flooding', 'drought', 'sea level rise'. Also look for non-climate shocks when flagged (earthquakes, pandemics)."
+    },
+    {
+      "id": "UrbanSystem",
+      "label": "Urban System",
+      "definition": "A physical, ecological, or socio-economic urban subsystem that a solution operates on, protects, or improves. Hierarchical taxonomy: sector, subsector, system. Optional infrastructure properties describe physical state when applicable.",
+      "properties": [
+        {
+          "id": "system_id",
+          "type": "string",
+          "required": true,
+          "vocabulary": "urban-systems"
+        },
+        {
+          "id": "sector",
+          "type": "enum",
+          "required": true,
+          "vocabulary": "urban-systems",
+          "values": [
+            "built_environment",
+            "mobility_transport",
+            "hydrological_water",
+            "energy_telecom",
+            "urban_ecology",
+            "socioeconomic_health",
+            "governance_finance"
+          ]
+        },
+        {
+          "id": "subsector",
+          "type": "string",
+          "required": false,
+          "vocabulary": "urban-systems"
+        },
+        {
+          "id": "infra_color",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "green",
+            "grey",
+            "blue",
+            "hybrid"
+          ],
+          "note": "Infrastructure classification: green (nature-based), grey (built), blue (water), hybrid."
+        },
+        {
+          "id": "condition",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "excellent",
+            "good",
+            "fair",
+            "poor",
+            "critical"
+          ],
+          "note": "Current condition or state of infrastructure."
+        },
+        {
+          "id": "capacity",
+          "type": "string",
+          "required": false,
+          "note": "Capacity metric (e.g., '10,000 m³/day', '500 people')."
+        },
+        {
+          "id": "service_coverage",
+          "type": "string",
+          "required": false,
+          "note": "Population or area served (e.g., '85% of district')."
+        }
+      ],
+      "vocabulary_bindings": [
+        {
+          "vocab": "urban-systems",
+          "field": "system_id, sector, subsector",
+          "note": "Custom hierarchical taxonomy for climate adaptation (7 sectors, 50+ systems)"
+        },
+        {
+          "vocab": "enums",
+          "field": "infra_color, condition"
+        }
+      ],
+      "notes": "Hierarchical structure enables interdependency queries. Infrastructure properties (color, condition, capacity) are optional — used when physical infrastructure state is documented.",
+      "extract_hint": "Look for references to urban infrastructure, services, or systems — e.g., 'stormwater drainage', 'public transit', 'power grid', 'urban canopy', 'housing stock', 'water treatment'."
+    },
+    {
+      "id": "Mechanism",
+      "label": "Mechanism",
+      "definition": "The functional adaptation process by which a solution achieves its physical or operational effect (e.g., absorb, redirect, harden, monitor, sense and detect, forecast and model). Strictly functional/operational — financial and governance mechanisms are captured by FinancialInstrument and EnablingCondition respectively.",
+      "properties": [
+        {
+          "id": "mechanism_type",
+          "type": "string",
+          "required": true,
+          "note": "Functional adaptation process. Must be a physical/operational mechanism (e.g., 'absorb', 'sense_and_detect'), not a financial instrument or governance enabler."
+        },
+        {
+          "id": "description",
+          "type": "string",
+          "required": false,
+          "note": "Free-text description of how the mechanism works."
+        }
+      ],
+      "vocabulary_bindings": [
+        {
+          "vocab": "enums",
+          "field": "mechanism_type",
+          "note": "Seed vocabulary (guidance only, not constraint). To be formalized via corpus clustering in Weeks 7-8."
+        }
+      ],
+      "notes": "Functional adaptation mechanisms only. Must be a physical or operational process, not a financial instrument or governance enabler.",
+      "extract_hint": "Look for HOW a solution works — verbs and processes like 'absorbs runoff', 'redirects floodwater', 'monitors soil moisture', 'detects heat anomalies', 'hardens infrastructure against wind load'."
+    },
+    {
+      "id": "Stakeholder",
+      "label": "Stakeholder",
+      "definition": "Any individual, group, or organization — such as residents, businesses, government agencies, and NGOs — that can affect or be affected by urban adaptation projects. Covers governance, implementation, and community roles. Commercial suppliers are modeled separately as Supplier.",
+      "properties": [
+        {
+          "id": "name",
+          "type": "string",
+          "required": false
+        },
+        {
+          "id": "stakeholder_type",
+          "type": "enum",
+          "required": true,
+          "values": [
+            "municipal_government",
+            "regional_government",
+            "national_government",
+            "utility",
+            "private_sector",
+            "ngo",
+            "community",
+            "academic",
+            "international_organization"
+          ]
+        },
+        {
+          "id": "role",
+          "type": "string",
+          "required": false
+        },
+        {
+          "id": "target_populations",
+          "type": "array<string>",
+          "required": false,
+          "vocabulary": "vulnerable-populations",
+          "note": "Vulnerable population group(s) this stakeholder primarily represents, serves, or advocates for. Bound to vulnerable-populations vocabulary."
+        }
+      ],
+      "vocabulary_bindings": [
+        {
+          "vocab": "enums",
+          "field": "actor_type"
+        },
+        {
+          "vocab": "vulnerable-populations",
+          "field": "target_populations"
+        }
+      ],
+      "notes": "Represents both implementing actors and their roles. Instances can be generic (e.g., 'municipal_government') or named entities (e.g., 'New York City Department of Environmental Protection').",
+      "extract_hint": "Look for named organizations, agencies, community groups, or actor types involved in planning or implementing adaptation — e.g., 'city planning department', 'local NGO', 'neighborhood association', 'utility company'."
+    },
+    {
+      "id": "Location",
+      "label": "Location",
+      "definition": "A geographic place where a solution is implemented or a plan applies — from a city to a neighborhood, corridor, watershed, or specific site. Supports hierarchical nesting via the WITHIN relationship.",
+      "properties": [
+        {
+          "id": "name",
+          "type": "string",
+          "required": true,
+          "note": "Name of the location (city, district, neighborhood, site, etc.)."
+        },
+        {
+          "id": "location_type",
+          "type": "enum",
+          "required": true,
+          "values": [
+            "city",
+            "district",
+            "neighborhood",
+            "corridor",
+            "watershed",
+            "region",
+            "site"
+          ],
+          "note": "Spatial scale of the location."
+        },
+        {
+          "id": "country",
+          "type": "string",
+          "required": false
+        },
+        {
+          "id": "region",
+          "type": "string",
+          "required": false
+        },
+        {
+          "id": "loc_id",
+          "type": "integer",
+          "required": false,
+          "note": "Foreign key to external cities database. City-level locations only."
+        },
+        {
+          "id": "geometry",
+          "type": "object",
+          "required": false,
+          "note": "GeoJSON geometry object for spatial boundaries. Supports Point, Polygon, MultiPolygon."
+        },
+        {
+          "id": "deployment_context",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "vocabulary_bindings": [],
+      "notes": "City-level locations can link to external city databases via loc_id. Sub-city locations (districts, neighborhoods, corridors, sites) can carry GeoJSON geometry for spatial analysis.",
+      "extract_hint": "Look for named places, jurisdictions, neighborhoods, districts, or sites — e.g., 'Rotterdam', 'Lower Manhattan', 'Mekong Delta', 'downtown waterfront corridor'."
+    },
+    {
+      "id": "ResilienceGoal",
+      "label": "Resilience Goal",
+      "definition": "A high-level resilience objective from the City Resilience Framework 2024 (22 goals across 4 dimensions). Bridges the planning and solutions domains: plans set goals, solutions claim to contribute to goals, actions target goals, and outcomes demonstrate progress on goals.",
+      "properties": [
+        {
+          "id": "goal_id",
+          "type": "string",
+          "required": true,
+          "vocabulary": "crf-goals"
+        },
+        {
+          "id": "dimension",
+          "type": "enum",
+          "required": true,
+          "vocabulary": "crf-goals",
+          "values": [
+            "health_wellbeing",
+            "economy_society",
+            "infrastructure_environment",
+            "leadership_planning"
+          ]
+        }
+      ],
+      "vocabulary_bindings": [
+        {
+          "vocab": "crf-goals",
+          "field": "goal_id, dimension",
+          "note": "City Resilience Framework 2024 v2 (Resilient Cities Network) - 22 goals"
+        }
+      ],
+      "notes": "Upper ontology entity bridging planning (prescriptive) and solutions (evaluative). Four epistemic tiers connect to ResilienceGoal: SETS_GOAL (plan aspiration), TARGETS_GOAL (action intent), CONTRIBUTES_TO (solution claim), DEMONSTRATES_PROGRESS_ON (measured evidence).",
+      "extract_hint": "Look for references to resilience objectives, CRF goals, or high-level targets — e.g., 'improve public health outcomes', 'ensure continuity of critical services', 'support livelihoods and employment', 'promote cohesive communities'."
+    },
+    {
+      "id": "Outcome",
+      "label": "Outcome",
+      "definition": "A measured or observed result of implementing a solution or action, including effectiveness indicators, co-benefits, and failure modes.",
+      "properties": [
+        {
+          "id": "outcome_type",
+          "type": "enum",
+          "required": true,
+          "values": [
+            "effectiveness_indicator",
+            "co_benefit",
+            "failure_mode"
+          ],
+          "note": "Category of outcome: effectiveness_indicator, co_benefit, or failure_mode."
+        },
+        {
+          "id": "description",
+          "type": "string",
+          "required": true,
+          "note": "Free-text description of the outcome."
+        },
+        {
+          "id": "evidence_level",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "anecdotal",
+            "measured",
+            "rigorously_evaluated"
+          ]
+        },
+        {
+          "id": "justice_dimension",
+          "type": "array<enum>",
+          "required": false,
+          "values": [
+            "distributive",
+            "procedural",
+            "recognitional",
+            "epistemic"
+          ],
+          "note": "Justice dimension(s) documented in this outcome. Based on Shi (2024) equity rubric: distributive = who bears costs/benefits; procedural = who participates in decisions; recognitional = whose knowledge/experience is acknowledged; epistemic = how knowledge is produced and whose expertise counts."
+        }
+      ],
+      "vocabulary_bindings": [
+        {
+          "vocab": "enums",
+          "field": "outcome_type, evidence_level, justice_dimension"
+        }
+      ],
+      "notes": "Aggregates effectiveness, co-benefits, and failure modes into a single node type. The outcome_type property differentiates between categories. Effectiveness indicators have additional Indicator children with baseline/target/measured values.",
+      "extract_hint": "Look for reported results, measured impacts, observed benefits, or documented failures — e.g., 'reduced flood events by 40%', 'improved air quality as co-benefit', 'system failed during extreme heat event'."
+    },
+    {
+      "id": "Indicator",
+      "label": "Indicator",
+      "definition": "A specific, measurable metric used to assess solution or action effectiveness (e.g., 'flood events per year reduced from 12 to 3').",
+      "properties": [
+        {
+          "id": "indicator_name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "id": "baseline",
+          "type": "string",
+          "required": false
+        },
+        {
+          "id": "target",
+          "type": "string",
+          "required": false
+        },
+        {
+          "id": "measured_value",
+          "type": "string",
+          "required": false
+        },
+        {
+          "id": "unit",
+          "type": "string",
+          "required": false
+        },
+        {
+          "id": "data_source",
+          "type": "string",
+          "required": false
+        },
+        {
+          "id": "recorded_year",
+          "type": "integer",
+          "required": false,
+          "note": "Year the indicator measurement was recorded."
+        }
+      ],
+      "vocabulary_bindings": [],
+      "notes": "Child of Outcome node. Captures quantified measurements. Baseline/target/measured_value structure supports before-after analysis and target tracking.",
+      "extract_hint": "Look for quantified metrics with numbers, units, baselines, or targets — e.g., 'reduced from 12 to 3 events per year', 'target: 50% reduction in heat-related mortality', 'baseline PM2.5 of 35 µg/m³'."
+    },
+    {
+      "id": "Plan",
+      "label": "Plan",
+      "definition": "A climate adaptation or resilience planning document that binds together goals, prescribed solutions, actions, and policy frameworks. Plans are forward-looking: they set targets, specify interventions, and establish implementation timelines.",
+      "properties": [
+        {
+          "id": "plan_type",
+          "type": "string",
+          "required": true,
+          "note": "Type of plan (e.g., 'Climate Action Plan', 'Resilience Strategy', 'Adaptation Plan')."
+        },
+        {
+          "id": "plan_title",
+          "label": "Plan Title",
+          "type": "string",
+          "required": true,
+          "definition": "Official title of the resilience plan document as published by the authoring organization.",
+          "notes": ""
+        },
+        {
+          "id": "adoption_year",
+          "label": "Adoption Year",
+          "type": "integer",
+          "required": true,
+          "definition": "Year in which the plan was officially adopted, approved, or published by the responsible authority.",
+          "notes": ""
+        },
+        {
+          "id": "planning_horizon_years",
+          "label": "Planning Horizon (Years)",
+          "type": "integer",
+          "required": false,
+          "definition": "Number of years from adoption that the plan is designed to cover, representing the intended implementation timeframe.",
+          "notes": ""
+        },
+        {
+          "id": "total_actions",
+          "label": "Total Actions",
+          "type": "integer",
+          "required": false,
+          "definition": "Total count of discrete actions, initiatives, or interventions specified within the plan document.",
+          "notes": ""
+        },
+        {
+          "id": "total_budget_mentioned",
+          "label": "Total Budget Mentioned",
+          "type": "string",
+          "required": false,
+          "definition": "Budget or financial resources mentioned in the plan, captured as free text due to varying formats and contexts.",
+          "notes": ""
+        },
+        {
+          "id": "monitoring_approach",
+          "label": "Monitoring Approach",
+          "type": "string",
+          "required": false,
+          "definition": "Description of how the plan's implementation and outcomes will be monitored, evaluated, or reported over time.",
+          "notes": ""
+        },
+        {
+          "id": "plan_uri",
+          "label": "Plan URI",
+          "type": "string",
+          "required": false,
+          "definition": "Unique resource identifier or persistent URL where the plan document can be accessed.",
+          "notes": ""
+        },
+        {
+          "id": "document_url",
+          "label": "Document URL",
+          "type": "string",
+          "required": false,
+          "definition": "Direct URL to the published PDF or web version of the plan document.",
+          "notes": ""
+        },
+        {
+          "id": "plan_status",
+          "label": "Plan Status",
+          "type": "string",
+          "required": false,
+          "definition": "Current status of the plan in its lifecycle (draft, adopted, active, completed, superseded).",
+          "notes": ""
+        }
+      ],
+      "vocabulary_bindings": [],
+      "notes": "Plans connect to goals (SETS_GOAL), solutions (PRESCRIBES), actions (CONTAINS_ACTION), stakeholders (ENGAGES, ISSUES), locations (COVERS_LOCATION), hazards (ADDRESSES_HAZARD), urban systems (TARGETS_URBAN_SYSTEM), and data sources (INFORMS).",
+      "extract_hint": "Look for named planning documents — e.g., 'Climate Action Plan', 'Resilience Strategy', 'Adaptation Plan', 'Heat Action Plan'. Also look for plan metadata: adoption year, planning horizon, budget, monitoring approach."
+    },
+    {
+      "id": "Action",
+      "label": "Action",
+      "definition": "A discrete initiative or intervention specified within a Plan — a specific, time-bound commitment with assigned timeline, budget, and implementation status. Distinct from Solution (which is the reusable intervention type): an Action is what a Plan commits to doing in a specific place and timeframe; a Solution is what that Action IS as a reusable class.",
+      "properties": [
+        {
+          "id": "action_name",
+          "type": "string",
+          "required": true,
+          "note": "Name or short description of the action as stated in the plan."
+        },
+        {
+          "id": "status",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "committed",
+            "in_planning",
+            "under_implementation",
+            "completed",
+            "cancelled"
+          ],
+          "note": "Implementation status. Aligned with C40, ICLEI, and GCoM action status vocabularies."
+        },
+        {
+          "id": "start_year",
+          "type": "integer",
+          "required": false
+        },
+        {
+          "id": "end_year",
+          "type": "integer",
+          "required": false
+        },
+        {
+          "id": "cost_usd",
+          "type": "number",
+          "required": false,
+          "note": "Budget allocated or estimated for this action in USD."
+        },
+        {
+          "id": "spatial_scale",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "city",
+            "district",
+            "neighborhood",
+            "site"
+          ],
+          "note": "Geographic scope of the action."
+        },
+        {
+          "id": "is_priority",
+          "type": "boolean",
+          "required": false,
+          "note": "Whether the plan flags this as a priority action."
+        }
+      ],
+      "vocabulary_bindings": [],
+      "notes": "CDP city action records are Action instances. Actions may optionally be linked to a Solution class via IMPLEMENTS, but many actions cannot be resolved to a known solution class. Actions connect directly to goals (TARGETS_GOAL) and outcomes (RESULTS_IN) independent of solution resolution.",
+      "extract_hint": "Look for specific planned or committed initiatives with timelines or budgets — e.g., 'install 500 rain gardens by 2028', 'establish cooling centers in 12 districts', 'retrofit 1,000 buildings for flood resilience'. Distinct from general solution descriptions."
+    },
+    {
+      "id": "EnablingCondition",
+      "label": "Enabling Condition",
+      "definition": "A prerequisite condition (regulatory, financial, technical, social, institutional) required for successful solution deployment.",
+      "properties": [
+        {
+          "id": "condition",
+          "type": "string",
+          "required": true
+        },
+        {
+          "id": "condition_type",
+          "type": "enum",
+          "required": true,
+          "values": [
+            "regulatory",
+            "financial",
+            "technical",
+            "social",
+            "institutional"
+          ]
+        }
+      ],
+      "vocabulary_bindings": [
+        {
+          "vocab": "enums",
+          "field": "condition_type"
+        }
+      ],
+      "notes": "Captures prerequisites for replicability. E.g., 'Requires enabling legislation for rainwater harvesting' or 'Needs upfront capital subsidy for low-income deployment'.",
+      "extract_hint": "Look for stated prerequisites, requirements, or conditions for success — e.g., 'requires building code reform', 'depends on community buy-in', 'needs dedicated funding stream'."
+    },
+    {
+      "id": "Barrier",
+      "label": "Barrier",
+      "definition": "An obstacle or constraint (regulatory, financial, technical, social, institutional, political) that impedes or prevents solution adoption. Can represent both systemic barriers and stakeholder-specific constraints.",
+      "properties": [
+        {
+          "id": "barrier",
+          "type": "string",
+          "required": true
+        },
+        {
+          "id": "barrier_type",
+          "type": "enum",
+          "required": true,
+          "values": [
+            "regulatory",
+            "financial",
+            "technical",
+            "social",
+            "institutional",
+            "political"
+          ]
+        },
+        {
+          "id": "severity_score",
+          "type": "number",
+          "required": false,
+          "note": "Quantified severity (scale TBD)."
+        },
+        {
+          "id": "affected_stakeholder",
+          "type": "string",
+          "required": false,
+          "note": "Which actor or stakeholder group faces this barrier."
+        },
+        {
+          "id": "is_structural",
+          "type": "boolean",
+          "required": false,
+          "note": "Whether barrier is structural (systemic/deep-rooted) vs. contingent (addressable)."
+        }
+      ],
+      "vocabulary_bindings": [
+        {
+          "vocab": "enums",
+          "field": "barrier_type"
+        }
+      ],
+      "notes": "Complements EnablingCondition. Barriers include a 'political' type not present in enabling conditions, reflecting the reality of implementation obstacles. Properties capture severity, affected stakeholders, and whether the barrier is structural (systemic) vs. contingent (addressable).",
+      "extract_hint": "Look for stated obstacles, challenges, or blockers — e.g., 'lack of political will', 'insufficient funding', 'regulatory uncertainty', 'community opposition', 'technical capacity gaps'."
+    },
+    {
+      "id": "FinancingSource",
+      "label": "Financing Source",
+      "definition": "A specific entity or funding source that provides capital for a solution (e.g., Green Climate Fund, World Bank, municipal budget).",
+      "properties": [
+        {
+          "id": "source_name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "id": "source_type",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "municipal",
+            "national",
+            "international",
+            "private_sector",
+            "philanthropic",
+            "multilateral"
+          ]
+        },
+        {
+          "id": "amount_usd",
+          "type": "number",
+          "required": false
+        }
+      ],
+      "vocabulary_bindings": [],
+      "notes": "Can be named entities (Green Climate Fund) or generic types (municipal budget). Links to FinancialInstrument via CHANNELS_THROUGH to capture 'who funds via what mechanism'.",
+      "extract_hint": "Look for named funders, funding programs, or budget sources — e.g., 'Green Climate Fund', 'World Bank', 'municipal capital budget', 'FEMA hazard mitigation grants'."
+    },
+    {
+      "id": "FinancialInstrument",
+      "label": "Financial Instrument",
+      "definition": "A specific financial mechanism used to fund a solution (e.g., green bond, sustainability-linked loan, resilience bond, blended finance, grant, direct allocation).",
+      "properties": [
+        {
+          "id": "instrument_type",
+          "type": "enum",
+          "required": true,
+          "values": [
+            "green_bond",
+            "sustainability_linked_loan",
+            "climate_bond",
+            "resilience_bond",
+            "blended_finance",
+            "revolving_fund",
+            "grant",
+            "direct_allocation"
+          ],
+          "note": "Type of financial instrument. Includes grant and direct_allocation for simple funding flows."
+        },
+        {
+          "id": "amount_usd",
+          "type": "number",
+          "required": false
+        },
+        {
+          "id": "description",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "vocabulary_bindings": [
+        {
+          "vocab": "enums",
+          "field": "instrument_type",
+          "note": "CDP project finance vocabulary"
+        }
+      ],
+      "notes": "Distinguishes how money is structured from who provides it (FinancingSource). Includes grant and direct_allocation for cases where documents specify a funding source without a structured instrument.",
+      "extract_hint": "Look for named financing mechanisms — e.g., 'green bond', 'revolving loan fund', 'blended finance facility', 'climate resilience bond', 'grant from federal government'."
+    },
+    {
+      "id": "Supplier",
+      "label": "Supplier",
+      "definition": "A vendor, manufacturer, or service provider that supplies technology, components, or services for a solution.",
+      "properties": [
+        {
+          "id": "supplier_name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "id": "role",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "manufacturer",
+            "system_integrator",
+            "service_provider",
+            "consultant"
+          ]
+        }
+      ],
+      "vocabulary_bindings": [],
+      "notes": "Captures the supply chain layer. Enables vendor analysis and technology provider tracking.",
+      "extract_hint": "Look for named companies, vendors, or service providers — e.g., 'Siemens provided the sensor network', 'installed by XYZ Engineering', 'technology from ABC Corp'."
+    },
+    {
+      "id": "Vulnerability",
+      "label": "Vulnerability",
+      "definition": "A climate vulnerability characterized by exposure, sensitivity, and adaptive capacity, following the IPCC AR6 framework where vulnerability = f(exposure, sensitivity, adaptive capacity). Represents what adaptation solutions aim to reduce.",
+      "properties": [
+        {
+          "id": "vuln_type",
+          "type": "string",
+          "required": false,
+          "note": "Type or category of vulnerability (e.g., 'flood vulnerability', 'heat vulnerability'). Free-text pending a dedicated vulnerability-type taxonomy."
+        },
+        {
+          "id": "exposure_score",
+          "type": "number",
+          "required": false,
+          "note": "Quantified exposure level (scale TBD)."
+        },
+        {
+          "id": "sensitivity_score",
+          "type": "number",
+          "required": false,
+          "note": "Quantified sensitivity level (scale TBD)."
+        },
+        {
+          "id": "adaptive_capacity_score",
+          "type": "number",
+          "required": false,
+          "note": "Quantified adaptive capacity level (scale TBD)."
+        },
+        {
+          "id": "affected_group",
+          "type": "array<string>",
+          "required": false,
+          "vocabulary": "vulnerable-populations",
+          "note": "Population group(s) experiencing this vulnerability. Bound to vulnerable-populations vocabulary."
+        }
+      ],
+      "vocabulary_bindings": [
+        {
+          "vocab": "vulnerable-populations",
+          "field": "affected_group"
+        }
+      ],
+      "notes": "Aligns with IPCC AR6 and UNDRR vulnerability frameworks. Planners measure success by vulnerability reduction. Vulnerability is both hazard-linked (via ExposureUnit) and socially constructed (via UrbanSystem SHAPES Vulnerability).",
+      "extract_hint": "Look for descriptions of who or what is vulnerable and why — e.g., 'low-income neighborhoods vulnerable to heat', 'aging infrastructure sensitive to flooding', 'limited adaptive capacity in informal settlements'."
+    },
+    {
+      "id": "ExposureUnit",
+      "label": "Exposure Unit",
+      "definition": "A population or asset exposed to climate hazards. Aligns with the UNDRR Sendai Framework for disaster risk reduction. Links hazards to vulnerabilities through exposure pathways (Risk = Hazard x Exposure x Vulnerability).",
+      "properties": [
+        {
+          "id": "population_count",
+          "type": "number",
+          "required": false,
+          "note": "Number of people in exposure unit."
+        },
+        {
+          "id": "asset_value",
+          "type": "number",
+          "required": false,
+          "note": "Economic value of exposed assets (USD)."
+        },
+        {
+          "id": "vulnerable_ratio",
+          "type": "number",
+          "required": false,
+          "note": "Proportion of population that is vulnerable (0-1 scale)."
+        },
+        {
+          "id": "social_capital_index",
+          "type": "number",
+          "required": false,
+          "note": "Measure of social cohesion/networks (scale TBD)."
+        },
+        {
+          "id": "affected_group",
+          "type": "array<string>",
+          "required": false,
+          "vocabulary": "vulnerable-populations",
+          "note": "Specific vulnerable population group(s) present in this exposure unit. Bound to vulnerable-populations vocabulary."
+        }
+      ],
+      "vocabulary_bindings": [
+        {
+          "vocab": "vulnerable-populations",
+          "field": "affected_group"
+        }
+      ],
+      "notes": "Connects hazards to vulnerabilities: Hazard EXPOSES ExposureUnit, ExposureUnit EXPERIENCES Vulnerability. Enables quantified exposure analysis in planning contexts.",
+      "extract_hint": "Look for descriptions of exposed populations or assets — e.g., '50,000 residents in the floodplain', '$2B in coastal property', 'critical hospital infrastructure in the storm surge zone'."
+    },
+    {
+      "id": "PlanningData",
+      "label": "Planning Data",
+      "definition": "A data source referenced or cited as informing a climate adaptation or resilience plan — e.g., downscaled climate projections, hazard maps, vulnerability assessments, demographic datasets.",
+      "properties": [],
+      "vocabulary_bindings": [],
+      "notes": "Catalogs data inputs to planning processes. Can link to Solutions that generate data (e.g., a climate hazard model solution GENERATES PlanningData that INFORMS a Plan).",
+      "extract_hint": "Look for referenced datasets, models, assessments, or studies that informed plan development — e.g., 'based on NOAA climate projections', 'informed by city vulnerability assessment', 'uses downscaled RCP 8.5 scenario data'."
+    }
+  ],
+  "relationships": [
+    {
+      "id": "MITIGATES",
+      "label": "mitigates",
+      "source": "Solution",
+      "target": "Hazard",
+      "definition": "The solution is designed to reduce the impact, likelihood, or severity of this climate hazard.",
+      "properties": [
+        {
+          "id": "is_primary",
+          "type": "boolean",
+          "required": false,
+          "note": "True if this is the primary hazard addressed."
+        },
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": true
+        }
+      ],
+      "cardinality": "many-to-many",
+      "notes": "Core relationship in the solutions domain. is_primary distinguishes the primary hazard from co-addressed hazards.",
+      "extract_hint": "Look for claims that a solution addresses, reduces, or protects against a specific hazard — e.g., 'designed to mitigate urban flooding', 'reduces heat island effect'."
+    },
+    {
+      "id": "OPERATES_ON",
+      "label": "operates on",
+      "source": "Solution",
+      "target": "UrbanSystem",
+      "definition": "The solution is deployed within, protects, or modifies this urban system or infrastructure component.",
+      "properties": [
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": true
+        }
+      ],
+      "cardinality": "many-to-many",
+      "notes": "Enables interdependency queries (e.g., 'Which solutions protect substations?'). Multiple systems can be affected by one solution.",
+      "extract_hint": "Look for which infrastructure or urban systems a solution acts upon — e.g., 'installed on the stormwater network', 'protects the electrical grid', 'integrated into public transit'."
+    },
+    {
+      "id": "DEPENDS_ON",
+      "label": "depends on",
+      "source": "Solution",
+      "target": "Solution",
+      "definition": "The source solution requires the target solution to be in place or concurrently deployed to function. Captures technology-stack dependencies, data-platform prerequisites, physical/operational coupling, and programmatic prerequisites.",
+      "properties": [
+        {
+          "id": "dependency_type",
+          "type": "enum",
+          "values": [
+            "requires_data_from",
+            "runs_on_platform",
+            "integrates_with",
+            "physically_coupled_to",
+            "programmatically_requires"
+          ],
+          "required": false,
+          "note": "Nature of the dependency: requires_data_from, runs_on_platform, integrates_with, physically_coupled_to, or programmatically_requires."
+        },
+        {
+          "id": "is_critical",
+          "type": "boolean",
+          "required": false,
+          "note": "True if the target solution must be operational for the source to function (hard dependency). False if the target enhances but is not strictly required (soft dependency)."
+        },
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": true
+        }
+      ],
+      "cardinality": "many-to-many",
+      "notes": "Self-referential (Solution → Solution). Covers both tech dependencies (sensor network requires data platform) and non-tech prerequisites (cooling centers require heat early warning). Extraction must guard against conflating with SUPPLIES (vendor relationship).",
+      "extract_hint": "Look for dependency language between solutions — e.g., 'requires real-time data from the sensor network', 'runs on the city's IoT platform', 'activated when early warning system triggers'."
+    },
+    {
+      "id": "WORKS_BY",
+      "label": "works by",
+      "source": "Solution",
+      "target": "Mechanism",
+      "definition": "The solution employs this functional mechanism to achieve its adaptation effect.",
+      "properties": [
+        {
+          "id": "is_primary",
+          "type": "boolean",
+          "required": false,
+          "note": "True for the primary mechanism, false for secondary mechanisms."
+        },
+        {
+          "id": "technical_components",
+          "type": "array<object>",
+          "required": false,
+          "note": "Specific technical components implementing this mechanism."
+        },
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": true
+        }
+      ],
+      "cardinality": "many-to-many",
+      "notes": "Reads naturally: 'bioswale works by absorption.' Technical components stored as relationship property.",
+      "extract_hint": "Look for descriptions of HOW a solution functions — e.g., 'works by absorbing excess rainfall', 'operates through real-time monitoring and automated alerts'."
+    },
+    {
+      "id": "IMPLEMENTED_IN",
+      "label": "implemented in",
+      "source": "Solution",
+      "target": "Location",
+      "definition": "The solution is deployed, operational, or proposed in this location.",
+      "properties": [
+        {
+          "id": "deployment_context",
+          "type": "string",
+          "required": false,
+          "note": "Local adaptation notes (e.g., 'adapted to Nordic climate')."
+        },
+        {
+          "id": "zone_type",
+          "type": "string",
+          "required": false,
+          "note": "Spatial zone within city (e.g., 'downtown', 'waterfront', 'residential district')."
+        },
+        {
+          "id": "area_km2",
+          "type": "number",
+          "required": false,
+          "note": "Area covered by deployment in square kilometers."
+        },
+        {
+          "id": "population_density",
+          "type": "number",
+          "required": false,
+          "note": "Population density in the deployment zone (people per km²)."
+        },
+        {
+          "id": "land_use_type",
+          "type": "string",
+          "required": false,
+          "note": "Land use classification (e.g., 'commercial', 'residential', 'industrial', 'mixed-use')."
+        },
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": true
+        }
+      ],
+      "cardinality": "many-to-many",
+      "notes": "Many-to-many enables replication tracking. Same solution can appear in multiple locations. Spatial properties enable sub-city targeting.",
+      "extract_hint": "Look for where a solution is deployed — e.g., 'implemented in Rotterdam', 'piloted in three districts of Mumbai', 'deployed along the waterfront corridor'."
+    },
+    {
+      "id": "IMPLEMENTED_BY",
+      "label": "implemented by",
+      "source": "Solution",
+      "target": "Stakeholder",
+      "definition": "The solution is implemented or operated by this stakeholder.",
+      "properties": [
+        {
+          "id": "role",
+          "type": "string",
+          "required": false,
+          "note": "Specific role (e.g., 'lead implementer', 'technical partner')."
+        },
+        {
+          "id": "is_lead",
+          "type": "boolean",
+          "required": false,
+          "note": "True if this is the primary implementing actor."
+        },
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": true
+        }
+      ],
+      "cardinality": "many",
+      "notes": "Captures primary responsibility for solution implementation. is_lead distinguishes the lead implementer from supporting actors (see also PARTICIPATES_IN for non-lead involvement).",
+      "extract_hint": "Look for who is responsible for implementing a solution — e.g., 'led by the city water authority', 'implemented by the parks department', 'operated by a public-private partnership'."
+    },
+    {
+      "id": "CONTRIBUTES_TO",
+      "label": "contributes to",
+      "source": "Solution",
+      "target": "ResilienceGoal",
+      "definition": "The solution advances or supports achieving this resilience goal. Claim-based: what the solution class is known or believed to achieve. Distinct from DEMONSTRATES_PROGRESS_ON (measured evidence) and TARGETS_GOAL (action-level planning intent).",
+      "properties": [
+        {
+          "id": "contribution_description",
+          "type": "string",
+          "required": false
+        },
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": true
+        }
+      ],
+      "cardinality": "many-to-many",
+      "notes": "Links solutions to the CRF 2024 framework at the solution-class level.",
+      "extract_hint": "Look for claims linking a solution type to resilience outcomes — e.g., 'green roofs contribute to improved public health', 'early warning systems support continuity of critical services'."
+    },
+    {
+      "id": "SETS_GOAL",
+      "label": "sets goal",
+      "source": "Plan",
+      "target": "ResilienceGoal",
+      "definition": "The plan establishes this resilience goal as a target or objective. Forward-looking: what the plan aims to achieve.",
+      "properties": [
+        {
+          "id": "target_year",
+          "type": "integer",
+          "required": false,
+          "note": "Target year for achieving this goal."
+        },
+        {
+          "id": "priority_level",
+          "type": "enum",
+          "values": [
+            "high",
+            "medium",
+            "low"
+          ],
+          "required": false,
+          "note": "Priority assigned to this goal in the plan."
+        },
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": true
+        }
+      ],
+      "cardinality": "many-to-many",
+      "notes": "Enables gap analysis: which goals are set in plans vs. which goals have deployed solutions vs. which goals have measured outcomes.",
+      "extract_hint": "Look for goal-setting language in plans — e.g., 'the plan targets improved access to affordable housing', 'aims to achieve zero climate-related deaths by 2035'."
+    },
+    {
+      "id": "DEMONSTRATES_PROGRESS_ON",
+      "label": "demonstrates progress on",
+      "source": "Outcome",
+      "target": "ResilienceGoal",
+      "definition": "The measured outcome provides evidence of progress toward achieving this resilience goal. Evidence-based: the strongest epistemic tier linking outcomes to goals.",
+      "properties": [
+        {
+          "id": "evidence_level",
+          "type": "enum",
+          "values": [
+            "anecdotal",
+            "measured",
+            "rigorously_evaluated"
+          ],
+          "required": false,
+          "note": "Strength of evidence: anecdotal, measured, or rigorously_evaluated."
+        },
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": true
+        }
+      ],
+      "cardinality": "many-to-many",
+      "notes": "Provides the measured evidence chain: Solution/Action PRODUCES/RESULTS_IN Outcome, Outcome DEMONSTRATES_PROGRESS_ON ResilienceGoal. Complements CONTRIBUTES_TO (claim-based) and TARGETS_GOAL (planning intent).",
+      "extract_hint": "Look for measured results tied to resilience objectives — e.g., 'flood reduction outcomes demonstrate progress on infrastructure resilience goals', 'mortality data evidences improved public health outcomes'."
+    },
+    {
+      "id": "PRODUCES",
+      "label": "produces",
+      "source": "Solution",
+      "target": "Outcome",
+      "definition": "The solution generates this outcome (effectiveness indicator, co-benefit, or failure mode). Captures what a solution class is known to produce at the general level.",
+      "properties": [
+        {
+          "id": "outcome_type",
+          "type": "enum",
+          "values": [
+            "effectiveness_indicator",
+            "co_benefit",
+            "failure_mode"
+          ],
+          "required": true,
+          "note": "Category: effectiveness_indicator, co_benefit, or failure_mode."
+        },
+        {
+          "id": "evidence_level",
+          "type": "enum",
+          "values": [
+            "anecdotal",
+            "measured",
+            "rigorously_evaluated"
+          ],
+          "required": false
+        },
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": true
+        }
+      ],
+      "cardinality": "one-to-many",
+      "notes": "Aggregates effectiveness, co-benefits, and failure modes. The outcome_type property differentiates. For instance-level outcomes from specific deployments, see RESULTS_IN (Action → Outcome).",
+      "extract_hint": "Look for documented results of a solution type — e.g., 'green roofs typically reduce stormwater runoff by 30-50%', 'permeable pavement has been shown to reduce urban heat island effect as a co-benefit', 'system failures reported during extreme events'."
+    },
+    {
+      "id": "RESULTS_IN",
+      "label": "results in",
+      "source": "Action",
+      "target": "Outcome",
+      "definition": "The action resulted in this outcome (effectiveness indicator, co-benefit, or failure mode). Instance-level counterpart to PRODUCES: captures what a specific deployment actually produced.",
+      "properties": [
+        {
+          "id": "outcome_type",
+          "type": "enum",
+          "values": [
+            "effectiveness_indicator",
+            "co_benefit",
+            "failure_mode"
+          ],
+          "required": true,
+          "note": "Category: effectiveness_indicator, co_benefit, or failure_mode. Consistent with PRODUCES."
+        },
+        {
+          "id": "evidence_level",
+          "type": "enum",
+          "values": [
+            "anecdotal",
+            "measured",
+            "rigorously_evaluated"
+          ],
+          "required": false
+        },
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": false
+        }
+      ],
+      "cardinality": "one-to-many",
+      "notes": "Distinct from PRODUCES (Solution → Outcome) which captures class-level knowledge. RESULTS_IN captures what a specific action in a specific place actually produced — including failure modes. Enables the evidence chain: Action RESULTS_IN Outcome, Outcome DEMONSTRATES_PROGRESS_ON ResilienceGoal.",
+      "extract_hint": "Look for specific, located results — e.g., 'the rain garden program in District 5 reduced local flooding by 40%', 'the cooling center initiative failed to reach elderly residents during the 2025 heat wave'."
+    },
+    {
+      "id": "MEASURED_BY",
+      "label": "measured by",
+      "source": "Outcome",
+      "target": "Indicator",
+      "definition": "The outcome is quantified using this specific metric or indicator.",
+      "properties": [
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": true
+        }
+      ],
+      "cardinality": "one-to-many",
+      "notes": "Indicators are children of effectiveness outcomes. Not all outcomes have indicators (co-benefits and failure modes typically don't).",
+      "extract_hint": "Look for specific metrics attached to outcomes — e.g., 'measured by flood events per year', 'tracked via PM2.5 concentration', 'quantified as dollars of avoided damage'."
+    },
+    {
+      "id": "REQUIRES",
+      "label": "requires",
+      "source": "Solution",
+      "target": "EnablingCondition",
+      "definition": "The solution requires this condition to be met for successful deployment or operation.",
+      "properties": [
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": true
+        }
+      ],
+      "cardinality": "many-to-many",
+      "notes": "Captures prerequisites for replicability. Important for understanding what must be in place before a solution can work in a new context.",
+      "extract_hint": "Look for stated requirements — e.g., 'requires enabling legislation', 'depends on dedicated maintenance budget', 'needs technical capacity in the water utility'."
+    },
+    {
+      "id": "FACES",
+      "label": "faces",
+      "source": "Solution",
+      "target": "Barrier",
+      "definition": "The solution encounters or is impeded by this obstacle or barrier to adoption.",
+      "properties": [
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": true
+        }
+      ],
+      "cardinality": "many-to-many",
+      "notes": "Complements REQUIRES. Documents obstacles that prevent or slow adoption. Barriers can affect solutions systemically or through specific stakeholders.",
+      "extract_hint": "Look for described obstacles — e.g., 'faces regulatory barriers in the building code', 'hindered by lack of community trust', 'constrained by limited municipal budget'."
+    },
+    {
+      "id": "PRESCRIBES",
+      "label": "prescribes",
+      "source": "Plan",
+      "target": "Solution",
+      "definition": "The plan specifies or calls for implementation of this solution.",
+      "properties": [
+        {
+          "id": "implementation_stage",
+          "type": "enum",
+          "values": [
+            "committed",
+            "in_planning",
+            "under_implementation",
+            "completed"
+          ],
+          "required": false,
+          "note": "Stage of implementation: committed, in_planning, under_implementation, or completed. Aligned with C40, ICLEI, and GCoM vocabularies."
+        },
+        {
+          "id": "implementation_timeline",
+          "type": "string",
+          "required": false,
+          "note": "Expected timeline from plan (e.g., 'by 2030', 'Phase 1')."
+        },
+        {
+          "id": "is_priority",
+          "type": "boolean",
+          "required": false,
+          "note": "Whether solution is flagged as a priority action."
+        },
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": true
+        }
+      ],
+      "cardinality": "many-to-many",
+      "notes": "Plans prescribe specific solutions (what to implement). Distinct from CONTAINS_ACTION (specific time-bound commitments) — PRESCRIBES links to solution classes.",
+      "extract_hint": "Look for plan language mandating or recommending specific solution types — e.g., 'the plan calls for expanded green infrastructure', 'recommends deployment of flood early warning systems'."
+    },
+    {
+      "id": "USES_INSTRUMENT",
+      "label": "uses financial instrument",
+      "source": "Solution",
+      "target": "FinancialInstrument",
+      "definition": "The solution is financed using this financial mechanism or instrument.",
+      "properties": [
+        {
+          "id": "amount_usd",
+          "type": "number",
+          "required": false
+        },
+        {
+          "id": "description",
+          "type": "string",
+          "required": false
+        },
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": true
+        }
+      ],
+      "cardinality": "many-to-many",
+      "notes": "Captures the 'how' of financing. The full financing path: FinancingSource CHANNELS_THROUGH FinancialInstrument, Solution USES_INSTRUMENT FinancialInstrument.",
+      "extract_hint": "Look for financing mechanisms tied to solutions — e.g., 'funded through a green bond', 'financed via revolving loan fund', 'supported by blended finance facility'."
+    },
+    {
+      "id": "SUPPLIES",
+      "label": "supplies",
+      "source": "Supplier",
+      "target": "Solution",
+      "definition": "The supplier provides technology, components, or services for this solution.",
+      "properties": [
+        {
+          "id": "component_refs",
+          "type": "array<string>",
+          "required": false,
+          "note": "References to specific technical components this supplier provides."
+        },
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": true
+        }
+      ],
+      "cardinality": "many-to-many",
+      "notes": "Captures the supply chain layer. component_refs link suppliers to specific technical components.",
+      "extract_hint": "Look for vendor/supplier relationships — e.g., 'sensors provided by Siemens', 'engineering services from AECOM', 'software platform supplied by IBM'."
+    },
+    {
+      "id": "REDUCES",
+      "label": "reduces",
+      "source": "Solution",
+      "target": "Vulnerability",
+      "definition": "The solution decreases or mitigates this vulnerability by improving adaptive capacity, reducing exposure, or decreasing sensitivity. Aligns with the IPCC AR6 vulnerability framework.",
+      "properties": [
+        {
+          "id": "mechanism_of_reduction",
+          "type": "enum",
+          "values": [
+            "reduces_exposure",
+            "reduces_sensitivity",
+            "increases_adaptive_capacity",
+            "multi_pathway"
+          ],
+          "required": false,
+          "note": "How the solution achieves vulnerability reduction per IPCC AR6: reduces_exposure, reduces_sensitivity, increases_adaptive_capacity, or multi_pathway."
+        },
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": true
+        }
+      ],
+      "cardinality": "many-to-many",
+      "notes": "Key planning outcome — planners measure success by vulnerability reduction. The mechanism_of_reduction property maps to IPCC AR6 vulnerability components.",
+      "extract_hint": "Look for claims about vulnerability reduction — e.g., 'reduces flood vulnerability of low-lying neighborhoods', 'improves adaptive capacity of informal settlements', 'decreases sensitivity of aging water infrastructure'."
+    },
+    {
+      "id": "IMPROVES",
+      "label": "improves",
+      "source": "Solution",
+      "target": "UrbanSystem",
+      "definition": "The solution enhances, upgrades, or increases the capacity/condition of this urban system or its infrastructure. Distinct from OPERATES_ON (what solution acts upon) — IMPROVES captures what gets enhanced.",
+      "properties": [
+        {
+          "id": "improvement_type",
+          "type": "enum",
+          "values": [
+            "capacity_increase",
+            "condition_upgrade",
+            "service_expansion",
+            "resilience_enhancement"
+          ],
+          "required": false,
+          "note": "Type of improvement: capacity_increase, condition_upgrade, service_expansion, or resilience_enhancement."
+        },
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": true
+        }
+      ],
+      "cardinality": "many-to-many",
+      "notes": "Captures improvement outcomes at the system level.",
+      "extract_hint": "Look for improvement claims — e.g., 'improves drainage capacity', 'upgrades the condition of the water network', 'expands service coverage of the transit system'."
+    },
+    {
+      "id": "PARTICIPATES_IN",
+      "label": "participates in",
+      "source": "Stakeholder",
+      "target": "Solution",
+      "definition": "This stakeholder is involved in or contributes to the solution without being the primary implementer. Complements IMPLEMENTED_BY (primary responsibility).",
+      "properties": [
+        {
+          "id": "participation_role",
+          "type": "string",
+          "required": false,
+          "note": "Specific role (e.g., 'technical advisor', 'community representative', 'funder')."
+        },
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": true
+        }
+      ],
+      "cardinality": "many-to-many",
+      "notes": "Captures non-lead participation. Enables mapping of the full stakeholder ecosystem around a solution.",
+      "extract_hint": "Look for supporting actor roles — e.g., 'community groups participated in design', 'university provided technical advisory', 'NGO facilitated community engagement'."
+    },
+    {
+      "id": "ISSUES",
+      "label": "issues",
+      "source": "Stakeholder",
+      "target": "Plan",
+      "definition": "The stakeholder creates, publishes, or officially issues a Plan. Typically a municipal government or regional authority.",
+      "properties": [
+        {
+          "id": "adoption_status",
+          "type": "enum",
+          "values": [
+            "draft",
+            "adopted",
+            "revised"
+          ],
+          "required": false,
+          "note": "Status of plan when issued: draft, adopted, or revised."
+        },
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": true
+        }
+      ],
+      "cardinality": "many-to-one",
+      "notes": "Captures plan authorship and institutional ownership. Can have multiple issuers for regional or multi-jurisdictional plans.",
+      "extract_hint": "Look for plan authorship — e.g., 'published by the City of Rotterdam', 'issued by the Metropolitan Planning Commission', 'jointly developed by three municipalities'."
+    },
+    {
+      "id": "EXPOSES",
+      "label": "exposes",
+      "source": "Hazard",
+      "target": "ExposureUnit",
+      "definition": "The climate hazard exposes this population or asset to risk. Creates the exposure pathway in the UNDRR/Sendai risk framework (Risk = Hazard x Exposure x Vulnerability).",
+      "properties": [
+        {
+          "id": "impact_severity",
+          "type": "enum",
+          "values": [
+            "low",
+            "moderate",
+            "high",
+            "severe"
+          ],
+          "required": false,
+          "note": "Severity of exposure impact: low, moderate, high, or severe."
+        },
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": true
+        }
+      ],
+      "cardinality": "many-to-many",
+      "notes": "Captures the exposure component of the UNDRR risk equation.",
+      "extract_hint": "Look for exposure claims — e.g., 'coastal flooding exposes 50,000 residents', 'extreme heat threatens outdoor workers', 'sea level rise puts $2B in property at risk'."
+    },
+    {
+      "id": "EXPERIENCES",
+      "label": "experiences",
+      "source": "ExposureUnit",
+      "target": "Vulnerability",
+      "definition": "The exposure unit experiences or manifests this vulnerability. Completes the UNDRR risk chain: hazards expose units, units experience vulnerability.",
+      "properties": [
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": true
+        }
+      ],
+      "cardinality": "many-to-many",
+      "notes": "Completes the risk pathway: Hazard EXPOSES ExposureUnit, ExposureUnit EXPERIENCES Vulnerability, Solution REDUCES Vulnerability.",
+      "extract_hint": "Look for vulnerability descriptions tied to specific populations or assets — e.g., 'low-income residents experience heightened heat vulnerability', 'aging infrastructure shows sensitivity to flood damage'."
+    },
+    {
+      "id": "CHANNELS_THROUGH",
+      "label": "channels through",
+      "source": "FinancingSource",
+      "target": "FinancialInstrument",
+      "definition": "The financing source channels capital through this financial instrument. Captures the 'who funds via what mechanism' linkage (e.g., 'World Bank channels funding through a green bond').",
+      "properties": [
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": true
+        }
+      ],
+      "cardinality": "many-to-many",
+      "notes": "Links FinancingSource (who provides money) to FinancialInstrument (how money is structured). Multiple sources can channel through one instrument (e.g., blended finance).",
+      "extract_hint": "Look for source-to-instrument linkages — e.g., 'World Bank funding via green bond', 'federal grant channeled through revolving loan fund', 'multilateral climate fund via blended finance'."
+    },
+    {
+      "id": "WITHIN",
+      "label": "within",
+      "source": "Location",
+      "target": "Location",
+      "definition": "This location is geographically contained within the target location. Enables hierarchical nesting: site WITHIN neighborhood WITHIN district WITHIN city.",
+      "properties": [
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": true
+        }
+      ],
+      "cardinality": "many-to-one",
+      "notes": "Self-referential (Location → Location) but strictly hierarchical — no cycles allowed.",
+      "extract_hint": "Look for spatial containment — e.g., 'the waterfront district within Rotterdam', 'pilot sites within the downtown neighborhood'."
+    },
+    {
+      "id": "SHAPES",
+      "source": "UrbanSystem",
+      "target": "Vulnerability",
+      "label": "shapes",
+      "definition": "Urban system conditions (housing quality, infrastructure deficits, service gaps) produce or amplify vulnerability independent of hazard exposure. Reflects the IPCC AR6 position that vulnerability is socially constructed through systemic conditions.",
+      "properties": [],
+      "notes": "Captures socially constructed vulnerability. Complements ExposureUnit EXPERIENCES Vulnerability (hazard-linked vulnerability).",
+      "extract_hint": "Look for claims that infrastructure or service deficits create vulnerability — e.g., 'aging water systems leave low-income neighborhoods more vulnerable', 'lack of green space amplifies heat vulnerability'.",
+      "cardinality": "many-to-many"
+    },
+    {
+      "id": "REDUCES_EXPOSURE",
+      "source": "Solution",
+      "target": "ExposureUnit",
+      "label": "reduces exposure of",
+      "definition": "The solution reduces the exposure of a population, asset, or system to climate hazards (e.g., a sea wall protects a coastal neighborhood, relocation removes assets from the floodplain).",
+      "properties": [],
+      "notes": "One of three IPCC AR6 risk-reduction pathways: reduce hazard (MITIGATES), reduce exposure (REDUCES_EXPOSURE), reduce vulnerability (REDUCES).",
+      "extract_hint": "Look for claims about physical protection, relocation, or shielding from hazard impact — e.g., 'sea wall protects 10,000 residents', 'managed retreat removes assets from floodplain', 'levee system shields industrial zone'.",
+      "cardinality": "many-to-many"
+    },
+    {
+      "id": "CONTAINS_ACTION",
+      "label": "contains action",
+      "source": "Plan",
+      "target": "Action",
+      "cardinality": "one-to-many",
+      "definition": "The plan specifies this action as a discrete initiative or intervention to be undertaken.",
+      "properties": [
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": false
+        }
+      ],
+      "notes": "One-to-many: a plan contains multiple actions. Actions may optionally link to solution classes via IMPLEMENTS.",
+      "extract_hint": "Look for specific initiatives listed in a plan — e.g., 'Action 3.2: Install permeable pavement in all new developments', 'Priority action: Establish 15 new cooling centers by 2027'."
+    },
+    {
+      "id": "IMPLEMENTS",
+      "label": "implements",
+      "source": "Action",
+      "target": "Solution",
+      "definition": "The action deploys or instantiates this solution class. Links a specific plan commitment to the reusable solution type it represents. Optional: not all actions can be matched to a known solution class.",
+      "properties": [
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": false
+        }
+      ],
+      "cardinality": "many-to-one",
+      "notes": "Many-to-one: many actions can implement the same solution class (e.g., multiple cities' heat action plans all implement 'Heat Early Warning System'). Extraction should not fail when an action cannot be resolved to a known solution class.",
+      "extract_hint": "Look for action descriptions that map to known solution types — e.g., an action 'deploy flood sensors across 5 watersheds' implements the solution class 'Flood Early Warning System'."
+    },
+    {
+      "id": "TARGETS_GOAL",
+      "label": "targets goal",
+      "source": "Action",
+      "target": "ResilienceGoal",
+      "definition": "The action is intended to advance this resilience goal, as stated in the plan or disclosure. Planning-intent: what the plan says the action is for.",
+      "properties": [
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": false
+        }
+      ],
+      "cardinality": "many-to-many",
+      "notes": "Primary path for goal alignment in plan documents and CDP disclosures, where goals are typically tagged at the action level rather than resolved to a solution class. Sits in the epistemic hierarchy between SETS_GOAL (plan aspiration) and CONTRIBUTES_TO (solution claim).",
+      "extract_hint": "Look for goal tags on actions — e.g., 'this action supports Goal 4: Promote cohesive communities', 'contributes to the infrastructure resilience dimension', 'targets improved public health outcomes'."
+    },
+    {
+      "id": "INFORMS",
+      "label": "informs",
+      "source": "PlanningData",
+      "target": "Plan",
+      "definition": "This data source informed the development of the plan. Captures the evidence base underlying planning decisions — e.g., downscaled climate projections, hazard maps, vulnerability assessments.",
+      "properties": [],
+      "notes": "Links PlanningData to Plan. Complements GENERATES (Solution → PlanningData) to form the chain: Solution GENERATES PlanningData, PlanningData INFORMS Plan.",
+      "extract_hint": "Look for data references in plan methodology sections — e.g., 'informed by NOAA downscaled climate projections', 'based on the 2024 citywide vulnerability assessment', 'uses flood hazard mapping from FEMA'.",
+      "cardinality": "many-to-many"
+    },
+    {
+      "id": "COVERS_LOCATION",
+      "label": "covers location",
+      "source": "Plan",
+      "target": "Location",
+      "definition": "The plan applies to or covers this geographic area or jurisdiction.",
+      "properties": [
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": false
+        }
+      ],
+      "cardinality": "many-to-many",
+      "notes": "Direct plan-to-location link. A plan covers a jurisdiction even if no specific solutions or actions have been matched to locations within it.",
+      "extract_hint": "Look for geographic scope in plan titles and introductions — e.g., 'City of Rotterdam Climate Adaptation Strategy', 'covers the Greater Miami metropolitan area', 'applies to all five boroughs'."
+    },
+    {
+      "id": "ADDRESSES_HAZARD",
+      "label": "addresses hazard",
+      "source": "Plan",
+      "target": "Hazard",
+      "definition": "The plan identifies and addresses this climate hazard in its risk assessment or adaptation strategy.",
+      "properties": [
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": false
+        }
+      ],
+      "cardinality": "many-to-many",
+      "notes": "Direct plan-to-hazard link. Captures which hazards a plan targets, independent of which specific solutions address them.",
+      "extract_hint": "Look for hazards identified in plan risk assessments — e.g., 'addresses coastal flooding and sea level rise', 'targets urban heat island effect', 'responds to increasing wildfire risk'."
+    },
+    {
+      "id": "SUPERSEDES",
+      "label": "supersedes",
+      "source": "Plan",
+      "target": "Plan",
+      "definition": "This plan replaces or updates the target plan. Captures plan lineage and policy evolution over time.",
+      "properties": [
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": false
+        }
+      ],
+      "cardinality": "one-to-one",
+      "notes": "Self-referential (Plan → Plan). Tracks how plans evolve — useful for understanding policy continuity and change.",
+      "extract_hint": "Look for succession language — e.g., 'this strategy supersedes the 2015 Climate Action Plan', 'replaces and updates the previous resilience framework', 'builds upon and replaces the 2018 adaptation plan'."
+    },
+    {
+      "id": "TARGETS_URBAN_SYSTEM",
+      "label": "targets urban system",
+      "source": "Plan",
+      "target": "UrbanSystem",
+      "definition": "The plan focuses on or explicitly targets this urban system or sector in its adaptation strategy.",
+      "properties": [
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": false
+        }
+      ],
+      "cardinality": "many-to-many",
+      "notes": "Direct plan-to-system link. Captures sectoral scope of plans (e.g., a water infrastructure plan, a transport resilience plan).",
+      "extract_hint": "Look for sectoral focus in plan scope — e.g., 'focuses on water infrastructure resilience', 'targets the public transit network', 'addresses energy system vulnerabilities'."
+    },
+    {
+      "id": "ENGAGES",
+      "label": "engages",
+      "source": "Plan",
+      "target": "Stakeholder",
+      "definition": "The plan involves this stakeholder in its development, governance, or implementation oversight.",
+      "properties": [
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": false
+        }
+      ],
+      "cardinality": "many-to-many",
+      "notes": "Plan-level stakeholder involvement. Distinct from IMPLEMENTED_BY (solution-level implementation) and PARTICIPATES_IN (solution-level participation).",
+      "extract_hint": "Look for stakeholder involvement in planning processes — e.g., 'developed in consultation with community groups', 'overseen by the Climate Resilience Commission', 'engages the private sector in implementation governance'."
+    },
+    {
+      "id": "GENERATES",
+      "label": "generates",
+      "source": "Solution",
+      "target": "PlanningData",
+      "definition": "The solution produces data outputs that can inform planning processes — e.g., a climate hazard model generates downscaled projections, a sensor network generates real-time monitoring data.",
+      "properties": [
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": false
+        }
+      ],
+      "cardinality": "many-to-many",
+      "notes": "Completes the chain: Solution GENERATES PlanningData, PlanningData INFORMS Plan. Captures the feedback loop where solutions produce knowledge that shapes future planning.",
+      "extract_hint": "Look for data-producing solutions — e.g., 'the climate model generates localized flood projections', 'the sensor network produces real-time air quality data used in planning', 'vulnerability assessment tool outputs risk maps'."
+    }
+  ],
+  "vocabularies": [
+    {
+      "id": "hazards",
+      "label": "C40/Arup Climate Hazard Typology",
+      "type": "external",
+      "url": "https://www.c40knowledgehub.org/s/article/Climate-Hazard-Taxonomy",
+      "description": "13 hazard categories and 31 specific climate hazards. Authoritative taxonomy for climate risk assessment.",
+      "bound_to": [
+        "Hazard.hazard_id",
+        "Hazard.hazard_name",
+        "Hazard.hazard_category"
+      ],
+      "terms_count": 31
+    },
+    {
+      "id": "urban-systems",
+      "label": "Urban Systems Taxonomy",
+      "type": "internal",
+      "url": "",
+      "description": "Hierarchical classification of urban infrastructure and services (sector → subsector → system)",
+      "bound_to": [
+        "UrbanSystem.system_id",
+        "UrbanSystem.sector",
+        "UrbanSystem.subsector"
+      ],
+      "terms_count": null
+    },
+    {
+      "id": "solution-categories",
+      "label": "Solution Categories",
+      "type": "internal",
+      "url": "",
+      "description": "Internal taxonomy for classifying adaptation solutions by type",
+      "bound_to": [
+        "Solution.category_id",
+        "Solution.subcategory_id"
+      ],
+      "terms_count": null
+    },
+    {
+      "id": "crf-goals",
+      "label": "City Resilience Framework 2024",
+      "type": "external",
+      "url": "https://www.arup.com/perspectives/publications/research/section/city-resilience-framework",
+      "description": "Arup's City Resilience Framework - 4 dimensions, 12 goals for urban resilience",
+      "bound_to": [
+        "ResilienceGoal.goal_id",
+        "ResilienceGoal.dimension"
+      ],
+      "terms_count": 12
+    },
+    {
+      "id": "enums",
+      "label": "Schema Enumerations",
+      "type": "internal",
+      "url": "",
+      "description": "Standard enumerated values defined in extraction schema (e.g., actor_type, outcome_type, evidence_level, mechanism_type)",
+      "bound_to": [
+        "various"
+      ],
+      "terms_count": null,
+      "note": "Collection of small controlled vocabularies for specific fields"
+    },
+    {
+      "id": "vulnerable-populations",
+      "label": "Vulnerable Populations",
+      "type": "internal",
+      "url": "",
+      "description": "18 socially-defined population groups facing disproportionate climate vulnerability. Drawn from IPCC AR6, UNDRR Sendai Framework, and EDF equity framework.",
+      "bound_to": [
+        "Solution.target_populations",
+        "Vulnerability.affected_group",
+        "ExposureUnit.affected_group",
+        "Stakeholder.target_populations"
+      ],
+      "terms_count": 18,
+      "note": "18 socially-defined population groups facing disproportionate climate vulnerability, drawn from IPCC AR6, UNDRR Sendai Framework, and EDF equity framework."
+    }
+  ],
+  "metadata": {
+    "types_count": 19,
+    "relationships_count": 37,
+    "vocabularies_count": 6,
+    "change_history": [
+      "v0.1 (2026-04-23): Initial consolidation into versioned JSON",
+      "v0.1.1 (2026-04-23): Infrastructure merged into UrbanSystem, relationship normalization, financing simplification",
+      "v0.1.2 (2026-04-23): IPCC AR6 risk-reduction pathways completed (SHAPES, REDUCES_EXPOSURE)",
+      "v0.1.5 (2026-04-28): Action type added, IMPLEMENTS relationship, Hazard enrichment, Stakeholder.target_populations",
+      "v0.1.6 (2026-04-28): TARGETS_GOAL and RESULTS_IN added for Action fan-out to goals and outcomes",
+      "v0.2 (2026-04-28): Public release cleanup — all text rewritten, extraction hints added, structural normalization, deprecated relationships removed"
+    ],
+    "design_notes": [
+      {
+        "topic": "IPCC AR6 Risk-Reduction Pathways",
+        "note": "The ontology represents three pathways through which solutions reduce climate risk per IPCC AR6 (Risk = f(Hazard, Exposure, Vulnerability)): (1) Solution MITIGATES Hazard — reduce hazard intensity or frequency; (2) Solution REDUCES_EXPOSURE ExposureUnit — shield, relocate, or protect exposed populations/assets; (3) Solution REDUCES Vulnerability — reduce sensitivity or build adaptive capacity. Mechanism (via WORKS_BY) describes the functional process by which a solution achieves any of these pathways."
+      },
+      {
+        "topic": "Socially Constructed Vulnerability",
+        "note": "UrbanSystem SHAPES Vulnerability reflects the position in IPCC AR6 that vulnerability is socially produced through systemic conditions (housing quality, infrastructure deficits, service gaps) independent of hazard exposure. This complements ExposureUnit EXPERIENCES Vulnerability which captures hazard-linked vulnerability."
+      },
+      {
+        "topic": "Solution vs Action",
+        "note": "Solution is a reusable class of adaptation intervention (what it IS, independent of place or plan). Action is a specific, time-bound plan commitment with budget, timeline, and implementation status. The full chain is Plan CONTAINS_ACTION Action, Action optionally IMPLEMENTS Solution. Actions connect directly to goals (TARGETS_GOAL) and outcomes (RESULTS_IN) independent of solution resolution."
+      },
+      {
+        "topic": "Epistemic Hierarchy for Resilience Goals",
+        "note": "Four relationship types connect to ResilienceGoal, forming an epistemic hierarchy from aspiration to evidence: SETS_GOAL (plan aspiration), TARGETS_GOAL (action intent from plan/disclosure), CONTRIBUTES_TO (solution-class claim), DEMONSTRATES_PROGRESS_ON (measured outcome evidence)."
+      }
+    ]
+  },
+  "version_notes": [
+    {
+      "version": "v0.2",
+      "date": "2026-04-28",
+      "changes": [
+        "All definitions, notes, and property descriptions rewritten for public audience",
+        "Extraction hints added to all types and relationships",
+        "Removed schema_field mappings (63), schema_source fields, and empty evidence_cases arrays",
+        "Removed 4 deprecated relationships (AUTHORED_BY, ALIGNS_WITH, SUPERSEDED_BY, REFERENCES)",
+        "Re-added 4 relationships with proper structure (COVERS_LOCATION, ADDRESSES_HAZARD, SUPERSEDES, TARGETS_URBAN_SYSTEM)",
+        "Added ENGAGES (Plan → Stakeholder) and GENERATES (Solution → PlanningData)",
+        "Reversed INFORMS to PlanningData → Plan",
+        "Fixed IMPLEMENTED_BY to Solution → Stakeholder (removed conflicting fields)",
+        "Normalized all relationships to source/target format"
+      ]
+    },
+    {
+      "version": "v0.1.6",
+      "date": "2026-04-28",
+      "changes": [
+        "Added TARGETS_GOAL (Action → ResilienceGoal): planning-intent goal alignment",
+        "Added RESULTS_IN (Action → Outcome): instance-level outcomes from specific deployments"
+      ]
+    },
+    {
+      "version": "v0.1.5",
+      "date": "2026-04-28",
+      "changes": [
+        "Added Action entity type",
+        "Added IMPLEMENTS relationship (Action → Solution)",
+        "Enriched Hazard with frequency, severity, trend, return_period",
+        "Added Stakeholder.target_populations"
+      ]
+    }
+  ]
+}
