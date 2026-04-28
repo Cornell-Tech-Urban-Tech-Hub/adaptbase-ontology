@@ -79,10 +79,7 @@
       html += `<div class="section-header">${esc(cluster)}</div>`;
       for (const t of types) {
         const active = selectedId === t.id ? ' active' : '';
-        html += `<div class="item${active}" data-id="${esc(t.id)}">
-          ${esc(t.label)}
-          <div class="sub">${(t.properties || []).length} props</div>
-        </div>`;
+        html += `<div class="item${active}" data-id="${esc(t.id)}">${esc(t.label)}</div>`;
       }
     }
     html += `<div style="padding:10px"><button class="btn-sm primary" id="add-type-btn">+ Add Type</button></div>`;
