@@ -15,6 +15,7 @@
     'FinancingSource': 'Finance',
     'FinancialInstrument': 'Finance',
     'Plan': 'Planning',
+    'Action': 'Planning',
     'EnablingCondition': 'Planning',
     'Mechanism': 'Planning',
   };
