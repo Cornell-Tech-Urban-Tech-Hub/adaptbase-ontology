@@ -2,7 +2,7 @@
 # Start ontology viewer locally
 
 PORT=8765
-URL="http://127.0.0.1:${PORT}/viewer.html"
+URL="http://127.0.0.1:${PORT}/"
 
 (sleep 1 && open "${URL}") &
 

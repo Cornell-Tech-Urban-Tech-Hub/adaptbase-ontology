@@ -4,7 +4,7 @@
 
 This repo contains the formal ontology for **AdaptBase** (also referred to as "Resilience Scanner" in legacy files). The ontology models how cities adapt to climate change — entity types, relationships, and controlled vocabularies that structure an evidence base spanning hazards, solutions, financing, implementation, and outcomes.
 
-The ontology is maintained as versioned JSON files in `ontology/` and displayed via a browser-based viewer at `viewer.html`.
+The ontology is maintained as versioned JSON files in `ontology/` and displayed via a browser-based viewer at `index.html`.
 
 **Current version:** v0.1.1 (2026-04-26)
 **Publication target:** May 14, 2026 — GitHub Pages + expert review invitations
@@ -14,7 +14,7 @@ The ontology is maintained as versioned JSON files in `ontology/` and displayed 
 ## Repo layout (what matters for the viewer)
 
 ```
-viewer.html                   # Main public-facing app
+index.html                    # Main public-facing app
 styles/tokens.css             # Design tokens
 styles/app.css                # App styles
 scripts/
@@ -37,7 +37,7 @@ mining/                       # Pipeline for grounding vocab in corpus data
 ```bash
 ./start-viewer.sh             # starts python http.server + opens browser
 # or manually:
-python3 -m http.server 8765   # then open http://127.0.0.1:8765/viewer.html
+python3 -m http.server 8765   # then open http://127.0.0.1:8765/
 ```
 
 No build step — plain HTML/CSS/JS with D3 loaded from unpkg CDN.
@@ -57,7 +57,7 @@ No build step — plain HTML/CSS/JS with D3 loaded from unpkg CDN.
    - Repo and issue labels should be designed: one issue per node/edge, or a discussion-thread model
 
 2. **Edit mode — restrict or remove for public**
-   - `viewer.html` has an "Edit" button that unlocks inline editing of ontology types and relationships
+   - `index.html` has an "Edit" button that unlocks inline editing of ontology types and relationships
    - The save flow currently just downloads a JSON file locally (no server write) — so it's functionally harmless for read-only deployments
    - Decision pending: hide the Edit button entirely in the public build, or keep it with a note that changes won't persist without repo access
    - The simplest approach: add a `?edit=true` query param guard or a `EDIT_ENABLED` flag in `ontology-adapter.js` that defaults to `false`

@@ -91,7 +91,7 @@ Graph queries can traverse to source evidence: `MATCH (s:Solution)-[:MITIGATES]-
 adaptbase-ontology/
 ├── README.md
 ├── CLAUDE.md
-├── viewer.html                            # Public ontology viewer
+├── index.html                             # Public ontology viewer
 ├── start-viewer.sh                        # Local dev server
 ├── styles/                                # Viewer CSS
 ├── scripts/                               # Viewer JS (graph, inspector, comments, app)
@@ -123,7 +123,7 @@ adaptbase-ontology/
 
 ## Ontology Viewer
 
-An interactive web-based viewer/editor for the ontology is available at `viewer.html`.
+An interactive web-based viewer/editor for the ontology is available at `index.html`.
 
 ### How to Use
 
@@ -131,7 +131,7 @@ An interactive web-based viewer/editor for the ontology is available at `viewer.
 1. Open Command Palette (`Cmd+Shift+P` / `Ctrl+Shift+P`)
 2. Run Tasks: Run Task
 3. Select "Ontology Viewer"
-4. Open browser to http://127.0.0.1:8765/viewer.html
+4. Open browser to http://127.0.0.1:8765/
 
 **Option 2: Shell Script**
 ```bash
@@ -142,13 +142,13 @@ Opens browser automatically to the viewer.
 
 **Option 3: VSCode Live Server Extension**
 1. Install "Live Server" extension
-2. Right-click `viewer.html` → "Open with Live Server"
+2. Right-click `index.html` → "Open with Live Server"
 
 **Option 4: Manual**
 ```bash
 cd packages/ontology
 python3 -m http.server 8765
-# Then open http://127.0.0.1:8765/viewer.html
+# Then open http://127.0.0.1:8765/
 ```
 
 ### Viewer Features
