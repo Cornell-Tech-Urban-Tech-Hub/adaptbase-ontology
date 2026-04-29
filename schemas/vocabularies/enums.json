@@ -56,11 +56,22 @@
   },
 
   "evidence_level": {
-    "_usage": "outcomes.evidence_level.value",
+    "_usage": "Outcome.evidence_level, PRODUCES.evidence_level, RESULTS_IN.evidence_level",
     "values": [
       { "id": "anecdotal", "name": "Anecdotal", "description": "Qualitative reports without systematic measurement" },
       { "id": "measured", "name": "Measured", "description": "Quantitative data collected but not rigorously controlled" },
       { "id": "rigorously_evaluated", "name": "Rigorously Evaluated", "description": "Controlled studies, peer-reviewed evaluations" }
+    ]
+  },
+
+  "outcome_type": {
+    "_usage": "Outcome.outcome_type, PRODUCES.outcome_type, RESULTS_IN.outcome_type",
+    "values": [
+      { "id": "effectiveness_indicator", "name": "Effectiveness Indicator", "description": "A measure of how well the solution reduces the target hazard or vulnerability" },
+      { "id": "co_benefit", "name": "Co-benefit", "description": "A secondary positive effect beyond the primary adaptation goal" },
+      { "id": "failure_mode", "name": "Failure Mode", "description": "A documented way the solution failed or underperformed" },
+      { "id": "maladaptation", "name": "Maladaptation", "description": "The solution worked as intended but transferred or increased risk elsewhere" },
+      { "id": "other", "name": "Other", "description": "Outcome type not covered by the above values" }
     ]
   },
 
@@ -113,23 +124,29 @@
     ]
   },
 
-  "mechanism_seed_vocabulary": {
-    "_description": "Seed vocabulary for mechanisms dimension. Free text — these are suggestions, not constraints. Expanded in Sprint 4 to include tech-native mechanism types alongside original eight. Will be further formalized through corpus clustering in Month 2.",
+  "mechanism_vocabulary": {
+    "_description": "Authoritative controlled vocabulary for mechanism dimension (v0.3 — upgraded from guidance-only seed). Extractors must use these values; use 'other' + free-text for outliers.",
     "_usage": "mechanisms.primary_mechanism.value, mechanisms.secondary_mechanisms[].value",
-    "_note": "Sprint 4: added sense_and_detect, forecast_and_model, automate_and_control, inform_and_alert. 'monitor' is retained for general observation but now complemented by these more specific digital-process types. The distinction: 'monitor' = ongoing observation (often human-led or passive); 'sense_and_detect' = active digital sensing with discrete event detection; 'automate_and_control' = closed-loop machine actuation. See decisions-log.md §15.",
+    "_note": "v0.3: added restore, relocate, buffer, insulate, regulate + other. Status changed from guidance-only to authoritative. Sprint 4: added sense_and_detect, forecast_and_model, automate_and_control, inform_and_alert. 'monitor' is retained for general observation but now complemented by more specific digital-process types. See decisions-log.md §15.",
     "values": [
       { "id": "absorb", "name": "Absorb", "description": "Buffer, attenuate, or absorb the impact (e.g., green infrastructure absorbing stormwater)" },
-      { "id": "redirect", "name": "Redirect", "description": "Divert, channel, or redistribute the hazard (e.g., flood channels)" },
-      { "id": "harden", "name": "Harden", "description": "Strengthen, fortify, or protect against impact (e.g., building hardening)" },
+      { "id": "redirect", "name": "Redirect", "description": "Divert, channel, or redistribute the hazard (e.g., flood channels, drainage rerouting)" },
+      { "id": "harden", "name": "Harden", "description": "Strengthen, fortify, or protect against impact (e.g., building hardening, seawalls)" },
       { "id": "monitor", "name": "Monitor", "description": "Observe, measure, or track conditions over time without automated response (e.g., manual sensor readings, periodic surveys, environmental monitoring programs)" },
-      { "id": "govern", "name": "Govern", "description": "Regulate, plan, coordinate, or incentivize (e.g., building codes, zoning)" },
-      { "id": "shift_risk", "name": "Shift Risk", "description": "Transfer, insure, or redistribute risk (e.g., parametric insurance)" },
-      { "id": "adapt_behavior", "name": "Adapt Behavior", "description": "Change practices, educate, or build awareness (e.g., demand response)" },
-      { "id": "restore_regenerate", "name": "Restore/Regenerate", "description": "Rehabilitate, restore, or regenerate natural or built systems (e.g., ecosystem restoration)" },
+      { "id": "govern", "name": "Govern", "description": "Regulate, plan, coordinate, or incentivize (e.g., building codes, zoning, carbon pricing)" },
+      { "id": "shift_risk", "name": "Shift Risk", "description": "Transfer, insure, or redistribute risk (e.g., parametric insurance, risk pooling)" },
+      { "id": "adapt_behavior", "name": "Adapt Behavior", "description": "Change practices, educate, or build awareness (e.g., demand response, heat action behavior campaigns)" },
+      { "id": "restore_regenerate", "name": "Restore/Regenerate", "description": "Rehabilitate, restore, or regenerate natural or built systems (e.g., ecosystem restoration, urban forest regeneration)" },
+      { "id": "restore", "name": "Restore", "description": "Bring a degraded ecosystem or system back to a prior functional state (e.g., wetland restoration, riparian zone recovery). Use when restoration is the primary mechanism, distinct from broader regeneration." },
+      { "id": "relocate", "name": "Relocate", "description": "Move people, assets, or infrastructure away from the hazard zone (e.g., managed retreat, infrastructure relocation out of flood plains)" },
+      { "id": "buffer", "name": "Buffer", "description": "Create protective zones or transition spaces that reduce hazard intensity before it reaches assets (e.g., coastal buffer strips, urban green belts, windbreaks). Distinct from 'absorb' — buffering acts at a distance from the asset." },
+      { "id": "insulate", "name": "Insulate", "description": "Create thermal or physical barriers that prevent hazard transmission into a system (e.g., thermal insulation against heat, acoustic barriers, flood-proof walls on individual structures). Distinct from 'harden' — insulation prevents transmission rather than strengthening resistance." },
+      { "id": "regulate", "name": "Regulate", "description": "Apply rules, standards, permits, or enforcement mechanisms to control hazard-relevant behaviors or land use (e.g., floodplain zoning enforcement, emission limits, water use restrictions). More specific than 'govern' — focused on rule-based compliance mechanisms." },
       { "id": "sense_and_detect", "name": "Sense and Detect", "description": "Actively sense environmental or system conditions and detect discrete events or threshold crossings using digital sensors, IoT devices, or remote sensing (e.g., flood sensors triggering alerts, wildfire detection cameras, structural health monitoring)" },
       { "id": "forecast_and_model", "name": "Forecast and Model", "description": "Use computational models, AI/ML, or simulation to produce forward-looking predictions or scenario analyses (e.g., hydrological models forecasting flood depth, digital twins simulating heat distribution, ML-based drought prediction)" },
       { "id": "automate_and_control", "name": "Automate and Control", "description": "Execute closed-loop machine actuation or automated system control in response to sensed conditions without requiring human decision in the loop (e.g., automated pump activation during storm events, DERMS load balancing, smart irrigation responding to soil moisture sensors)" },
-      { "id": "inform_and_alert", "name": "Inform and Alert", "description": "Disseminate information, warnings, or targeted communications to populations, responders, or decision-makers to trigger human action (e.g., heat-wave SMS alerts, early-warning broadcasts, real-time dashboard for emergency managers). Distinct from automate_and_control — the response is human." }
+      { "id": "inform_and_alert", "name": "Inform and Alert", "description": "Disseminate information, warnings, or targeted communications to populations, responders, or decision-makers to trigger human action (e.g., heat-wave SMS alerts, early-warning broadcasts, real-time dashboard for emergency managers). Distinct from automate_and_control — the response is human." },
+      { "id": "other", "name": "Other", "description": "Mechanism not covered by the above values. Use with mechanism_other_description." }
     ]
   },
 

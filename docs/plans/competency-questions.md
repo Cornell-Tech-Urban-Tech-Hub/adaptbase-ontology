@@ -66,10 +66,10 @@ Each CQ is annotated with the ontology elements it exercises, in the form `Sourc
 - `Plan -[ISSUED_BY]-> Actor` (city), `Plan -[PRESCRIBES]-> Solution -[MITIGATES]-> Hazard` vs. `Solution -[IMPLEMENTED_IN]-> City -[MITIGATES via deployed solutions]-> Hazard`
 
 **CQ-11.** *Which solutions prescribed by plans have a documented funding source and lead implementing actor (i.e., are actually shovel-ready)?*
-- `Plan -[PRESCRIBES]-> Solution`, with both `Solution -[FUNDED_BY]-> FinancingSource` AND `Solution -[IMPLEMENTED_BY]-> Actor` (`is_lead=true`)
+- `Plan -[PRESCRIBES]-> Solution`, with both `Solution -[USES_INSTRUMENT]-> FinancialInstrument` (or `FinancingSource -[CHANNELS_THROUGH]-> FinancialInstrument`) AND `Solution -[IMPLEMENTED_BY]-> Stakeholder` (`is_lead=true`)
 
-**CQ-12.** *Which policies established by plans have actually been implemented by deployed solutions?*
-- `Plan -[ESTABLISHES]-> Policy <-[IMPLEMENTS]- Solution`
+**CQ-12.** *Which regulatory conditions prescribed by plans have actually been satisfied by deployed solutions?*
+- `Plan -[PRESCRIBES]-> Solution -[REQUIRES]-> EnablingCondition` where `condition_type = regulatory` — trace enacted enabling conditions back to plan context. *(Policy node removed in v0.1.1; regulatory context now covered by EnablingCondition/Barrier with condition_type/barrier_type = regulatory.)*
 
 **CQ-13.** *Which actors are most frequently named as plan issuers, and what types of solutions do their plans prescribe?*
 - `Plan -[ISSUED_BY]-> Actor`, `Plan -[PRESCRIBES]-> Solution`, grouped by `Actor.actor_type` and `Solution.category_id`
@@ -95,12 +95,12 @@ Each CQ is annotated with the ontology elements it exercises, in the form `Sourc
 - `Solution.ipcc_action_types` × `Solution -[PRODUCES]-> Outcome.evidence_level`
 
 **CQ-20.** *Show the time-series of measured indicator values for [solution] across reporting periods.*
-- `Solution -[PRODUCES]-> Outcome -[MEASURED_BY]-> Indicator -[RECORDED_AT]-> TimePoint`
+- `Solution -[PRODUCES]-> Outcome -[MEASURED_BY]-> Indicator`, filtered by `Indicator.recorded_year` and `Indicator.measurement_period`. *(TimePoint node removed in v0.1.1; temporal context now on Indicator.recorded_year and Indicator.measurement_period properties.)*
 
 ### D. Investor — Project benchmarking & due diligence
 
 **CQ-21.** *For [solution type] in [region], what financing structures (instrument × source) have been used, and what capital amounts?*
-- `Solution -[FUNDED_BY { amount_usd }]-> FinancingSource`, `Solution -[USES_INSTRUMENT { amount_usd }]-> FinancialInstrument`, filtered by `Solution -[IMPLEMENTED_IN]-> City`
+- `Solution -[USES_INSTRUMENT { amount_usd }]-> FinancialInstrument`, `FinancingSource -[CHANNELS_THROUGH]-> FinancialInstrument`, filtered by `Solution -[IMPLEMENTED_IN]-> Location`
 
 **CQ-22.** *Which financial instruments (green bond, blended finance, resilience bond, etc.) are associated with the highest-evidence outcomes?*
 - `Solution -[USES_INSTRUMENT]-> FinancialInstrument`, `Solution -[PRODUCES { evidence_level }]-> Outcome`
@@ -114,13 +114,13 @@ Each CQ is annotated with the ontology elements it exercises, in the form `Sourc
 **CQ-25.** *Which suppliers serve the most cities for [hazard / urban-system] segment, and what's their reach by region?*
 - `Supplier <-[SUPPLIED_BY]- Solution -[MITIGATES | OPERATES_ON]-> Hazard | UrbanSystem`, `Solution -[IMPLEMENTED_IN]-> City`
 
-**CQ-26.** *Which actors coordinate or co-finance with whom in deployed solutions, and what coordination patterns recur?*
-- `Actor -[COORDINATES_WITH]-> Actor`, `Solution -[FUNDED_BY]-> FinancingSource`, `Solution -[IMPLEMENTED_BY]-> Actor`
+**CQ-26.** *Which stakeholders coordinate with whom on adaptation initiatives, and what coordination patterns recur?*
+- `Stakeholder -[COORDINATES_WITH]-> Stakeholder` (cross-agency coordination, explicitly documented), `Solution -[USES_INSTRUMENT]-> FinancialInstrument`, `Solution -[IMPLEMENTED_BY]-> Stakeholder`
 
 ### E. Cross-cutting / structural
 
-**CQ-27.** *Show infrastructure improvements delivered by solutions targeting [hazard], grouped by infra color (green / grey / blue / hybrid).*
-- `Solution -[MITIGATES]-> Hazard`, `Solution -[IMPROVES]-> Infrastructure` grouped by `Infrastructure.infra_color`
+**CQ-27.** *Show infrastructure improvements delivered by solutions targeting [hazard], grouped by urban system sector.*
+- `Solution -[MITIGATES]-> Hazard`, `Solution -[IMPROVES]-> UrbanSystem` grouped by `UrbanSystem.sector`. *(infra_color removed in v0.3; use UrbanSystem.sector for infrastructure classification.)*
 
 **CQ-28.** *Trace the full evidence chain from a claim about [outcome] back to its source document and character span.*
 - `Outcome.claim_ids -> claims table -> documents -> document_chunks` (provenance traversal)
@@ -193,22 +193,21 @@ Added to exercise `Solution.equity_focus`, `Solution.target_populations`, `Outco
 | `Hazard` / `MITIGATES` | 1, 2, 10, 15, 25, 27 |
 | `UrbanSystem` / `OPERATES_ON` | 2, 25 |
 | `Mechanism` / `USES_MECHANISM` | 2, 29 |
-| `City` / `IMPLEMENTED_IN` | 1, 3, 6, 10, 21, 24, 25 |
-| `Actor` / `IMPLEMENTED_BY` / `ISSUED_BY` / `COORDINATES_WITH` | 11, 13, 26 |
+| `Location` / `IMPLEMENTED_IN` | 1, 3, 6, 10, 21, 24, 25 |
+| `Stakeholder` / `IMPLEMENTED_BY` / `ISSUES` / `COORDINATES_WITH` | 11, 13, 26 |
 | `Outcome` / `PRODUCES` / `DEMONSTRATES_PROGRESS_ON` | 2, 14–20, 22 |
 | `Indicator` / `MEASURED_BY` / `RECORDED_AT` | 14, 20 |
 | `EnablingCondition` / `REQUIRES` | 4, 16, 24 |
 | `Barrier` / `FACES` | 7, 24 |
-| `FinancingSource` / `FUNDED_BY` | 11, 21, 23, 26 |
+| `FinancingSource` / `CHANNELS_THROUGH` | 21, 23 |
 | `FinancialInstrument` / `USES_INSTRUMENT` | 21, 22, 23 |
 | `Supplier` / `SUPPLIED_BY` | 6, 25 |
-| `Infrastructure` / `IMPROVES` | 27 |
+| `UrbanSystem` / `IMPROVES` | 2, 25, 27 |
 | `Vulnerability` / `REDUCES` | 5, 29 |
 | `ExposureUnit` / `EXPOSES` / `EXPERIENCES_VULN` | 5 |
 | `ResilienceGoal` / `CONTRIBUTES_TO` / `SETS_GOAL` | 8, 9, 18, 30 |
-| `Plan` / `PRESCRIBES` / `ESTABLISHES` / `PUBLISHED_AT` | 8–13, 30 |
-| `Policy` / `IMPLEMENTS` / `FACILITATES` / `HINDERS` | 12 |
-| `TimePoint` / `STARTED_AT` / `ISSUED_AT` / `PUBLISHED_AT` / `RECORDED_AT` | 20 |
+| `Plan` / `PRESCRIBES` / `SETS_GOAL` / `COVERS_LOCATION` | 8–13, 30 |
+| `Indicator.recorded_year` / `Indicator.measurement_period` | 20 |
 | `DEPENDS_ON` (Solution → Solution) | 31, 32, 33, 34, 37 |
 | `Solution.maturity_level` | 35, 36, 37 |
 | `Solution.equity_focus` | 38, 44 |

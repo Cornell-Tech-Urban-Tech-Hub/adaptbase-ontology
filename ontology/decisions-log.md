@@ -597,6 +597,44 @@ Added `UrbanSystem --shapes--> Vulnerability` to reflect the AR6 position that v
 
 ---
 
+## Decision 22: v0.3 Peer Review — Governance, Barriers, Hazard Scenarios, Comparability
+
+**Date:** 2026-04-29
+**Context:** Full peer review of v0.2 ontology conducted via Claude Opus (OPUS-ONTOLOGY-REVIEW-2026-04-29). Eight clarifying questions resolved. Full punch list implemented in v0.3.
+
+### Key decisions
+
+**BLOCKS vs. FACES direction (Q3):** BLOCKS is Barrier → Solution (must remove barrier for solution to proceed); FACES is Action → Barrier (fuzzier, action may work around it). This captures a real semantic distinction: solutions need barriers removed, actions can sometimes adapt around them. FACES source changed from Solution to Action.
+
+**GovernanceStructure as a separate type:** Rather than overloading Stakeholder with governance semantics, a dedicated GovernanceStructure type captures formal bodies (interagency committees, public agencies, task forces, PPPs) with an authority_level (advisory/regulatory/operational) and mandate_description. GOVERNS (GovernanceStructure → Plan) and MEMBER_OF (Stakeholder → GovernanceStructure) provide the linkages.
+
+**SSP-only climate scenarios (Q1b):** Hazard.climate_scenario uses IPCC AR6 SSP vocabulary (SSP1-2.6, SSP2-4.5, SSP3-7.0, SSP5-8.5). Older RCP references from pre-2023 plans should be mapped to SSP equivalents by extractors. Crosswalk: RCP 4.5 ≈ SSP2-4.5, RCP 8.5 ≈ SSP5-8.5.
+
+**RISK_ASSESSED_IN (Q5):** Added Hazard → Plan relationship to enable longitudinal comparison. Two successive plans can both link to the same hazard node to compare how the assessment changed (projection_year + climate_scenario capture within-plan temporal context; RISK_ASSESSED_IN captures plan-level provenance).
+
+**other + _other_description convention (GC-1):** Every new or tightened enum gets an `other` value plus a companion `_other_description` free-text field. Ensures extraction never fails on outliers while preserving structured labels for ML training.
+
+**Dropped items (GC-2):** EnablingCondition.scale_required and UrbanSystem.is_instance were not added — both are primarily useful for formal inference, not extraction or retrieval.
+
+**Dropped items (user decision):** Solution.deployment_count_range dropped. Aggregation counts belong in graph queries, not schema properties.
+
+**Mechanism vocabulary formalized:** Status changed from guidance-only to authoritative. Added restore, relocate, buffer, insulate, regulate as distinct mechanism types (with precise semantic distinctions from similar values). Added `other` value per GC-1 convention.
+
+**Location comparability fields:** climate_zone (Köppen), population, coastal_status, income_classification (World Bank) added to Location type. Enables cross-city comparability queries.
+
+**Action → Location direct link:** DEPLOYED_IN (Action → Location) added. Where IMPLEMENTED_IN captures general solution deployment geography, DEPLOYED_IN captures where a specific plan action is committed.
+
+### Changes in v0.3
+
+- **New type:** GovernanceStructure
+- **New relationships (8):** LOCATED_IN, SHIFTS_RISK_TO, GOVERNS, COORDINATES_WITH (restored), BLOCKS, MEMBER_OF, RISK_ASSESSED_IN, DEPLOYED_IN
+- **Modified relationships:** FACES source changed Solution → Action
+- **Property additions:** Hazard (climate_scenario, projection_year), Location (4 comparability fields), ResilienceGoal (goal_text), Plan (review_cycle_years, plan_type → enum), Outcome (maladaptation/other + co_benefit_type), Indicator (measurement_period), DEMONSTRATES_PROGRESS_ON (achieved), Vulnerability (vuln_type → enum), PlanningData (7 properties)
+- **Property removals:** UrbanSystem.infra_color
+- **Vocabulary:** mechanism_seed_vocabulary → mechanism_vocabulary (authoritative), sdg_goals added to solution-categories.json
+
+---
+
 ## Deferred Decisions (Post-Phase 2)
 
 ### 1. Separate GovernanceMechanism Node
@@ -630,7 +668,9 @@ Added `UrbanSystem --shapes--> Vulnerability` to reflect the AR6 position that v
 | v0.1 | 0 | +1 (CHANNELS_THROUGH), -4 (REPORTS_TO, MONITORS, MANAGES, MANDATES) | Financing linkage, Actor pruning, consolidation |
 | v0.1.1 | -3 (TimePoint, Infrastructure, Policy); City→Location | -1 (COORDINATES_WITH), renames/reversals | Type simplification, relationship cleanup |
 | v0.1.2 | 0 | +2 (REDUCES_EXPOSURE, SHAPES) | IPCC AR6 risk-reduction pathways, socially constructed vulnerability |
-| **Total** | **17** | **26** | **Planning + solutions + tech + equity + v0.1 consolidation + AR6 pathways** |
+| v0.2 | 0 | -4 deprecated (AUTHORED_BY, ALIGNS_WITH, SUPERSEDED_BY, REFERENCES); +4 restructured; +2 new (ENGAGES, GENERATES) | Public release cleanup — definitions rewritten, deprecated rels removed, schema fields stripped |
+| v0.3 | +1 (GovernanceStructure) | +8 (LOCATED_IN, SHIFTS_RISK_TO, GOVERNS, COORDINATES_WITH, BLOCKS, MEMBER_OF, RISK_ASSESSED_IN, DEPLOYED_IN) | Peer review — governance, barriers, hazard scenarios, comparability fields |
+| **Total** | **20** | **45** | **Planning + solutions + tech + equity + consolidation + AR6 pathways + public release + peer review** |
 
 ---
 

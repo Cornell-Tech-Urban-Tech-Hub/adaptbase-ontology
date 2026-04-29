@@ -14,7 +14,8 @@
         ],
         "gcom_hazard_focus": ["flood", "water_scarcity", "wave_action", "precipitation"],
         "ipcc_action_types": ["structural_physical", "institutional"],
-        "iclei_milestone": "D. Implement"
+        "iclei_milestone": "D. Implement",
+        "sdg_goals": ["SDG6", "SDG11", "SDG13"]
       },
       "subcategories": [
         { "id": "desalination_and_brackish_water_treatment", "name": "Desalination and Brackish Water Treatment" },
@@ -43,7 +44,8 @@
         ],
         "gcom_hazard_focus": ["water_scarcity", "extreme_temperature_hot", "flood", "precipitation"],
         "ipcc_action_types": ["structural_physical", "institutional", "ecosystem_based"],
-        "iclei_milestone": "D. Implement"
+        "iclei_milestone": "D. Implement",
+        "sdg_goals": ["SDG2", "SDG11", "SDG13"]
       },
       "subcategories": [
         { "id": "climate-resilient_crop_traits_and_crop_protection", "name": "Climate-Resilient Crop Traits and Crop Protection" },
@@ -66,7 +68,8 @@
         ],
         "gcom_hazard_focus": ["extreme_temperature_hot", "flood", "wind", "wild_fire", "extreme_temperature_cold"],
         "ipcc_action_types": ["structural_physical"],
-        "iclei_milestone": "D. Implement"
+        "iclei_milestone": "D. Implement",
+        "sdg_goals": ["SDG11", "SDG13"]
       },
       "subcategories": [
         { "id": "building_code_and_permit_management,_code_enforcem", "name": "Building Code and Permit Management, Code Enforcement, and Land Use Planning" },
@@ -92,6 +95,7 @@
         "gcom_hazard_focus": ["flood", "wind", "extreme_temperature_hot", "wild_fire", "mass_movement"],
         "ipcc_action_types": ["structural_physical"],
         "iclei_milestone": "D. Implement",
+        "sdg_goals": ["SDG9", "SDG11", "SDG13"],
         "_note": "Cross-cutting category — infrastructure solutions address nearly all hazard types"
       },
       "subcategories": [
@@ -114,7 +118,8 @@
         ],
         "gcom_hazard_focus": ["wind", "flood", "extreme_temperature_hot", "wild_fire", "extreme_temperature_cold"],
         "ipcc_action_types": ["structural_physical"],
-        "iclei_milestone": "D. Implement"
+        "iclei_milestone": "D. Implement",
+        "sdg_goals": ["SDG7", "SDG11", "SDG13"]
       },
       "subcategories": [
         { "id": "battery_storage_backup_power_for_residential_and_c", "name": "Battery Storage Backup Power for Residential and Commercial" },
@@ -136,7 +141,8 @@
         ],
         "gcom_hazard_focus": ["flood", "extreme_temperature_hot", "wind", "wild_fire", "precipitation"],
         "ipcc_action_types": ["structural_physical"],
-        "iclei_milestone": "D. Implement"
+        "iclei_milestone": "D. Implement",
+        "sdg_goals": ["SDG11", "SDG13"]
       },
       "subcategories": [
         { "id": "disaster_response_logistics", "name": "Disaster Response Logistics" },
@@ -162,6 +168,7 @@
         "gcom_hazard_focus": ["flood", "extreme_temperature_hot", "water_scarcity", "wave_action", "wild_fire", "chemical_change"],
         "ipcc_action_types": ["ecosystem_based"],
         "iclei_milestone": "D. Implement",
+        "sdg_goals": ["SDG11", "SDG13", "SDG14", "SDG15"],
         "_note": "Strongest GCoM/C40 category alignment — nature-based solutions are a primary focus of both frameworks' adaptation guidance"
       },
       "subcategories": [
@@ -184,7 +191,8 @@
         ],
         "gcom_hazard_focus": ["extreme_temperature_hot", "insects_and_microorganisms", "chemical_change", "flood"],
         "ipcc_action_types": ["social", "structural_physical"],
-        "iclei_milestone": "D. Implement"
+        "iclei_milestone": "D. Implement",
+        "sdg_goals": ["SDG3", "SDG11", "SDG13"]
       },
       "subcategories": [
         { "id": "air_quality_measurement_and_filtration", "name": "Air Quality Measurement and Filtration" },
@@ -206,6 +214,7 @@
         "gcom_hazard_focus": ["cross-cutting"],
         "ipcc_action_types": ["institutional"],
         "iclei_milestone": "D. Implement",
+        "sdg_goals": ["SDG11", "SDG13", "SDG17"],
         "_note": "GCoM CRF specifically tracks financing mechanisms — strong alignment with FinancingSource and FinancialInstrument node types"
       },
       "subcategories": [
@@ -227,6 +236,7 @@
         "gcom_hazard_focus": ["cross-cutting"],
         "ipcc_action_types": ["institutional"],
         "iclei_milestone": "B. Investigate / C. Plan / E. Monitor",
+        "sdg_goals": ["SDG11", "SDG13"],
         "_note": "Uniquely spans multiple ICLEI milestones — planning tools support the full planning cycle, not just implementation. Aligns with GCoM's B.4 (monitoring) and B.3 (vulnerability assessment) reporting sections."
       },
       "subcategories": [
@@ -252,6 +262,7 @@
         "gcom_hazard_focus": ["cross-cutting"],
         "ipcc_action_types": ["social", "institutional"],
         "iclei_milestone": "A. Initiate / D. Implement",
+        "sdg_goals": ["SDG11", "SDG13", "SDG16"],
         "_note": "Social and institutional action types — most directly addresses IPCC AR6's social adaptation category. Community engagement tools support ICLEI Milestone A (stakeholder participation)."
       },
       "subcategories": [
