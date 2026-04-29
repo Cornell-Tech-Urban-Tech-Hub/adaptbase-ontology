@@ -23,8 +23,7 @@ body {
 
 /* ============ HEADER ============ */
 .site-header {
-  display: grid;
-  grid-template-columns: auto 1fr;
+  display: flex;
   align-items: center;
   gap: var(--sp-5);
   padding: var(--sp-3) var(--sp-6);
@@ -77,15 +76,12 @@ body {
 }
 
 .header-actions {
-  justify-self: end;
-}
-}
-
-.header-actions {
   display: flex;
   gap: var(--sp-2);
   align-items: center;
+  margin-left: auto;
 }
+
 
 .btn {
   font-family: var(--font-sans);
@@ -129,6 +125,56 @@ body {
   appearance: auto;
   padding-right: 24px;
 }
+
+/* ============ ABOUT MODAL ============ */
+.about-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+.about-lede {
+  font-size: var(--fs-base);
+  line-height: 1.6;
+  color: var(--fg-2);
+  margin: 0;
+  padding-bottom: var(--sp-3);
+  border-bottom: 1px solid var(--border-hair);
+}
+.about-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.about-section h4 {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+  margin: 0;
+}
+.about-section p {
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  color: var(--fg-2);
+  margin: 0;
+  text-wrap: pretty;
+}
+.about-section strong { color: var(--fg-1); font-weight: 600; }
+.about-list {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.about-list li {
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+  color: var(--fg-2);
+}
+.about-list li strong { color: var(--fg-1); }
 
 /* ============ HERO STRIP (above the graph) ============ */
 .hero {
@@ -209,6 +255,8 @@ body {
   gap: var(--sp-6);
   font-family: var(--font-mono);
   padding-bottom: 4px;
+  align-items: center;
+  position: relative;
 }
 .stat {
   display: flex;
@@ -476,42 +524,56 @@ body {
 .graph-legend {
   bottom: var(--sp-5);
   left: var(--sp-5);
-  padding: 12px 14px;
-  max-width: 240px;
+  padding: 8px 10px;
 }
 .graph-legend h4 {
   font-family: var(--font-mono);
-  font-size: var(--fs-xs);
+  font-size: 9px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--fg-3);
-  margin: 0 0 10px 0;
+  color: var(--fg-4);
+  margin: 0 0 6px 0;
   font-weight: 600;
 }
 .legend-row {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 4px 0;
-  font-size: var(--fs-sm);
+  gap: 6px;
+  padding: 2px 0;
+  font-size: 11px;
   color: var(--fg-2);
   cursor: pointer;
   user-select: none;
   transition: color var(--dur-fast) var(--ease-standard);
 }
 .legend-row:hover { color: var(--fg-1); }
-.legend-row.off { opacity: 0.35; }
-.legend-row.off:hover { opacity: 0.6; }
+.legend-row.off { opacity: 0.3; }
+.legend-row.off:hover { opacity: 0.55; }
 .legend-row .dot {
-  width: 10px; height: 10px; border-radius: 50%;
+  width: 8px; height: 8px; border-radius: 50%;
   flex-shrink: 0;
   border: 1.5px solid transparent;
 }
 .legend-row .count {
   margin-left: auto;
+  padding-left: 8px;
   font-family: var(--font-mono);
-  font-size: var(--fs-xs);
+  font-size: 10px;
   color: var(--fg-4);
+}
+
+/* Jacobs logo — transparent float, bottom-right of graph, no box */
+.jacobs-float {
+  position: absolute;
+  bottom: var(--sp-5);
+  right: calc(var(--sp-5) + 130px); /* clear the controls overlay */
+  width: 100px;
+  height: auto;
+  display: block;
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 3;
+  mix-blend-mode: multiply;
 }
 
 /* Physics + zoom controls bottom-right */
@@ -1466,6 +1528,71 @@ body {
   padding-left: 18px;
 }
 
+/* Section count badge */
+.section-count {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--fog);
+  color: var(--fg-4);
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+/* Inline relationship list in Detail tab */
+.rel-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.rel-item {
+  display: grid;
+  grid-template-columns: 16px auto 1fr;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border-radius: var(--r-xs);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-standard);
+  font-size: var(--fs-sm);
+}
+.rel-item:hover { background: var(--fog); }
+.rel-dir {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-4);
+  text-align: center;
+  font-weight: 600;
+}
+.rel-label {
+  font-family: var(--font-accent);
+  font-style: italic;
+  color: var(--carnelian);
+  white-space: nowrap;
+}
+.rel-target {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  color: var(--fg-2);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.rel-target .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
 /* Meta row (label + value pair) */
 .meta-row {
   display: flex;
@@ -1526,3 +1653,72 @@ body {
   border-radius: var(--r-sm);
   background: var(--bg-1);
 }
+
+/* ── Changelog modal ─────────────────────────────────────────────────── */
+.changelog-entry {
+  margin-bottom: var(--sp-6);
+  padding-bottom: var(--sp-6);
+  border-bottom: 1px solid var(--border-soft);
+}
+.changelog-entry:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+.changelog-header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-3);
+  flex-wrap: wrap;
+}
+.changelog-version {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--fg-1);
+  letter-spacing: 0.04em;
+}
+.changelog-date {
+  font-size: var(--fs-xs);
+  color: var(--fg-4);
+}
+.changelog-summary {
+  font-size: var(--fs-sm);
+  color: var(--fg-3);
+  font-style: italic;
+}
+.changelog-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+.changelog-item {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+}
+.changelog-text {
+  color: var(--fg-2);
+}
+.change-badge {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+  text-transform: lowercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.change-badge-added   { background: rgba(22, 130, 60, 0.12); color: #16823c; }
+.change-badge-removed { background: rgba(179, 27, 27, 0.10); color: var(--carnelian); }
+.change-badge-changed { background: rgba(30, 77, 216, 0.10); color: var(--blueprint); }
+.change-badge-fixed   { background: rgba(180, 120, 0, 0.12); color: #b47800; }

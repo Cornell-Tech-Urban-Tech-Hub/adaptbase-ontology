@@ -6,8 +6,7 @@ This repo contains the formal ontology for **AdaptBase** (also referred to as "R
 
 The ontology is maintained as versioned JSON files in `ontology/` and displayed via a browser-based viewer at `index.html`.
 
-**Current version:** v0.1.1 (2026-04-26)
-**Publication target:** May 14, 2026 — GitHub Pages + expert review invitations
+**Current version:** v0.3.1 (2026-04-29)
 
 ---
 
@@ -21,11 +20,11 @@ scripts/
   ontology-adapter.js         # Loads/parses ontology JSON; version registry
   graph.js                    # D3 canvas force-directed graph
   inspector.js                # Side panel: node/edge detail + inline editing
-  comments.js                 # CURRENTLY: hardcoded mock comment threads
+  comments.js                 # Hardcoded mock comment threads
   app.js                      # Bootstrap: wires UI, search, edit mode, save
 ontology/
-  ontology-v0.1.json          # Version history
-  ontology-v0.1.1.json        # Latest
+  ontology-v0.3.1.json        # Current version
+  ontology-v0.2.json          # Version history
 schemas/vocabularies/         # Controlled vocabularies (hazards, systems, etc.)
 mining/                       # Pipeline for grounding vocab in corpus data
 ```
@@ -41,36 +40,6 @@ python3 -m http.server 8765   # then open http://127.0.0.1:8765/
 ```
 
 No build step — plain HTML/CSS/JS with D3 loaded from unpkg CDN.
-
----
-
-## Public publication plan
-
-**Goal:** Publish this repo publicly so domain experts can view and comment on the ontology via GitHub Issues.
-
-### What needs to happen before going public
-
-1. **Comments backend — GitHub Issues integration** (not yet built)
-   - `scripts/comments.js` currently contains hardcoded mock reviewer threads
-   - Needs to be replaced with real GitHub Issues read/write via the GitHub REST API
-   - Public viewers should be able to read comments without auth; submitting a comment requires GitHub OAuth or a token flow
-   - Repo and issue labels should be designed: one issue per node/edge, or a discussion-thread model
-
-2. **Edit mode — restrict or remove for public**
-   - `index.html` has an "Edit" button that unlocks inline editing of ontology types and relationships
-   - The save flow currently just downloads a JSON file locally (no server write) — so it's functionally harmless for read-only deployments
-   - Decision pending: hide the Edit button entirely in the public build, or keep it with a note that changes won't persist without repo access
-   - The simplest approach: add a `?edit=true` query param guard or a `EDIT_ENABLED` flag in `ontology-adapter.js` that defaults to `false`
-
-3. **Branding / naming cleanup**
-   - Several places still say "Resilience Scanner" (header, hero text, HTML title) — decide whether to update to "AdaptBase" before going public
-
-4. **Sensitive files audit** — check nothing in `research/resources/` or `docs/plans/` should stay private
-
-### What's already safe for public
-- All ontology JSON files in `ontology/`
-- All vocabulary files in `schemas/vocabularies/`
-- The viewer UI itself (no secrets, no server-side code)
 
 ---
 
@@ -104,6 +73,17 @@ This pipeline is a dev/research tool — it does not affect the viewer.
 - **Vocabularies as guidance, not hard constraints** — advisory validation, not blocking
 - **Claims as provenance** — every extraction value traces to a claim UUID in Supabase
 - All non-obvious design calls are logged in `decisions-log.md`
+
+---
+
+## Version management
+
+**Always increment the ontology version before committing changes.** Follow semver patch increments (e.g., v0.3 → v0.3.1 → v0.3.2) for viewer/tooling changes; minor increments (v0.3 → v0.4) for ontology schema changes.
+
+When bumping the version:
+1. Copy `ontology/ontology-v<current>.json` → `ontology/ontology-v<new>.json` and update `"version"` and `"update_note"` inside it
+2. Prepend the new entry to `ontology/versions.json`
+3. Update `**Current version:**` in this file and the filename in the repo layout section above
 
 ---
 

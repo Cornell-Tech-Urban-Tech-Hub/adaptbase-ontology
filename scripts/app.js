@@ -4,7 +4,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   await init();
 
   async function init() {
-    await window.OntologyAdapter.loadVersions();
+    await Promise.all([
+      window.OntologyAdapter.loadVersions(),
+      window.OntologyAdapter.loadEnums(),
+    ]);
     renderVersionSelector();
     wireHeaderButtons();
     wireSearch();
@@ -109,6 +112,24 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     });
 
+    document.getElementById('changelog-btn').addEventListener('click', () => {
+      showChangelogModal();
+    });
+
+    document.getElementById('about-btn').addEventListener('click', () => {
+      showAboutModal();
+    });
+
+    document.getElementById('about-modal-close').addEventListener('click', () => {
+      document.getElementById('about-modal').classList.remove('show');
+    });
+
+    document.getElementById('about-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'about-modal') {
+        document.getElementById('about-modal').classList.remove('show');
+      }
+    });
+
     document.getElementById('stat-vocabs-link').addEventListener('click', () => {
       showVocabulariesModal();
     });
@@ -120,6 +141,53 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('stat-rels-link').addEventListener('click', () => {
       showRelationshipsModal();
     });
+  }
+
+  function showAboutModal() {
+    const versionEl = document.getElementById('about-version');
+    if (versionEl && currentGraphData?.metadata?.version) {
+      versionEl.textContent = currentGraphData.metadata.version;
+    }
+    document.getElementById('about-modal').classList.add('show');
+  }
+
+  function showChangelogModal() {
+    const modal = document.getElementById('vocab-modal');
+    const title = document.getElementById('vocab-modal-title');
+    const content = document.getElementById('vocab-modal-content');
+
+    title.textContent = 'Changelog';
+
+    const notes = (currentGraphData?.metadata?.version_notes) || [];
+    if (!notes.length) {
+      content.innerHTML = '<div class="vocab-empty">No changelog available for this version.</div>';
+      modal.classList.add('show');
+      return;
+    }
+
+    const badgeLabel = { added: 'added', removed: 'removed', changed: 'changed', fixed: 'fixed' };
+
+    content.innerHTML = notes.map(entry => `
+      <div class="changelog-entry">
+        <div class="changelog-header">
+          <span class="changelog-version">${escapeHtml(entry.version)}</span>
+          <span class="changelog-date">${escapeHtml(entry.date || '')}</span>
+          ${entry.summary ? `<span class="changelog-summary">${escapeHtml(entry.summary)}</span>` : ''}
+        </div>
+        <ul class="changelog-list">
+          ${(entry.changes || []).map(c => {
+            const type = (typeof c === 'string') ? 'changed' : (c.type || 'changed');
+            const text = (typeof c === 'string') ? c : (c.text || '');
+            return `<li class="changelog-item">
+              <span class="change-badge change-badge-${escapeHtml(type)}">${escapeHtml(badgeLabel[type] || type)}</span>
+              <span class="changelog-text">${escapeHtml(text)}</span>
+            </li>`;
+          }).join('')}
+        </ul>
+      </div>
+    `).join('');
+
+    modal.classList.add('show');
   }
 
   function showEntityTypesModal() {

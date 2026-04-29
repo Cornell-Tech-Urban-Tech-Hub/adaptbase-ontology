@@ -89,16 +89,19 @@
       <ul class="prop-list">
         ${properties.map(p => {
           const isEnum = p.type && p.type.includes('enum');
-          const hasValues = p.values && p.values.length;
+          const enumValues = p.values && p.values.length
+            ? p.values
+            : (p.vocabulary_binding ? window.OntologyAdapter.resolveEnumValues(p.vocabulary_binding) : []);
+          const vocabLabel = p.vocabulary_binding ? p.vocabulary_binding.field : p.vocabulary;
           return `
           <li class="prop-item">
             <span class="name">${esc(p.id)}</span>
             <span class="type-group">
               <span class="type">${esc(p.type)}${p.required ? '<span class="req">req</span>' : ''}</span>
-              ${isEnum && hasValues ? `<span class="enum-hover">${p.values.length}<span class="enum-tooltip">${p.values.map(v => `<span class="enum-val">${esc(v)}</span>`).join('')}</span></span>` : ''}
+              ${isEnum && enumValues.length ? `<span class="enum-hover">${enumValues.length}<span class="enum-tooltip">${enumValues.map(v => `<span class="enum-val">${esc(v)}</span>`).join('')}</span></span>` : ''}
             </span>
             ${p.note ? `<span class="note">${esc(p.note)}</span>` : ''}
-            ${p.vocabulary ? `<span class="vocab-tag" data-vocab="${esc(p.vocabulary)}">${esc(p.vocabulary)}</span>` : ''}
+            ${vocabLabel ? `<span class="vocab-tag" data-vocab="${esc(vocabLabel)}">${esc(vocabLabel)}</span>` : ''}
           </li>`;
         }).join('')}
       </ul>
@@ -170,11 +173,6 @@
               <h4>Metadata</h4>
               <div class="chips">
                 <span class="chip chip-hover">${n.properties.length} properties<span class="chip-tooltip">${n.properties.map(p => `<span>${esc(p.id)}</span>`).join('')}</span></span>
-                <span class="chip chip-hover">${links.length} connections<span class="chip-tooltip">${links.map(l => {
-                  const out = l.source.id === n.id;
-                  const other = out ? l.target : l.source;
-                  return `<span>${out ? '→' : '←'} ${esc(l.label)} ${esc(other.label)}</span>`;
-                }).join('')}</span></span>
                 ${n.vocabulary_bindings && n.vocabulary_bindings.length
                   ? n.vocabulary_bindings.map(vb =>
                       `<span class="chip chip-vocab" data-vocab="${esc(vb.vocab)}">${esc(vb.vocab)}</span>`
@@ -182,6 +180,28 @@
                   : ''}
               </div>
             </div>
+
+            ${links.length ? `
+            <div class="section">
+              <h4>Relationships <span class="section-count">${links.length}</span></h4>
+              <ul class="rel-list">
+                ${links.map(l => {
+                  const out = l.source.id === n.id;
+                  const other = out ? l.target : l.source;
+                  if (!other) return '';
+                  const color = window.Graph.getClusterColor(other.cluster);
+                  return `<li class="rel-item" data-nid="${esc(other.id)}" data-eid="${esc(l.id)}">
+                    <span class="rel-dir">${out ? '→' : '←'}</span>
+                    <span class="rel-label">${esc(l.label)}</span>
+                    <span class="rel-target">
+                      <span class="dot" style="background:${color}"></span>
+                      ${esc(other.label)}
+                    </span>
+                  </li>`;
+                }).join('')}
+              </ul>
+            </div>
+            ` : ''}
 
             <div class="section">
               <h4>Properties</h4>
@@ -373,6 +393,9 @@
 
   function wireNeighbors() {
     el().querySelectorAll('.neighbor').forEach(li => {
+      li.addEventListener('click', () => window.Graph.focusNode(li.dataset.nid));
+    });
+    el().querySelectorAll('.rel-item').forEach(li => {
       li.addEventListener('click', () => window.Graph.focusNode(li.dataset.nid));
     });
   }

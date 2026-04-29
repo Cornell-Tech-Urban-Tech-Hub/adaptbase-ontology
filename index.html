@@ -28,6 +28,8 @@
   </div>
 
   <div class="header-actions">
+    <button id="about-btn" class="btn btn-ghost">About</button>
+    <button id="changelog-btn" class="btn btn-ghost">Changelog</button>
     <select id="version-selector" class="btn btn-ghost version-select">
       <option value="">Loading…</option>
     </select>
@@ -37,11 +39,11 @@
 <section class="hero">
   <div class="hero-inner">
     <div class="hero-headline">
-      <h1>Organizing knowledge on <em>how cities adapt</em> — and how we know it's working.</h1>
+      <h1>Organizing knowledge on <em>how cities adapt to climate change</em> — and how we know it's working.</h1>
     </div>
     <div class="hero-detail">
       <p class="lede">
-        This ontology contains <span id="hero-type-count">—</span> entity types and <span id="hero-rel-count">—</span> relationships to provide a rich semantic framework for organizing data on urban climate adaptation solutions from conception through engineering, financing, implementation, governance and evaluation. Explore the graph below, inspect any node or edge, and leave review comments.
+        This ontology provides an open framework for representing knowledge about urban climate adaptation plans, actions, and solutions. It contains <span id="hero-type-count">—</span> entity types and <span id="hero-rel-count">—</span> relationships to provide a rich semantic framework spanning planning, engineering, financing, implementation, governance and evaluation. Explore the graph below, inspect any node or edge, and leave review comments.
       </p>
       <div class="hero-stats">
         <div class="stat stat-link" id="stat-types-link" role="button" tabindex="0"><span class="num" id="stat-types">—</span><span class="lbl">Entity types</span></div>
@@ -61,9 +63,13 @@
   <div class="graph-pane" id="graph-pane">
     <canvas class="graph-canvas" id="graph"></canvas>
 
+    <!-- Entity cluster legend -->
     <div class="graph-overlay graph-legend" id="legend">
-      <h4>Entity clusters</h4>
+      <h4>Clusters</h4>
     </div>
+
+    <!-- Jacobs logo — transparent float, no box -->
+    <img src="img/logo-horizontal.png" alt="Jacobs" class="jacobs-float" />
 
     <div class="graph-overlay graph-controls">
       <div class="control-row">
@@ -87,13 +93,45 @@
   </aside>
 </main>
 
-<!-- Vocabulary Modal -->
+<!-- Vocabulary / Changelog / Entity / Relationship Modal -->
 <div class="modal" id="vocab-modal">
   <div class="modal-content wide">
     <h3 id="vocab-modal-title">Vocabulary</h3>
     <div id="vocab-modal-content"></div>
     <div class="modal-buttons">
       <button id="vocab-modal-close" class="primary">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- About Modal -->
+<div class="modal" id="about-modal">
+  <div class="modal-content wide">
+    <h3>About AdaptBase</h3>
+    <div class="about-content">
+      <p class="about-lede">AdaptBase is an open knowledge framework for urban climate adaptation — a structured ontology that maps the entities, relationships, and vocabularies needed to organize, compare, and analyze how cities respond to climate hazards.</p>
+
+      <div class="about-section">
+        <h4>What this is</h4>
+        <p>This viewer displays the AdaptBase ontology: twenty entity types (Solution, Hazard, Plan, Stakeholder, and more) connected by forty-five typed relationships. The ontology provides a shared semantic layer for evidence on adaptation solutions drawn from published literature, city action plans, and project databases.</p>
+      </div>
+
+      <div class="about-section">
+        <h4>How to use it</h4>
+        <ul class="about-list">
+          <li><strong>Explore the graph</strong> — click any node to inspect its definition, properties, and relationships. Click an edge to read about that relationship type.</li>
+          <li><strong>Search</strong> — type in the search bar above the graph to jump directly to any entity or relationship.</li>
+          <li><strong>Review &amp; comment</strong> — select a node or edge and open the Comments tab to read or leave structured feedback.</li>
+        </ul>
+      </div>
+
+      <div class="about-section">
+        <h4>Development</h4>
+        <p>AdaptBase is developed by the <strong>Urban Tech Hub at Cornell Tech</strong> in collaboration with <strong>Marceta PBC</strong>. The ontology is under active development — current version: <strong id="about-version">—</strong>.</p>
+      </div>
+    </div>
+    <div class="modal-buttons">
+      <button id="about-modal-close" class="primary">Close</button>
     </div>
   </div>
 </div>

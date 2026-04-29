@@ -3,14 +3,14 @@
 // getNodeById, getEdgesForNode, etc.
 
 (function () {
+  // Cluster colors used by the inspector (node dots, kicker line) — not for graph node fill
   const CLUSTER_COLORS = {
-    'Core':     '#B31B1B',  // carnelian (Solution only)
-    'Threat':   '#6B4C9A',  // purple (hazard, vulnerability, exposure, barrier) - distinct from Planning grey
-    'Place':    '#2E7D4F',  // chlorophyll (location, urban system)
-    'Actors':   '#1E4DD8',  // blueprint
-    'Outcomes': '#F4A02C',  // sodium
+    'Solution': '#B31B1B',  // carnelian
+    'Risk':     '#6B4C9A',  // purple
+    'Context':  '#2E7D4F',  // chlorophyll
+    'Programs': '#1E4DD8',  // blueprint
     'Finance':  '#4A4F57',  // graphite
-    'Planning': '#8A8F98',  // concrete
+    'Outcomes': '#D4900A',  // warm amber
   };
 
   // Hub-spoke layout configuration
@@ -453,30 +453,33 @@
     // Apply hub-spoke layout algorithm for deterministic positioning
     applyHubSpokeLayout();
 
-    // Build cluster counts for legend
+    // Build cluster counts and populate legend
     const counts = {};
     for (const n of nodes) counts[n.cluster] = (counts[n.cluster] || 0) + 1;
 
-    // Populate legend
     const legend = document.getElementById('legend');
-    Object.keys(CLUSTER_COLORS).forEach(c => {
-      if (!counts[c]) return;
-      const row = document.createElement('div');
-      row.className = 'legend-row';
-      row.dataset.cluster = c;
-      const dotFill = c === 'Core' ? CLUSTER_COLORS[c] : hexToSoftFill(CLUSTER_COLORS[c]);
-      row.innerHTML = `
-        <span class="dot" style="background:${dotFill}; border-color:${CLUSTER_COLORS[c]}"></span>
-        <span>${c}</span>
-        <span class="count">${counts[c]}</span>
-      `;
-      row.addEventListener('click', () => {
-        if (dimmed.has(c)) dimmed.delete(c); else dimmed.add(c);
-        row.classList.toggle('off');
-        draw();
+    if (legend) {
+      // Clear any rows from a previous load
+      legend.querySelectorAll('.legend-row').forEach(r => r.remove());
+      Object.keys(CLUSTER_COLORS).forEach(c => {
+        if (!counts[c]) return;
+        const row = document.createElement('div');
+        row.className = 'legend-row';
+        row.dataset.cluster = c;
+        const dotFill = c === 'Solution' ? CLUSTER_COLORS[c] : hexToSoftFill(CLUSTER_COLORS[c]);
+        row.innerHTML = `
+          <span class="dot" style="background:${dotFill}; border-color:${CLUSTER_COLORS[c]}"></span>
+          <span>${c}</span>
+          <span class="count">${counts[c]}</span>
+        `;
+        row.addEventListener('click', () => {
+          if (dimmed.has(c)) dimmed.delete(c); else dimmed.add(c);
+          row.classList.toggle('off');
+          draw();
+        });
+        legend.appendChild(row);
       });
-      legend.appendChild(row);
-    });
+    }
   }
 
   function initSim() {
@@ -631,9 +634,16 @@
       drawLabel(n);
     }
 
-    // selected edge label (if any)
-    if (selectedEdge) drawEdgeLabel(selectedEdge);
-    else if (hoverEdge) drawEdgeLabel(hoverEdge);
+    // Edge labels: all connected edges when a node is selected, otherwise hover/selected edge
+    if (selectedNode) {
+      for (const l of (linksByNode[selectedNode.id] || [])) {
+        if (l.source !== l.target) drawEdgeLabel(l);
+      }
+    } else if (selectedEdge) {
+      drawEdgeLabel(selectedEdge);
+    } else if (hoverEdge) {
+      drawEdgeLabel(hoverEdge);
+    }
 
     ctx.restore();
   }
@@ -691,13 +701,14 @@
     const r = radiusFor(n);
     const isSel = n === selectedNode;
     const isHov = n === hoverNode;
-    const color = colorFor(n.cluster);
 
     ctx.save();
 
     if (isDim) {
-      ctx.globalAlpha = 0.2;
+      ctx.globalAlpha = 0.15;
     }
+
+    const color = colorFor(n.cluster);
 
     // Outer selection ring
     if (isSel) {
@@ -709,10 +720,9 @@
     }
 
     // Fill
-    if (n.cluster === 'Core' || isSel) {
+    if (n.cluster === 'Solution' || isSel) {
       ctx.fillStyle = color;
     } else {
-      // paper-tinted fill
       ctx.fillStyle = hexToSoftFill(color);
     }
     ctx.beginPath();
@@ -762,7 +772,7 @@
     ctx.fillStyle = 'rgba(251, 250, 246, 0.88)';
     ctx.fillRect(n.x - lw / 2, ly - padY, lw, lh);
 
-    ctx.fillStyle = isSel || isHov ? '#121417' : '#2A2D33';
+    ctx.fillStyle = '#121417';
     ctx.fillText(label, n.x, ly);
     ctx.restore();
   }
