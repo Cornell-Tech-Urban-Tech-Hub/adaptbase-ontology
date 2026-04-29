@@ -681,18 +681,27 @@
     ctx.lineTo(x2, y2);
     ctx.stroke();
 
-    // Arrow head
-    const arrSize = isHighlight ? 7 : 5.5;
+    // Arrow heads — one at each end, both pointing source→target
+    const arrSize = isHighlight ? 13 : 10;
     const angle = Math.atan2(dy, dx);
     ctx.fillStyle = ctx.strokeStyle;
-    ctx.beginPath();
-    ctx.moveTo(x2, y2);
-    ctx.lineTo(x2 - arrSize * Math.cos(angle - Math.PI / 7),
-               y2 - arrSize * Math.sin(angle - Math.PI / 7));
-    ctx.lineTo(x2 - arrSize * Math.cos(angle + Math.PI / 7),
-               y2 - arrSize * Math.sin(angle + Math.PI / 7));
-    ctx.closePath();
-    ctx.fill();
+
+    function drawArrow(px, py) {
+      ctx.beginPath();
+      ctx.moveTo(px, py);
+      ctx.lineTo(px - arrSize * Math.cos(angle - Math.PI / 7),
+                 py - arrSize * Math.sin(angle - Math.PI / 7));
+      ctx.lineTo(px - arrSize * Math.cos(angle + Math.PI / 7),
+                 py - arrSize * Math.sin(angle + Math.PI / 7));
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    // target-end arrow
+    drawArrow(x2, y2);
+    // source-end arrow — placed arrSize*2 along the line from x1,y1
+    const srcOffset = arrSize * 2;
+    drawArrow(x1 + ux * srcOffset, y1 + uy * srcOffset);
 
     ctx.restore();
   }
@@ -783,13 +792,13 @@
     const my = (l.source.y + l.target.y) / 2;
 
     ctx.save();
-    ctx.font = `italic 500 13px "Instrument Serif", "Fraunces", Georgia, serif`;
+    ctx.font = `italic 700 15px "Instrument Serif", "Fraunces", Georgia, serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     const metrics = ctx.measureText(l.label);
     const padX = 8, padY = 4;
     const w = metrics.width + padX * 2;
-    const h = 18 + padY;
+    const h = 20 + padY;
 
     ctx.fillStyle = 'rgba(251, 250, 246, 0.95)';
     ctx.strokeStyle = 'rgba(179,27,27,0.4)';
