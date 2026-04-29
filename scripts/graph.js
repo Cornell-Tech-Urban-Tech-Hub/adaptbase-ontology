@@ -13,17 +13,29 @@
     'Outcomes': '#D4900A',  // warm amber
   };
 
-  // Hub-spoke layout configuration
+  // Multi-ring concentric layout
   const LAYOUT_CONFIG = {
-    hubRadius: 280,             // Distance from hub to 1st-degree neighbors
-    singletonRadiusMult: 1.45,  // Singletons pushed further out to clear chord edges
-    outerRadiusMult: 1.75,      // Outer nodes (Indicator, FinancingSource) further still
-    chargeStrength: -520,       // Repulsion strength between nodes
-    linkDistance: 100,          // Base link distance
-    collisionRadius: 30,        // Padding around nodes for collision detection
-    layoutIterations: 400,      // Number of simulation ticks before stopping
-    randomSeed: 12345,          // Seed for deterministic positioning
+    ring1Radius: 180,           // Inner ring (structural connectors)
+    ring2Radius: 300,           // Middle ring (hub neighbors)
+    ring3Radius: 400,           // Outer ring (leaves)
   };
+
+  // Sector angles per cluster (radians, starting from top going clockwise)
+  // Order: Risk, Programs, Outcomes, Finance, Context
+  const SECTOR_ANGLES = {
+    'Risk':     -Math.PI / 2,                    // top (12 o'clock)
+    'Programs':  -Math.PI / 2 + 2*Math.PI/5,    // top-right
+    'Outcomes':  -Math.PI / 2 + 4*Math.PI/5,    // bottom-right
+    'Finance':   -Math.PI / 2 + 6*Math.PI/5,    // bottom-left
+    'Context':   -Math.PI / 2 + 8*Math.PI/5,    // top-left
+  };
+
+  // Ring assignments: which nodes go on which ring
+  // Ring 1: high cross-connectivity (degree > 4, excluding Solution)
+  // Ring 3: not connected to hub directly
+  // Ring 2: everything else
+  const RING1_NODES = new Set(['Plan', 'Action', 'Stakeholder', 'ExposureUnit', 'Location']);
+  const RING3_NODES = new Set(['Indicator', 'FinancingSource', 'GovernanceStructure', 'Mechanism', 'EnablingCondition', 'Supplier']);
 
   let canvas, ctx, dpr;
   let W = 0, H = 0;
@@ -35,393 +47,66 @@
   let dimmed = new Set(); // cluster ids that are off
   let dragNode = null, dragStart = null;
   let isPanning = false, panStart = null;
-  let physicsOn = false;
 
   function colorFor(cluster) { return CLUSTER_COLORS[cluster] || '#4A4F57'; }
 
   function radiusFor(d) {
-    // degree-based; min 14, max ~60 (2x previous)
     const deg = d.degree || 1;
-    return 14 + Math.min(46, Math.sqrt(deg) * 9);
+    return 22 + Math.min(58, Math.sqrt(deg) * 13);
   }
 
-  // Seeded random number generator for deterministic layout
-  let rngSeed = LAYOUT_CONFIG.randomSeed;
-  function seededRandom() {
-    rngSeed = (rngSeed * 9301 + 49297) % 233280;
-    return rngSeed / 233280;
-  }
-
-  function applyHubSpokeLayout() {
-    // Reset seed for deterministic positioning
-    rngSeed = LAYOUT_CONFIG.randomSeed;
-
-    // Find hub node (Solution)
+  function applyConcentricLayout() {
     const hub = nodes.find(n => n.id === 'Solution');
-    if (!hub) {
-      console.warn('Hub node "Solution" not found, applying random layout');
-      for (const n of nodes) {
-        n.x = (seededRandom() - 0.5) * 400;
-        n.y = (seededRandom() - 0.5) * 400;
-      }
-      return;
-    }
-
-    // Position hub at center
+    if (!hub) return;
     hub.x = 0;
     hub.y = 0;
 
-    // Find spoke nodes (1st-degree neighbors of hub)
-    const hubLinks = links.filter(l =>
-      (l.source.id === hub.id || l.target.id === hub.id) &&
-      l.source !== l.target
-    );
-
-    const spokes = new Set();
-    for (const l of hubLinks) {
-      if (l.source !== hub) spokes.add(l.source);
-      if (l.target !== hub) spokes.add(l.target);
+    // Group non-hub nodes by cluster, assign ring per node
+    const clusterBuckets = new Map();
+    for (const n of nodes) {
+      if (n === hub) continue;
+      if (!clusterBuckets.has(n.cluster)) clusterBuckets.set(n.cluster, []);
+      clusterBuckets.get(n.cluster).push(n);
     }
 
-    if (spokes.size === 0) {
-      console.warn('No spokes found');
-      return;
-    }
+    // Each cluster gets a sector wedge; place nodes within that wedge at their ring radius
+    const sectorNames = Object.keys(SECTOR_ANGLES);
+    const sectorArc = (2 * Math.PI) / sectorNames.length; // equal wedges
+    const gapArc = sectorArc * 0.12; // small gap between sectors
+    const usableArc = sectorArc - gapArc;
 
-    // Find secondary edges (spoke-to-spoke connections)
-    const secondaryEdges = [];
-    const spokeIds = new Set(Array.from(spokes).map(n => n.id));
-    for (const l of links) {
-      if (l.source !== hub && l.target !== hub &&
-          spokeIds.has(l.source.id) && spokeIds.has(l.target.id)) {
-        secondaryEdges.push(l);
+    for (const cluster of sectorNames) {
+      const arr = clusterBuckets.get(cluster);
+      if (!arr || arr.length === 0) continue;
+
+      // Sort: ring1 first, then ring2, then ring3; within same ring by degree desc
+      arr.sort((a, b) => {
+        const ringA = RING1_NODES.has(a.id) ? 1 : RING3_NODES.has(a.id) ? 3 : 2;
+        const ringB = RING1_NODES.has(b.id) ? 1 : RING3_NODES.has(b.id) ? 3 : 2;
+        if (ringA !== ringB) return ringA - ringB;
+        return (b.degree || 0) - (a.degree || 0);
+      });
+
+      const centerAngle = SECTOR_ANGLES[cluster];
+      const startAngle = centerAngle - usableArc / 2;
+
+      // Distribute evenly within the wedge
+      for (let i = 0; i < arr.length; i++) {
+        const n = arr[i];
+        const ring = RING1_NODES.has(n.id) ? 1 : RING3_NODES.has(n.id) ? 3 : 2;
+        const radius = ring === 1 ? LAYOUT_CONFIG.ring1Radius
+                     : ring === 2 ? LAYOUT_CONFIG.ring2Radius
+                     : LAYOUT_CONFIG.ring3Radius;
+
+        // Angular position within the wedge
+        const angle = arr.length === 1
+          ? centerAngle
+          : startAngle + (usableArc / (arr.length - 1)) * i;
+
+        n.x = Math.cos(angle) * radius;
+        n.y = Math.sin(angle) * radius;
       }
     }
-
-    console.log(`Step 0: Found ${spokes.size} spokes, ${secondaryEdges.length} secondary edges`);
-
-    // STEP 1: Decompose into connected components
-    const allComponents = findConnectedComponents(Array.from(spokes), secondaryEdges);
-    const multiComps = allComponents.filter(c => c.length > 1);
-    const singletons = allComponents
-      .filter(c => c.length === 1)
-      .map(c => c[0])
-      .sort((a, b) => a.id.localeCompare(b.id)); // deterministic
-
-    console.log(`Step 1: ${multiComps.length} multi-node components + ${singletons.length} singletons`);
-    multiComps.forEach((c, i) => console.log(`  Multi[${i}]: [${c.map(n => n.id).join(', ')}]`));
-
-    // STEP 2: Order nodes within each multi-node component (DFS for trees, barycenter for cycles)
-    const orderedMultiComps = multiComps.map(c => orderWithinComponent(c, secondaryEdges));
-    orderedMultiComps.forEach((c, i) =>
-      console.log(`Step 2: Multi[${i}] internal order: [${c.map(n => n.id).join(', ')}]`)
-    );
-
-    // STEP 3: Optimize multi-node component circular ordering (minimize cross-component crossings)
-    const optimizedComps = optimizeMultiComponentOrder(orderedMultiComps, secondaryEdges);
-    console.log(`Step 3: Component cyclic order:`,
-      optimizedComps.map(c => `[${c.map(n => n.id).join(',')}]`));
-
-    // STEP 4: Distribute singletons across gaps between multi-node components
-    const numGaps = Math.max(1, optimizedComps.length);
-    const gapSingletons = Array.from({ length: numGaps }, () => []);
-    for (let i = 0; i < singletons.length; i++) {
-      gapSingletons[i % numGaps].push(singletons[i]);
-    }
-    console.log(`Step 4: Singleton distribution per gap:`,
-      gapSingletons.map(g => g.map(n => n.id)));
-
-    // STEP 5: Build final spoke order (multi-comp + gap-singletons interleaved)
-    const orderedSpokes = [];
-    if (optimizedComps.length === 0) {
-      orderedSpokes.push(...singletons);
-    } else {
-      for (let i = 0; i < optimizedComps.length; i++) {
-        orderedSpokes.push(...optimizedComps[i]);
-        orderedSpokes.push(...gapSingletons[i]);
-      }
-    }
-
-    // STEP 6: Place spokes around circle
-    const spokeAngles = placeSpokesAroundCircle(orderedSpokes, singletons);
-
-    const crossings = countAllCrossings(orderedSpokes, secondaryEdges, hub, spokeAngles);
-    console.log(`Step 6: Layout complete with ${crossings} crossings`);
-
-    // STEP 7: Position outer nodes (non-spokes like Indicator, FinancingSource)
-    positionOuterNodes(nodes, hub, spokes, links, spokeAngles);
-
-    console.log(`Hub-spoke layout: ${spokes.size} spokes, ${crossings} crossings`);
-  }
-
-  // Place spokes evenly around circle, with singletons at slightly larger radius
-  function placeSpokesAroundCircle(orderedSpokes, singletonsList) {
-    const angles = new Map();
-    const angleStep = (2 * Math.PI) / orderedSpokes.length;
-    const singletonIds = new Set(singletonsList.map(n => n.id));
-
-    orderedSpokes.forEach((n, i) => {
-      const angle = i * angleStep - Math.PI / 2;
-      const radius = singletonIds.has(n.id)
-        ? LAYOUT_CONFIG.hubRadius * LAYOUT_CONFIG.singletonRadiusMult
-        : LAYOUT_CONFIG.hubRadius;
-      n.x = Math.cos(angle) * radius;
-      n.y = Math.sin(angle) * radius;
-      angles.set(n.id, angle);
-    });
-
-    return angles;
-  }
-
-  // Find optimal cyclic ordering of multi-node components to minimize crossings
-  function optimizeMultiComponentOrder(orderedMultiComps, secondaryEdges) {
-    if (orderedMultiComps.length <= 1) return orderedMultiComps;
-    if (orderedMultiComps.length === 2) return orderedMultiComps; // 2 comps: only 1 cyclic order
-
-    // For small numbers, try all permutations (fixing first component to break rotational symmetry)
-    const n = orderedMultiComps.length;
-    if (n <= 7) {
-      let best = orderedMultiComps;
-      let bestCrossings = countCrossingsForComponentOrder(orderedMultiComps, secondaryEdges);
-
-      const fixed = orderedMultiComps[0];
-      const rest = orderedMultiComps.slice(1);
-      const perms = [];
-      generatePermutations(rest, 0, [], perms);
-
-      for (const perm of perms) {
-        const candidate = [fixed, ...perm];
-        const crossings = countCrossingsForComponentOrder(candidate, secondaryEdges);
-        if (crossings < bestCrossings) {
-          bestCrossings = crossings;
-          best = candidate;
-        }
-      }
-      return best;
-    }
-
-    // For larger numbers, use 2-opt
-    let current = [...orderedMultiComps];
-    let bestCrossings = countCrossingsForComponentOrder(current, secondaryEdges);
-    let improved = true;
-    while (improved) {
-      improved = false;
-      for (let i = 0; i < current.length - 1; i++) {
-        for (let j = i + 1; j < current.length; j++) {
-          // Try swapping i and j
-          [current[i], current[j]] = [current[j], current[i]];
-          const newCrossings = countCrossingsForComponentOrder(current, secondaryEdges);
-          if (newCrossings < bestCrossings) {
-            bestCrossings = newCrossings;
-            improved = true;
-          } else {
-            [current[i], current[j]] = [current[j], current[i]]; // revert
-          }
-        }
-      }
-    }
-    return current;
-  }
-
-  function countCrossingsForComponentOrder(orderedComps, secondaryEdges) {
-    // Place components contiguously and count crossings
-    const flat = orderedComps.flat();
-    const angles = new Map();
-    const step = (2 * Math.PI) / flat.length;
-    flat.forEach((n, i) => angles.set(n.id, i * step - Math.PI / 2));
-    return countAllCrossings(flat, secondaryEdges, null, angles);
-  }
-
-  // STEP 1: Find connected components in spoke subgraph
-  function findConnectedComponents(spokes, secondaryEdges) {
-    const adj = new Map();
-    for (const n of spokes) adj.set(n.id, []);
-    for (const e of secondaryEdges) {
-      adj.get(e.source.id).push(e.target);
-      adj.get(e.target.id).push(e.source);
-    }
-
-    const visited = new Set();
-    const components = [];
-
-    for (const start of spokes) {
-      if (visited.has(start.id)) continue;
-
-      const component = [];
-      const queue = [start];
-      visited.add(start.id);
-
-      while (queue.length > 0) {
-        const node = queue.shift();
-        component.push(node);
-
-        for (const neighbor of adj.get(node.id)) {
-          if (!visited.has(neighbor.id)) {
-            visited.add(neighbor.id);
-            queue.push(neighbor);
-          }
-        }
-      }
-
-      components.push(component);
-    }
-
-    return components;
-  }
-
-  // Order nodes within a component (DFS for trees, barycenter for cycles)
-  function orderWithinComponent(component, secondaryEdges) {
-    if (component.length === 1) return component;
-
-    // Build adjacency for this component
-    const adj = new Map();
-    const nodeIds = new Set(component.map(n => n.id));
-    for (const n of component) adj.set(n.id, []);
-    for (const e of secondaryEdges) {
-      if (nodeIds.has(e.source.id) && nodeIds.has(e.target.id)) {
-        adj.get(e.source.id).push(e.target);
-        adj.get(e.target.id).push(e.source);
-      }
-    }
-
-    // Find a leaf or endpoint (degree-1 node) for DFS start
-    let start = component[0];
-    for (const n of component) {
-      if (adj.get(n.id).length === 1) {
-        start = n;
-        break;
-      }
-    }
-
-    // DFS traversal
-    const ordered = [];
-    const visited = new Set();
-
-    function dfs(node) {
-      visited.add(node.id);
-      ordered.push(node);
-      for (const neighbor of adj.get(node.id)) {
-        if (!visited.has(neighbor.id)) {
-          dfs(neighbor);
-        }
-      }
-    }
-
-    dfs(start);
-
-    // If component has cycles or wasn't fully connected, add remaining nodes
-    for (const n of component) {
-      if (!visited.has(n.id)) ordered.push(n);
-    }
-
-    return ordered;
-  }
-
-  function generatePermutations(arr, start, current, results) {
-    if (current.length === arr.length) {
-      results.push([...current]);
-      return;
-    }
-
-    // Limit to prevent combinatorial explosion
-    if (results.length > 720) return; // 6! = 720
-
-    for (let i = 0; i < arr.length; i++) {
-      if (!current.includes(arr[i])) {
-        current.push(arr[i]);
-        generatePermutations(arr, start, current, results);
-        current.pop();
-      }
-    }
-  }
-
-  function countAllCrossings(orderedSpokes, secondaryEdges, hub, angles) {
-    let crossings = 0;
-
-    // Check all pairs of secondary edges
-    for (let i = 0; i < secondaryEdges.length; i++) {
-      for (let j = i + 1; j < secondaryEdges.length; j++) {
-        const e1 = secondaryEdges[i];
-        const e2 = secondaryEdges[j];
-
-        // Skip if edges share a node
-        if (e1.source === e2.source || e1.source === e2.target ||
-            e1.target === e2.source || e1.target === e2.target) {
-          continue;
-        }
-
-        // Get angles
-        const a1 = angles.get(e1.source.id);
-        const a2 = angles.get(e1.target.id);
-        const b1 = angles.get(e2.source.id);
-        const b2 = angles.get(e2.target.id);
-
-        if (edgesCrossInCircularLayout(a1, a2, b1, b2)) {
-          crossings++;
-        }
-      }
-    }
-
-    return crossings;
-  }
-
-  function edgesCrossInCircularLayout(a1, a2, b1, b2) {
-    // Two chords in a circle cross iff their endpoints alternate around the circle
-    // Normalize angles to [0, 2π)
-    const normalize = (a) => ((a % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
-
-    let angles = [
-      {a: normalize(a1), edge: 1},
-      {a: normalize(a2), edge: 1},
-      {a: normalize(b1), edge: 2},
-      {a: normalize(b2), edge: 2}
-    ];
-
-    angles.sort((x, y) => x.a - y.a);
-
-    // Edges cross iff pattern is 1,2,1,2 or 2,1,2,1
-    const pattern = angles.map(x => x.edge).join('');
-    return pattern === '1212' || pattern === '2121';
-  }
-
-  function positionOuterNodes(allNodes, hub, spokes, links, spokeAngles) {
-    for (const n of allNodes) {
-      if (n === hub || spokes.has(n)) continue;
-
-      // Find connected spokes
-      const connectedSpokes = [];
-      for (const l of links) {
-        if (l.source === n && spokes.has(l.target)) {
-          connectedSpokes.push(l.target);
-        } else if (l.target === n && spokes.has(l.source)) {
-          connectedSpokes.push(l.source);
-        }
-      }
-
-      if (connectedSpokes.length > 0) {
-        // Position at average angle, outer ring
-        let avgAngle = 0;
-        for (const spoke of connectedSpokes) {
-          avgAngle += spokeAngles.get(spoke.id);
-        }
-        avgAngle /= connectedSpokes.length;
-
-        const outerRadius = LAYOUT_CONFIG.hubRadius * LAYOUT_CONFIG.outerRadiusMult;
-        n.x = Math.cos(avgAngle) * outerRadius;
-        n.y = Math.sin(avgAngle) * outerRadius;
-      } else {
-        // Orphaned node, place randomly
-        const angle = seededRandom() * 2 * Math.PI;
-        const distance = LAYOUT_CONFIG.hubRadius * LAYOUT_CONFIG.outerRadiusMult;
-        n.x = Math.cos(angle) * distance;
-        n.y = Math.sin(angle) * distance;
-      }
-    }
-  }
-
-  function setData(graphData) {
-    // Accept data from OntologyAdapter instead of loading from file
-    return Promise.resolve(graphData);
   }
 
   function setup(data) {
@@ -450,8 +135,8 @@
       if (l.source.id !== l.target.id) linksByNode[l.target.id].push(l);
     }
 
-    // Apply hub-spoke layout algorithm for deterministic positioning
-    applyHubSpokeLayout();
+    // Deterministic concentric ring layout
+    applyConcentricLayout();
 
     // Build cluster counts and populate legend
     const counts = {};
@@ -483,22 +168,19 @@
   }
 
   function initSim() {
-    // Initial pass: collision resolution only — preserves the deterministic layout
-    // while gently resolving any node-node overlaps. Auto-stops and pins nodes.
     simulation = d3.forceSimulation(nodes)
       .force('collide', d3.forceCollide()
-        .radius(d => radiusFor(d) + 6)
-        .strength(0.9)
-        .iterations(4)
+        .radius(d => radiusFor(d) + 12)
+        .strength(0.8)
+        .iterations(3)
       )
-      .alpha(0.4)
+      .alpha(0.5)
       .alphaDecay(0.05)
       .on('tick', draw)
       .on('end', () => {
         for (const n of nodes) { n.fx = n.x; n.fy = n.y; }
         fitToView();
         draw();
-        setPhysics(true);
       });
   }
 
@@ -636,13 +318,29 @@
 
     // Edge labels: all connected edges when a node is selected, otherwise hover/selected edge
     if (selectedNode) {
-      for (const l of (linksByNode[selectedNode.id] || [])) {
-        if (l.source !== l.target) drawEdgeLabel(l);
+      const edgesToDraw = (linksByNode[selectedNode.id] || []).filter(l => l.source !== l.target);
+      // Detect reciprocal pairs (same two nodes, opposite directions)
+      const pairKey = (l) => [l.source.id, l.target.id].sort().join('::');
+      const pairCounts = {};
+      const pairIndex = {};
+      for (const l of edgesToDraw) {
+        const k = pairKey(l);
+        pairCounts[k] = (pairCounts[k] || 0) + 1;
+        pairIndex[k] = 0;
+      }
+      for (const l of edgesToDraw) {
+        const k = pairKey(l);
+        let offset = 0;
+        if (pairCounts[k] > 1) {
+          offset = pairIndex[k] === 0 ? -1 : 1;
+          pairIndex[k]++;
+        }
+        drawEdgeLabel(l, offset);
       }
     } else if (selectedEdge) {
-      drawEdgeLabel(selectedEdge);
+      drawEdgeLabel(selectedEdge, 0);
     } else if (hoverEdge) {
-      drawEdgeLabel(hoverEdge);
+      drawEdgeLabel(hoverEdge, 0);
     }
 
     ctx.restore();
@@ -766,7 +464,7 @@
     const isHov = n === hoverNode;
 
     ctx.save();
-    ctx.font = `${isSel ? 600 : 500} ${isSel ? 18 : 16}px "Inter Tight", system-ui, sans-serif`;
+    ctx.font = `${isSel ? 600 : 500} ${isSel ? 22 : 20}px "Inter Tight", system-ui, sans-serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
 
@@ -786,30 +484,43 @@
     ctx.restore();
   }
 
-  function drawEdgeLabel(l) {
+  function drawEdgeLabel(l, offsetIndex) {
     if (l.source === l.target) return;
+
     const mx = (l.source.x + l.target.x) / 2;
     const my = (l.source.y + l.target.y) / 2;
 
+    // Offset perpendicular to the edge for reciprocal pairs
+    const dx = l.target.x - l.source.x;
+    const dy = l.target.y - l.source.y;
+    const len = Math.sqrt(dx * dx + dy * dy) || 1;
+    const perpX = -dy / len;
+    const perpY = dx / len;
+    const offset = (offsetIndex || 0) * 26;
+
+    const lx = mx + perpX * offset;
+    const ly = my + perpY * offset;
+
     ctx.save();
-    ctx.font = `italic 700 15px "Instrument Serif", "Fraunces", Georgia, serif`;
+    ctx.font = `italic 700 18px "Instrument Serif", "Fraunces", Georgia, serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
+
     const metrics = ctx.measureText(l.label);
-    const padX = 8, padY = 4;
+    const padX = 10, padY = 5;
     const w = metrics.width + padX * 2;
-    const h = 20 + padY;
+    const h = 24 + padY;
 
     ctx.fillStyle = 'rgba(251, 250, 246, 0.95)';
     ctx.strokeStyle = 'rgba(179,27,27,0.4)';
     ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.rect(mx - w/2, my - h/2, w, h);
+    ctx.rect(lx - w / 2, ly - h / 2, w, h);
     ctx.fill();
     ctx.stroke();
 
     ctx.fillStyle = '#B31B1B';
-    ctx.fillText(l.label, mx, my + 1);
+    ctx.fillText(l.label, lx, ly + 1);
     ctx.restore();
   }
 
@@ -895,10 +606,6 @@
         // treat as click
         selectNode(dragNode);
       }
-      if (physicsOn && !moved) {
-        dragNode.fx = null; dragNode.fy = null;
-      }
-      // If physics off, leave pinned. If moved and physics on, leave pinned (user pinned it).
       simulation.alphaTarget(0);
       dragNode = null;
       draw();
@@ -965,43 +672,10 @@
     if (n) selectNode(n);
   }
 
-  function setPhysics(on) {
-    physicsOn = on;
-    if (on) {
-      // Full spring physics: unpin nodes, add link + charge + centering forces
-      for (const n of nodes) { n.fx = null; n.fy = null; }
-      simulation
-        .force('link', d3.forceLink(links)
-          .id(d => d.id)
-          .distance(l => LAYOUT_CONFIG.linkDistance + radiusFor(l.source) + radiusFor(l.target))
-          .strength(0.4)
-        )
-        .force('charge', d3.forceManyBody()
-          .strength(d => LAYOUT_CONFIG.chargeStrength - radiusFor(d) * 10)
-          .distanceMax(700)
-        )
-        .force('center', d3.forceCenter(0, 0).strength(0.06))
-        .on('tick', draw)
-        .on('end', null)
-        .alpha(0.4).alphaDecay(0.01).restart();
-    } else {
-      // Pin all nodes at current positions; remove spring forces; keep collision
-      for (const n of nodes) { n.fx = n.x; n.fy = n.y; }
-      simulation
-        .force('link', null)
-        .force('charge', null)
-        .force('center', null)
-        .alphaTarget(0).alpha(0).stop();
-      simulation.on('end', () => {
-        for (const n of nodes) { n.fx = n.x; n.fy = n.y; }
-      });
-    }
-  }
 
   function init() {
     canvas = document.getElementById('graph');
 
-    // Set up event listeners once
     canvas.addEventListener('mousemove', onMouseMove);
     canvas.addEventListener('mousedown', onMouseDown);
     window.addEventListener('mouseup', onMouseUp);
@@ -1011,58 +685,18 @@
     document.getElementById('zoom-in').onclick = () => zoomAt(W/2, H/2, 1.25);
     document.getElementById('zoom-out').onclick = () => zoomAt(W/2, H/2, 1/1.25);
     document.getElementById('zoom-reset').onclick = resetZoom;
-
-    const toggle = document.getElementById('toggle-physics');
-    toggle.addEventListener('click', () => {
-      const on = !toggle.classList.contains('on');
-      toggle.classList.toggle('on', on);
-      toggle.setAttribute('aria-checked', on ? 'true' : 'false');
-      setPhysics(on);
-    });
   }
 
   function load(graphData) {
     window.ONTOLOGY = graphData;
     if (simulation) simulation.stop();
     transform = { x: 0, y: 0, k: 1 };
-    physicsOn = false;
-    const toggle = document.getElementById('toggle-physics');
-    if (toggle) { toggle.classList.add('on'); toggle.setAttribute('aria-checked', 'true'); }
     setup(graphData);
     resize();
     fitToView();
     initSim();
     draw();
     window.Inspector && window.Inspector.showEmpty();
-  }
-
-  // Expose crossing counter for validation
-  function countCrossings() {
-    const hub = nodes.find(n => n.id === 'Solution');
-    if (!hub) return 0;
-
-    const spokes = new Set();
-    for (const l of links) {
-      if (l.source === hub && l.target !== hub) spokes.add(l.target);
-      if (l.target === hub && l.source !== hub) spokes.add(l.source);
-    }
-
-    const secondaryEdges = [];
-    const spokeIds = new Set(Array.from(spokes).map(n => n.id));
-    for (const l of links) {
-      if (l.source !== hub && l.target !== hub &&
-          spokeIds.has(l.source.id) && spokeIds.has(l.target.id)) {
-        secondaryEdges.push(l);
-      }
-    }
-
-    const angles = new Map();
-    for (const n of spokes) {
-      const angle = Math.atan2(n.y - hub.y, n.x - hub.x);
-      angles.set(n.id, angle);
-    }
-
-    return countAllCrossings(Array.from(spokes), secondaryEdges, hub, angles);
   }
 
   window.Graph = {
@@ -1072,7 +706,6 @@
     getLinks: () => links,
     getLinksForNode: id => linksByNode[id] || [],
     getClusterColor: colorFor,
-    layoutConfig: LAYOUT_CONFIG, // Expose for tuning
-    countCrossings, // Expose for validation
+    layoutConfig: LAYOUT_CONFIG,
   };
 })();
