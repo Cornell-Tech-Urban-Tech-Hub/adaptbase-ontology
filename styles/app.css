@@ -522,25 +522,25 @@ body {
 
 /* Legend overlay, bottom-left */
 .graph-legend {
-  bottom: var(--sp-5);
-  left: var(--sp-5);
-  padding: 8px 10px;
+  top: var(--sp-5);
+  right: var(--sp-5);
+  padding: 12px 14px;
 }
 .graph-legend h4 {
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--fg-4);
-  margin: 0 0 6px 0;
+  color: var(--fg-3);
+  margin: 0 0 8px 0;
   font-weight: 600;
 }
 .legend-row {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 2px 0;
-  font-size: 11px;
+  gap: 8px;
+  padding: 3px 0;
+  font-size: 14px;
   color: var(--fg-2);
   cursor: pointer;
   user-select: none;
@@ -550,27 +550,27 @@ body {
 .legend-row.off { opacity: 0.3; }
 .legend-row.off:hover { opacity: 0.55; }
 .legend-row .dot {
-  width: 8px; height: 8px; border-radius: 50%;
+  width: 10px; height: 10px; border-radius: 50%;
   flex-shrink: 0;
   border: 1.5px solid transparent;
 }
 .legend-row .count {
   margin-left: auto;
-  padding-left: 8px;
+  padding-left: 10px;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 12px;
   color: var(--fg-4);
 }
 
-/* Jacobs logo — transparent float, bottom-right of graph, no box */
+/* Jacobs logo — bottom-left of graph */
 .jacobs-float {
   position: absolute;
   bottom: var(--sp-5);
-  right: calc(var(--sp-5) + 130px); /* clear the controls overlay */
-  width: 100px;
+  left: var(--sp-5);
+  width: 140px;
   height: auto;
   display: block;
-  opacity: 0.35;
+  opacity: 0.55;
   pointer-events: none;
   z-index: 3;
   mix-blend-mode: multiply;

@@ -55,11 +55,16 @@
     return 22 + Math.min(58, Math.sqrt(deg) * 13);
   }
 
+  // Per-node sector constraints (populated during layout)
+  let nodeSectorBounds = new Map();
+
   function applyConcentricLayout() {
     const hub = nodes.find(n => n.id === 'Solution');
     if (!hub) return;
     hub.x = 0;
     hub.y = 0;
+
+    nodeSectorBounds = new Map();
 
     // Group non-hub nodes by cluster, assign ring per node
     const clusterBuckets = new Map();
@@ -71,15 +76,14 @@
 
     // Each cluster gets a sector wedge; place nodes within that wedge at their ring radius
     const sectorNames = Object.keys(SECTOR_ANGLES);
-    const sectorArc = (2 * Math.PI) / sectorNames.length; // equal wedges
-    const gapArc = sectorArc * 0.12; // small gap between sectors
+    const sectorArc = (2 * Math.PI) / sectorNames.length;
+    const gapArc = sectorArc * 0.12;
     const usableArc = sectorArc - gapArc;
 
     for (const cluster of sectorNames) {
       const arr = clusterBuckets.get(cluster);
       if (!arr || arr.length === 0) continue;
 
-      // Sort: ring1 first, then ring2, then ring3; within same ring by degree desc
       arr.sort((a, b) => {
         const ringA = RING1_NODES.has(a.id) ? 1 : RING3_NODES.has(a.id) ? 3 : 2;
         const ringB = RING1_NODES.has(b.id) ? 1 : RING3_NODES.has(b.id) ? 3 : 2;
@@ -89,8 +93,8 @@
 
       const centerAngle = SECTOR_ANGLES[cluster];
       const startAngle = centerAngle - usableArc / 2;
+      const endAngle = centerAngle + usableArc / 2;
 
-      // Distribute evenly within the wedge
       for (let i = 0; i < arr.length; i++) {
         const n = arr[i];
         const ring = RING1_NODES.has(n.id) ? 1 : RING3_NODES.has(n.id) ? 3 : 2;
@@ -98,14 +102,44 @@
                      : ring === 2 ? LAYOUT_CONFIG.ring2Radius
                      : LAYOUT_CONFIG.ring3Radius;
 
-        // Angular position within the wedge
         const angle = arr.length === 1
           ? centerAngle
           : startAngle + (usableArc / (arr.length - 1)) * i;
 
         n.x = Math.cos(angle) * radius;
         n.y = Math.sin(angle) * radius;
+
+        // Store sector bounds for collision clamping
+        nodeSectorBounds.set(n.id, { minAngle: startAngle, maxAngle: endAngle, minR: radius * 0.7, maxR: radius * 1.4 });
       }
+    }
+  }
+
+  function clampToSector() {
+    for (const n of nodes) {
+      const bounds = nodeSectorBounds.get(n.id);
+      if (!bounds) continue;
+
+      let angle = Math.atan2(n.y, n.x);
+      let r = Math.sqrt(n.x * n.x + n.y * n.y);
+
+      // Clamp angle to sector
+      // Handle wrap-around for sectors crossing the -π/π boundary
+      let min = bounds.minAngle, max = bounds.maxAngle;
+      if (min > max) {
+        // Sector wraps around ±π
+        if (angle < min && angle > max) {
+          angle = (Math.abs(angle - min) < Math.abs(angle - max)) ? min : max;
+        }
+      } else {
+        angle = Math.max(min, Math.min(max, angle));
+      }
+
+      // Clamp radius
+      r = Math.max(bounds.minR, Math.min(bounds.maxR, r));
+
+      n.x = Math.cos(angle) * r;
+      n.y = Math.sin(angle) * r;
     }
   }
 
@@ -170,13 +204,13 @@
   function initSim() {
     simulation = d3.forceSimulation(nodes)
       .force('collide', d3.forceCollide()
-        .radius(d => radiusFor(d) + 12)
-        .strength(0.8)
-        .iterations(3)
+        .radius(d => radiusFor(d) + 32)
+        .strength(0.9)
+        .iterations(4)
       )
       .alpha(0.5)
       .alphaDecay(0.05)
-      .on('tick', draw)
+      .on('tick', () => { clampToSector(); draw(); })
       .on('end', () => {
         for (const n of nodes) { n.fx = n.x; n.fy = n.y; }
         fitToView();

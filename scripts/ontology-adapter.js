@@ -11,7 +11,7 @@
     'Location': 'Context',
     'UrbanSystem': 'Context',
     'Stakeholder': 'Context',
-    'Supplier': 'Context',
+    'Supplier': 'Finance',
     'GovernanceStructure': 'Context',
     // Programs — how solutions are planned and delivered
     'Plan': 'Programs',
