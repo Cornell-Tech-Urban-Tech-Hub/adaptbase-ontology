@@ -463,9 +463,10 @@
       drawLabel(n);
     }
 
-    // Edge labels: all connected edges when a node is selected, otherwise hover/selected edge
-    if (selectedNode) {
-      const edgesToDraw = (linksByNode[selectedNode.id] || []).filter(l => l.source !== l.target);
+    // Edge labels: show on hover OR select of a node, otherwise hover/selected edge
+    const activeNode = selectedNode || hoverNode;
+    if (activeNode) {
+      const edgesToDraw = (linksByNode[activeNode.id] || []).filter(l => l.source !== l.target);
       // Detect reciprocal pairs (same two nodes, opposite directions)
       const pairKey = (l) => [l.source.id, l.target.id].sort().join('::');
       const pairCounts = {};
@@ -479,8 +480,8 @@
         const k = pairKey(l);
         let offset = 0;
         if (pairCounts[k] > 1) {
-          offset = pairIndex[k] === 0 ? -1 : 1;
-          pairIndex[k]++;
+          // Shift each label toward its own source node
+          offset = -1;
         }
         drawEdgeLabel(l, offset);
       }
@@ -637,16 +638,16 @@
     const mx = (l.source.x + l.target.x) / 2;
     const my = (l.source.y + l.target.y) / 2;
 
-    // Offset perpendicular to the edge for reciprocal pairs
+    // For reciprocal pairs, shift along the edge toward the source node
     const dx = l.target.x - l.source.x;
     const dy = l.target.y - l.source.y;
     const len = Math.sqrt(dx * dx + dy * dy) || 1;
-    const perpX = -dy / len;
-    const perpY = dx / len;
-    const offset = (offsetIndex || 0) * 26;
+    const axisX = dx / len;
+    const axisY = dy / len;
+    const shift = (offsetIndex || 0) * len * 0.25;
 
-    const lx = mx + perpX * offset;
-    const ly = my + perpY * offset;
+    const lx = mx + axisX * shift;
+    const ly = my + axisY * shift;
 
     ctx.save();
     ctx.font = `italic 700 18px "Instrument Serif", "Fraunces", Georgia, serif`;
