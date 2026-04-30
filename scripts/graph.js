@@ -492,8 +492,12 @@
   }
 
   // Compute quadratic bezier control point for curved reciprocal edges
+  // Only curves when the edge is connected to the active (hovered/selected) node
   function getCurveControl(l) {
     if (!l._curveDir) return null;
+    const activeNode = selectedNode || hoverNode;
+    if (!activeNode) return null;
+    if (l.source !== activeNode && l.target !== activeNode) return null;
     const mx = (l.source.x + l.target.x) / 2;
     const my = (l.source.y + l.target.y) / 2;
     // Use canonical direction (sorted node IDs) so reciprocal pairs get genuinely opposite curves
