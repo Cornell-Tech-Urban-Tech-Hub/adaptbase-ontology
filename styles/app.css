@@ -1551,10 +1551,9 @@ body {
   gap: 2px;
 }
 .rel-item {
-  display: grid;
-  grid-template-columns: 16px auto 1fr;
-  align-items: center;
-  gap: 8px;
+  display: flex;
+  align-items: baseline;
+  gap: 0;
   padding: 5px 8px;
   border-radius: var(--r-xs);
   cursor: pointer;
@@ -1562,11 +1561,17 @@ body {
   font-size: var(--fs-sm);
 }
 .rel-item:hover { background: var(--fog); }
-.rel-dir {
-  font-family: var(--font-mono);
-  font-size: var(--fs-xs);
+.rel-sentence {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.rel-self {
   color: var(--fg-4);
-  text-align: center;
+  font-weight: 400;
+}
+.rel-other {
   font-weight: 600;
 }
 .rel-label {
@@ -1574,23 +1579,6 @@ body {
   font-style: italic;
   color: var(--carnelian);
   white-space: nowrap;
-}
-.rel-target {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-weight: 500;
-  color: var(--fg-2);
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.rel-target .dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  flex-shrink: 0;
 }
 
 /* Meta row (label + value pair) */

@@ -190,12 +190,14 @@
                   const other = out ? l.target : l.source;
                   if (!other) return '';
                   const color = window.Graph.getClusterColor(other.cluster);
+                  const srcLabel = out ? n.label : other.label;
+                  const tgtLabel = out ? other.label : n.label;
+                  const selfIsSrc = out;
                   return `<li class="rel-item" data-nid="${esc(other.id)}" data-eid="${esc(l.id)}">
-                    <span class="rel-dir">${out ? '→' : '←'}</span>
-                    <span class="rel-label">${esc(l.label)}</span>
-                    <span class="rel-target">
-                      <span class="dot" style="background:${color}"></span>
-                      ${esc(other.label)}
+                    <span class="rel-sentence">
+                      <span class="${selfIsSrc ? 'rel-self' : 'rel-other'}" ${!selfIsSrc ? `style="color:${color}"` : ''}>${esc(srcLabel)}</span>
+                      <span class="rel-label">${esc(l.label)}</span>
+                      <span class="${selfIsSrc ? 'rel-other' : 'rel-self'}" ${selfIsSrc ? `style="color:${color}"` : ''}>${esc(tgtLabel)}</span>
                     </span>
                   </li>`;
                 }).join('')}

@@ -15,9 +15,9 @@
 
   // Multi-ring concentric layout
   const LAYOUT_CONFIG = {
-    ring1Radius: 200,           // Inner ring (structural connectors)
-    ring2Radius: 330,           // Middle ring (hub neighbors)
-    ring3Radius: 440,           // Outer ring (leaves)
+    ring1Radius: 240,           // Inner ring (structural connectors)
+    ring2Radius: 360,           // Middle ring (hub neighbors)
+    ring3Radius: 470,           // Outer ring (leaves)
   };
 
   // Sector angles per cluster (radians, starting from top going clockwise)
@@ -246,7 +246,7 @@
       // Clear any rows from a previous load
       legend.querySelectorAll('.legend-row').forEach(r => r.remove());
       Object.keys(CLUSTER_COLORS).forEach(c => {
-        if (!counts[c]) return;
+        if (!counts[c] || c === 'Solution') return;
         const row = document.createElement('div');
         row.className = 'legend-row';
         row.dataset.cluster = c;
@@ -527,9 +527,9 @@
     ctx.stroke();
 
     // Arrow heads — one at each end, both pointing source→target
-    const arrSize = isHighlight ? 13 : 10;
+    const arrSize = isHighlight ? 13 : 8;
     const angle = Math.atan2(dy, dx);
-    ctx.fillStyle = ctx.strokeStyle;
+    ctx.fillStyle = isHighlight ? ctx.strokeStyle : 'rgba(18,20,23,0.10)';
 
     function drawArrow(px, py) {
       ctx.beginPath();

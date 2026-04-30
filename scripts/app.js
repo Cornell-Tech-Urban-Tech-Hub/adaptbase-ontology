@@ -369,14 +369,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!categories || !categories.length) return '<div class="vocab-empty">Empty.</div>';
     return `<ul class="vocab-tree">${categories.map(cat => {
       const children = cat[childKey] || cat.hazards || cat.subcategories || [];
+      const rccShocks = cat.rcc_shocks || [];
       return `
         <li class="vocab-tree-node ${children.length ? 'has-children' : ''}">
           <div class="vocab-tree-header" ${children.length ? 'data-expandable' : ''}>
             ${children.length ? '<span class="vocab-tree-chevron">▶</span>' : '<span class="vocab-tree-leaf">·</span>'}
             <span class="vocab-tree-name">${escapeHtml(cat.name)}</span>
+            ${cat.hazard_source ? `<span class="vocab-badge vocab-badge-type">${escapeHtml(cat.hazard_source)}</span>` : ''}
             ${children.length ? `<span class="vocab-tree-count">${children.length}</span>` : ''}
           </div>
-          ${children.length ? `
+          ${children.length || rccShocks.length ? `
             <ul class="vocab-tree-children" hidden>
               ${children.map(child => `
                 <li class="vocab-tree-node">
@@ -387,6 +389,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                   </div>
                 </li>
               `).join('')}
+              ${rccShocks.length ? `
+                <li class="vocab-tree-node">
+                  <div class="vocab-tree-header">
+                    <span class="vocab-tree-leaf">↔</span>
+                    <span class="vocab-tree-name" style="font-style:italic; opacity:0.7;">RCC shocks: ${rccShocks.map(s => escapeHtml(s)).join(', ')}</span>
+                  </div>
+                </li>
+              ` : ''}
             </ul>
           ` : ''}
         </li>`;
