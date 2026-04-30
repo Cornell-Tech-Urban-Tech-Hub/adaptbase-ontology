@@ -562,22 +562,6 @@
           "_note": "Distinct from C40 mass_movement subsidence; here refers to long-term ground settling from groundwater extraction or soil compaction"
         }
       ]
-    },
-    {
-      "id": "emergent_from_mining",
-      "name": "Emergent (corpus-mining proposals, awaiting reparenting)",
-      "hazard_source": "corpus_mining",
-      "rcc_shocks": [],
-      "hazards": [
-        {
-          "id": "waste_management_challenges",
-          "name": "Waste Management Challenges",
-          "definition": "Chronic challenges related to inadequate waste collection, disposal, and recycling infrastructure that create public health, environmental, and climate resilience risks.",
-          "undrr_terms": [],
-          "source": "corpus_mining_distribution_v0"
-        }
-      ],
-      "source": "corpus_mining_distribution_v0"
     }
   ]
 }

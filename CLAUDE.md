@@ -6,7 +6,7 @@ This repo contains the formal ontology for **AdaptBase** (also referred to as "R
 
 The ontology is maintained as versioned JSON files in `ontology/` and displayed via a browser-based viewer at `index.html`.
 
-**Current version:** v0.3.2 (2026-04-30)
+**Current version:** v0.1 (2026-04-30)
 
 ---
 
@@ -23,8 +23,7 @@ scripts/
   comments.js                 # Hardcoded mock comment threads
   app.js                      # Bootstrap: wires UI, search, edit mode, save
 ontology/
-  ontology-v0.3.2.json        # Current version
-  ontology-v0.2.json          # Version history
+  ontology-v0.1.json          # Current version
 schemas/vocabularies/         # Controlled vocabularies (hazards, systems, etc.)
 mining/                       # Pipeline for grounding vocab in corpus data
 ```

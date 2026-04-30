@@ -253,7 +253,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     'crf-goals': 'schemas/vocabularies/crf-goals.json',
     'enums': 'schemas/vocabularies/enums.json',
     'vulnerable-populations': 'schemas/vocabularies/vulnerable-populations.json',
-    'resilience-attributes': 'schemas/vocabularies/resilience-attributes.json',
   };
   const vocabCache = {};
 
@@ -394,7 +393,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (vocabId === 'crf-goals') return renderCrfGoals(data.dimensions);
     if (vocabId === 'enums') return renderEnums(data);
     if (vocabId === 'vulnerable-populations') return renderFlatList(data.populations);
-    if (vocabId === 'resilience-attributes') return renderFlatList(data.attributes, 'cdp_label');
     return '<div class="vocab-empty">Unknown vocabulary format.</div>';
   }
 
