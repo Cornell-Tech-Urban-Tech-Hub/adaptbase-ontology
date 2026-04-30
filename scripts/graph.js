@@ -530,14 +530,14 @@
       (hoverNode && (l.source === hoverNode || l.target === hoverNode));
 
     if (isDim) {
-      ctx.strokeStyle = 'rgba(18,20,23,0.05)';
-      ctx.lineWidth = 0.8;
+      ctx.strokeStyle = 'rgba(18,20,23,0.03)';
+      ctx.lineWidth = 0.6;
     } else if (isHighlight) {
       ctx.strokeStyle = '#B31B1B';
       ctx.lineWidth = 1.6;
     } else {
-      ctx.strokeStyle = 'rgba(18,20,23,0.18)';
-      ctx.lineWidth = 1;
+      ctx.strokeStyle = 'rgba(18,20,23,0.10)';
+      ctx.lineWidth = 0.7;
     }
 
     const cp = getCurveControl(l);
@@ -553,7 +553,7 @@
 
     // Arrowheads at both ends
     const arrSize = isHighlight ? 13 : 8;
-    ctx.fillStyle = isHighlight ? ctx.strokeStyle : 'rgba(18,20,23,0.10)';
+    ctx.fillStyle = isHighlight ? ctx.strokeStyle : 'rgba(18,20,23,0.06)';
 
     // Target-end arrow — angle matches curve tangent at endpoint
     let targetAngle;

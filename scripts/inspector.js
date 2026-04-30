@@ -12,6 +12,38 @@
     return `${target.id}:${target._sourceId}:${target._targetId}`;
   }
 
+  // Sort relationships clockwise from 12 o'clock by other node's angle,
+  // grouping reciprocal pairs together (outgoing first)
+  function sortRelationships(links, currentNode) {
+    const sorted = links.slice();
+    // Compute clockwise angle from 12 o'clock for each link's other node
+    function angleOf(l) {
+      const other = l.source.id === currentNode.id ? l.target : l.source;
+      const dx = other.x - currentNode.x;
+      const dy = other.y - currentNode.y;
+      // atan2 from -π to π, convert to clockwise from north (0 to 2π)
+      let a = Math.atan2(dx, -dy); // north=0, clockwise positive
+      if (a < 0) a += 2 * Math.PI;
+      return a;
+    }
+    function otherNode(l) {
+      return l.source.id === currentNode.id ? l.target.id : l.source.id;
+    }
+    function isOutgoing(l) {
+      return l.source.id === currentNode.id;
+    }
+    sorted.sort((a, b) => {
+      const otherA = otherNode(a), otherB = otherNode(b);
+      // Group by other node first (reciprocals stay together)
+      if (otherA === otherB) {
+        // Outgoing edges first within the same pair
+        return isOutgoing(a) === isOutgoing(b) ? 0 : isOutgoing(a) ? -1 : 1;
+      }
+      return angleOf(a) - angleOf(b);
+    });
+    return sorted;
+  }
+
   function showEmpty() {
     const featured = [
       { id: 'Solution', lede: 'The central hub — all other solution-domain entities connect to it, with additional relationships between them.' },
@@ -185,7 +217,7 @@
             <div class="section">
               <h4>Relationships <span class="section-count">${links.length}</span></h4>
               <ul class="rel-list">
-                ${links.map(l => {
+                ${sortRelationships(links, n).map(l => {
                   const out = l.source.id === n.id;
                   const other = out ? l.target : l.source;
                   if (!other) return '';

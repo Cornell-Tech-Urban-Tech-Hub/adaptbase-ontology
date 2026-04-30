@@ -440,42 +440,43 @@ body {
 }
 
 /* Search bar below hero stats, above graph */
-.hero-search {
-  position: relative;
+.graph-search {
+  position: absolute;
+  top: var(--sp-5);
+  left: var(--sp-5);
+  z-index: 10;
   display: flex;
   align-items: center;
-  gap: 0;
-  margin-top: var(--sp-4);
-  border-top: 1px solid var(--border-hair);
-  padding-top: var(--sp-3);
-  max-width: 1600px;
-  margin-left: auto;
-  margin-right: auto;
+  width: min(380px, calc(100% - 200px));
 }
-.hero-search svg {
+.graph-search svg {
   position: absolute;
-  left: 10px;
+  left: 12px;
   color: var(--fg-4);
   pointer-events: none;
   flex-shrink: 0;
 }
-.hero-search input {
+.graph-search input {
   width: 100%;
   font-family: var(--font-sans);
-  font-size: var(--fs-sm);
-  padding: 8px 12px 8px 32px;
-  background: var(--bg-2);
+  font-size: var(--fs-base);
+  padding: 10px 14px 10px 36px;
+  background: rgba(251, 250, 246, 0.92);
+  backdrop-filter: saturate(140%) blur(8px);
+  -webkit-backdrop-filter: saturate(140%) blur(8px);
   border: 1px solid var(--border-soft);
-  border-radius: var(--r-sm);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-1);
   color: var(--fg-1);
   outline: none;
   transition: border-color var(--dur-fast) var(--ease-standard);
 }
-.hero-search input:focus {
+.graph-search input:focus {
   border-color: var(--carnelian);
   box-shadow: 0 0 0 2px rgba(179,27,27,0.12);
+  background: var(--bg-2);
 }
-.hero-search .search-results {
+.graph-search .search-results {
   top: calc(100% + 4px);
   left: 0;
   right: 0;
