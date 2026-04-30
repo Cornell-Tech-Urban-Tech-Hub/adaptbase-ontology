@@ -234,6 +234,20 @@
       if (l.source.id !== l.target.id) linksByNode[l.target.id].push(l);
     }
 
+    // Detect reciprocal pairs and assign curve directions
+    const pairMap = {};
+    for (const l of links) {
+      const k = [l.source.id, l.target.id].sort().join('::');
+      if (!pairMap[k]) pairMap[k] = [];
+      pairMap[k].push(l);
+    }
+    for (const k in pairMap) {
+      if (pairMap[k].length > 1) {
+        pairMap[k][0]._curveDir = 1;
+        pairMap[k][1]._curveDir = -1;
+      }
+    }
+
     // Deterministic concentric ring layout
     applyConcentricLayout();
 
@@ -467,31 +481,31 @@
     const activeNode = selectedNode || hoverNode;
     if (activeNode) {
       const edgesToDraw = (linksByNode[activeNode.id] || []).filter(l => l.source !== l.target);
-      // Detect reciprocal pairs (same two nodes, opposite directions)
-      const pairKey = (l) => [l.source.id, l.target.id].sort().join('::');
-      const pairCounts = {};
-      const pairIndex = {};
-      for (const l of edgesToDraw) {
-        const k = pairKey(l);
-        pairCounts[k] = (pairCounts[k] || 0) + 1;
-        pairIndex[k] = 0;
-      }
-      for (const l of edgesToDraw) {
-        const k = pairKey(l);
-        let offset = 0;
-        if (pairCounts[k] > 1) {
-          // Shift each label toward its own source node
-          offset = -1;
-        }
-        drawEdgeLabel(l, offset);
-      }
+      for (const l of edgesToDraw) drawEdgeLabel(l);
     } else if (selectedEdge) {
-      drawEdgeLabel(selectedEdge, 0);
+      drawEdgeLabel(selectedEdge);
     } else if (hoverEdge) {
-      drawEdgeLabel(hoverEdge, 0);
+      drawEdgeLabel(hoverEdge);
     }
 
     ctx.restore();
+  }
+
+  // Compute quadratic bezier control point for curved reciprocal edges
+  function getCurveControl(l) {
+    if (!l._curveDir) return null;
+    const mx = (l.source.x + l.target.x) / 2;
+    const my = (l.source.y + l.target.y) / 2;
+    // Use canonical direction (sorted node IDs) so reciprocal pairs get genuinely opposite curves
+    const [id1, id2] = [l.source.id, l.target.id].sort();
+    const n1 = nodeById[id1], n2 = nodeById[id2];
+    const dx = n2.x - n1.x;
+    const dy = n2.y - n1.y;
+    const len = Math.sqrt(dx * dx + dy * dy) || 1;
+    const perpX = -dy / len;
+    const perpY = dx / len;
+    const bow = Math.min(len * 0.25, 60);
+    return { x: mx + perpX * bow * l._curveDir, y: my + perpY * bow * l._curveDir };
   }
 
   function drawLink(l, isDim) {
@@ -522,32 +536,55 @@
       ctx.lineWidth = 1;
     }
 
+    const cp = getCurveControl(l);
+
     ctx.beginPath();
     ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
+    if (cp) {
+      ctx.quadraticCurveTo(cp.x, cp.y, x2, y2);
+    } else {
+      ctx.lineTo(x2, y2);
+    }
     ctx.stroke();
 
-    // Arrow heads — one at each end, both pointing source→target
+    // Arrowheads at both ends
     const arrSize = isHighlight ? 13 : 8;
-    const angle = Math.atan2(dy, dx);
     ctx.fillStyle = isHighlight ? ctx.strokeStyle : 'rgba(18,20,23,0.10)';
 
-    function drawArrow(px, py) {
-      ctx.beginPath();
-      ctx.moveTo(px, py);
-      ctx.lineTo(px - arrSize * Math.cos(angle - Math.PI / 7),
-                 py - arrSize * Math.sin(angle - Math.PI / 7));
-      ctx.lineTo(px - arrSize * Math.cos(angle + Math.PI / 7),
-                 py - arrSize * Math.sin(angle + Math.PI / 7));
-      ctx.closePath();
-      ctx.fill();
+    // Target-end arrow — angle matches curve tangent at endpoint
+    let targetAngle;
+    if (cp) {
+      targetAngle = Math.atan2(y2 - cp.y, x2 - cp.x);
+    } else {
+      targetAngle = Math.atan2(dy, dx);
     }
+    ctx.beginPath();
+    ctx.moveTo(x2, y2);
+    ctx.lineTo(x2 - arrSize * Math.cos(targetAngle - Math.PI / 7),
+               y2 - arrSize * Math.sin(targetAngle - Math.PI / 7));
+    ctx.lineTo(x2 - arrSize * Math.cos(targetAngle + Math.PI / 7),
+               y2 - arrSize * Math.sin(targetAngle + Math.PI / 7));
+    ctx.closePath();
+    ctx.fill();
 
-    // target-end arrow
-    drawArrow(x2, y2);
-    // source-end arrow — placed arrSize*2 along the line from x1,y1
+    // Source-end arrow — tangent at start, offset inward along curve
+    let sourceAngle;
+    if (cp) {
+      sourceAngle = Math.atan2(cp.y - y1, cp.x - x1);
+    } else {
+      sourceAngle = Math.atan2(dy, dx);
+    }
     const srcOffset = arrSize * 2;
-    drawArrow(x1 + ux * srcOffset, y1 + uy * srcOffset);
+    const srcAx = x1 + Math.cos(sourceAngle) * srcOffset;
+    const srcAy = y1 + Math.sin(sourceAngle) * srcOffset;
+    ctx.beginPath();
+    ctx.moveTo(srcAx, srcAy);
+    ctx.lineTo(srcAx - arrSize * Math.cos(sourceAngle - Math.PI / 7),
+               srcAy - arrSize * Math.sin(sourceAngle - Math.PI / 7));
+    ctx.lineTo(srcAx - arrSize * Math.cos(sourceAngle + Math.PI / 7),
+               srcAy - arrSize * Math.sin(sourceAngle + Math.PI / 7));
+    ctx.closePath();
+    ctx.fill();
 
     ctx.restore();
   }
@@ -632,22 +669,19 @@
     ctx.restore();
   }
 
-  function drawEdgeLabel(l, offsetIndex) {
+  function drawEdgeLabel(l) {
     if (l.source === l.target) return;
 
-    const mx = (l.source.x + l.target.x) / 2;
-    const my = (l.source.y + l.target.y) / 2;
-
-    // For reciprocal pairs, shift along the edge toward the source node
-    const dx = l.target.x - l.source.x;
-    const dy = l.target.y - l.source.y;
-    const len = Math.sqrt(dx * dx + dy * dy) || 1;
-    const axisX = dx / len;
-    const axisY = dy / len;
-    const shift = (offsetIndex || 0) * len * 0.25;
-
-    const lx = mx + axisX * shift;
-    const ly = my + axisY * shift;
+    // Position at curve midpoint (t=0.5 on quadratic bezier) or line midpoint
+    const cp = getCurveControl(l);
+    let lx, ly;
+    if (cp) {
+      lx = 0.25 * l.source.x + 0.5 * cp.x + 0.25 * l.target.x;
+      ly = 0.25 * l.source.y + 0.5 * cp.y + 0.25 * l.target.y;
+    } else {
+      lx = (l.source.x + l.target.x) / 2;
+      ly = (l.source.y + l.target.y) / 2;
+    }
 
     ctx.save();
     ctx.font = `italic 700 18px "Instrument Serif", "Fraunces", Georgia, serif`;
@@ -689,10 +723,29 @@
     for (const l of links) {
       if (l.source === l.target) continue;
       if (!isClusterOn(l.source.cluster) || !isClusterOn(l.target.cluster)) continue;
-      const d = distToSegment(wx, wy, l.source.x, l.source.y, l.target.x, l.target.y);
+      const cp = getCurveControl(l);
+      let d;
+      if (cp) {
+        d = distToBezier(wx, wy, l.source.x, l.source.y, cp.x, cp.y, l.target.x, l.target.y);
+      } else {
+        d = distToSegment(wx, wy, l.source.x, l.source.y, l.target.x, l.target.y);
+      }
       if (d < bestDist) { bestDist = d; best = l; }
     }
     return best;
+  }
+
+  function distToBezier(px, py, x0, y0, cx, cy, x1, y1) {
+    // Sample the quadratic bezier at intervals and find closest point
+    let minD = Infinity;
+    for (let t = 0; t <= 1; t += 0.05) {
+      const it = 1 - t;
+      const bx = it * it * x0 + 2 * it * t * cx + t * t * x1;
+      const by = it * it * y0 + 2 * it * t * cy + t * t * y1;
+      const d = Math.hypot(px - bx, py - by);
+      if (d < minD) minD = d;
+    }
+    return minD;
   }
 
   function distToSegment(px, py, x1, y1, x2, y2) {
