@@ -15,9 +15,9 @@
 
   // Multi-ring concentric layout
   const LAYOUT_CONFIG = {
-    ring1Radius: 180,           // Inner ring (structural connectors)
-    ring2Radius: 300,           // Middle ring (hub neighbors)
-    ring3Radius: 400,           // Outer ring (leaves)
+    ring1Radius: 200,           // Inner ring (structural connectors)
+    ring2Radius: 330,           // Middle ring (hub neighbors)
+    ring3Radius: 440,           // Outer ring (leaves)
   };
 
   // Sector angles per cluster (radians, starting from top going clockwise)
@@ -40,7 +40,7 @@
   let canvas, ctx, dpr;
   let W = 0, H = 0;
   let nodes = [], links = [], nodeById = {}, linksByNode = {};
-  let simulation;
+  let simulation = null;
   let transform = { x: 0, y: 0, k: 1 };
   let hoverNode = null, hoverEdge = null;
   let selectedNode = null, selectedEdge = null;
@@ -57,6 +57,8 @@
 
   // Per-node sector constraints (populated during layout)
   let nodeSectorBounds = new Map();
+  // Sector geometry for drawing separators
+  let sectorBoundaries = [];
 
   function applyConcentricLayout() {
     const hub = nodes.find(n => n.id === 'Solution');
@@ -65,6 +67,7 @@
     hub.y = 0;
 
     nodeSectorBounds = new Map();
+    sectorBoundaries = [];
 
     // Group non-hub nodes by cluster, assign ring per node
     const clusterBuckets = new Map();
@@ -74,44 +77,111 @@
       clusterBuckets.get(n.cluster).push(n);
     }
 
-    // Each cluster gets a sector wedge; place nodes within that wedge at their ring radius
-    const sectorNames = Object.keys(SECTOR_ANGLES);
-    const sectorArc = (2 * Math.PI) / sectorNames.length;
-    const gapArc = sectorArc * 0.12;
-    const usableArc = sectorArc - gapArc;
+    // Determine optimal sector order to minimize inter-cluster edge length
+    const clusterNames = Object.keys(SECTOR_ANGLES);
 
-    for (const cluster of sectorNames) {
-      const arr = clusterBuckets.get(cluster);
-      if (!arr || arr.length === 0) continue;
+    // Count inter-cluster edges (excluding hub)
+    const interClusterEdges = {};
+    for (const a of clusterNames) for (const b of clusterNames) {
+      interClusterEdges[a + '::' + b] = 0;
+    }
+    for (const l of links) {
+      const ca = l.source.cluster, cb = l.target.cluster;
+      if (ca === 'Solution' || cb === 'Solution') continue;
+      if (ca !== cb) {
+        interClusterEdges[ca + '::' + cb]++;
+        interClusterEdges[cb + '::' + ca]++;
+      }
+    }
 
-      arr.sort((a, b) => {
-        const ringA = RING1_NODES.has(a.id) ? 1 : RING3_NODES.has(a.id) ? 3 : 2;
-        const ringB = RING1_NODES.has(b.id) ? 1 : RING3_NODES.has(b.id) ? 3 : 2;
-        if (ringA !== ringB) return ringA - ringB;
-        return (b.degree || 0) - (a.degree || 0);
-      });
-
-      const centerAngle = SECTOR_ANGLES[cluster];
-      const startAngle = centerAngle - usableArc / 2;
-      const endAngle = centerAngle + usableArc / 2;
-
+    // Try all permutations (5! = 120) and score by adjacency
+    function permutations(arr) {
+      if (arr.length <= 1) return [arr];
+      const result = [];
       for (let i = 0; i < arr.length; i++) {
-        const n = arr[i];
+        const rest = [...arr.slice(0, i), ...arr.slice(i + 1)];
+        for (const p of permutations(rest)) result.push([arr[i], ...p]);
+      }
+      return result;
+    }
+
+    function scorePerm(perm) {
+      let cost = 0;
+      for (let i = 0; i < perm.length; i++) {
+        for (let j = i + 1; j < perm.length; j++) {
+          const dist = Math.min(j - i, perm.length - (j - i)); // circular distance
+          const edges = interClusterEdges[perm[i] + '::' + perm[j]];
+          cost += edges * dist;
+        }
+      }
+      return cost;
+    }
+
+    let bestOrder = clusterNames;
+    let bestCost = Infinity;
+    for (const perm of permutations(clusterNames)) {
+      const c = scorePerm(perm);
+      if (c < bestCost) { bestCost = c; bestOrder = perm; }
+    }
+
+    const sectorNames = bestOrder;
+    const totalGap = sectorNames.length * 0.04; // minimal gaps between sectors
+    const availableArc = 2 * Math.PI - totalGap;
+    const gapArc = totalGap / sectorNames.length;
+
+    // Weight = nodes + intra-cluster edges (gives denser clusters more room)
+    const weights = sectorNames.map(cluster => {
+      const arr = clusterBuckets.get(cluster) || [];
+      const nodeIds = new Set(arr.map(n => n.id));
+      let intraLinks = 0;
+      for (const l of links) {
+        if (nodeIds.has(l.source.id) && nodeIds.has(l.target.id)) intraLinks++;
+      }
+      return arr.length + intraLinks * 0.5;
+    });
+    const totalWeight = weights.reduce((s, w) => s + w, 0);
+    const sectorArcs = weights.map(w => (w / totalWeight) * availableArc);
+
+    // Place sectors sequentially starting from top (-π/2)
+    let cursor = -Math.PI / 2 - sectorArcs[0] / 2;
+
+    for (let si = 0; si < sectorNames.length; si++) {
+      const cluster = sectorNames[si];
+      const usableArc = sectorArcs[si];
+      const arr = clusterBuckets.get(cluster);
+      if (!arr || arr.length === 0) { cursor += usableArc + gapArc; continue; }
+
+      const startAngle = cursor;
+      const endAngle = cursor + usableArc;
+
+      // Sort by degree descending — highest-degree nodes get center positions
+      arr.sort((a, b) => (b.degree || 0) - (a.degree || 0));
+      // Reorder to place highest-degree at center of arc (interleave from center out)
+      const ordered = new Array(arr.length);
+      for (let i = 0; i < arr.length; i++) {
+        if (i % 2 === 0) ordered[Math.floor(arr.length / 2) + Math.floor(i / 2)] = arr[i];
+        else ordered[Math.floor(arr.length / 2) - Math.ceil(i / 2)] = arr[i];
+      }
+
+      for (let i = 0; i < ordered.length; i++) {
+        const n = ordered[i];
         const ring = RING1_NODES.has(n.id) ? 1 : RING3_NODES.has(n.id) ? 3 : 2;
         const radius = ring === 1 ? LAYOUT_CONFIG.ring1Radius
                      : ring === 2 ? LAYOUT_CONFIG.ring2Radius
                      : LAYOUT_CONFIG.ring3Radius;
 
-        const angle = arr.length === 1
-          ? centerAngle
-          : startAngle + (usableArc / (arr.length - 1)) * i;
+        const angle = ordered.length === 1
+          ? (startAngle + endAngle) / 2
+          : startAngle + (usableArc / (ordered.length + 1)) * (i + 1);
 
         n.x = Math.cos(angle) * radius;
         n.y = Math.sin(angle) * radius;
 
-        // Store sector bounds for collision clamping
         nodeSectorBounds.set(n.id, { minAngle: startAngle, maxAngle: endAngle, minR: radius * 0.7, maxR: radius * 1.4 });
       }
+
+      sectorBoundaries.push({ cluster, startAngle, endAngle, color: CLUSTER_COLORS[cluster] });
+      cursor = endAngle + gapArc;
     }
   }
 
@@ -123,17 +193,12 @@
       let angle = Math.atan2(n.y, n.x);
       let r = Math.sqrt(n.x * n.x + n.y * n.y);
 
-      // Clamp angle to sector
-      // Handle wrap-around for sectors crossing the -π/π boundary
+      // Normalize angle to match sector range (sectors can exceed π)
       let min = bounds.minAngle, max = bounds.maxAngle;
-      if (min > max) {
-        // Sector wraps around ±π
-        if (angle < min && angle > max) {
-          angle = (Math.abs(angle - min) < Math.abs(angle - max)) ? min : max;
-        }
-      } else {
-        angle = Math.max(min, Math.min(max, angle));
-      }
+      // Shift angle into the same revolution as the sector
+      while (angle < min - Math.PI) angle += 2 * Math.PI;
+      while (angle > max + Math.PI) angle -= 2 * Math.PI;
+      angle = Math.max(min, Math.min(max, angle));
 
       // Clamp radius
       r = Math.max(bounds.minR, Math.min(bounds.maxR, r));
@@ -201,21 +266,44 @@
     }
   }
 
-  function initSim() {
-    simulation = d3.forceSimulation(nodes)
-      .force('collide', d3.forceCollide()
-        .radius(d => radiusFor(d) + 32)
-        .strength(0.9)
-        .iterations(4)
-      )
-      .alpha(0.5)
-      .alphaDecay(0.05)
-      .on('tick', () => { clampToSector(); draw(); })
+  // Preferred radius per node (soft target for radial force)
+  let nodeTargetRadius = new Map();
+
+  function initDiffusionSim() {
+    // Build target radii
+    nodeTargetRadius = new Map();
+    for (const n of nodes) {
+      if (n.id === 'Solution') { nodeTargetRadius.set(n.id, 0); continue; }
+      const ring = RING1_NODES.has(n.id) ? 1 : RING3_NODES.has(n.id) ? 3 : 2;
+      const r = ring === 1 ? LAYOUT_CONFIG.ring1Radius
+              : ring === 2 ? LAYOUT_CONFIG.ring2Radius
+              : LAYOUT_CONFIG.ring3Radius;
+      nodeTargetRadius.set(n.id, r);
+    }
+
+    const sim = d3.forceSimulation(nodes)
+      .force('charge', d3.forceManyBody().strength(-300).distanceMax(500))
+      .force('collide', d3.forceCollide().radius(d => radiusFor(d) + 14).strength(1).iterations(2))
+      .force('radial', d3.forceRadial(
+        d => nodeTargetRadius.get(d.id) || 0,
+        0, 0
+      ).strength(0.3))
+      .alpha(1)
+      .alphaDecay(0.04)
+      .on('tick', () => {
+        // Pin hub at center
+        const hub = nodes.find(n => n.id === 'Solution');
+        if (hub) { hub.x = 0; hub.y = 0; }
+        clampToSector();
+        draw();
+      })
       .on('end', () => {
         for (const n of nodes) { n.fx = n.x; n.fy = n.y; }
         fitToView();
         draw();
       });
+
+    return sim;
   }
 
   function resize() {
@@ -322,6 +410,31 @@
     ctx.save();
     ctx.translate(transform.x, transform.y);
     ctx.scale(transform.k, transform.k);
+
+    // --- draw sector wedge fills and separators ---
+    const sepRadius = LAYOUT_CONFIG.ring3Radius + 80;
+    for (const sec of sectorBoundaries) {
+      ctx.save();
+      // Subtle wedge fill
+      const c = sec.color;
+      const r = parseInt(c.slice(1,3),16), g = parseInt(c.slice(3,5),16), b = parseInt(c.slice(5,7),16);
+      ctx.fillStyle = `rgba(${r},${g},${b},0.03)`;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.arc(0, 0, sepRadius, sec.startAngle, sec.endAngle);
+      ctx.closePath();
+      ctx.fill();
+      // Separator line at startAngle
+      ctx.strokeStyle = 'rgba(18,20,23,0.12)';
+      ctx.lineWidth = 0.8;
+      ctx.setLineDash([6, 4]);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(Math.cos(sec.startAngle) * sepRadius, Math.sin(sec.startAngle) * sepRadius);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.restore();
+    }
 
     // --- draw links ---
     // Two passes: dim first, then bright
@@ -598,8 +711,10 @@
     const { x: wx, y: wy } = toWorld(sx, sy);
 
     if (dragNode) {
+      dragNode.x = wx; dragNode.y = wy;
       dragNode.fx = wx; dragNode.fy = wy;
-      simulation.alphaTarget(0.3).restart();
+      if (simulation) simulation.alphaTarget(0.1).restart();
+      draw();
       return;
     }
     if (isPanning) {
@@ -626,7 +741,7 @@
       dragNode = hit;
       dragStart = { mx: e.clientX, my: e.clientY, moved: false };
       hit.fx = hit.x; hit.fy = hit.y;
-      simulation.alphaTarget(0.3).restart();
+      if (simulation) simulation.alphaTarget(0.1).restart();
     } else {
       isPanning = true;
       panStart = { mx: e.clientX, my: e.clientY, tx: transform.x, ty: transform.y };
@@ -640,7 +755,8 @@
         // treat as click
         selectNode(dragNode);
       }
-      simulation.alphaTarget(0);
+      if (simulation) simulation.alphaTarget(0);
+      dragNode.fx = dragNode.x; dragNode.fy = dragNode.y;
       dragNode = null;
       draw();
       return;
@@ -728,7 +844,7 @@
     setup(graphData);
     resize();
     fitToView();
-    initSim();
+    simulation = initDiffusionSim();
     draw();
     window.Inspector && window.Inspector.showEmpty();
   }
