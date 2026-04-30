@@ -13,11 +13,11 @@
     'Outcomes': '#D4900A',  // warm amber
   };
 
-  // Multi-ring concentric layout
+  // Two-ring layout: high-degree inner, low-degree outer
   const LAYOUT_CONFIG = {
-    ring1Radius: 240,           // Inner ring (structural connectors)
-    ring2Radius: 360,           // Middle ring (hub neighbors)
-    ring3Radius: 470,           // Outer ring (leaves)
+    ringCount: 2,
+    innerRadius: 280,
+    outerRadius: 460,
   };
 
   // Sector angles per cluster (radians, starting from top going clockwise)
@@ -30,12 +30,7 @@
     'Context':   -Math.PI / 2 + 8*Math.PI/5,    // top-left
   };
 
-  // Ring assignments: which nodes go on which ring
-  // Ring 1: high cross-connectivity (degree > 4, excluding Solution)
-  // Ring 3: not connected to hub directly
-  // Ring 2: everything else
-  const RING1_NODES = new Set(['Plan', 'Action', 'Stakeholder', 'ExposureUnit', 'Location']);
-  const RING3_NODES = new Set(['Indicator', 'FinancingSource', 'GovernanceStructure', 'Mechanism', 'EnablingCondition', 'Supplier']);
+  // No hard ring assignments — radius is computed continuously from node degree
 
   let canvas, ctx, dpr;
   let W = 0, H = 0;
@@ -69,7 +64,7 @@
     nodeSectorBounds = new Map();
     sectorBoundaries = [];
 
-    // Group non-hub nodes by cluster, assign ring per node
+    // Group non-hub nodes by cluster
     const clusterBuckets = new Map();
     for (const n of nodes) {
       if (n === hub) continue;
@@ -80,7 +75,6 @@
     // Determine optimal sector order to minimize inter-cluster edge length
     const clusterNames = Object.keys(SECTOR_ANGLES);
 
-    // Count inter-cluster edges (excluding hub)
     const interClusterEdges = {};
     for (const a of clusterNames) for (const b of clusterNames) {
       interClusterEdges[a + '::' + b] = 0;
@@ -94,7 +88,6 @@
       }
     }
 
-    // Try all permutations (5! = 120) and score by adjacency
     function permutations(arr) {
       if (arr.length <= 1) return [arr];
       const result = [];
@@ -109,7 +102,7 @@
       let cost = 0;
       for (let i = 0; i < perm.length; i++) {
         for (let j = i + 1; j < perm.length; j++) {
-          const dist = Math.min(j - i, perm.length - (j - i)); // circular distance
+          const dist = Math.min(j - i, perm.length - (j - i));
           const edges = interClusterEdges[perm[i] + '::' + perm[j]];
           cost += edges * dist;
         }
@@ -125,11 +118,10 @@
     }
 
     const sectorNames = bestOrder;
-    const totalGap = sectorNames.length * 0.04; // minimal gaps between sectors
+    const totalGap = sectorNames.length * 0.04;
     const availableArc = 2 * Math.PI - totalGap;
     const gapArc = totalGap / sectorNames.length;
 
-    // Weight = nodes + intra-cluster edges (gives denser clusters more room)
     const weights = sectorNames.map(cluster => {
       const arr = clusterBuckets.get(cluster) || [];
       const nodeIds = new Set(arr.map(n => n.id));
@@ -142,7 +134,13 @@
     const totalWeight = weights.reduce((s, w) => s + w, 0);
     const sectorArcs = weights.map(w => (w / totalWeight) * availableArc);
 
-    // Place sectors sequentially starting from top (-π/2)
+    // Compute evenly-spaced ring radii
+    const { ringCount, innerRadius, outerRadius } = LAYOUT_CONFIG;
+    const ringRadii = [];
+    for (let r = 0; r < ringCount; r++) {
+      ringRadii.push(innerRadius + (outerRadius - innerRadius) * (r / (ringCount - 1)));
+    }
+
     let cursor = -Math.PI / 2 - sectorArcs[0] / 2;
 
     for (let si = 0; si < sectorNames.length; si++) {
@@ -154,30 +152,36 @@
       const startAngle = cursor;
       const endAngle = cursor + usableArc;
 
-      // Sort by degree descending — highest-degree nodes get center positions
-      arr.sort((a, b) => (b.degree || 0) - (a.degree || 0));
-      // Reorder to place highest-degree at center of arc (interleave from center out)
-      const ordered = new Array(arr.length);
-      for (let i = 0; i < arr.length; i++) {
-        if (i % 2 === 0) ordered[Math.floor(arr.length / 2) + Math.floor(i / 2)] = arr[i];
-        else ordered[Math.floor(arr.length / 2) - Math.ceil(i / 2)] = arr[i];
-      }
+      // Split THIS sector's nodes evenly: top half by degree → inner, rest → outer
+      arr.sort((a, b) => (b.degree || 1) - (a.degree || 1));
+      const half = Math.ceil(arr.length / 2);
+      const ringBuckets = [arr.slice(0, half), arr.slice(half)];
 
-      for (let i = 0; i < ordered.length; i++) {
-        const n = ordered[i];
-        const ring = RING1_NODES.has(n.id) ? 1 : RING3_NODES.has(n.id) ? 3 : 2;
-        const radius = ring === 1 ? LAYOUT_CONFIG.ring1Radius
-                     : ring === 2 ? LAYOUT_CONFIG.ring2Radius
-                     : LAYOUT_CONFIG.ring3Radius;
+      // Place nodes: even angular spacing within each ring
+      for (let ri = 0; ri < ringCount; ri++) {
+        const ringNodes = ringBuckets[ri];
+        if (!ringNodes.length) continue;
+        const radius = ringRadii[ri];
 
-        const angle = ordered.length === 1
-          ? (startAngle + endAngle) / 2
-          : startAngle + (usableArc / (ordered.length + 1)) * (i + 1);
+        // Sort by degree within ring for consistent ordering
+        ringNodes.sort((a, b) => (b.degree || 1) - (a.degree || 1));
 
-        n.x = Math.cos(angle) * radius;
-        n.y = Math.sin(angle) * radius;
+        for (let i = 0; i < ringNodes.length; i++) {
+          const n = ringNodes[i];
+          const angle = ringNodes.length === 1
+            ? (startAngle + endAngle) / 2
+            : startAngle + (usableArc / (ringNodes.length + 1)) * (i + 1);
 
-        nodeSectorBounds.set(n.id, { minAngle: startAngle, maxAngle: endAngle, minR: radius * 0.7, maxR: radius * 1.4 });
+          n.x = Math.cos(angle) * radius;
+          n.y = Math.sin(angle) * radius;
+
+          nodeSectorBounds.set(n.id, {
+            minAngle: startAngle,
+            maxAngle: endAngle,
+            minR: radius * 0.85,
+            maxR: radius * 1.15,
+          });
+        }
       }
 
       sectorBoundaries.push({ cluster, startAngle, endAngle, color: CLUSTER_COLORS[cluster] });
@@ -280,32 +284,27 @@
     }
   }
 
-  // Preferred radius per node (soft target for radial force)
+  // Preferred radius per node (matches ring assignment from layout)
   let nodeTargetRadius = new Map();
 
   function initDiffusionSim() {
-    // Build target radii
+    // Target radius = actual placed radius from layout
     nodeTargetRadius = new Map();
     for (const n of nodes) {
       if (n.id === 'Solution') { nodeTargetRadius.set(n.id, 0); continue; }
-      const ring = RING1_NODES.has(n.id) ? 1 : RING3_NODES.has(n.id) ? 3 : 2;
-      const r = ring === 1 ? LAYOUT_CONFIG.ring1Radius
-              : ring === 2 ? LAYOUT_CONFIG.ring2Radius
-              : LAYOUT_CONFIG.ring3Radius;
-      nodeTargetRadius.set(n.id, r);
+      nodeTargetRadius.set(n.id, Math.sqrt(n.x * n.x + n.y * n.y));
     }
 
     const sim = d3.forceSimulation(nodes)
-      .force('charge', d3.forceManyBody().strength(-300).distanceMax(500))
-      .force('collide', d3.forceCollide().radius(d => radiusFor(d) + 14).strength(1).iterations(2))
+      .force('charge', d3.forceManyBody().strength(-200).distanceMax(400))
+      .force('collide', d3.forceCollide().radius(d => radiusFor(d) + 16).strength(1).iterations(3))
       .force('radial', d3.forceRadial(
         d => nodeTargetRadius.get(d.id) || 0,
         0, 0
-      ).strength(0.3))
-      .alpha(1)
+      ).strength(0.8))
+      .alpha(0.6)
       .alphaDecay(0.04)
       .on('tick', () => {
-        // Pin hub at center
         const hub = nodes.find(n => n.id === 'Solution');
         if (hub) { hub.x = 0; hub.y = 0; }
         clampToSector();
@@ -426,7 +425,7 @@
     ctx.scale(transform.k, transform.k);
 
     // --- draw sector wedge fills and separators ---
-    const sepRadius = LAYOUT_CONFIG.ring3Radius + 80;
+    const sepRadius = LAYOUT_CONFIG.outerRadius + 80;
     for (const sec of sectorBoundaries) {
       ctx.save();
       // Subtle wedge fill
