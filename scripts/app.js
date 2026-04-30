@@ -345,13 +345,46 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   function showVocabulary(vocabId) {
-    const content = showVocabulariesModal();
-    if (!content) return;
-    const card = content.querySelector(`.vocab-card[data-vocab-id="${vocabId}"]`);
-    if (card) {
-      card.querySelector('.vocab-header').click();
-      card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
+    const ontology = window.OntologyAdapter.getCurrentOntology();
+    if (!ontology || !ontology.vocabularies) return;
+
+    const v = ontology.vocabularies.find(voc => voc.id === vocabId);
+    if (!v) { showVocabulariesModal(); return; }
+
+    const modal = document.getElementById('vocab-modal');
+    const content = document.getElementById('vocab-modal-content');
+    const isExt = v.type === 'external';
+
+    content.innerHTML = `
+      <div class="vocab-card ${isExt ? 'vocab-external' : ''} vocab-open" data-vocab-id="${escapeHtml(v.id)}">
+        <div class="vocab-header">
+          <div class="vocab-summary">
+            <div class="vocab-label">${escapeHtml(v.label)}</div>
+            <div class="vocab-desc">${escapeHtml(v.description)}</div>
+            <div class="vocab-meta">
+              <span class="vocab-badge vocab-badge-type">${isExt ? 'external' : 'internal'}</span>
+              ${v.terms_count ? `<span class="vocab-badge">${v.terms_count} terms</span>` : ''}
+              ${v.url ? `<a href="${escapeHtml(v.url)}" target="_blank" rel="noopener" class="vocab-ref" onclick="event.stopPropagation()">↗ source</a>` : ''}
+            </div>
+          </div>
+        </div>
+        <div class="vocab-body">
+          <div class="vocab-loading">Loading…</div>
+        </div>
+      </div>`;
+
+    modal.classList.add('show');
+
+    (async () => {
+      const body = content.querySelector('.vocab-body');
+      const data = await fetchVocabData(vocabId);
+      if (!data) {
+        body.innerHTML = '<div class="vocab-empty">No detailed data available for this vocabulary.</div>';
+        return;
+      }
+      body.innerHTML = renderVocabData(vocabId, data);
+      wireVocabExpanders(body);
+    })();
   }
 
   function renderVocabData(vocabId, data) {

@@ -99,7 +99,7 @@
   function renderTabs(active, counts) {
     const tabs = [
       { id: 'detail',    label: 'Detail' },
-      { id: 'neighbors', label: 'Neighbors', count: counts.neighbors },
+      { id: 'notes',     label: 'Design Notes' },
       { id: 'comments',  label: 'Comments', count: counts.comments },
     ];
     return `
@@ -140,33 +140,6 @@
     `;
   }
 
-  function renderNeighborsList(node) {
-    const links = window.Graph.getLinksForNode(node.id);
-    if (!links.length) {
-      return '<p class="small" style="color:var(--fg-4);">No connections.</p>';
-    }
-    return `
-      <ul class="neighbors">
-        ${links.map(l => {
-          const isOutgoing = l.source.id === node.id;
-          const other = isOutgoing ? l.target : l.source;
-          if (!other) return '';
-          const color = window.Graph.getClusterColor(other.cluster);
-          return `
-            <li class="neighbor" data-nid="${other.id}" data-eid="${l.id}" data-dir="${isOutgoing ? 'out' : 'in'}">
-              <span class="dot" style="background:${color}"></span>
-              <span class="label">
-                <span class="dir">${isOutgoing ? '→ outgoing' : '← incoming'}</span>
-                <span class="rel">${esc(l.label)}</span>
-                <span class="name">${esc(other.label)}</span>
-              </span>
-              <span class="arrow">→</span>
-            </li>
-          `;
-        }).join('')}
-      </ul>
-    `;
-  }
 
   function renderCommentsPanel(key, label) {
     return `
@@ -181,7 +154,6 @@
     const links = window.Graph.getLinksForNode(n.id);
     const key = n.id;
     const counts = {
-      neighbors: links.length,
       comments: null,
     };
 
@@ -199,18 +171,6 @@
             <div class="section">
               <h4>Definition</h4>
               <p class="definition">${esc(n.definition)}</p>
-            </div>
-
-            <div class="section">
-              <h4>Metadata</h4>
-              <div class="chips">
-                <span class="chip chip-hover">${n.properties.length} properties<span class="chip-tooltip">${n.properties.map(p => `<span>${esc(p.id)}</span>`).join('')}</span></span>
-                ${n.vocabulary_bindings && n.vocabulary_bindings.length
-                  ? n.vocabulary_bindings.map(vb =>
-                      `<span class="chip chip-vocab" data-vocab="${esc(vb.vocab)}">${esc(vb.vocab)}</span>`
-                    ).join('')
-                  : ''}
-              </div>
             </div>
 
             ${links.length ? `
@@ -241,27 +201,21 @@
               <h4>Properties</h4>
               ${renderProperties(n.properties)}
             </div>
+          </div>
 
-            ${n.notes ? `
-              <div class="section">
-                <h4>Design notes</h4>
-                <p class="definition" style="font-size:13px; color:var(--fg-3);">${esc(n.notes)}</p>
-              </div>
-            ` : ''}
-
+          <div data-panel="notes" hidden>
+            <div class="section">
+              ${n.notes
+                ? `<p class="definition" style="font-size:13px; line-height:1.6; color:var(--fg-2);">${esc(n.notes)}</p>`
+                : '<p class="small" style="color:var(--fg-4);">No design notes for this entity.</p>'
+              }
+            </div>
             ${n.schema_source ? `
               <div class="section">
                 <h4>Schema source</h4>
                 <p class="definition" style="font-size:12px; font-family:var(--font-mono); color:var(--fg-3);">${esc(n.schema_source)}</p>
               </div>
             ` : ''}
-          </div>
-
-          <div data-panel="neighbors" hidden>
-            <div class="section">
-              <h4>${links.length} connection${links.length === 1 ? '' : 's'}</h4>
-              ${renderNeighborsList(n)}
-            </div>
           </div>
 
           <div data-panel="comments" hidden>
@@ -282,7 +236,6 @@
     const targetColor = window.Graph.getClusterColor(l.target.cluster);
     const key = `${l.id}:${l.source.id}:${l.target.id}`;
     const counts = {
-      neighbors: 2,
       comments: null,
     };
 
@@ -309,20 +262,6 @@
             <div class="section">
               <h4>Definition</h4>
               <p class="definition">${esc(l.definition)}</p>
-            </div>
-
-            <div class="section">
-              <h4>Metadata</h4>
-              <div class="chips">
-                <span class="chip chip-carn">${esc(l.id)}</span>
-                <span class="chip">${l.properties.length} edge properties</span>
-              </div>
-              ${l.cardinality ? `
-                <div class="meta-row" style="margin-top:8px">
-                  <label class="meta-label">Cardinality:</label>
-                  <span class="meta-value">${esc(l.cardinality)}</span>
-                </div>
-              ` : ''}
             </div>
 
             <div class="section">
@@ -354,35 +293,20 @@
               </div>
             ` : ''}
 
-            ${l.notes ? `
+            ${l.cardinality ? `
               <div class="section">
-                <h4>Design notes</h4>
-                <p class="definition" style="font-size:13px; color:var(--fg-3);">${esc(l.notes)}</p>
+                <h4>Cardinality</h4>
+                <p class="definition" style="font-size:13px;">${esc(l.cardinality)}</p>
               </div>
             ` : ''}
           </div>
 
-          <div data-panel="neighbors" hidden>
+          <div data-panel="notes" hidden>
             <div class="section">
-              <h4>Endpoints</h4>
-              <ul class="neighbors">
-                <li class="neighbor" data-nid="${l.source.id}">
-                  <span class="dot" style="background:${sourceColor}"></span>
-                  <span class="label">
-                    <span class="dir">source</span>
-                    <span class="name">${esc(l.source.label)}</span>
-                  </span>
-                  <span class="arrow">→</span>
-                </li>
-                <li class="neighbor" data-nid="${l.target.id}">
-                  <span class="dot" style="background:${targetColor}"></span>
-                  <span class="label">
-                    <span class="dir">target</span>
-                    <span class="name">${esc(l.target.label)}</span>
-                  </span>
-                  <span class="arrow">→</span>
-                </li>
-              </ul>
+              ${l.notes
+                ? `<p class="definition" style="font-size:13px; line-height:1.6; color:var(--fg-2);">${esc(l.notes)}</p>`
+                : '<p class="small" style="color:var(--fg-4);">No design notes for this relationship.</p>'
+              }
             </div>
           </div>
 
