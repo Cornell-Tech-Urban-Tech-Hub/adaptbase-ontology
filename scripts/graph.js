@@ -152,10 +152,22 @@
       const startAngle = cursor;
       const endAngle = cursor + usableArc;
 
-      // Split THIS sector's nodes evenly: top half by degree → inner, rest → outer
-      arr.sort((a, b) => (b.degree || 1) - (a.degree || 1));
-      const half = Math.ceil(arr.length / 2);
-      const ringBuckets = [arr.slice(0, half), arr.slice(half)];
+      // Leaf nodes not directly linked to Solution/Plan always go outer
+      const vips = new Set(['Solution', 'Plan']);
+      const forceOuter = new Set();
+      for (const n of arr) {
+        if ((n.degree || 1) > 1) continue;
+        const hasVipLink = (linksByNode[n.id] || []).some(l =>
+          vips.has(l.source.id) || vips.has(l.target.id)
+        );
+        if (!hasVipLink) forceOuter.add(n.id);
+      }
+
+      // Split remaining nodes evenly by degree, then append forced-outer
+      const eligible = arr.filter(n => !forceOuter.has(n.id));
+      eligible.sort((a, b) => (b.degree || 1) - (a.degree || 1));
+      const half = Math.ceil(eligible.length / 2);
+      const ringBuckets = [eligible.slice(0, half), [...eligible.slice(half), ...arr.filter(n => forceOuter.has(n.id))]];
 
       // Place nodes: even angular spacing within each ring
       for (let ri = 0; ri < ringCount; ri++) {
