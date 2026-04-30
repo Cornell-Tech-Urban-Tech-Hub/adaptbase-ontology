@@ -43,6 +43,13 @@
   let dragNode = null, dragStart = null;
   let isPanning = false, panStart = null;
 
+  // Focus mode state
+  let focusMode = false;
+  let focusProgress = 0;
+  let stashedPositions = null;
+  let stashedTransform = null;
+  let focusAnimFrame = null;
+
   function colorFor(cluster) { return CLUSTER_COLORS[cluster] || '#4A4F57'; }
 
   function radiusFor(d) {
@@ -317,6 +324,7 @@
       .alpha(0.6)
       .alphaDecay(0.04)
       .on('tick', () => {
+        if (focusMode) return;
         const hub = nodes.find(n => n.id === 'Solution');
         if (hub) { hub.x = 0; hub.y = 0; }
         clampToSector();
@@ -436,39 +444,43 @@
     ctx.translate(transform.x, transform.y);
     ctx.scale(transform.k, transform.k);
 
-    // --- draw sector wedge fills and separators ---
-    const sepRadius = LAYOUT_CONFIG.outerRadius + 80;
-    for (const sec of sectorBoundaries) {
-      ctx.save();
-      // Subtle wedge fill
-      const c = sec.color;
-      const r = parseInt(c.slice(1,3),16), g = parseInt(c.slice(3,5),16), b = parseInt(c.slice(5,7),16);
-      ctx.fillStyle = `rgba(${r},${g},${b},0.03)`;
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.arc(0, 0, sepRadius, sec.startAngle, sec.endAngle);
-      ctx.closePath();
-      ctx.fill();
-      // Separator line at startAngle
-      ctx.strokeStyle = 'rgba(18,20,23,0.12)';
-      ctx.lineWidth = 0.8;
-      ctx.setLineDash([6, 4]);
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(Math.cos(sec.startAngle) * sepRadius, Math.sin(sec.startAngle) * sepRadius);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.restore();
+    // --- draw sector wedge fills and separators (fade out in focus mode) ---
+    const pieFade = 1 - focusProgress;
+    if (pieFade > 0.01) {
+      const sepRadius = LAYOUT_CONFIG.outerRadius + 80;
+      for (const sec of sectorBoundaries) {
+        ctx.save();
+        const c = sec.color;
+        const r = parseInt(c.slice(1,3),16), g = parseInt(c.slice(3,5),16), b = parseInt(c.slice(5,7),16);
+        ctx.fillStyle = `rgba(${r},${g},${b},${0.03 * pieFade})`;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.arc(0, 0, sepRadius, sec.startAngle, sec.endAngle);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = `rgba(18,20,23,${0.12 * pieFade})`;
+        ctx.lineWidth = 0.8;
+        ctx.setLineDash([6, 4]);
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(Math.cos(sec.startAngle) * sepRadius, Math.sin(sec.startAngle) * sepRadius);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.restore();
+      }
     }
 
     // --- draw links ---
-    // Two passes: dim first, then bright
+    const dimAlpha = focusProgress < 0.01 ? 1 : (1 - focusProgress);
     for (const pass of ['dim', 'bright']) {
       for (const l of links) {
         const isDim = linkIsDim(l);
         if (pass === 'dim' && !isDim) continue;
         if (pass === 'bright' && isDim) continue;
+        if (isDim && dimAlpha < 0.01) continue;
+        if (isDim && focusProgress > 0) { ctx.save(); ctx.globalAlpha = dimAlpha; }
         drawLink(l, isDim);
+        if (isDim && focusProgress > 0) { ctx.restore(); }
       }
     }
 
@@ -478,7 +490,10 @@
         const isDim = nodeIsDim(n);
         if (pass === 'dim' && !isDim) continue;
         if (pass === 'bright' && isDim) continue;
+        if (isDim && dimAlpha < 0.01) continue;
+        if (isDim && focusProgress > 0) { ctx.save(); ctx.globalAlpha = dimAlpha; }
         drawNode(n, isDim);
+        if (isDim && focusProgress > 0) { ctx.restore(); }
       }
     }
 
@@ -698,6 +713,12 @@
       ly = (l.source.y + l.target.y) / 2;
     }
 
+    // Offset reciprocal edge labels so they don't overlap
+    if (l._curveDir) {
+      const vOffset = 16 * l._curveDir;
+      ly += vOffset;
+    }
+
     ctx.save();
     ctx.font = `italic 700 18px "Instrument Serif", "Fraunces", Georgia, serif`;
     ctx.textAlign = 'center';
@@ -867,22 +888,145 @@
     draw();
   }
 
+  function animateTransition(duration, onTick, onDone) {
+    if (focusAnimFrame) cancelAnimationFrame(focusAnimFrame);
+    const startTime = performance.now();
+    function tick(now) {
+      const t = Math.min(1, (now - startTime) / duration);
+      const ease = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      onTick(ease);
+      draw();
+      if (t < 1) { focusAnimFrame = requestAnimationFrame(tick); }
+      else { focusAnimFrame = null; if (onDone) onDone(); }
+    }
+    focusAnimFrame = requestAnimationFrame(tick);
+  }
+
   function selectNode(n) {
-    selectedNode = n;
     selectedEdge = null;
-    draw();
+
+    // If already in focus mode, deselect first (spring back), don't re-focus
+    if (focusMode) {
+      deselect();
+      return;
+    }
+
+    // Stop simulation so it doesn't fight the focus layout
+    if (simulation) simulation.stop();
+
+    selectedNode = n;
+
+    // Stash current positions and transform
+    stashedPositions = new Map();
+    for (const nd of nodes) stashedPositions.set(nd.id, { x: nd.x, y: nd.y });
+    stashedTransform = { ...transform };
+
+    // Compute 1-hop subgraph
+    const neighborIds = new Set();
+    for (const l of linksByNode[n.id]) {
+      neighborIds.add(l.source.id);
+      neighborIds.add(l.target.id);
+    }
+    neighborIds.delete(n.id);
+
+    // Compute target positions: focused node at (0,0), neighbors on a ring
+    const neighbors = [...neighborIds].map(id => nodeById[id]).filter(Boolean);
+    neighbors.sort((a, b) => (b.degree || 1) - (a.degree || 1));
+    // Ring radius accounts for largest nodes to prevent overlap
+    const maxNeighborR = Math.max(...neighbors.map(nd => radiusFor(nd)));
+    const ringRadius = Math.max(300, radiusFor(n) + maxNeighborR + 120);
+    const targetPositions = new Map();
+    targetPositions.set(n.id, { x: 0, y: 0 });
+    for (let i = 0; i < neighbors.length; i++) {
+      const angle = -Math.PI / 2 + (2 * Math.PI / neighbors.length) * i;
+      targetPositions.set(neighbors[i].id, {
+        x: Math.cos(angle) * ringRadius,
+        y: Math.sin(angle) * ringRadius,
+      });
+    }
+    // Non-subgraph nodes: keep at stashed (they'll be invisible anyway)
+    for (const nd of nodes) {
+      if (!targetPositions.has(nd.id)) {
+        targetPositions.set(nd.id, stashedPositions.get(nd.id));
+      }
+    }
+
+    // Target transform: center (0,0) in viewport
+    const targetTransform = {
+      k: transform.k,
+      x: W / 2,
+      y: H / 2,
+    };
+
+    focusMode = true;
+    const startPositions = new Map(stashedPositions);
+    const startTransform = { ...stashedTransform };
+
+    animateTransition(400, (ease) => {
+      focusProgress = ease;
+      for (const nd of nodes) {
+        const from = startPositions.get(nd.id);
+        const to = targetPositions.get(nd.id);
+        nd.x = from.x + (to.x - from.x) * ease;
+        nd.y = from.y + (to.y - from.y) * ease;
+        nd.fx = nd.x;
+        nd.fy = nd.y;
+      }
+      transform.x = startTransform.x + (targetTransform.x - startTransform.x) * ease;
+      transform.y = startTransform.y + (targetTransform.y - startTransform.y) * ease;
+      transform.k = startTransform.k + (targetTransform.k - startTransform.k) * ease;
+    });
+
     window.Inspector && window.Inspector.showNode(n);
   }
+
   function selectEdge(l) {
+    if (focusMode) { deselect(); return; }
     selectedEdge = l;
     selectedNode = null;
     draw();
     window.Inspector && window.Inspector.showEdge(l);
   }
+
   function deselect() {
+    if (!focusMode) {
+      selectedNode = null;
+      selectedEdge = null;
+      draw();
+      window.Inspector && window.Inspector.showEmpty();
+      return;
+    }
+
+    // Animate back to stashed positions
+    const startPositions = new Map();
+    for (const nd of nodes) startPositions.set(nd.id, { x: nd.x, y: nd.y });
+    const startTransform = { ...transform };
+    const targetPositions = stashedPositions;
+    const targetTransform = stashedTransform;
+
     selectedNode = null;
     selectedEdge = null;
-    draw();
+
+    animateTransition(350, (ease) => {
+      focusProgress = 1 - ease;
+      for (const nd of nodes) {
+        const from = startPositions.get(nd.id);
+        const to = targetPositions.get(nd.id);
+        nd.x = from.x + (to.x - from.x) * ease;
+        nd.y = from.y + (to.y - from.y) * ease;
+        nd.fx = nd.x;
+        nd.fy = nd.y;
+      }
+      transform.x = startTransform.x + (targetTransform.x - startTransform.x) * ease;
+      transform.y = startTransform.y + (targetTransform.y - startTransform.y) * ease;
+      transform.k = startTransform.k + (targetTransform.k - startTransform.k) * ease;
+    }, () => {
+      focusMode = false;
+      focusProgress = 0;
+      stashedPositions = null;
+      stashedTransform = null;
+    });
+
     window.Inspector && window.Inspector.showEmpty();
   }
 
