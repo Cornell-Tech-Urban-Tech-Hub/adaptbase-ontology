@@ -42,6 +42,27 @@
           "endsPattern": "Ctrl-C to stop"
         }
       }
+    },
+    {
+      "label": "Start viewer server (Tailscale)",
+      "type": "shell",
+      "command": "./start-viewer-tailscale.sh",
+      "isBackground": true,
+      "presentation": {
+        "reveal": "silent",
+        "panel": "dedicated",
+        "label": "Ontology Viewer (Tailscale)"
+      },
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".",
+          "endsPattern": "Ctrl-C to stop"
+        }
+      }
     }
   ]
 }

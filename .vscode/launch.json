@@ -16,6 +16,14 @@
       "url": "http://127.0.0.1:8766/viewer/editor.html",
       "webRoot": "${workspaceFolder}",
       "preLaunchTask": "Start editor server"
+    },
+    {
+      "name": "Ontology Viewer (Tailscale)",
+      "type": "firefox",
+      "request": "launch",
+      "url": "http://100.115.183.48:8765/viewer/",
+      "webRoot": "${workspaceFolder}",
+      "preLaunchTask": "Start viewer server (Tailscale)"
     }
   ],
   "compounds": [

@@ -346,7 +346,17 @@
 
   function wireClose() {
     const btn = el().querySelector('#close-inspector');
-    if (btn) btn.addEventListener('click', () => window.Graph.deselect());
+    if (btn) btn.addEventListener('click', () => {
+      window.Graph.deselect();
+      if (window.innerWidth <= 767) {
+        document.body.classList.remove('mobile-inspector-open');
+        const toggle = document.getElementById('mobile-inspector-toggle');
+        if (toggle) {
+          toggle.setAttribute('aria-expanded', 'false');
+          toggle.textContent = 'Details';
+        }
+      }
+    });
   }
 
   function wireNeighbors() {
