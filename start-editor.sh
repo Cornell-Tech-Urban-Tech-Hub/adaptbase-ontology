@@ -2,7 +2,7 @@
 # Start ontology editor locally (with write support)
 
 PORT=8766
-URL="http://127.0.0.1:${PORT}/editor.html"
+URL="http://127.0.0.1:${PORT}/viewer/editor.html"
 
 (sleep 1 && open "${URL}") &
 

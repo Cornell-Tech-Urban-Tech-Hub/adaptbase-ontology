@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AdaptBase — Ontology Viewer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles/tokens.css" />
+<link rel="stylesheet" href="styles/app.css" />
+<script src="https://unpkg.com/d3-selection@3"></script>
+<script src="https://unpkg.com/d3-force@3"></script>
+<script src="https://unpkg.com/d3-drag@3"></script>
+<script src="https://unpkg.com/d3-zoom@3"></script>
+<script src="https://unpkg.com/d3-quadtree@3"></script>
+<script src="https://unpkg.com/d3-dispatch@3"></script>
+<script src="https://unpkg.com/d3-timer@3"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="brand-lockup">
+    <div class="brand-title">
+      <span class="project-name">AdaptBase</span>
+      <span class="brand-subtitle">Urban Climate Adaptation &amp; Resilience Solutions</span>
+    </div>
+  </div>
+
+  <div class="header-actions">
+    <button id="about-btn" class="btn btn-ghost">About</button>
+    <a href="discussions.html" class="btn btn-ghost">Discussions</a>
+    <button id="changelog-btn" class="btn btn-ghost">Changelog</button>
+    <select id="version-selector" class="btn btn-ghost version-select">
+      <option value="">Loading…</option>
+    </select>
+    <a href="https://github.com/Cornell-Tech-Urban-Tech-Hub/adaptbase-ontology/" target="_blank" rel="noopener" class="github-link" title="View on GitHub">
+      <img src="https://img.shields.io/github/stars/Cornell-Tech-Urban-Tech-Hub/adaptbase-ontology?style=social&label=" alt="GitHub stars" height="20">
+    </a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-headline">
+      <h1>Organizing knowledge on <em>how cities adapt to climate change</em> — and how we know it's working.</h1>
+    </div>
+    <div class="hero-detail">
+      <p class="lede">
+        This ontology provides an open framework for representing knowledge about urban climate adaptation plans, actions, and solutions. It contains <span id="hero-type-count">—</span> entity types and <span id="hero-rel-count">—</span> relationships to provide a rich semantic framework spanning planning, engineering, financing, implementation, governance and evaluation. Explore the graph below, inspect any node or edge, and leave review comments.
+      </p>
+      <div class="hero-stats">
+        <div class="stat stat-link" id="stat-types-link" role="button" tabindex="0"><span class="num" id="stat-types">—</span><span class="lbl">Entity types</span></div>
+        <div class="stat stat-link" id="stat-rels-link" role="button" tabindex="0"><span class="num" id="stat-rels">—</span><span class="lbl">Relationships</span></div>
+        <div class="stat stat-link" id="stat-vocabs-link" role="button" tabindex="0"><span class="num" id="stat-vocabs">—</span><span class="lbl">Vocabularies</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<main class="workspace">
+  <div class="graph-pane" id="graph-pane">
+    <canvas class="graph-canvas" id="graph"></canvas>
+
+    <!-- Search bar floated inside graph -->
+    <div class="graph-search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="search" type="text" placeholder="Search entities and relationships…" autocomplete="off" />
+      <div class="search-results" id="search-results"></div>
+    </div>
+
+    <!-- Entity cluster legend -->
+    <div class="graph-overlay graph-legend" id="legend">
+      <h4>Clusters</h4>
+    </div>
+
+    <!-- Jacobs logo — transparent float, no box -->
+    <img src="img/logo-horizontal.png" alt="Jacobs" class="jacobs-float" />
+
+    <div class="graph-overlay graph-controls">
+      <div class="control-row">
+        <label>Zoom</label>
+        <div class="zoom-btns">
+          <button class="zoom-btn" id="zoom-out" title="Zoom out">−</button>
+          <button class="zoom-btn" id="zoom-reset" title="Reset">⊙</button>
+          <button class="zoom-btn" id="zoom-in" title="Zoom in">+</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <aside class="inspector" id="inspector">
+    <!-- filled by JS -->
+  </aside>
+</main>
+
+<button id="mobile-inspector-toggle" class="mobile-inspector-toggle" aria-expanded="false" aria-controls="inspector" type="button">
+  Details
+</button>
+
+<!-- Vocabulary / Changelog / Entity / Relationship Modal -->
+<div class="modal" id="vocab-modal">
+  <div class="modal-content wide">
+    <h3 id="vocab-modal-title">Vocabulary</h3>
+    <div id="vocab-modal-content"></div>
+    <div class="modal-buttons">
+      <button id="vocab-modal-close" class="primary">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- About Modal -->
+<div class="modal" id="about-modal">
+  <div class="modal-content wide">
+    <div class="about-content" id="about-content">
+      <p>Loading…</p>
+    </div>
+    <div class="modal-buttons">
+      <button id="about-modal-close" class="primary">Close</button>
+    </div>
+  </div>
+</div>
+
+<script src="scripts/ontology-adapter.js"></script>
+<script src="scripts/comments.js"></script>
+<script src="scripts/graph.js"></script>
+<script src="scripts/inspector.js"></script>
+<script src="scripts/app.js"></script>
+
+</body>
+</html>

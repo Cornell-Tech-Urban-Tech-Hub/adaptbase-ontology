@@ -328,12 +328,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   const vocabFileMap = {
-    'hazards': 'schemas/vocabularies/hazards.json',
-    'urban-systems': 'schemas/vocabularies/urban-systems.json',
-    'solution-categories': 'schemas/vocabularies/solution-categories.json',
-    'crf-goals': 'schemas/vocabularies/crf-goals.json',
-    'enums': 'schemas/vocabularies/enums.json',
-    'vulnerable-populations': 'schemas/vocabularies/vulnerable-populations.json',
+    'hazards': '../ontology/vocabularies/hazards.json',
+    'urban-systems': '../ontology/vocabularies/urban-systems.json',
+    'solution-categories': '../ontology/vocabularies/solution-categories.json',
+    'crf-goals': '../ontology/vocabularies/crf-goals.json',
+    'enums': '../ontology/vocabularies/enums.json',
+    'vulnerable-populations': '../ontology/vocabularies/vulnerable-populations.json',
   };
   const vocabCache = {};
 

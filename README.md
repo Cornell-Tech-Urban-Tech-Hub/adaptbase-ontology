@@ -1,335 +1,178 @@
-# Resilience Ontology Development
+# AdaptBase Ontology
 
-## Overview
+An open knowledge framework for **urban climate adaptation** — a structured ontology that
+maps the entities, relationships, and vocabularies needed to organize, compare, and
+analyze how cities respond to climate hazards.
 
-Formalizing the Resilience Scanner extraction schema (v1.2) into an OWL ontology for the knowledge graph. This work builds on an existing, working extraction system with ~200 published research cases and thousands of CDP-imported actions.
-
-## What Already Exists
-
-### Working Extraction System
-- **Extraction Schema v1.2**: JSON Schema defining 7 ontology dimensions (identity, hazards, urban_systems, mechanisms, implementation, outcomes, context)
-- **Controlled Vocabularies**: Hazards, solution categories, urban systems, CRF goals, IPCC action types, resilience attributes
-- **Claims Architecture**: First-class claims in Supabase with extraction_schema JSONB fields referencing claim UUIDs
-- **Published Research**: ~200 cases in `research_versions` table with populated extraction schemas
-- **CDP Database**: 11,842 city-reported actions imported as solutions
-
-### Files and Directories
-- `schemas/extraction-schema-v1.json` - JSON Schema for solutions.extraction_schema (JSONB)
-- `schemas/vocabularies/` - Controlled vocabulary files (see [Vocabulary Integration](schemas/vocabularies/README.md))
-- `schemas/prompts/` - Research agent and synthesis prompts
-- `schemas/validation/` - Schema validation reports
-- `research/resources/` - Source documents (CDP data, CRF framework, student ontology)
-
-**Legacy documentation**: Extraction schema architecture details have been removed (file deleted).
+**Live viewer:** [ontology.adaptbase.us](https://ontology.adaptbase.us/)
+**Current version:** v0.1 (2026-04-30)
 
 ---
 
-## Ontology Development Plan
+## Future ontology improvements
 
-### Goals
+This is the running inbox for things to address in upcoming cycles. We populate it as
+issues come up; items here are the next things we work on.
 
-1. **Formalize extraction schema as OWL ontology** - Transform the working v1.2 schema into formal types, relationships, and constraints
-2. **Validate against populated data** - Ensure ontology accurately represents the ~200 cases and CDP actions
-3. **Bind to external vocabularies** - Map to IPCC AR6, C40/Arup, CityGML, UNDRR, CRF 2024
-4. **Enable GraphRAG queries** - Support multi-hop Cypher queries in Neo4j (NL → Cypher → result set → synthesis)
-5. **Document design decisions** - Log every non-obvious call with rationale
+- _Add planned improvements here._
 
-### Approach
-
-This is **ontology induction from an existing schema**, not building from scratch:
-
-1. **Analyze populated extraction schemas** - Query Supabase to see what fields are actually used across cases
-2. **Identify node types** - Extract entity types from the 7 dimensions
-3. **Identify relationships** - Infer edge types from cross-dimension references and claim relationships
-4. **Formalize as OWL** - Use Protégé to build v0.1 ontology with types, relationships, properties
-5. **Validate** - Check ontology against held-out cases
-6. **Iterate** - Refine based on gaps, edge cases, and alignment with external vocabularies
+> **For Claude / future planning sessions:** Before starting any non-trivial change,
+> read this section. If your work intersects an item, advance that item rather than
+> creating parallel work.
 
 ---
 
-## Ontology Design Principles
+## What this ontology covers
 
-### Four-Dimension Architecture
+AdaptBase models the full chain of urban climate adaptation: the **hazards** cities face,
+the **solutions** they deploy, the **plans** and **stakeholders** that authorize and
+deliver them, the **finance** that pays for them, and the **outcomes** they produce. The
+graph spans planning, engineering, financing, implementation, governance, and evaluation.
 
-The ontology organizes around **four core dimensions** (separate node types, not flat taxonomy):
+**Design principles**
 
-| Dimension | What it classifies | Controlled Vocabulary Source |
-|---|---|---|
-| **Hazards / Stresses** | Climate-driven threats | C40/Arup Climate Hazard Typology (30+ hazards, 13 categories) |
-| **Solutions** | The intervention itself | Solution taxonomy (7 categories, ~100 subcategories) |
-| **Urban Systems** | What part of the city it operates on | Custom hierarchical taxonomy (7 sectors, 50+ systems) |
-| **Mechanisms** | How it works | Free text now, cluster later (seed: absorb, redirect, harden, monitor, govern) |
+- **Solutions are classified by what they ARE, not what they DO.** Function is expressed
+  as typed relationships (`MITIGATES`, `OPERATES_ON`, `USES_MECHANISM`) rather than baked
+  into the taxonomy.
+- **Vocabularies are guidance, not rigid constraints.** Validation is advisory, so
+  edge cases and new terms don't break extraction.
+- **Provenance is first-class.** Every value can trace back to a claim with a source URL.
 
-**Key Decision**: Solution hierarchy organized by **what solutions ARE** (identity), not what they do. What they do is expressed as typed relationships to hazard and mechanism nodes.
-
-### External Frameworks to Integrate
-
-Already referenced in extraction schema; need formal ontology bindings:
-
-- **IPCC AR6 adaptation action typology** - structural/physical, social, institutional, ecosystem-based (crosscutting attribute on solution nodes)
-- **C40/Arup Climate Hazard Typology** - 13 categories, 30+ specific hazards → `hazards.json`
-- **City Resilience Framework 2024** - 22 goals across 4 dimensions → `crf-goals.json`
-- **CDP project finance fields** - financing models, funding sources, instruments
-- **UNDRR Sendai Framework** - hazard/exposure/vulnerability/risk definitions
-- **Student ontology governance relationships** - MANDATES, FACILITATED_BY, HINDERED_BY, etc.
-
-### Claims as Provenance
-
-Every structured value in the extraction schema references claim UUIDs from the `claims` table. The ontology must preserve this:
-
-```
-Solution → extraction_schema dimension → claim UUID → claims table → source document
-```
-
-Graph queries can traverse to source evidence: `MATCH (s:Solution)-[:MITIGATES]->(h:Hazard) RETURN s, h, claims`
+The ontology binds to several external frameworks where they exist (C40/Arup Climate
+Hazard Typology, IPCC AR6 adaptation action types, City Resilience Framework 2024,
+UNDRR Sendai Framework). See `ontology/framework-crosswalk.md` for the mappings.
 
 ---
 
-## Repository Structure
+## Using the viewer
+
+Open [ontology.adaptbase.us](https://ontology.adaptbase.us/) and:
+
+- **Explore the graph.** Click any node to inspect its definition, properties, and
+  relationships. Click an edge to read about that relationship type.
+- **Search.** Type in the search bar to jump to any entity or relationship.
+- **Browse vocabularies.** Click the *Vocabularies* stat in the hero to see the
+  controlled terms (hazards, urban systems, solution categories, CRF goals, etc.).
+- **Read the changelog.** The *Changelog* button shows what's changed across versions.
+
+---
+
+## Leaving feedback
+
+Reviews live in GitHub Issues so the discussion happens where the code is.
+
+1. Open an issue at
+   [github.com/Cornell-Tech-Urban-Tech-Hub/adaptbase-ontology/issues](https://github.com/Cornell-Tech-Urban-Tech-Hub/adaptbase-ontology/issues).
+2. Apply the **`review`** label.
+3. Apply an **`ontology:<entity-or-relationship>`** label so the comment surfaces in the
+   right place — for example `ontology:Solution`, `ontology:Hazard`, or
+   `ontology:Solution:MITIGATES:Hazard`.
+
+The [Discussions page](https://ontology.adaptbase.us/viewer/discussions.html) on the
+viewer aggregates all open `review`-labeled issues and groups them by entity and
+relationship.
+
+---
+
+## What a knowledge graph built on this could do
+
+The ontology is the schema. The interesting work begins once it's populated as a
+**knowledge graph** — extract instances from reports, plans, and datasets and load them
+as nodes and edges spanning thousands of solutions, hundreds of cities, and the actors,
+policies, hazards, and funding mechanisms that connect them. At that scale, the graph
+itself becomes analytic substrate.
+
+A few directions this opens up:
+
+- **Cross-city comparisons.** Standardize how different municipalities describe their
+  solutions so you can surface patterns and transferable strategies.
+- **Implementation trackers.** Model the connections between solutions, stakeholders,
+  funding, and outcomes to understand what actually works.
+- **GraphRAG for adaptation.** LLMs answering policy or research questions can ground
+  their reasoning in a typed, traceable graph rather than fuzzy document retrieval.
+- **Link prediction — "what's missing?"** Identify edges that *should* exist but don't.
+  If Miami-Dade has implemented strategy X for flooding, and Houston has a similar
+  hazard profile but no connection to strategy X, the model surfaces that as a
+  recommendation. Goes beyond centrality (which finds what's important in the existing
+  graph) to find what's *absent*.
+- **Subgraph similarity — "find me analogues."** Given a local subgraph (e.g.,
+  Miami-Dade's flooding adaptation ecosystem — its actors, policies, infrastructure,
+  funding), find structurally similar subgraphs elsewhere. Not keyword matching but
+  topological similarity: which cities have a similar configuration of institutional
+  relationships, hazard exposures, and strategy portfolios?
+- **Temporal graph learning — trajectory prediction.** With timestamps on adoption,
+  policy change, and implementation, temporal GNNs can learn adaptation pathways:
+  "cities that did A then B then C tend to do D next" — pattern-mining adaptation
+  trajectories across the full graph.
+- **Emergent solution clusters.** At thousands of nodes, clustering reveals groupings
+  that don't map to existing taxonomies — e.g., solutions that span what traditional
+  frameworks separate into "infrastructure" and "governance" but co-occur in practice.
+  This generates new knowledge about how adaptation actually works vs. how it's
+  categorized.
+- **Transfer learning across hazard domains.** Solutions for coastal flooding may share
+  graph topology (institutional arrangements, funding mechanisms, implementation
+  timelines) with wildfire evacuation solutions, even when the content differs. That
+  structural similarity is the kind of insight you can't get without graph ML.
+
+---
+
+## What's in this repo
 
 ```
 adaptbase-ontology/
-├── README.md
-├── CLAUDE.md
-├── index.html                             # Public ontology viewer
-├── start-viewer.sh                        # Local dev server
-├── styles/                                # Viewer CSS
-├── scripts/                               # Viewer JS (graph, inspector, comments, app)
-├── schemas/
-│   ├── extraction-schema-v1.json          # JSON Schema (source of truth for dimensions)
-│   ├── vocabularies/                      # Controlled vocabularies
-│   ├── prompts/                           # Research agent + synthesis prompts
-│   └── validation/                        # Schema validation reports
-├── ontology/
+├── ontology/             # The ontology — JSON definitions + vocabularies + docs
 │   ├── ontology-v0.1.json
-│   ├── ontology-v0.1.1.json               # Current version
-│   ├── decisions-log.md                   # Design decisions log
-│   ├── TYPES-EXTRACTION-SUMMARY.md
-│   └── RELATIONSHIPS-EXTRACTION-SUMMARY.md
-├── mining/                                # Corpus mining pipeline (Python)
-├── docs/                                  # Design and planning documents
-│   ├── alignment/                         # Mappings to external ontologies
-│   ├── plans/                             # Planning and design docs
-│   └── validation/                        # Validation templates and docs
-└── research/                              # Reference material and raw data
-    ├── extractions/                        # Case-level sample extractions
-    ├── papers/                             # Reference papers
-    └── resources/                          # Source documents (CDP data, CRF, etc.)
+│   ├── versions.json
+│   ├── vocabularies/     # Hazards, urban systems, solution categories, CRF goals…
+│   ├── decisions-log.md
+│   ├── framework-crosswalk.md
+│   └── review/           # Reviewer notes
+├── viewer/               # Web viewer (ontology.adaptbase.us)
+├── docs/                 # Project documentation, plans, schema reference
+├── scripts/              # Dev tooling (Python: editor server, validators)
+├── research/             # Archive: corpus mining work used to ground vocabularies
+├── start-viewer.sh       # Run the viewer locally
+└── start-editor.sh       # Run the local editor (for ontology authors)
 ```
 
-**Note**: Extraction schema and vocabularies already exist in `schemas/`. Ontology development adds formalization in `ontology/`, alignment in `docs/alignment/`, and validation docs in `docs/validation/`.
+### About `research/`
+
+`research/` is an archive of the corpus mining work that grounded several vocabularies
+in real data. It's not consulted day-to-day, but it's preserved because it documents
+**how the vocabularies were validated**:
+
+- `research/mining/` — the LLM extraction pipeline (Python). Pulled corpora from a
+  Supabase database, ran clustering and gap analysis, generated taxonomy proposals for
+  human review. Result: validated the 12-mechanism seed vocabulary, added two missing
+  urban sectors, identified coverage patterns.
+- `research/mining/corpus/` — parquet caches of 221 published solutions, 5,552 CDP city
+  actions, and 50 resilience plans (100RC, CDP, C40).
+- `research/extractions/miami/` — sample extractions used to test the schema end-to-end.
+- `research/papers/` — reference papers (e.g., OntoKGen methodology, 2412.00608v3).
+- `research/resources/` — external source documents (CDP data, City Resilience
+  Framework PDF, etc.).
+
+If we resume corpus-mining work, see `docs/plans/ONTOLOGY-FUTURE-EXPANSION-CORPUS-MINING.md`
+for the next-cycle plan.
 
 ---
 
-## Ontology Viewer
-
-An interactive web-based viewer/editor for the ontology is available at `index.html`.
-
-### How to Use
-
-**Option 1: VSCode Task (Recommended)**
-1. Open Command Palette (`Cmd+Shift+P` / `Ctrl+Shift+P`)
-2. Run Tasks: Run Task
-3. Select "Ontology Viewer"
-4. Open browser to http://127.0.0.1:8765/
-
-**Option 2: Shell Script**
-```bash
-cd packages/ontology
-./start-viewer.sh
-```
-Opens browser automatically to the viewer.
-
-**Option 3: VSCode Live Server Extension**
-1. Install "Live Server" extension
-2. Right-click `index.html` → "Open with Live Server"
-
-**Option 4: Manual**
-```bash
-cd packages/ontology
-python3 -m http.server 8765
-# Then open http://127.0.0.1:8765/
-```
-
-### Viewer Features
-
-- Load ontology JSON files (drag & drop or file picker)
-- Interactive graph visualization (vis.js)
-- Click nodes/edges to inspect properties
-- Edit types and relationships inline
-- Export modified ontology as JSON
-- Filter by domain (planning vs. solutions)
-- Sample ontology included (click "Load Sample")
-
-### Current Status
-
-- Viewer expects `ontology/draft-v0.json` (will be created in next step)
-- Can use "Load Sample" to see demo ontology
-- After relationship extraction, can load actual ontology
-
----
-
-## Development Status
-
-**Current Version**: v0.1.1 (2026-04-26)
-
-**Completed**:
-1. ✅ v0.1.0: Base ontology with 15 entity types, 25 relationships, vocabulary bindings
-2. ✅ Phase D: Distribution gaps analysis (added 2 urban sectors)
-3. ✅ Phase A: Mechanism clustering (validated 12-mechanism seed taxonomy)
-4. ✅ **Phase P: Plan entity expansion (v0.1.1)**
-   - 10 properties: plan_title*, plan_type*, adoption_year*, planning_horizon_years, total_actions, total_budget_mentioned, monitoring_approach, plan_uri, document_url, plan_status (*required)
-   - 10 relationships: AUTHORED_BY, IMPLEMENTED_BY, ALIGNS_WITH, SUPERSEDES, SUPERSEDED_BY, COVERS_LOCATION, CONTAINS_ACTION, ADDRESSES_HAZARD, TARGETS_URBAN_SYSTEM, REFERENCES
-   - Source: 50 resilience plans (100RC, CDP, C40) parsed and analyzed via LLM
-
-**Next Steps**:
-1. V3 pipeline integration: Generate extraction schema from ontology-v0.1.1.json
-2. Expand Framework entity (similar to Plan corpus mining approach)
-3. Map additional external vocabularies (CityGML, UNDRR hazard taxonomy)
-4. Validate ontology against held-out cases
-
----
-
-## Corpus Mining Pipeline
-
-An automated pipeline for grounding ontology vocabularies in real corpus data. Extracts patterns from published solutions and CDP actions, generates LLM proposals for vocabulary gaps, and applies human-reviewed decisions to canonical vocabulary files.
-
-### Pipeline Overview
-
-```
-Depth corpus (221 solutions)  →  LLM extraction  →  Clustering  →  Proposals
-Breadth corpus (5,552 CDP)    →  LLM categorize  →  Gap analysis →     ↓
-                                                                    Review UI
-                                                                        ↓
-                                                                   Apply to vocab
-```
-
-### Running the Pipeline
-
-See `mining/README.md` for detailed usage. Quick start:
+## Local development
 
 ```bash
-# 1. Pull corpora from Supabase (idempotent, cached locally)
-uv run packages/ontology/mining/scripts/pull_depth_corpus.py --stats
-uv run packages/ontology/mining/scripts/pull_breadth_corpus.py --stats
-
-# 2. Phase D: Distribution & coverage analysis
-uv run packages/ontology/mining/scripts/phase_d_distribution.py --all
-
-# 3. Phase A: Mechanism clustering (optional)
-uv run packages/ontology/mining/scripts/phase_a_extract_mechanisms.py
-uv run packages/ontology/mining/scripts/phase_a_cluster_mechanisms.py
-uv run packages/ontology/mining/scripts/phase_a_propose_taxonomy.py
-
-# 4. Review proposals via web UI
-uv run packages/ontology/mining/scripts/review_server.py  # → http://localhost:8769
-
-# 5. Apply approved decisions to vocabularies
-uv run packages/ontology/mining/scripts/apply_decisions.py --phase distribution
+./start-viewer.sh   # http://127.0.0.1:8765/viewer/
+./start-editor.sh   # http://127.0.0.1:8766/viewer/editor.html  (requires Python)
 ```
 
-### Results
+The viewer is plain HTML/CSS/JS with D3 from a CDN — no build step. The editor adds a
+small Python backend (`scripts/editor-server.py`) that writes ontology and vocabulary
+files to disk.
 
-**Phase D (Distribution Gaps)**:
-- Analyzed 221 published solutions vs. 5,552 CDP actions across 4 dimensions
-- Found 3 vocabulary gaps → added 2 urban sectors (agriculture & food systems, emergency & disaster management)
-- Identified systematic coverage patterns (e.g., slow-onset environmental stresses +10.6pp in breadth)
-
-**Phase A (Mechanism Clustering)**:
-- Extracted 2,862 mechanism candidates from research narratives and claims
-- Clustered into 2,067 semantic groups
-- Generated 49 taxonomy proposals
-- **Result**: Existing 12-mechanism seed vocabulary validated as comprehensive (0 additions needed)
-- Confirms Sprint 4 expansion with tech-native types (sense_and_detect, forecast_and_model, automate_and_control, inform_and_alert) successfully anticipated corpus patterns
-
-### Pipeline Components
-
-- **Corpus extraction** (`pull_*.py`) — Pulls published solutions + CDP actions to local parquet cache
-- **LLM categorization** (`phase_d_distribution.py`) — Concurrent Haiku categorization with checkpoint resumption
-- **Clustering** (`phase_a_cluster_mechanisms.py`) — Embedding-based hierarchical clustering (scikit-learn)
-- **Proposal generation** (`phase_a_propose_taxonomy.py`) — Sonnet generates canonical names, definitions, external vocab crosswalks
-- **Review server** (`review_server.py`) — FastAPI + interactive HTML viewer with keyboard controls
-- **Decision applier** (`apply_decisions.py`) — Routes approved decisions to vocabulary files, logs rejections
-
-All decisions logged in `ontology/decisions-log.md` with rationales for traceability.
+For editing conventions and version-bumping rules, see `CLAUDE.md`.
 
 ---
 
-## Integration with Broader System
+## Acknowledgements
 
-### Data Flow
-
-```
-Crawler discovers solutions → solutions table (draft)
-CDP importer loads actions → solutions table (draft)
-                                    ↓
-Deep researcher picks up drafts → extracts claims → claims table
-                                                 → populates extraction_schema JSONB
-                                    ↓
-Synthesis prompt → narrative markdown → research_versions table
-                                    ↓
-Ontology formalization → Neo4j graph → GraphRAG query layer
-```
-
-### GraphRAG Architecture
-
-**Query Flow**: Natural language → Cypher generation → exposed result set → LLM synthesis
-
-All four steps logged and inspectable. The result set is the epistemic ground truth.
-
-### 90-Day Plan Context
-
-This ontology work is **Weeks 5-8** of the 90-day plan:
-
-- **Weeks 1-4**: Extraction schema built, deep researcher running, CDP batch imported ✅ DONE
-- **Weeks 5-6**: Architecture formalization, adaptation mechanism typologies (current phase)
-- **Weeks 7-8**: Ontology induction from full corpus, relationship clustering
-- **Weeks 9-10**: Populate Neo4j, sanity-check queries
-- **Weeks 11-12**: GraphRAG pipeline with test harness
-
----
-
-## Key Design Decisions
-
-### Solutions: What They ARE vs. What They DO
-
-**Decision**: Solution taxonomy classifies by **identity** (what the solution is), not **function** (what it does).
-
-**Rationale**: Function is expressed as typed relationships:
-- `Solution -[:MITIGATES]-> Hazard`
-- `Solution -[:OPERATES_ON]-> UrbanSystem`
-- `Solution -[:USES_MECHANISM]-> Mechanism`
-
-This enables multi-hop queries: "Find solutions that mitigate coastal flooding by hardening energy infrastructure."
-
-### Vocabularies as Guidance, Not Constraints
-
-**Decision**: Vocabulary files provide **guidance** rather than rigid schema enforcement. Validation is advisory, not blocking.
-
-**Rationale**: Allows handling edge cases, new terms, and genuine ambiguity without breaking extraction. Invalid terms flagged for review but don't stop the researcher.
-
-### Claims as First-Class Objects
-
-**Decision**: Every value in extraction_schema references claim UUIDs. Claims are rows in the `claims` table with `claim_text`, `source_url`, `confidence`, etc.
-
-**Rationale**: Enables provenance tracking, re-classification as ontology evolves, and graph queries that traverse to source evidence.
-
----
-
-## Tools and Technologies
-
-- **Ontology Editor**: Protégé (for OWL formalization)
-- **Graph Database**: Neo4j (for knowledge graph)
-- **Schema Validation**: JSON Schema + custom validators
-- **Vocabulary Management**: JSON files synced from Supabase tables
-- **Diagram Tools**: draw.io (architecture sketches), WebVOWL (ontology visualization)
-
----
-
-## References
-
-- **Extraction Schema**: `schemas/extraction-schema-v1.json`
-- **Vocabulary Strategy**: `schemas/vocabularies/README.md`
-- **Decisions Log**: `ontology/decisions-log.md`
-- **OntoKGen Methodology**: `research/papers/2412.00608v3.pdf`
-- **Project Context**: `docs/plans/firewall_project_context.md`
+AdaptBase is developed by the **Urban Tech Hub at Cornell Tech** in collaboration with
+**[Marceta PBC](https://marceta.ai/)**.

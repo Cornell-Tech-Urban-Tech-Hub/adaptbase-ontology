@@ -1,93 +1,91 @@
 # AdaptBase Ontology — CLAUDE.md
 
+## Start here
+
+Before planning any non-trivial change, read the **"Future ontology improvements"**
+section at the top of `README.md`. If your work intersects an item there, advance that
+item rather than creating parallel work.
+
 ## What this is
 
-This repo contains the formal ontology for **AdaptBase** (also referred to as "Resilience Scanner" in legacy files). The ontology models how cities adapt to climate change — entity types, relationships, and controlled vocabularies that structure an evidence base spanning hazards, solutions, financing, implementation, and outcomes.
-
-The ontology is maintained as versioned JSON files in `ontology/` and displayed via a browser-based viewer at `index.html`.
+The formal ontology for **AdaptBase** — entity types, relationships, and controlled
+vocabularies that model how cities adapt to climate change. Versioned JSON in
+`ontology/`, displayed by a browser-based viewer in `viewer/`, deployed to
+[ontology.adaptbase.us](https://ontology.adaptbase.us/) via GitHub Pages.
 
 **Current version:** v0.1 (2026-04-30)
 
----
-
-## Repo layout (what matters for the viewer)
+## Repo layout
 
 ```
-index.html                    # Main public-facing app
-styles/tokens.css             # Design tokens
-styles/app.css                # App styles
-scripts/
-  ontology-adapter.js         # Loads/parses ontology JSON; version registry
-  graph.js                    # D3 canvas force-directed graph
-  inspector.js                # Side panel: node/edge detail + inline editing
-  comments.js                 # Hardcoded mock comment threads
-  app.js                      # Bootstrap: wires UI, search, edit mode, save
-ontology/
-  ontology-v0.1.json          # Current version
-schemas/vocabularies/         # Controlled vocabularies (hazards, systems, etc.)
-mining/                       # Pipeline for grounding vocab in corpus data
+adaptbase-ontology/
+├── ontology/             # Ontology JSON, vocabularies, decisions log, framework crosswalk, reviews
+│   ├── ontology-v0.1.json
+│   ├── versions.json
+│   ├── vocabularies/     # Controlled vocab: hazards, urban systems, solution categories, CRF goals, enums…
+│   ├── decisions-log.md
+│   ├── framework-crosswalk.md
+│   └── review/
+├── viewer/               # All web files — index.html, discussions.html, editor.html, scripts/, styles/, img/, content/
+├── docs/                 # Planning docs, validation methodology, reference schema/prompts (vestigial)
+├── scripts/              # Python: editor-server.py, validate_ontology.py, generate_miami_sample.py
+├── research/             # ARCHIVE — corpus mining pipeline; not consulted day-to-day
+├── index.html            # Root meta-redirect → viewer/ (so GH Pages root works)
+├── start-viewer.sh       # http://127.0.0.1:8765/viewer/
+└── start-editor.sh       # http://127.0.0.1:8766/viewer/editor.html
 ```
 
----
-
-## Running the viewer locally
+## Running locally
 
 ```bash
-./start-viewer.sh             # starts python http.server + opens browser
-# or manually:
-python3 -m http.server 8765   # then open http://127.0.0.1:8765/
+./start-viewer.sh   # plain static server (python3 -m http.server)
+./start-editor.sh   # editor backend with /api/save-ontology and /api/save-vocab
 ```
 
-No build step — plain HTML/CSS/JS with D3 loaded from unpkg CDN.
+No build step. D3 loads from a CDN. The viewer fetches `../ontology/...` relative to
+`viewer/index.html`, so the local server must serve the **repo root**, not `viewer/`.
 
----
+## Editing the ontology
 
-## Ontology structure
+- **Types and relationships** live in `ontology/ontology-v<version>.json`.
+- **Controlled vocabularies** live in `ontology/vocabularies/*.json` and are loaded by
+  both the viewer (read-only) and the editor (read/write via the editor server).
+- The editor (`viewer/editor.html` + `scripts/editor-server.py`) writes new versions to
+  disk and updates `ontology/versions.json`. Paths in `versions.json` are relative to
+  `viewer/` (i.e. start with `../ontology/...`).
 
-The ontology JSON has three top-level keys:
+### Version management
 
-```json
-{
-  "types": [...],          // Entity types (nodes): id, label, definition, properties, vocabulary_bindings
-  "relationships": [...],  // Edge types: id, label, source, target, definition, properties
-  "vocabularies": [...]    // Controlled vocabularies: label, description, type (external|internal)
-}
-```
+**Always increment the ontology version before committing changes.** Follow semver:
+- **Patch** (`v0.3` → `v0.3.1` → `v0.3.2`) — viewer/tooling changes
+- **Minor** (`v0.3` → `v0.4`) — ontology schema changes
 
-Version metadata lives at the top level: `version`, `updated`, `domain`.
-
----
-
-## Mining pipeline (Python)
-
-The `mining/` directory contains an automated pipeline for grounding ontology vocabularies in real corpus data (221 published solutions + 5,552 CDP city actions). It pulls from Supabase and uses LLM calls via a LiteLLM proxy. See `mining/README.md` for usage.
-
-This pipeline is a dev/research tool — it does not affect the viewer.
-
----
+When bumping:
+1. Copy `ontology/ontology-v<current>.json` → `ontology/ontology-v<new>.json`; update
+   `version` and `update_note` inside.
+2. Prepend the new entry to `ontology/versions.json` (path: `../ontology/ontology-v<new>.json`).
+3. Update `**Current version:**` in this file and in `README.md`.
 
 ## Key design decisions
 
-- **Solutions classified by identity, not function** — what a solution IS, not what it does; function expressed as typed relationships (MITIGATES, OPERATES_ON, etc.)
-- **Vocabularies as guidance, not hard constraints** — advisory validation, not blocking
-- **Claims as provenance** — every extraction value traces to a claim UUID in Supabase
-- All non-obvious design calls are logged in `decisions-log.md`
+- **Solutions classified by identity, not function.** What a solution IS, not what it
+  does; function is expressed via typed relationships (`MITIGATES`, `OPERATES_ON`,
+  `USES_MECHANISM`).
+- **Vocabularies are guidance, not hard constraints.** Validation is advisory, not
+  blocking.
+- **Claims as provenance.** Every extracted value traces to a claim UUID with a source.
+- All non-obvious design calls go in `ontology/decisions-log.md`.
 
----
+## `research/`
 
-## Version management
-
-**Always increment the ontology version before committing changes.** Follow semver patch increments (e.g., v0.3 → v0.3.1 → v0.3.2) for viewer/tooling changes; minor increments (v0.3 → v0.4) for ontology schema changes.
-
-When bumping the version:
-1. Copy `ontology/ontology-v<current>.json` → `ontology/ontology-v<new>.json` and update `"version"` and `"update_note"` inside it
-2. Prepend the new entry to `ontology/versions.json`
-3. Update `**Current version:**` in this file and the filename in the repo layout section above
-
----
+Archive of the corpus mining work that grounded several vocabularies in real data
+(221 published solutions + 5,552 CDP city actions + 50 plans). Not part of the
+viewer; not consulted unless the current task explicitly relates to corpus mining.
+See `research/mining/README.md` if you need to dig in.
 
 ## Out of scope for this repo
 
-- Supabase database, extraction pipeline, deep researcher agent — those live in the main resilience-scanner monorepo
-- Neo4j graph population — planned for post-May 15
-- OWL/Protégé formalization — future work
+- Supabase database, extraction pipeline, deep researcher agent — those live in the
+  main adaptbase monorepo (sibling repos under `_dev/adaptbase/`).
+- Neo4j graph population — planned for later.
+- OWL/Protégé formalization — future work.

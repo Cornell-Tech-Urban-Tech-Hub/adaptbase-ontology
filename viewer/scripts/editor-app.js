@@ -13,7 +13,7 @@
   // ── Bootstrap ────────────────────────────────────────────────
 
   async function init() {
-    const versions = await fetchJSON('ontology/versions.json');
+    const versions = await fetchJSON('../ontology/versions.json');
     if (!versions.length) { alert('No ontology versions found'); return; }
 
     ontology = await fetchJSON(versions[0].path);
@@ -22,7 +22,7 @@
     const vfRes = await fetchJSON('/api/vocab-files');
     vocabFileList = vfRes.files || [];
     for (const f of vocabFileList) {
-      vocabFiles[f] = await fetchJSON(`schemas/vocabularies/${f}`);
+      vocabFiles[f] = await fetchJSON(`../ontology/vocabularies/${f}`);
     }
     vocabBaseline = structuredClone(vocabFiles);
 
@@ -892,7 +892,7 @@
     ontology.version_notes = versionNotes;
 
     const versionsEntry = {
-      path: `ontology/ontology-${newVersion}.json`,
+      path: `../ontology/ontology-${newVersion}.json`,
       label: newVersion,
       value: newVersion
     };

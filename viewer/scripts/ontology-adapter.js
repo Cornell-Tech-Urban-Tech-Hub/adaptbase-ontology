@@ -34,7 +34,7 @@
   let loadedEnums = null;
 
   async function loadVersions() {
-    const res = await fetch('ontology/versions.json?t=' + Date.now());
+    const res = await fetch('../ontology/versions.json?t=' + Date.now());
     if (!res.ok) throw new Error('Failed to load ontology/versions.json');
     ONTOLOGY_VERSIONS = await res.json();
     return ONTOLOGY_VERSIONS;
@@ -42,8 +42,8 @@
 
   async function loadEnums() {
     if (loadedEnums) return loadedEnums;
-    const res = await fetch('schemas/vocabularies/enums.json?t=' + Date.now());
-    if (!res.ok) throw new Error('Failed to load schemas/vocabularies/enums.json');
+    const res = await fetch('../ontology/vocabularies/enums.json?t=' + Date.now());
+    if (!res.ok) throw new Error('Failed to load ontology/vocabularies/enums.json');
     loadedEnums = await res.json();
     return loadedEnums;
   }

@@ -7,7 +7,7 @@ for writing ontology versions and vocabulary files to disk.
 Endpoints:
   POST /api/save-ontology  {version, data, versions_entry}
   POST /api/save-vocab     {filename, data}
-  GET  /api/vocab-files    lists schemas/vocabularies/*.json
+  GET  /api/vocab-files    lists ontology/vocabularies/*.json
 """
 
 import json
@@ -109,7 +109,7 @@ class EditorHandler(SimpleHTTPRequestHandler):
         if data is None:
             return self._json_error(400, 'data is required')
 
-        vocab_dir = os.path.join(ROOT, 'schemas', 'vocabularies')
+        vocab_dir = os.path.join(ROOT, 'ontology', 'vocabularies')
         filepath = os.path.join(vocab_dir, filename)
 
         if not os.path.exists(filepath):
@@ -122,7 +122,7 @@ class EditorHandler(SimpleHTTPRequestHandler):
         self._json_response(200, {'ok': True, 'file': filename})
 
     def _list_vocab_files(self):
-        vocab_dir = os.path.join(ROOT, 'schemas', 'vocabularies')
+        vocab_dir = os.path.join(ROOT, 'ontology', 'vocabularies')
         files = sorted(
             f for f in os.listdir(vocab_dir)
             if f.endswith('.json')
@@ -133,7 +133,7 @@ class EditorHandler(SimpleHTTPRequestHandler):
 def run(port=8766):
     handler = partial(EditorHandler, directory=ROOT)
     server = HTTPServer(('127.0.0.1', port), handler)
-    print(f'  Editor server  ->  http://127.0.0.1:{port}/editor.html')
+    print(f'  Editor server  ->  http://127.0.0.1:{port}/viewer/editor.html')
     print('  Ctrl-C to stop')
     try:
         server.serve_forever()
