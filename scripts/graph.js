@@ -42,6 +42,8 @@
   let dimmed = new Set(); // cluster ids that are off
   let dragNode = null, dragStart = null;
   let isPanning = false, panStart = null;
+  let pinchState = null;
+  let tapState = null;
 
   // Focus mode state
   let focusMode = false;
@@ -883,6 +885,118 @@
     draw();
   }
 
+  // --- touch interaction ---
+  function touchPoint(touch) {
+    const rect = canvas.getBoundingClientRect();
+    return { x: touch.clientX - rect.left, y: touch.clientY - rect.top };
+  }
+
+  function touchDistance(t1, t2) {
+    return Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+  }
+
+  function onTouchStart(e) {
+    if (e.touches.length === 1) {
+      const t = e.touches[0];
+      const p = touchPoint(t);
+      isPanning = true;
+      panStart = { mx: t.clientX, my: t.clientY, tx: transform.x, ty: transform.y };
+      tapState = { x: p.x, y: p.y, startTime: performance.now(), moved: false };
+      pinchState = null;
+    } else if (e.touches.length === 2) {
+      isPanning = false;
+      tapState = null;
+      const p1 = touchPoint(e.touches[0]);
+      const p2 = touchPoint(e.touches[1]);
+      pinchState = {
+        startDist: touchDistance(e.touches[0], e.touches[1]),
+        startK: transform.k,
+        centerX: (p1.x + p2.x) / 2,
+        centerY: (p1.y + p2.y) / 2,
+      };
+    }
+  }
+
+  function onTouchMove(e) {
+    if (e.touches.length === 2 && pinchState) {
+      e.preventDefault();
+      const currDist = touchDistance(e.touches[0], e.touches[1]);
+      if (currDist <= 0 || pinchState.startDist <= 0) return;
+      const targetK = Math.max(0.3, Math.min(3, pinchState.startK * (currDist / pinchState.startDist)));
+      const before = toWorld(pinchState.centerX, pinchState.centerY);
+      transform.k = targetK;
+      const after = toWorld(pinchState.centerX, pinchState.centerY);
+      transform.x += (after.x - before.x) * transform.k;
+      transform.y += (after.y - before.y) * transform.k;
+      draw();
+    } else if (e.touches.length === 1 && isPanning) {
+      e.preventDefault();
+      const t = e.touches[0];
+      const dx = t.clientX - panStart.mx;
+      const dy = t.clientY - panStart.my;
+      transform.x = panStart.tx + dx;
+      transform.y = panStart.ty + dy;
+      if (tapState && (Math.abs(dx) + Math.abs(dy) > 8)) tapState.moved = true;
+      draw();
+    }
+  }
+
+  function onTouchEnd(e) {
+    if (e.touches.length === 0) {
+      const wasPanning = isPanning;
+      if (tapState && !tapState.moved && (performance.now() - tapState.startTime) < 400) {
+        e.preventDefault(); // suppress synthetic mouse events after tap
+        const { x: wx, y: wy } = toWorld(tapState.x, tapState.y);
+        const node = nodeAt(wx, wy);
+        if (node) {
+          selectNode(node);
+        } else {
+          const edge = edgeAt(wx, wy);
+          if (edge) selectEdge(edge);
+          else deselect();
+        }
+      } else if (wasPanning) {
+        e.preventDefault(); // suppress synthetic mouse events after pan
+      }
+      isPanning = false;
+      pinchState = null;
+      tapState = null;
+    } else if (e.touches.length === 1 && pinchState) {
+      const t = e.touches[0];
+      pinchState = null;
+      isPanning = true;
+      panStart = { mx: t.clientX, my: t.clientY, tx: transform.x, ty: transform.y };
+      tapState = null;
+    }
+  }
+
+  // --- mobile inspector toggle ---
+  let mobileInspectorToggle = null;
+
+  function setMobileToggleUI(open) {
+    if (!mobileInspectorToggle) return;
+    mobileInspectorToggle.setAttribute('aria-expanded', String(open));
+    mobileInspectorToggle.textContent = open ? 'Close details' : 'Details';
+  }
+
+  function openMobileInspector() {
+    if (!document.body.classList.contains('mobile-inspector-open')) {
+      document.body.classList.add('mobile-inspector-open');
+      setMobileToggleUI(true);
+    }
+  }
+
+  function closeMobileInspector() {
+    if (document.body.classList.contains('mobile-inspector-open')) {
+      document.body.classList.remove('mobile-inspector-open');
+      setMobileToggleUI(false);
+    }
+  }
+
+  function onResizeMobileToggle() {
+    if (window.innerWidth > 767) closeMobileInspector();
+  }
+
   function resetZoom() {
     fitToView();
     draw();
@@ -978,6 +1092,7 @@
     });
 
     window.Inspector && window.Inspector.showNode(n);
+    if (window.innerWidth <= 767) openMobileInspector();
   }
 
   function selectEdge(l) {
@@ -986,6 +1101,7 @@
     selectedNode = null;
     draw();
     window.Inspector && window.Inspector.showEdge(l);
+    if (window.innerWidth <= 767) openMobileInspector();
   }
 
   function deselect() {
@@ -1043,11 +1159,33 @@
     canvas.addEventListener('mousedown', onMouseDown);
     window.addEventListener('mouseup', onMouseUp);
     canvas.addEventListener('wheel', onWheel, { passive: false });
+
+    canvas.addEventListener('touchstart', onTouchStart, { passive: true });
+    canvas.addEventListener('touchmove', onTouchMove, { passive: false });
+    canvas.addEventListener('touchend', onTouchEnd, { passive: false });
+    canvas.addEventListener('touchcancel', () => {
+      isPanning = false;
+      pinchState = null;
+      tapState = null;
+    }, { passive: true });
+
     window.addEventListener('resize', resize);
+    window.addEventListener('resize', onResizeMobileToggle);
 
     document.getElementById('zoom-in').onclick = () => zoomAt(W/2, H/2, 1.25);
     document.getElementById('zoom-out').onclick = () => zoomAt(W/2, H/2, 1/1.25);
     document.getElementById('zoom-reset').onclick = resetZoom;
+
+    mobileInspectorToggle = document.getElementById('mobile-inspector-toggle');
+    if (mobileInspectorToggle) {
+      mobileInspectorToggle.addEventListener('click', () => {
+        if (document.body.classList.contains('mobile-inspector-open')) {
+          closeMobileInspector();
+        } else {
+          openMobileInspector();
+        }
+      });
+    }
   }
 
   function load(graphData) {
