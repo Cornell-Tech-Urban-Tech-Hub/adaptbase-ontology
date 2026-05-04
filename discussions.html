@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Discussions — AdaptBase Ontology</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles/tokens.css" />
+<link rel="stylesheet" href="styles/app.css" />
+<style>
+.discussions-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.discussions-header {
+  margin-bottom: 3rem;
+}
+
+.discussions-header h1 {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--sodium);
+}
+
+.discussions-header p {
+  font-size: 1.125rem;
+  color: var(--sodium-dim);
+  line-height: 1.6;
+}
+
+.section {
+  margin-bottom: 4rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--bord);
+}
+
+.section-header h2 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--sodium);
+  margin: 0;
+}
+
+.section-count {
+  font-size: 0.875rem;
+  color: var(--sodium-dim);
+  font-weight: 500;
+}
+
+.discussion-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.discussion-item {
+  background: var(--carb);
+  border: 1px solid var(--bord);
+  border-radius: 8px;
+  padding: 1.25rem;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.discussion-item:hover {
+  border-color: var(--blue);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.discussion-item-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.discussion-item-title {
+  font-weight: 600;
+  font-size: 1.125rem;
+  color: var(--sodium);
+  margin: 0;
+  flex: 1;
+}
+
+.discussion-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: var(--sodium-dim);
+}
+
+.discussion-item-label {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  background: var(--hydrogen);
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  color: var(--blue);
+}
+
+.discussion-item-comments {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--sodium-dim);
+}
+
+.discussion-item-comments svg {
+  width: 14px;
+  height: 14px;
+}
+
+.grouped-section {
+  margin-top: 2rem;
+}
+
+.group-header {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--sodium);
+  margin-bottom: 1rem;
+  padding-left: 0.5rem;
+  border-left: 3px solid var(--blue);
+}
+
+.loading {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--sodium-dim);
+  font-size: 1.125rem;
+}
+
+.error {
+  background: var(--carn-soft);
+  border: 1px solid var(--carn);
+  border-radius: 8px;
+  padding: 1.5rem;
+  color: var(--carn);
+  margin: 2rem 0;
+}
+
+.empty {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: var(--sodium-dim);
+  font-size: 1rem;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--bord);
+}
+
+.tab {
+  padding: 0.75rem 1.5rem;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--sodium-dim);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tab:hover {
+  color: var(--sodium);
+}
+
+.tab.active {
+  color: var(--blue);
+  border-bottom-color: var(--blue);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="brand-lockup">
+    <div class="brand-title">
+      <a href="index.html" style="text-decoration: none; color: inherit;">
+        <span class="project-name">AdaptBase</span>
+        <span class="brand-subtitle">Urban Climate Adaptation &amp; Resilience Solutions</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="header-actions">
+    <a href="index.html" class="btn btn-ghost">← Back to Ontology</a>
+    <a href="https://github.com/Cornell-Tech-Urban-Tech-Hub/adaptbase-ontology/issues?q=is%3Aissue+label%3Areview" target="_blank" rel="noopener" class="btn btn-ghost">View on GitHub</a>
+  </div>
+</header>
+
+<main class="discussions-container">
+  <div class="discussions-header">
+    <h1>Ontology Discussions</h1>
+    <p>Review comments and feedback on entity types, relationships, and vocabularies. Join the conversation on GitHub.</p>
+  </div>
+
+  <div id="loading" class="loading">Loading discussions…</div>
+  <div id="error" class="error" style="display: none;"></div>
+  <div id="content" style="display: none;">
+
+    <div class="tabs">
+      <button class="tab active" data-tab="recent">Most Recent</button>
+      <button class="tab" data-tab="active">Most Active</button>
+      <button class="tab" data-tab="entities">By Entity Type</button>
+      <button class="tab" data-tab="relationships">By Relationship</button>
+    </div>
+
+    <div id="tab-recent" class="tab-content active">
+      <div class="section">
+        <div class="discussion-list" id="recent-list"></div>
+      </div>
+    </div>
+
+    <div id="tab-active" class="tab-content">
+      <div class="section">
+        <div class="discussion-list" id="active-list"></div>
+      </div>
+    </div>
+
+    <div id="tab-entities" class="tab-content">
+      <div class="section" id="entities-section"></div>
+    </div>
+
+    <div id="tab-relationships" class="tab-content">
+      <div class="section" id="relationships-section"></div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+(function() {
+  const REPO_OWNER = 'Cornell-Tech-Urban-Tech-Hub';
+  const REPO_NAME = 'adaptbase-ontology';
+  const API_BASE = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}`;
+
+  function timeAgo(dateStr) {
+    const now = Date.now();
+    const then = new Date(dateStr).getTime();
+    const diff = now - then;
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return 'just now';
+    if (mins < 60) return `${mins}m ago`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    if (days < 30) return `${days}d ago`;
+    return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  function esc(s) {
+    return String(s ?? '').replace(/[&<>"]/g, c => ({
+      '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;'
+    }[c]));
+  }
+
+  function extractOntologyLabel(issue) {
+    const ontologyLabel = issue.labels.find(l => l.name.startsWith('ontology:'));
+    if (!ontologyLabel) return null;
+    const key = ontologyLabel.name.replace('ontology:', '');
+    return {
+      key,
+      isRelationship: key.includes(':'),
+      label: key
+    };
+  }
+
+  function renderDiscussionItem(issue) {
+    const ontLabel = extractOntologyLabel(issue);
+    const labelText = ontLabel ? ontLabel.label : 'general';
+
+    return `
+      <a href="${esc(issue.html_url)}" target="_blank" rel="noopener" class="discussion-item">
+        <div class="discussion-item-header">
+          <h3 class="discussion-item-title">${esc(issue.title)}</h3>
+          <div class="discussion-item-meta">
+            <span class="discussion-item-label">${esc(labelText)}</span>
+            ${issue.comments > 0 ? `
+              <span class="discussion-item-comments">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                ${issue.comments}
+              </span>
+            ` : ''}
+          </div>
+        </div>
+        <div class="discussion-item-meta">
+          <span>Opened by ${esc(issue.user.login)}</span>
+          <span>•</span>
+          <span>${timeAgo(issue.created_at)}</span>
+        </div>
+      </a>
+    `;
+  }
+
+  async function loadDiscussions() {
+    try {
+      const url = `${API_BASE}/issues?labels=review&state=open&per_page=100`;
+      const res = await fetch(url, {
+        headers: { 'Accept': 'application/vnd.github.v3+json' },
+      });
+
+      if (!res.ok) {
+        throw new Error(`GitHub API returned ${res.status}`);
+      }
+
+      const issues = await res.json();
+
+      if (issues.length === 0) {
+        document.getElementById('loading').innerHTML = '<div class="empty">No discussions yet. Be the first to leave feedback on the ontology!</div>';
+        return;
+      }
+
+      // Sort and group
+      const recent = [...issues].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      const active = [...issues].sort((a, b) => b.comments - a.comments);
+
+      const entities = {};
+      const relationships = {};
+
+      issues.forEach(issue => {
+        const ontLabel = extractOntologyLabel(issue);
+        if (ontLabel) {
+          const target = ontLabel.isRelationship ? relationships : entities;
+          if (!target[ontLabel.label]) {
+            target[ontLabel.label] = [];
+          }
+          target[ontLabel.label].push(issue);
+        }
+      });
+
+      // Render Most Recent
+      document.getElementById('recent-list').innerHTML = recent.map(renderDiscussionItem).join('');
+
+      // Render Most Active
+      document.getElementById('active-list').innerHTML = active.map(renderDiscussionItem).join('');
+
+      // Render By Entity Type
+      const entitiesHtml = Object.keys(entities).sort().map(label => {
+        const groupIssues = entities[label];
+        return `
+          <div class="grouped-section">
+            <div class="group-header">${esc(label)} <span class="section-count">(${groupIssues.length})</span></div>
+            <div class="discussion-list">
+              ${groupIssues.map(renderDiscussionItem).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('entities-section').innerHTML = entitiesHtml || '<div class="empty">No entity type discussions yet.</div>';
+
+      // Render By Relationship
+      const relationshipsHtml = Object.keys(relationships).sort().map(label => {
+        const groupIssues = relationships[label];
+        return `
+          <div class="grouped-section">
+            <div class="group-header">${esc(label)} <span class="section-count">(${groupIssues.length})</span></div>
+            <div class="discussion-list">
+              ${groupIssues.map(renderDiscussionItem).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('relationships-section').innerHTML = relationshipsHtml || '<div class="empty">No relationship discussions yet.</div>';
+
+      // Show content
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('content').style.display = 'block';
+
+    } catch (err) {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('error').textContent = `Failed to load discussions: ${err.message}`;
+      document.getElementById('error').style.display = 'block';
+    }
+  }
+
+  // Tab switching
+  document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('tab')) {
+      const tabName = e.target.dataset.tab;
+
+      // Update tab buttons
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      e.target.classList.add('active');
+
+      // Update tab content
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.getElementById(`tab-${tabName}`).classList.add('active');
+    }
+  });
+
+  // Load on page load
+  loadDiscussions();
+})();
+</script>
+
+</body>
+</html>

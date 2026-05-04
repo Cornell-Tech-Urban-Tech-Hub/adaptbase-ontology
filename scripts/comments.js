@@ -42,9 +42,9 @@
   }
 
   function newIssueUrl(key, label) {
-    const issueTitle = encodeURIComponent(`[Review] ${label}`);
+    const issueTitle = encodeURIComponent(label);
     const issueBody = encodeURIComponent(
-      `**Ontology element:** \`${key}\`\n\n---\n\n_Your review comment here. Describe what you'd change, flag an ambiguity, or suggest an improvement._`
+      "_Describe what you'd change, flag an ambiguity, or suggest an improvement._"
     );
     const issueLabel = encodeURIComponent(labelForKey(key));
     return `https://github.com/${REPO_OWNER}/${REPO_NAME}/issues/new?title=${issueTitle}&body=${issueBody}&labels=${issueLabel},review`;
@@ -117,7 +117,7 @@
             <a href="${esc(issue.user.html_url)}" target="_blank" rel="noopener" class="name" style="text-decoration:none;color:inherit;">${esc(issue.user.login)}</a>
             <span class="time">${timeAgo(issue.created_at)}</span>
           </div>
-          <div class="body"><strong>${esc(issue.title.replace(/^\[Review\]\s*/, ''))}</strong></div>
+          <div class="body"><strong>${esc(issue.title)}</strong></div>
           <div class="body">${renderMarkdownSimple(issue.body || '')}</div>
           <div class="actions">
             <a href="${esc(issueUrl)}" target="_blank" rel="noopener">View on GitHub</a>
