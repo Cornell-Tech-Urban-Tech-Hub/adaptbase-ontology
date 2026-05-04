@@ -143,12 +143,93 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  function showAboutModal() {
-    const versionEl = document.getElementById('about-version');
-    if (versionEl && currentGraphData?.metadata?.version) {
-      versionEl.textContent = currentGraphData.metadata.version;
+  async function showAboutModal() {
+    const modal = document.getElementById('about-modal');
+    const content = document.getElementById('about-content');
+
+    // Show modal immediately with loading state
+    modal.classList.add('show');
+
+    try {
+      const res = await fetch('content/about.md');
+      if (!res.ok) throw new Error('Failed to load about content');
+
+      let markdown = await res.text();
+
+      // Replace placeholders
+      const version = currentGraphData?.metadata?.version || '—';
+      const typeCount = currentGraphData?.nodes?.length || 0;
+      const relCount = currentGraphData?.edges?.length || 0;
+
+      markdown = markdown
+        .replace(/\{\{VERSION\}\}/g, version)
+        .replace(/\{\{TYPE_COUNT\}\}/g, typeCount)
+        .replace(/\{\{REL_COUNT\}\}/g, relCount);
+
+      // Render markdown to HTML
+      content.innerHTML = renderMarkdown(markdown);
+    } catch (err) {
+      content.innerHTML = '<p>Failed to load about content.</p>';
+      console.error(err);
     }
-    document.getElementById('about-modal').classList.add('show');
+  }
+
+  function renderMarkdown(md) {
+    // Helper to process inline formatting (bold, links)
+    function processInline(text) {
+      return text
+        // Links: [text](url)
+        .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+        // Bold: **text**
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    }
+
+    // Split into blocks
+    const blocks = md.split('\n\n').map(b => b.trim()).filter(b => b);
+    let html = '';
+    let inSection = false;
+    let isFirstParagraph = true;
+
+    for (const block of blocks) {
+      // Skip HTML comments
+      if (block.startsWith('<!--')) continue;
+
+      // H1
+      if (block.startsWith('# ')) {
+        if (inSection) { html += '</div>'; inSection = false; }
+        html += `<h3>${processInline(block.slice(2))}</h3>\n`;
+        isFirstParagraph = true;
+      }
+      // H2 - opens a section
+      else if (block.startsWith('## ')) {
+        if (inSection) html += '</div>';
+        html += `<div class="about-section"><h4>${processInline(block.slice(3))}</h4>\n`;
+        inSection = true;
+      }
+      // List
+      else if (block.includes('\n- ') || block.startsWith('- ')) {
+        const items = block.split('\n')
+          .filter(line => line.startsWith('- '))
+          .map(line => `<li>${processInline(line.slice(2))}</li>`)
+          .join('\n');
+        html += `<ul class="about-list">\n${items}\n</ul>\n`;
+      }
+      // Paragraph
+      else {
+        const content = processInline(block);
+        if (isFirstParagraph) {
+          html += `<p class="about-lede">${content}</p>\n`;
+          isFirstParagraph = false;
+        } else {
+          html += `<p>${content}</p>\n`;
+        }
+      }
+    }
+
+    // Close any open section
+    if (inSection) html += '</div>';
+
+    return html;
   }
 
   function showChangelogModal() {
