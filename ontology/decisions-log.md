@@ -1,14 +1,114 @@
 # Ontology Design Decisions Log
 
 **Project:** Resilience Scanner - Climate Adaptation Solutions Ontology  
-**Version:** 0.1.1  
-**Last Updated:** 2026-05-04
+**Version:** 0.2  
+**Last Updated:** 2026-05-05
 
 ---
 
 ## Purpose
 
 This log documents key design decisions in the ontology development process, including rationale, alternatives considered, and implications for future work.
+
+---
+
+## Decision 28 (v0.2): Resilience finance extension — CapitalProject entity, debt-service properties, FUNDED_BY relationship, monetized co-benefits
+
+**Date:** 2026-05-05
+**Context:** Meeting with Andy Salkin (Resilient Cities Catalyst), NYC, 5 May 2026. Salkin's brief: help cities prioritize resilience spending in their Capital Improvement Plans (CIPs), and surface evidence to justify more debt-financed adaptation work. Analytical core: *plan↔budget alignment* — comparing what a climate plan says with what the capital budget actually commits.
+
+The v0.1.1 ontology had the financing primitives (`FinancingSource`, `FinancialInstrument`, `CHANNELS_THROUGH`, `USES_INSTRUMENT`) and modeled climate-plan commitments well via `Plan` and `Action`, but three concrete gaps prevented Salkin's use cases:
+
+1. No way to ingest a non-climate capital budget. `Action` is defined as a commitment within a climate plan; Salkin needs to ingest the full CIP from sources like OpenGov and *then* test which line items are climate-relevant.
+2. No structured multi-source funding stack. A typical CIP line is funded by, e.g., 40% federal grant + 30% revenue bond + 30% municipal appropriation. The chain `Solution USES_INSTRUMENT FinancialInstrument ← CHANNELS_THROUGH FinancingSource` was incomplete (Solution↔Source not directly connected), carried no debt-service detail, and wasn't grained at the project level.
+3. Co-benefits were categorical, not monetized. `Outcome.co_benefit_type` captured kind but not value — Salkin's framing ("show how investments connect to other capital programs — transit, parks, public safety, pensions") needed both monetary value and a beneficiary-program tag.
+
+### Decision
+
+Bump to **v0.2** (minor — schema change). Six coordinated additions:
+
+**A. New entity: `CapitalProject`** — a budget-document line item with project_id, asset_class, total_capex_usd, annual_opex_usd, asset_life_years, construction_phase, funding_year_breakdown, financing_status, is_climate_relevant flag. Distinct from `Action` (climate-plan commitment): a `CapitalProject` is sourced from a CIP / capital budget and may or may not be climate-relevant.
+
+**B. `FinancialInstrument` debt-service properties** — principal_amount_usd, interest_rate, loan_term_years, annual_debt_service_usd, issuance_year, maturity_year, issuer, credit_rating. All optional (extraction tolerant). Enables answering "what is the total annual debt service burden from adaptation projects?"
+
+**C. `FinancialInstrument.instrument_type` extended** with US municipal CIP language: `general_obligation_bond`, `revenue_bond`, `tax_increment_financing`, `special_assessment`, `federal_cost_share`, `state_cost_share`, `municipal_capital_appropriation`, `ratepayer_funded`, `other`. All previous values retained.
+
+**D. New relationships:**
+- `REALIZES` (CapitalProject → Action) — bridges climate-plan language and budget-document execution. The plan↔budget alignment edge.
+- `FUNDED_BY` (CapitalProject → FinancingSource) — closes the financing chain. Edge properties: `amount_usd`, `share_percent`, `financing_model` (bound to the previously-orphaned `enums.json#financing_model`). Multi-source funding stacks are modeled as multiple FUNDED_BY rows from one CapitalProject.
+- `COMMISSIONED_BY` (CapitalProject → Stakeholder) — sponsoring agency, distinct from `IMPLEMENTED_BY` (executing party).
+
+**E. Existing relationships extended (duplicate-id rows for CapitalProject as source/target):** `DEPLOYED_IN`, `USES_INSTRUMENT`, `IMPLEMENTED_BY`, `PRODUCES`, `FACES`, and `SPECIFIES` (Plan → CapitalProject). The viewer's edge keying (`id:source:target` per inspector.js:237) tolerates duplicate ids — this preserves semantic identity (the relationship means the same thing whether the source is Action or CapitalProject) without cluttering the schema with parallel names.
+
+**F. `Outcome` monetary valuation** — new properties: `monetized_value_usd`, `value_recurrence` (one_time/annual/lifetime), `valuation_method` (free-text), `beneficiary_program` (array, new `municipal_program` enum: transportation, parks_recreation, public_safety, public_health, housing, schools, water_utilities, energy_utilities, pensions, general_revenue, other). `co_benefit_type` extended with five finance-relevant categories: `asset_protection`, `revenue_stability`, `operational_cost_reduction`, `tax_base_protection`, `service_continuity`.
+
+**G. Plan and Action extensions:**
+- `Plan.plan_type` extended with `capital_improvement_plan` and `capital_budget`.
+- `Action.financing_status` property added, bound to `enums.json#financing_status` (previously orphaned).
+
+**H. New authoritative enum blocks in `enums.json`:** `instrument_type` (formalized), `asset_class`, `construction_phase`, `municipal_program`, `value_recurrence`. The previously-defined-but-unbound `financing_status` and `financing_model` enums now have explicit `_usage` annotations citing their bindings.
+
+### Edge Economy — what was deliberately NOT added
+
+CapitalProject omits direct edges that are reachable via multi-hop paths:
+- `IMPLEMENTS Solution` — reach via `REALIZES Action` + `Action IMPLEMENTS Solution`.
+- `MITIGATES Hazard` / `REDUCES_EXPOSURE ExposureUnit` / `REDUCES Vulnerability` — reach via Solution.
+- `PURSUES ResilienceGoal` — reach via Action.
+- `OPERATES_ON UrbanSystem` — collapsed into the `asset_class` property (the local annotation from the budget document).
+- `PROTECTS ExposureUnit` — reach via Solution → REDUCES_EXPOSURE.
+
+`BUNDLES_WITH` (CapitalProject ↔ CapitalProject) for cross-program co-financing is deferred until first CIP ingestion shows whether bundles are extractable. `INTERSECTS_RISK_SHED` (CapitalProject → Hazard) is similarly deferred — currently derivable via shared Location/ExposureUnit.
+
+### Why FUNDED_BY at the project grain is a different question from the 2026-04-26 rejection
+
+The corpus-mining team's 2026-04-26 rejection of `FUNDED_BY` was scoped to the **Plan** node, with the rationale "these will almost all be funded by municipalities" — i.e., plans themselves are funded by their issuing city, and that's not interesting. At the **project grain**, multi-source funding (federal cost-share + state SRF + revenue bond + municipal appropriation) is the *central* analytical question and the whole point of resilience-finance reasoning. Different grain, different relevance.
+
+### Five-axis split (extension of Decision 27)
+
+Decision 27 (v0.1.1) established a four-axis split: who funds (`FinancingSource`) → how accredited (`accreditation_modality`) → what instrument carries the capital (`FinancialInstrument`) → what the solution physically does (`Mechanism`).
+
+v0.2 adds a fifth axis at the project grain: **what budget line item receives it** (`CapitalProject`), with debt-service detail surfaced on `FinancialInstrument` (principal, term, rate, annual debt service). The full project-level financing chain:
+
+```
+FinancingSource ←FUNDED_BY← CapitalProject →USES_INSTRUMENT→ FinancialInstrument
+                                                            ↑
+                                       FinancingSource →CHANNELS_THROUGH→
+```
+
+### Worked example — multi-source funding stack
+
+```
+CapitalProject {
+  project_id: "23-WTR-015",
+  project_name: "Watershed Drainage Improvements",
+  asset_class: "stormwater",
+  total_capex_usd: 50000000,
+  asset_life_years: 50
+}
+  └─ FUNDED_BY → FinancingSource(name="FEMA BRIC")        [amount: 30M, share: 60%, financing_model: "grants"]
+  └─ FUNDED_BY → FinancingSource(name="State SRF")        [amount: 10M, share: 20%, financing_model: "regional_funds"]
+  └─ FUNDED_BY → FinancingSource(name="City Water Dept")  [amount: 10M, share: 20%, financing_model: "municipal_budget"]
+  └─ USES_INSTRUMENT → FinancialInstrument(instrument_type: "revenue_bond", principal: 10M, term: 30, rate: 0.045, annual_debt_service: 615000)
+  └─ COMMISSIONED_BY → Stakeholder(name="Department of Environmental Protection")
+  └─ DEPLOYED_IN → Location(name="South Watershed District")
+  └─ REALIZES → Action(action_name="Reduce stormwater flooding in vulnerable neighborhoods")
+  └─ PRODUCES → Outcome(outcome_type: "co_benefit", co_benefit_type: "asset_protection", monetized_value_usd: 80000000, value_recurrence: "lifetime", valuation_method: "FEMA BCA", beneficiary_program: ["water_utilities", "transportation"])
+```
+
+### Plan↔Budget alignment query (the Salkin use case)
+
+```
+MATCH (p1:Plan {plan_type: "climate_action_plan"})-[:SPECIFIES]->(a:Action)-[:PURSUES]->(g:ResilienceGoal),
+      (p2:Plan {plan_type: "capital_improvement_plan"})-[:SPECIFIES]->(cp:CapitalProject)-[:REALIZES]->(a)
+RETURN g, a, cp, p2
+```
+
+→ Returns climate-plan goals whose actions ARE realized by funded capital projects (the aligned ones). Inverse query — actions with no `REALIZES` inbound — surfaces unfunded climate commitments. This is the analytical core of NYC OMB-style climate budgeting.
+
+### Counts
+
+- v0.1.1: 20 types, 44 relationship rows (the v0.1.1 metadata listed 45; it was off by one), 6 vocabularies
+- v0.2: 21 types (+CapitalProject), 53 relationship rows (+9: REALIZES, FUNDED_BY, COMMISSIONED_BY new ids; DEPLOYED_IN, USES_INSTRUMENT, IMPLEMENTED_BY, PRODUCES, FACES, SPECIFIES duplicate-id rows), 6 vocabularies (enums.json gained 5 authoritative blocks: instrument_type, asset_class, construction_phase, municipal_program, value_recurrence)
 
 ---
 
@@ -747,7 +847,8 @@ Added `UrbanSystem --shapes--> Vulnerability` to reflect the AR6 position that v
 | v0.1.2 | 0 | +2 (REDUCES_EXPOSURE, SHAPES) | IPCC AR6 risk-reduction pathways, socially constructed vulnerability |
 | v0.2 | 0 | -4 deprecated (AUTHORED_BY, ALIGNS_WITH, SUPERSEDED_BY, REFERENCES); +4 restructured; +2 new (ENGAGES, GENERATES) | Public release cleanup — definitions rewritten, deprecated rels removed, schema fields stripped |
 | v0.3 | +1 (GovernanceStructure) | +8 (LOCATED_IN, SHIFTS_RISK_TO, GOVERNS, COORDINATES_WITH, BLOCKS, MEMBER_OF, RISK_ASSESSED_IN, DEPLOYED_IN) | Peer review — governance, barriers, hazard scenarios, comparability fields |
-| **Total** | **20** | **45** | **Planning + solutions + tech + equity + consolidation + AR6 pathways + public release + peer review** |
+| v0.2 | +1 (CapitalProject) | +9 (REALIZES, FUNDED_BY, COMMISSIONED_BY new; DEPLOYED_IN/USES_INSTRUMENT/IMPLEMENTED_BY/PRODUCES/FACES/SPECIFIES duplicate-id rows) | Resilience finance extension (Salkin / RCC, 5 May 2026) — capital-budget line items, debt-service modeling, multi-source funding stack, monetized co-benefits |
+| **Total** | **21** | **53** | **Planning + solutions + tech + equity + consolidation + AR6 pathways + public release + peer review + resilience finance** |
 
 ---
 
