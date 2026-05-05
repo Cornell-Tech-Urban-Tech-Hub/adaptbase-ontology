@@ -1,7 +1,7 @@
 {
   "_source": "solution_taxonomy table in Supabase (is_active = true)",
   "_usage": "identity.solution_category.category_id and subcategory_id",
-  "_note": "framework_mappings added Sprint 3. c40_action_categories: C40 Cities adaptation intervention labels. gcom_hazard_focus: primary GCoM CRF hazard categories these solutions address. ipcc_action_types: IPCC AR6 WGII action classification. iclei_milestone: primary ICLEI milestone (all solutions primarily = D.Implement).",
+  "_note": "framework_mappings added Sprint 3. c40_action_categories: C40 Cities adaptation intervention labels. gcom_hazard_focus: primary GCoM CRF hazard categories these solutions address. ipcc_action_types: IPCC AR6 WGII action classification. iclei_milestone: primary ICLEI milestone (all solutions primarily = D.Implement). v0.1.1: added iclei_pathways[] mapping each category to ICLEI's five urban development pathways (low-emission, nature-based, circular, resilient, equitable_people_centered). Added Ecosystem-based Adaptation (EbA) under nature and Community-based Adaptation (CbA) under communication_and_community per UNFCCC and IPCC AR6 distinctions.",
   "categories": [
     {
       "id": "water",
@@ -15,6 +15,7 @@
         "gcom_hazard_focus": ["flood", "water_scarcity", "wave_action", "precipitation"],
         "ipcc_action_types": ["structural_physical", "institutional"],
         "iclei_milestone": "D. Implement",
+        "iclei_pathways": ["resilient", "circular"],
         "sdg_goals": ["SDG6", "SDG11", "SDG13"]
       },
       "subcategories": [
@@ -45,6 +46,7 @@
         "gcom_hazard_focus": ["water_scarcity", "extreme_temperature_hot", "flood", "precipitation"],
         "ipcc_action_types": ["structural_physical", "institutional", "ecosystem_based"],
         "iclei_milestone": "D. Implement",
+        "iclei_pathways": ["resilient", "circular", "nature_based"],
         "sdg_goals": ["SDG2", "SDG11", "SDG13"]
       },
       "subcategories": [
@@ -69,6 +71,7 @@
         "gcom_hazard_focus": ["extreme_temperature_hot", "flood", "wind", "wild_fire", "extreme_temperature_cold"],
         "ipcc_action_types": ["structural_physical"],
         "iclei_milestone": "D. Implement",
+        "iclei_pathways": ["low_emission", "resilient"],
         "sdg_goals": ["SDG11", "SDG13"]
       },
       "subcategories": [
@@ -95,6 +98,7 @@
         "gcom_hazard_focus": ["flood", "wind", "extreme_temperature_hot", "wild_fire", "mass_movement"],
         "ipcc_action_types": ["structural_physical"],
         "iclei_milestone": "D. Implement",
+        "iclei_pathways": ["resilient", "circular", "low_emission"],
         "sdg_goals": ["SDG9", "SDG11", "SDG13"],
         "_note": "Cross-cutting category — infrastructure solutions address nearly all hazard types"
       },
@@ -119,6 +123,7 @@
         "gcom_hazard_focus": ["wind", "flood", "extreme_temperature_hot", "wild_fire", "extreme_temperature_cold"],
         "ipcc_action_types": ["structural_physical"],
         "iclei_milestone": "D. Implement",
+        "iclei_pathways": ["low_emission", "resilient"],
         "sdg_goals": ["SDG7", "SDG11", "SDG13"]
       },
       "subcategories": [
@@ -142,6 +147,7 @@
         "gcom_hazard_focus": ["flood", "extreme_temperature_hot", "wind", "wild_fire", "precipitation"],
         "ipcc_action_types": ["structural_physical"],
         "iclei_milestone": "D. Implement",
+        "iclei_pathways": ["low_emission", "resilient"],
         "sdg_goals": ["SDG11", "SDG13"]
       },
       "subcategories": [
@@ -168,11 +174,13 @@
         "gcom_hazard_focus": ["flood", "extreme_temperature_hot", "water_scarcity", "wave_action", "wild_fire", "chemical_change"],
         "ipcc_action_types": ["ecosystem_based"],
         "iclei_milestone": "D. Implement",
+        "iclei_pathways": ["nature_based", "resilient"],
         "sdg_goals": ["SDG11", "SDG13", "SDG14", "SDG15"],
         "_note": "Strongest GCoM/C40 category alignment — nature-based solutions are a primary focus of both frameworks' adaptation guidance"
       },
       "subcategories": [
         { "id": "biodiversity_protection,_ecosystem_monitoring_and_", "name": "Biodiversity Protection, Ecosystem Monitoring and Rehabilitation" },
+        { "id": "ecosystem_based_adaptation_eba", "name": "Ecosystem-based Adaptation (EbA)", "_note": "Conservation, sustainable management, and restoration of ecosystems explicitly to deliver adaptation services. Distinct from generic urban_greening: EbA is anchored in CBD/UNFCCC framing and emphasizes biodiversity outcomes alongside adaptation outcomes." },
         { "id": "invasive_species,_pest_and_vector_control", "name": "Invasive Species, Pest and Vector Control" },
         { "id": "natural_coastal_protection_(reefs,_mangroves)", "name": "Natural Coastal Protection (Reefs, Mangroves)" },
         { "id": "natural_water_drainage_(bioswales,_rain_gardens,_w", "name": "Natural Water Drainage (Bioswales, Rain Gardens, Wetlands)" },
@@ -192,6 +200,7 @@
         "gcom_hazard_focus": ["extreme_temperature_hot", "insects_and_microorganisms", "chemical_change", "flood"],
         "ipcc_action_types": ["social", "structural_physical"],
         "iclei_milestone": "D. Implement",
+        "iclei_pathways": ["resilient", "equitable_people_centered"],
         "sdg_goals": ["SDG3", "SDG11", "SDG13"]
       },
       "subcategories": [
@@ -214,6 +223,7 @@
         "gcom_hazard_focus": ["cross-cutting"],
         "ipcc_action_types": ["institutional"],
         "iclei_milestone": "D. Implement",
+        "iclei_pathways": ["resilient", "equitable_people_centered"],
         "sdg_goals": ["SDG11", "SDG13", "SDG17"],
         "_note": "GCoM CRF specifically tracks financing mechanisms — strong alignment with FinancingSource and FinancialInstrument node types"
       },
@@ -236,8 +246,9 @@
         "gcom_hazard_focus": ["cross-cutting"],
         "ipcc_action_types": ["institutional"],
         "iclei_milestone": "B. Investigate / C. Plan / E. Monitor",
+        "iclei_pathways": ["low_emission", "nature_based", "circular", "resilient", "equitable_people_centered"],
         "sdg_goals": ["SDG11", "SDG13"],
-        "_note": "Uniquely spans multiple ICLEI milestones — planning tools support the full planning cycle, not just implementation. Aligns with GCoM's B.4 (monitoring) and B.3 (vulnerability assessment) reporting sections."
+        "_note": "Uniquely spans multiple ICLEI milestones — planning tools support the full planning cycle, not just implementation. Aligns with GCoM's B.4 (monitoring) and B.3 (vulnerability assessment) reporting sections. Cross-cutting on iclei_pathways: planning instruments serve all five pathways."
       },
       "subcategories": [
         { "id": "climate_analytics,_hazard_forecasting_and_weather_", "name": "Climate Analytics, Hazard Forecasting and Weather Monitoring" },
@@ -262,11 +273,13 @@
         "gcom_hazard_focus": ["cross-cutting"],
         "ipcc_action_types": ["social", "institutional"],
         "iclei_milestone": "A. Initiate / D. Implement",
+        "iclei_pathways": ["equitable_people_centered", "resilient"],
         "sdg_goals": ["SDG11", "SDG13", "SDG16"],
         "_note": "Social and institutional action types — most directly addresses IPCC AR6's social adaptation category. Community engagement tools support ICLEI Milestone A (stakeholder participation)."
       },
       "subcategories": [
         { "id": "commmunity_engagement_platforms_for_planning,_educ", "name": "Commmunity Engagement Platforms for Planning, Education / Training and Crowd-Sourcing" },
+        { "id": "community_based_adaptation_cba", "name": "Community-based Adaptation (CbA)", "_note": "Locally-led adaptation rooted in the priorities, knowledge, and capacities of communities most exposed to climate risk. Distinct from generic engagement platforms: CbA frames the community as the lead agent of adaptation, not as an audience to be consulted. Aligned with UNFCCC and IPCC AR6 framing." },
         { "id": "early_warning_systems_and_alerts_(heat,_wildfire,_", "name": "Early Warning Systems And Alerts (Heat, Wildfire, Air Quality, Flood, Water)" },
         { "id": "first_responder_and_public_safety_tech", "name": "First Responder and Public Safety Tech" },
         { "id": "telecommunication_and_connectivity_hardening", "name": "Telecommunication And Connectivity Hardening" }

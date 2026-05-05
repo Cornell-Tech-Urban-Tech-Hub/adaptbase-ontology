@@ -2,7 +2,7 @@
   "_source": "Advanced urban systems taxonomy for climate adaptation. Multi-tiered hierarchy mapping physical, ecological, and socio-economic urban subsystems.",
   "_usage": "urban_systems.systems_affected[].system_id and sector",
   "_sync_with": "None - conceptual taxonomy for classification",
-  "_note": "This taxonomy enables precise classification of where a solution is deployed and what it protects. Supports interdependency analysis and critical bottleneck identification.",
+  "_note": "This taxonomy enables precise classification of where a solution is deployed and what it protects. Supports interdependency analysis and critical bottleneck identification. v0.1.1: added informal_service_systems subsector under socioeconomic_health to capture service provision filled by informal actors where formal systems are absent — addresses IPCC AR6 Ch. 6 critique that ISO 37120 misses informal urban systems entirely.",
   "sectors": [
     {
       "id": "built_environment",
@@ -466,6 +466,48 @@
               "id": "resilience_hubs",
               "name": "Resilience Hubs",
               "examples": "Community centers equipped for off-grid survival"
+            }
+          ]
+        },
+        {
+          "id": "informal_service_systems",
+          "name": "Informal Service Systems",
+          "_note": "Service provision filled by informal actors and arrangements where formal systems are absent, insufficient, or inaccessible. Critical for modeling adaptation in cities of the Global South per IPCC AR6 Ch. 6, which observes that ISO 37120 and similar formal taxonomies miss these systems even when they serve a majority of residents.",
+          "systems": [
+            {
+              "id": "informal_water_supply",
+              "name": "Informal Water Supply",
+              "examples": "Water vendors, tanker trucks, private boreholes serving communities without piped supply"
+            },
+            {
+              "id": "informal_sanitation",
+              "name": "Informal Sanitation",
+              "examples": "Pit latrines, manual desludging services, decentralized community toilets"
+            },
+            {
+              "id": "informal_solid_waste",
+              "name": "Informal Solid Waste & Recycling",
+              "examples": "Waste pickers, informal recyclers, neighborhood collection arrangements"
+            },
+            {
+              "id": "informal_transport",
+              "name": "Informal Transport",
+              "examples": "Paratransit, jitneys, motorcycle taxis, informal minibus networks"
+            },
+            {
+              "id": "informal_energy",
+              "name": "Informal Energy Provision",
+              "examples": "Unmetered grid connections, charcoal/biomass markets, shared generators"
+            },
+            {
+              "id": "community_disaster_response",
+              "name": "Community-Led Disaster Response",
+              "examples": "Mutual aid networks, neighborhood watch, volunteer evacuation coordination, faith-based response"
+            },
+            {
+              "id": "informal_food_systems",
+              "name": "Informal Food Systems",
+              "examples": "Street vendors, wet markets, urban subsistence agriculture, mutual food banks"
             }
           ]
         }

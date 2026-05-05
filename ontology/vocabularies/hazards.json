@@ -1,119 +1,41 @@
 {
-  "_source": "hazards table in Supabase (is_active = true)",
+  "_source": "Primary structure: UNDRR-ISC Hazard Information Profiles (HIPs) 2025 — 7 of 8 hazard clusters (Extraterrestrial omitted as out of scope for urban climate adaptation). Hazards within clusters draw from C40/Arup Climate Hazard Typology (city-level climate hazards) and Resilient Cities Catalysts (RCC) taxonomy (non-climate acute shocks and slow-onset stresses).",
   "_usage": "hazards.hazards_addressed[].hazard_id and hazard_category",
-  "_note": "Primary vocabulary: C40/Arup Climate Hazard Typology (hazard_source=c40_arup). Extended Sprint 3 with RCC non-climate acute shocks (hazard_source=rcc) and RCC slow-onset environmental stresses. rcc_shocks field on each C40 category maps overlapping RCC shock terms. undrr_terms field on each hazard entry maps to UNDRR/Sendai Framework terminology (from UNDRR Terminology on Disaster Risk Reduction and the Sendai Framework Monitor hazard classification). undrr_terms enables agent to recognise UNDRR-framed source documents and map to our C40 hazard_ids.",
+  "_note": "Restructured in v0.1.1 from C40/Arup-primary to HIPs 2025-primary. Each cluster carries c40_arup_categories[] for legacy crosswalk. Each hazard carries c40_arup_category (the legacy C40/Arup parent), hazard_source ('c40_arup' or 'rcc'), and undrr_terms[] for matching UNDRR-framed source documents. The previous rcc_non_climate and rcc_slow_onset buckets were dissolved — their contents now sit in their proper HIPs clusters (Technological, Societal, Geohazards, Environmental).",
   "categories": [
     {
-      "id": "chemical_change",
-      "name": "Chemical Change",
-      "hazard_source": "c40_arup",
-      "rcc_shocks": [
-        "Hazardous Materials Accident"
+      "id": "meteorological_hydrological",
+      "name": "Meteorological & Hydrological",
+      "hips_2025_cluster": "Meteorological and Hydrological",
+      "c40_arup_categories": [
+        "flood",
+        "wind",
+        "precipitation",
+        "extreme_temperature_hot",
+        "extreme_temperature_cold",
+        "fog",
+        "lightning",
+        "wave_action",
+        "water_scarcity"
       ],
-      "hazards": [
-        {
-          "id": "ocean_acidification",
-          "name": "Ocean acidification",
-          "undrr_terms": [
-            "ocean acidification",
-            "acidification of the ocean"
-          ]
-        },
-        {
-          "id": "salt_water_intrusion",
-          "name": "Salt water intrusion",
-          "undrr_terms": [
-            "saline intrusion",
-            "saltwater intrusion",
-            "salinity intrusion",
-            "seawater intrusion"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "extreme_temperature_cold",
-      "name": "Extreme Temperature (Cold)",
-      "hazard_source": "c40_arup",
-      "rcc_shocks": [
-        "Blizzard",
-        "Extreme Cold"
-      ],
-      "hazards": [
-        {
-          "id": "cold_wave",
-          "name": "Cold wave",
-          "undrr_terms": [
-            "cold wave",
-            "cold spell",
-            "cold surge"
-          ]
-        },
-        {
-          "id": "extreme_cold_weather",
-          "name": "Extreme cold weather",
-          "undrr_terms": [
-            "extreme cold",
-            "severe cold",
-            "hard freeze",
-            "frost"
-          ]
-        },
-        {
-          "id": "ice_hail_freezing_rain",
-          "name": "Ice, hail, freezing rain",
-          "undrr_terms": [
-            "ice storm",
-            "freezing rain",
-            "glaze",
-            "hail",
-            "hailstorm",
-            "sleet"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "extreme_temperature_hot",
-      "name": "Extreme Temperature (Hot)",
-      "hazard_source": "c40_arup",
-      "rcc_shocks": [
-        "Extreme Heat"
-      ],
-      "hazards": [
-        {
-          "id": "extreme_hot_weather",
-          "name": "Extreme hot weather",
-          "undrr_terms": [
-            "extreme heat",
-            "severe heat",
-            "high temperature"
-          ]
-        },
-        {
-          "id": "heat_wave",
-          "name": "Heat wave",
-          "undrr_terms": [
-            "heat wave",
-            "heatwave",
-            "heat stress",
-            "extreme heat event"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "flood",
-      "name": "Flood",
-      "hazard_source": "c40_arup",
       "rcc_shocks": [
         "Rainfall Flooding",
-        "Storm Surge"
+        "Storm Surge",
+        "Hurricane / Typhoon / Cyclone",
+        "Tornado",
+        "Severe Storms",
+        "Dust / Sand Storm",
+        "Blizzard",
+        "Extreme Heat",
+        "Extreme Cold",
+        "Drought"
       ],
       "hazards": [
         {
           "id": "coastal_flood",
           "name": "Coastal flood",
+          "c40_arup_category": "flood",
+          "hazard_source": "c40_arup",
           "undrr_terms": [
             "coastal flood",
             "coastal flooding",
@@ -125,6 +47,8 @@
         {
           "id": "flash_surface_flood",
           "name": "Flash/surface flood",
+          "c40_arup_category": "flood",
+          "hazard_source": "c40_arup",
           "undrr_terms": [
             "flash flood",
             "surface water flood",
@@ -136,6 +60,8 @@
         {
           "id": "groundwater_flood",
           "name": "Groundwater flood",
+          "c40_arup_category": "flood",
+          "hazard_source": "c40_arup",
           "undrr_terms": [
             "groundwater flood",
             "groundwater flooding",
@@ -145,6 +71,8 @@
         {
           "id": "river_flood",
           "name": "River flood",
+          "c40_arup_category": "flood",
+          "hazard_source": "c40_arup",
           "undrr_terms": [
             "riverine flood",
             "fluvial flood",
@@ -152,285 +80,12 @@
             "river overflow",
             "inundation"
           ]
-        }
-      ]
-    },
-    {
-      "id": "fog",
-      "name": "Fog",
-      "hazard_source": "c40_arup",
-      "rcc_shocks": [],
-      "hazards": [
-        {
-          "id": "fog",
-          "name": "Fog",
-          "undrr_terms": [
-            "fog",
-            "dense fog",
-            "freezing fog",
-            "advection fog"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "insects_and_microorganisms",
-      "name": "Insects and Microorganisms",
-      "hazard_source": "c40_arup",
-      "rcc_shocks": [
-        "Disease Outbreak"
-      ],
-      "hazards": [
-        {
-          "id": "air-borne_disease",
-          "name": "Air-borne disease",
-          "undrr_terms": [
-            "epidemic",
-            "airborne disease",
-            "respiratory disease outbreak",
-            "airborne pathogen",
-            "pandemic"
-          ]
         },
-        {
-          "id": "insect_infestation",
-          "name": "Insect infestation",
-          "undrr_terms": [
-            "insect infestation",
-            "locust infestation",
-            "pest outbreak",
-            "agricultural pest"
-          ]
-        },
-        {
-          "id": "vector-borne_disease",
-          "name": "Vector-borne disease",
-          "undrr_terms": [
-            "vector-borne disease",
-            "vector borne disease",
-            "epidemic (vector-borne)",
-            "malaria",
-            "dengue",
-            "mosquito-borne disease"
-          ]
-        },
-        {
-          "id": "water-borne_disease",
-          "name": "Water-borne disease",
-          "undrr_terms": [
-            "waterborne disease",
-            "water-borne disease",
-            "waterborne epidemic",
-            "water contamination (biological)"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "lightning",
-      "name": "Lightning",
-      "hazard_source": "c40_arup",
-      "rcc_shocks": [],
-      "hazards": [
-        {
-          "id": "electrical_storm",
-          "name": "Electrical storm",
-          "undrr_terms": [
-            "lightning",
-            "thunderstorm",
-            "electrical storm",
-            "convective storm"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "mass_movement",
-      "name": "Mass Movement",
-      "hazard_source": "c40_arup",
-      "rcc_shocks": [
-        "Landslide",
-        "Liquefaction"
-      ],
-      "hazards": [
-        {
-          "id": "avalanche",
-          "name": "Avalanche",
-          "undrr_terms": [
-            "avalanche",
-            "snow avalanche",
-            "ice avalanche",
-            "slab avalanche"
-          ]
-        },
-        {
-          "id": "landslide",
-          "name": "Landslide",
-          "undrr_terms": [
-            "landslide",
-            "debris flow",
-            "mudslide",
-            "mudflow",
-            "debris avalanche",
-            "slope failure"
-          ]
-        },
-        {
-          "id": "rockfall",
-          "name": "Rockfall",
-          "undrr_terms": [
-            "rockfall",
-            "rock fall",
-            "rock slide",
-            "rockslide"
-          ]
-        },
-        {
-          "id": "subsidence",
-          "name": "Subsidence",
-          "undrr_terms": [
-            "subsidence",
-            "ground subsidence",
-            "land subsidence",
-            "ground settlement",
-            "sinkholes"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "precipitation",
-      "name": "Precipitation",
-      "hazard_source": "c40_arup",
-      "rcc_shocks": [
-        "Blizzard",
-        "Severe Storms"
-      ],
-      "hazards": [
-        {
-          "id": "heavy_snow",
-          "name": "Heavy snow",
-          "undrr_terms": [
-            "heavy snow",
-            "snowstorm",
-            "blizzard",
-            "snow storm",
-            "heavy snowfall"
-          ]
-        },
-        {
-          "id": "rain_storm",
-          "name": "Rain storm",
-          "undrr_terms": [
-            "severe storm",
-            "rainstorm",
-            "heavy rainfall",
-            "extreme precipitation",
-            "convective rainfall"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "water_scarcity",
-      "name": "Water Scarcity",
-      "hazard_source": "c40_arup",
-      "rcc_shocks": [
-        "Drought"
-      ],
-      "hazards": [
-        {
-          "id": "drought",
-          "name": "Drought",
-          "undrr_terms": [
-            "drought",
-            "hydrological drought",
-            "agricultural drought",
-            "meteorological drought",
-            "water shortage",
-            "water stress",
-            "socioeconomic drought"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "wave_action",
-      "name": "Wave Action",
-      "hazard_source": "c40_arup",
-      "rcc_shocks": [
-        "Storm Surge",
-        "Tsunami"
-      ],
-      "hazards": [
-        {
-          "id": "storm_surge",
-          "name": "Storm surge",
-          "undrr_terms": [
-            "storm surge",
-            "storm tide",
-            "coastal surge",
-            "tidal surge"
-          ]
-        },
-        {
-          "id": "tsunami",
-          "name": "Tsunami",
-          "undrr_terms": [
-            "tsunami",
-            "seismic sea wave",
-            "tidal wave"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "wild_fire",
-      "name": "Wildfire",
-      "hazard_source": "c40_arup",
-      "rcc_shocks": [
-        "Fire"
-      ],
-      "hazards": [
-        {
-          "id": "forest_fire",
-          "name": "Forest fire",
-          "undrr_terms": [
-            "wildfire",
-            "forest fire",
-            "bushfire",
-            "bush fire",
-            "wildland fire",
-            "woodland fire"
-          ]
-        },
-        {
-          "id": "land_fire",
-          "name": "Land fire",
-          "undrr_terms": [
-            "land fire",
-            "grassland fire",
-            "savanna fire",
-            "grass fire",
-            "scrubland fire"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "wind",
-      "name": "Wind",
-      "hazard_source": "c40_arup",
-      "rcc_shocks": [
-        "Hurricane / Typhoon / Cyclone",
-        "Tornado",
-        "Severe Storms",
-        "Dust / Sand Storm"
-      ],
-      "hazards": [
         {
           "id": "cyclone_hurricane_typhoon",
           "name": "Cyclone (Hurricane/Typhoon)",
+          "c40_arup_category": "wind",
+          "hazard_source": "c40_arup",
           "undrr_terms": [
             "tropical cyclone",
             "hurricane",
@@ -442,6 +97,8 @@
         {
           "id": "severe_wind",
           "name": "Severe wind",
+          "c40_arup_category": "wind",
+          "hazard_source": "c40_arup",
           "undrr_terms": [
             "severe wind",
             "windstorm",
@@ -455,6 +112,8 @@
         {
           "id": "tornado",
           "name": "Tornado",
+          "c40_arup_category": "wind",
+          "hazard_source": "c40_arup",
           "undrr_terms": [
             "tornado",
             "twister",
@@ -464,102 +123,615 @@
         {
           "id": "tropical_storm",
           "name": "Tropical storm",
+          "c40_arup_category": "wind",
+          "hazard_source": "c40_arup",
           "undrr_terms": [
             "tropical storm",
             "tropical depression",
             "subtropical storm"
           ]
+        },
+        {
+          "id": "heavy_snow",
+          "name": "Heavy snow",
+          "c40_arup_category": "precipitation",
+          "hazard_source": "c40_arup",
+          "undrr_terms": [
+            "heavy snow",
+            "snowstorm",
+            "blizzard",
+            "snow storm",
+            "heavy snowfall"
+          ]
+        },
+        {
+          "id": "rain_storm",
+          "name": "Rain storm",
+          "c40_arup_category": "precipitation",
+          "hazard_source": "c40_arup",
+          "undrr_terms": [
+            "severe storm",
+            "rainstorm",
+            "heavy rainfall",
+            "extreme precipitation",
+            "convective rainfall"
+          ]
+        },
+        {
+          "id": "extreme_hot_weather",
+          "name": "Extreme hot weather",
+          "c40_arup_category": "extreme_temperature_hot",
+          "hazard_source": "c40_arup",
+          "undrr_terms": [
+            "extreme heat",
+            "severe heat",
+            "high temperature"
+          ]
+        },
+        {
+          "id": "heat_wave",
+          "name": "Heat wave",
+          "c40_arup_category": "extreme_temperature_hot",
+          "hazard_source": "c40_arup",
+          "undrr_terms": [
+            "heat wave",
+            "heatwave",
+            "heat stress",
+            "extreme heat event"
+          ]
+        },
+        {
+          "id": "cold_wave",
+          "name": "Cold wave",
+          "c40_arup_category": "extreme_temperature_cold",
+          "hazard_source": "c40_arup",
+          "undrr_terms": [
+            "cold wave",
+            "cold spell",
+            "cold surge"
+          ]
+        },
+        {
+          "id": "extreme_cold_weather",
+          "name": "Extreme cold weather",
+          "c40_arup_category": "extreme_temperature_cold",
+          "hazard_source": "c40_arup",
+          "undrr_terms": [
+            "extreme cold",
+            "severe cold",
+            "hard freeze",
+            "frost"
+          ]
+        },
+        {
+          "id": "ice_hail_freezing_rain",
+          "name": "Ice, hail, freezing rain",
+          "c40_arup_category": "extreme_temperature_cold",
+          "hazard_source": "c40_arup",
+          "undrr_terms": [
+            "ice storm",
+            "freezing rain",
+            "glaze",
+            "hail",
+            "hailstorm",
+            "sleet"
+          ]
+        },
+        {
+          "id": "fog",
+          "name": "Fog",
+          "c40_arup_category": "fog",
+          "hazard_source": "c40_arup",
+          "undrr_terms": [
+            "fog",
+            "dense fog",
+            "freezing fog",
+            "advection fog"
+          ]
+        },
+        {
+          "id": "electrical_storm",
+          "name": "Electrical storm",
+          "c40_arup_category": "lightning",
+          "hazard_source": "c40_arup",
+          "undrr_terms": [
+            "lightning",
+            "thunderstorm",
+            "electrical storm",
+            "convective storm"
+          ]
+        },
+        {
+          "id": "storm_surge",
+          "name": "Storm surge",
+          "c40_arup_category": "wave_action",
+          "hazard_source": "c40_arup",
+          "undrr_terms": [
+            "storm surge",
+            "storm tide",
+            "coastal surge",
+            "tidal surge"
+          ]
+        },
+        {
+          "id": "drought",
+          "name": "Drought",
+          "c40_arup_category": "water_scarcity",
+          "hazard_source": "c40_arup",
+          "_note": "HIPs 2025 groups drought under water-related Meteorological & Hydrological hazards.",
+          "undrr_terms": [
+            "drought",
+            "hydrological drought",
+            "agricultural drought",
+            "meteorological drought",
+            "water shortage",
+            "water stress",
+            "socioeconomic drought"
+          ]
         }
       ]
     },
     {
-      "id": "rcc_non_climate",
-      "name": "Non-Climate Acute Shocks (RCC)",
-      "hazard_source": "rcc",
-      "_note": "Acute shocks from RCC taxonomy with no direct C40/Arup climate hazard equivalent. Use hazard_source=rcc on Hazard nodes in this category. Volcanic Activity and Earthquake are geophysical, not climate-driven.",
+      "id": "geohazards",
+      "name": "Geohazards",
+      "hips_2025_cluster": "Geohazards",
+      "c40_arup_categories": [
+        "mass_movement",
+        "wave_action"
+      ],
+      "rcc_shocks": [
+        "Landslide",
+        "Liquefaction",
+        "Tsunami"
+      ],
+      "_note": "Geophysically-triggered hazards. Includes tsunami (HIPs 2025 places tsunami in Geohazards because its trigger is geophysical, not meteorological). Includes both acute shocks (earthquake, volcanic) and chronic/slow-onset processes (subsidence).",
       "hazards": [
         {
-          "id": "rcc.cyber_attack",
-          "name": "Cyber Attack"
+          "id": "avalanche",
+          "name": "Avalanche",
+          "c40_arup_category": "mass_movement",
+          "hazard_source": "c40_arup",
+          "undrr_terms": [
+            "avalanche",
+            "snow avalanche",
+            "ice avalanche",
+            "slab avalanche"
+          ]
         },
         {
-          "id": "rcc.disease_outbreak",
-          "name": "Disease Outbreak",
-          "_note": "Overlaps with C40 insects_and_microorganisms; use rcc category when outbreak framing is more relevant than specific pathogen type"
+          "id": "landslide",
+          "name": "Landslide",
+          "c40_arup_category": "mass_movement",
+          "hazard_source": "c40_arup",
+          "undrr_terms": [
+            "landslide",
+            "debris flow",
+            "mudslide",
+            "mudflow",
+            "debris avalanche",
+            "slope failure"
+          ]
+        },
+        {
+          "id": "rockfall",
+          "name": "Rockfall",
+          "c40_arup_category": "mass_movement",
+          "hazard_source": "c40_arup",
+          "undrr_terms": [
+            "rockfall",
+            "rock fall",
+            "rock slide",
+            "rockslide"
+          ]
+        },
+        {
+          "id": "subsidence",
+          "name": "Subsidence",
+          "c40_arup_category": "mass_movement",
+          "hazard_source": "c40_arup",
+          "undrr_terms": [
+            "subsidence",
+            "ground subsidence",
+            "land subsidence",
+            "ground settlement",
+            "sinkholes"
+          ]
+        },
+        {
+          "id": "tsunami",
+          "name": "Tsunami",
+          "c40_arup_category": "wave_action",
+          "hazard_source": "c40_arup",
+          "_note": "Reclassified from wave_action to geohazards in v0.1.1 to align with HIPs 2025, which groups tsunamis under Geohazards based on geophysical trigger.",
+          "undrr_terms": [
+            "tsunami",
+            "seismic sea wave",
+            "tidal wave"
+          ]
         },
         {
           "id": "rcc.earthquake",
-          "name": "Earthquake"
+          "name": "Earthquake",
+          "c40_arup_category": null,
+          "hazard_source": "rcc",
+          "undrr_terms": [
+            "earthquake",
+            "seismic event",
+            "seismic shock"
+          ]
         },
         {
-          "id": "rcc.financial_economic_crisis",
-          "name": "Financial / Economic Crisis"
-        },
-        {
-          "id": "rcc.hazmat_accident",
-          "name": "Hazardous Materials Accident"
-        },
-        {
-          "id": "rcc.infrastructure_failure",
-          "name": "Infrastructure Failure"
+          "id": "rcc.volcanic_activity",
+          "name": "Volcanic Activity",
+          "c40_arup_category": null,
+          "hazard_source": "rcc",
+          "undrr_terms": [
+            "volcanic eruption",
+            "volcanic activity",
+            "lava flow",
+            "ash fall",
+            "pyroclastic flow"
+          ]
         },
         {
           "id": "rcc.liquefaction",
           "name": "Liquefaction",
-          "_note": "Seismic-induced; overlaps with C40 mass_movement but implies earthquake trigger"
-        },
-        {
-          "id": "rcc.nuclear_incident",
-          "name": "Nuclear Incident"
-        },
-        {
-          "id": "rcc.power_outage",
-          "name": "Power Outage"
-        },
-        {
-          "id": "rcc.riot_civil_unrest",
-          "name": "Riot / Civil Unrest"
-        },
-        {
-          "id": "rcc.terrorist_attack",
-          "name": "Terrorist Attack"
-        },
-        {
-          "id": "rcc.volcanic_activity",
-          "name": "Volcanic Activity"
-        }
-      ]
-    },
-    {
-      "id": "rcc_slow_onset",
-      "name": "Slow-Onset Environmental Stresses (RCC)",
-      "hazard_source": "rcc",
-      "_note": "Chronic environmental stresses from RCC taxonomy. Distinct from acute hazards \u2014 these are gradual-onset processes that function as persistent hazards in planning contexts. Use when a source document describes these as ongoing threats rather than acute events.",
-      "hazards": [
-        {
-          "id": "rcc.sea_level_rise",
-          "name": "Sea Level Rise / Coastal Erosion"
-        },
-        {
-          "id": "rcc.environmental_degradation",
-          "name": "Environmental Degradation"
-        },
-        {
-          "id": "rcc.loss_of_biodiversity",
-          "name": "Loss of Biodiversity"
-        },
-        {
-          "id": "rcc.poor_air_quality",
-          "name": "Poor Air Quality (chronic)"
-        },
-        {
-          "id": "rcc.invasive_species",
-          "name": "Invasive Species"
+          "c40_arup_category": null,
+          "hazard_source": "rcc",
+          "_note": "Seismic-induced ground failure. Distinct from C40 mass_movement subsidence: liquefaction implies earthquake trigger.",
+          "undrr_terms": [
+            "liquefaction",
+            "soil liquefaction",
+            "seismic liquefaction"
+          ]
         },
         {
           "id": "rcc.subsidence_chronic",
           "name": "Subsidence (chronic / non-seismic)",
-          "_note": "Distinct from C40 mass_movement subsidence; here refers to long-term ground settling from groundwater extraction or soil compaction"
+          "c40_arup_category": null,
+          "hazard_source": "rcc",
+          "_note": "Distinct from C40 mass_movement subsidence: refers to long-term ground settling from groundwater extraction, soil compaction, or peat oxidation rather than acute geophysical events.",
+          "undrr_terms": [
+            "land subsidence",
+            "anthropogenic subsidence",
+            "ground settling"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "environmental",
+      "name": "Environmental",
+      "hips_2025_cluster": "Environmental",
+      "c40_arup_categories": [
+        "wild_fire"
+      ],
+      "rcc_shocks": [
+        "Fire"
+      ],
+      "_note": "Slow-onset environmental degradation and wildfire. HIPs 2025 places wildfire under Environmental hazards alongside biodiversity loss, air quality, and sea level rise.",
+      "hazards": [
+        {
+          "id": "forest_fire",
+          "name": "Forest fire",
+          "c40_arup_category": "wild_fire",
+          "hazard_source": "c40_arup",
+          "undrr_terms": [
+            "wildfire",
+            "forest fire",
+            "bushfire",
+            "bush fire",
+            "wildland fire",
+            "woodland fire"
+          ]
+        },
+        {
+          "id": "land_fire",
+          "name": "Land fire",
+          "c40_arup_category": "wild_fire",
+          "hazard_source": "c40_arup",
+          "undrr_terms": [
+            "land fire",
+            "grassland fire",
+            "savanna fire",
+            "grass fire",
+            "scrubland fire"
+          ]
+        },
+        {
+          "id": "rcc.sea_level_rise",
+          "name": "Sea Level Rise / Coastal Erosion",
+          "c40_arup_category": null,
+          "hazard_source": "rcc",
+          "undrr_terms": [
+            "sea level rise",
+            "coastal erosion",
+            "shoreline retreat",
+            "relative sea level rise"
+          ]
+        },
+        {
+          "id": "rcc.environmental_degradation",
+          "name": "Environmental Degradation",
+          "c40_arup_category": null,
+          "hazard_source": "rcc",
+          "undrr_terms": [
+            "environmental degradation",
+            "ecosystem degradation",
+            "land degradation",
+            "soil degradation"
+          ]
+        },
+        {
+          "id": "rcc.loss_of_biodiversity",
+          "name": "Loss of Biodiversity",
+          "c40_arup_category": null,
+          "hazard_source": "rcc",
+          "undrr_terms": [
+            "biodiversity loss",
+            "species loss",
+            "habitat loss",
+            "ecosystem collapse"
+          ]
+        },
+        {
+          "id": "rcc.poor_air_quality",
+          "name": "Poor Air Quality (chronic)",
+          "c40_arup_category": null,
+          "hazard_source": "rcc",
+          "undrr_terms": [
+            "air pollution",
+            "poor air quality",
+            "particulate matter",
+            "smog"
+          ]
+        },
+        {
+          "id": "rcc.invasive_species",
+          "name": "Invasive Species",
+          "c40_arup_category": null,
+          "hazard_source": "rcc",
+          "undrr_terms": [
+            "invasive species",
+            "alien species",
+            "biological invasion"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "biological",
+      "name": "Biological",
+      "hips_2025_cluster": "Biological",
+      "c40_arup_categories": [
+        "insects_and_microorganisms"
+      ],
+      "rcc_shocks": [
+        "Disease Outbreak"
+      ],
+      "hazards": [
+        {
+          "id": "air-borne_disease",
+          "name": "Air-borne disease",
+          "c40_arup_category": "insects_and_microorganisms",
+          "hazard_source": "c40_arup",
+          "undrr_terms": [
+            "epidemic",
+            "airborne disease",
+            "respiratory disease outbreak",
+            "airborne pathogen",
+            "pandemic"
+          ]
+        },
+        {
+          "id": "insect_infestation",
+          "name": "Insect infestation",
+          "c40_arup_category": "insects_and_microorganisms",
+          "hazard_source": "c40_arup",
+          "undrr_terms": [
+            "insect infestation",
+            "locust infestation",
+            "pest outbreak",
+            "agricultural pest"
+          ]
+        },
+        {
+          "id": "vector-borne_disease",
+          "name": "Vector-borne disease",
+          "c40_arup_category": "insects_and_microorganisms",
+          "hazard_source": "c40_arup",
+          "undrr_terms": [
+            "vector-borne disease",
+            "vector borne disease",
+            "epidemic (vector-borne)",
+            "malaria",
+            "dengue",
+            "mosquito-borne disease"
+          ]
+        },
+        {
+          "id": "water-borne_disease",
+          "name": "Water-borne disease",
+          "c40_arup_category": "insects_and_microorganisms",
+          "hazard_source": "c40_arup",
+          "undrr_terms": [
+            "waterborne disease",
+            "water-borne disease",
+            "waterborne epidemic",
+            "water contamination (biological)"
+          ]
+        },
+        {
+          "id": "rcc.disease_outbreak",
+          "name": "Disease Outbreak",
+          "c40_arup_category": null,
+          "hazard_source": "rcc",
+          "_note": "General outbreak framing. Use when a source describes a disease event without specifying transmission mode (use the more specific air-borne / vector-borne / water-borne entries when transmission is documented).",
+          "undrr_terms": [
+            "disease outbreak",
+            "epidemic",
+            "pandemic",
+            "infectious disease outbreak"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chemical",
+      "name": "Chemical",
+      "hips_2025_cluster": "Chemical",
+      "c40_arup_categories": [
+        "chemical_change"
+      ],
+      "rcc_shocks": [
+        "Hazardous Materials Accident"
+      ],
+      "hazards": [
+        {
+          "id": "ocean_acidification",
+          "name": "Ocean acidification",
+          "c40_arup_category": "chemical_change",
+          "hazard_source": "c40_arup",
+          "undrr_terms": [
+            "ocean acidification",
+            "acidification of the ocean"
+          ]
+        },
+        {
+          "id": "salt_water_intrusion",
+          "name": "Salt water intrusion",
+          "c40_arup_category": "chemical_change",
+          "hazard_source": "c40_arup",
+          "undrr_terms": [
+            "saline intrusion",
+            "saltwater intrusion",
+            "salinity intrusion",
+            "seawater intrusion"
+          ]
+        },
+        {
+          "id": "rcc.hazmat_accident",
+          "name": "Hazardous Materials Accident",
+          "c40_arup_category": null,
+          "hazard_source": "rcc",
+          "undrr_terms": [
+            "hazardous materials release",
+            "chemical spill",
+            "toxic release",
+            "industrial accident"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "technological",
+      "name": "Technological",
+      "hips_2025_cluster": "Technological",
+      "c40_arup_categories": [],
+      "rcc_shocks": [
+        "Cyber Attack",
+        "Power Outage",
+        "Infrastructure Failure",
+        "Nuclear Incident"
+      ],
+      "_note": "Promoted to first-class cluster in v0.1.1 (previously buried under rcc_non_climate). Critical for modeling cascading climate-induced infrastructure failures (e.g., heatwave → grid failure → health impacts).",
+      "hazards": [
+        {
+          "id": "rcc.cyber_attack",
+          "name": "Cyber Attack",
+          "c40_arup_category": null,
+          "hazard_source": "rcc",
+          "undrr_terms": [
+            "cyber attack",
+            "cyber incident",
+            "cybersecurity breach",
+            "ICT system failure"
+          ]
+        },
+        {
+          "id": "rcc.power_outage",
+          "name": "Power Outage",
+          "c40_arup_category": null,
+          "hazard_source": "rcc",
+          "undrr_terms": [
+            "power outage",
+            "blackout",
+            "grid failure",
+            "electrical outage"
+          ]
+        },
+        {
+          "id": "rcc.infrastructure_failure",
+          "name": "Infrastructure Failure",
+          "c40_arup_category": null,
+          "hazard_source": "rcc",
+          "undrr_terms": [
+            "infrastructure failure",
+            "critical infrastructure failure",
+            "system failure",
+            "cascading infrastructure failure"
+          ]
+        },
+        {
+          "id": "rcc.nuclear_incident",
+          "name": "Nuclear Incident",
+          "c40_arup_category": null,
+          "hazard_source": "rcc",
+          "undrr_terms": [
+            "nuclear incident",
+            "nuclear accident",
+            "radiological incident",
+            "radiation release"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "societal",
+      "name": "Societal",
+      "hips_2025_cluster": "Societal",
+      "c40_arup_categories": [],
+      "rcc_shocks": [
+        "Riot / Civil Unrest",
+        "Terrorist Attack",
+        "Financial / Economic Crisis"
+      ],
+      "_note": "Promoted to first-class cluster in v0.1.1 (previously buried under rcc_non_climate). Important for modeling indirect impacts of climate migration, displacement, and resource conflict.",
+      "hazards": [
+        {
+          "id": "rcc.riot_civil_unrest",
+          "name": "Riot / Civil Unrest",
+          "c40_arup_category": null,
+          "hazard_source": "rcc",
+          "undrr_terms": [
+            "civil unrest",
+            "riot",
+            "social unrest",
+            "civil disorder"
+          ]
+        },
+        {
+          "id": "rcc.terrorist_attack",
+          "name": "Terrorist Attack",
+          "c40_arup_category": null,
+          "hazard_source": "rcc",
+          "undrr_terms": [
+            "terrorist attack",
+            "terrorism",
+            "violent attack"
+          ]
+        },
+        {
+          "id": "rcc.financial_economic_crisis",
+          "name": "Financial / Economic Crisis",
+          "c40_arup_category": null,
+          "hazard_source": "rcc",
+          "undrr_terms": [
+            "financial crisis",
+            "economic crisis",
+            "economic shock",
+            "recession"
+          ]
         }
       ]
     }

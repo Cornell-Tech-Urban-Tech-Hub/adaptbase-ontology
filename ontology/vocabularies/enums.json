@@ -169,6 +169,22 @@
     ]
   },
 
+  "accreditation_modality": {
+    "_source": "Adaptation Fund (AF) and Green Climate Fund (GCF) access modalities for adaptation finance. Captures the institutional arrangement through which a financing source delivers capital to a project, distinct from the financing model (the structural form of the funds).",
+    "_usage": "FinancingSource.accreditation_modality",
+    "_note": "v0.1.1: added per peer review recommendation that AF/GCF terminology (NIEs, direct access, pooled facilities) be modeled. Belongs on FinancingSource — distinct from the operational mechanism_vocabulary, which describes how a Solution physically achieves adaptation effect.",
+    "values": [
+      { "id": "national_implementing_entity", "name": "National Implementing Entity (NIE)", "description": "AF/GCF-accredited entity within the recipient country with direct access to climate finance" },
+      { "id": "regional_implementing_entity", "name": "Regional Implementing Entity (RIE)", "description": "AF/GCF-accredited regional entity (e.g., regional development bank) with direct access on behalf of multiple countries" },
+      { "id": "multilateral_implementing_entity", "name": "Multilateral Implementing Entity (MIE)", "description": "International accredited entity (UNDP, World Bank, regional MDBs) channeling AF/GCF funds — the international-access default" },
+      { "id": "direct_access", "name": "Direct Access", "description": "Recipient-country institution applies for and receives funds directly without an MIE intermediary" },
+      { "id": "enhanced_direct_access", "name": "Enhanced Direct Access (EDA)", "description": "GCF modality devolving project-level decision-making to in-country accredited entities; deeper subsidiarity than baseline direct access" },
+      { "id": "pooled_facility", "name": "Pooled Facility", "description": "Multiple sources or instruments aggregated into a single funding facility serving a portfolio of projects (e.g., national climate funds, blended-finance vehicles)" },
+      { "id": "readiness_programme", "name": "Readiness / Preparatory Support", "description": "Capacity-building and project-preparation grants (GCF Readiness, AF Readiness Grants) — funds the preparatory work rather than the adaptation project itself" },
+      { "id": "not_applicable", "name": "Not Applicable", "description": "Source is outside the AF/GCF accreditation framework (e.g., commercial loan, municipal budget, private investment)" }
+    ]
+  },
+
   "financing_status": {
     "_source": "CDP project_financing_status field",
     "_usage": "implementation.financing.financing_status.value",

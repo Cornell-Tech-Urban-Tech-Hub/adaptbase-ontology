@@ -1,14 +1,91 @@
 # Ontology Design Decisions Log
 
 **Project:** Resilience Scanner - Climate Adaptation Solutions Ontology  
-**Version:** 0.1  
-**Last Updated:** 2026-04-23
+**Version:** 0.1.1  
+**Last Updated:** 2026-05-04
 
 ---
 
 ## Purpose
 
 This log documents key design decisions in the ontology development process, including rationale, alternatives considered, and implications for future work.
+
+---
+
+## Decision 22 (v0.1.1): Restructure hazards.json to UNDRR HIPs 2025 primary
+
+**Date:** 2026-05-04
+**Context:** Peer review (Cornell Tech Urban Tech Hub, May 2026) identified that the C40/Arup-primary hazard taxonomy missed two HIPs 2025 clusters — Technological and Societal — buried instead under an `rcc_non_climate` bucket. With no published extractions to invalidate, the better long-term call is to align primary structure with the most current authoritative international standard.
+
+### Decision
+Restructure `hazards.json` top-level from C40/Arup-primary to UNDRR-ISC HIPs 2025-primary. Use 7 of 8 HIPs clusters (omit Extraterrestrial as out of scope for urban climate adaptation): meteorological_hydrological, geohazards, environmental, biological, chemical, technological, societal. Keep the curated subset of hazards (don't import all 281 HIPs entries). Add `c40_arup_category` backref on every hazard for legacy crosswalk. Promote technological + societal hazards to first-class clusters. Reclassify tsunami from wave_action to geohazards per HIPs 2025 (geophysical trigger, not meteorological).
+
+### Alternatives Considered
+- **Keep C40/Arup primary, add HIPs cluster mapping field** — rejected: leaves technological + societal buried under "rcc_non_climate" naming, which obscures their importance for cascading-failure modeling.
+- **Switch to full HIPs 281-hazard list** — rejected: bloats the vocabulary with hazards not relevant to urban adaptation (extraterrestrial, esoteric chemical hazards).
+
+---
+
+## Decision 23 (v0.1.1): ICLEI five-pathway crosswalk on solution categories
+
+**Date:** 2026-05-04
+**Context:** Peer review observed that the solution taxonomy mapped to ICLEI milestones (A.Initiate → E.Monitor) but not to ICLEI's five urban-development pathways (low-emission, nature-based, circular, resilient, equitable_people_centered) which are the strategic framing layer above milestones.
+
+### Decision
+Add `iclei_pathways[]` to `framework_mappings` on every solution category. Most categories map to 2 pathways; Planning & Monitoring is cross-cutting on all five.
+
+### Implications
+Enables queries like "Which solutions advance the equitable people-centered pathway?" and supports cross-walk to ICLEI's GreenClimateCities reporting framework.
+
+---
+
+## Decision 24 (v0.1.1): EbA and CbA as distinct solution subcategories
+
+**Date:** 2026-05-04
+**Context:** Peer review noted that Ecosystem-based Adaptation (EbA) and Community-based Adaptation (CbA) are distinct technical concepts in the UNFCCC and IPCC AR6 literature, not interchangeable with generic "nature-based" or "engagement" solutions.
+
+### Decision
+Add `ecosystem_based_adaptation_eba` subcategory under `nature` (distinct from urban_greening: EbA is anchored in CBD/UNFCCC framing and emphasizes biodiversity outcomes). Add `community_based_adaptation_cba` subcategory under `communication_and_community` (distinct from generic engagement: CbA frames the community as the lead agent of adaptation, not as an audience to be consulted).
+
+---
+
+## Decision 25 (v0.1.1): Informal service systems as a subsector
+
+**Date:** 2026-05-04
+**Context:** Peer review cited IPCC AR6 Ch. 6's critique that ISO 37120 (the source standard underlying our urban-systems taxonomy) misses informal urban systems entirely, even when those systems serve a majority of residents — particularly in cities of the Global South.
+
+### Decision
+Add `informal_service_systems` subsector under `socioeconomic_health` covering informal water supply, sanitation, solid waste, transport, energy, food systems, and community-led disaster response. Distinct from existing `informal_settlements` (built-environment / land-tenure axis) and `informal_economies` (livelihood / labor axis): this subsector captures the SERVICE-PROVISION axis where formal infrastructure is absent.
+
+### Alternatives Considered
+- **Top-level "Informal Systems" sector** — rejected: would create double-counting with existing informal_settlements and informal_economies entries.
+- **Distribute across existing sectors** — rejected: makes the informal-system theme harder to query as a coherent class.
+
+---
+
+## Decision 26 (v0.1.1): Housing tenure as a vulnerability axis (atomic, not derived)
+
+**Date:** 2026-05-04
+**Context:** Peer review cited Shelters in the Storm (Bradshaw et al. 2025) on housing-tenure form (co-ops, condos, mobile homes, tenure-insecure residents) as a distinct vulnerability driver not captured by income-only or settlement-form-only framings. Reviewer also flagged intersectional vulnerability as a gap.
+
+### Decision
+Add three housing-tenure entries to `vulnerable-populations`: `manufactured_mobile_home_residents`, `cooperative_condo_residents`, `tenure_insecure_residents`. Do NOT add an `intersectional` flag or hard-coded intersectional categories. Intersectionality is expressed by listing multiple atomic groups on the same Vulnerability or Solution node — queries derive the intersection rather than the vocabulary hard-coding it.
+
+### Rationale
+Atomic groups + multi-value arrays + queries is more expressive than enumerated intersections. Adding an `intersectional` boolean would be metadata about the source's framing, not about the vulnerability itself; enumerating intersections (e.g., `low_income_elderly`) would explode the vocabulary into a Cartesian product. The reviewer's underlying concern — that intersectional vulnerability be queryable — is satisfied by `array<string>` semantics already in place on `Vulnerability.affected_group` and `Solution.target_populations`.
+
+---
+
+## Decision 27 (v0.1.1): AF/GCF accreditation modalities on FinancingSource (not on mechanism_vocabulary)
+
+**Date:** 2026-05-04
+**Context:** Peer review recommended that Adaptation Fund and Green Climate Fund terminology — National Implementing Entities (NIEs), direct access, pooled facilities — should align our `mechanism_vocabulary`. This was a misreading of the ontology: our `Mechanism` entity (and its `mechanism_vocabulary` enum) is explicitly the *functional/operational* process by which a Solution physically achieves adaptation effect (absorb, redirect, harden, sense_and_detect, etc.), not the financial-institutional arrangement. The Mechanism entity definition states explicitly that "financial and governance mechanisms are captured by FinancialInstrument and EnablingCondition respectively" (ontology v0.1, line 301).
+
+### Decision
+Add an `accreditation_modality` enum to `enums.json` (NIE, RIE, MIE, direct_access, enhanced_direct_access, pooled_facility, readiness_programme, not_applicable) and an `accreditation_modality` property on `FinancingSource`. Leave `mechanism_vocabulary` untouched. Document the distinction in the FinancingSource notes: source_type (broad funder category) vs. accreditation_modality (institutional access arrangement) vs. FinancialInstrument.instrument_type (structural form of capital) vs. Mechanism.mechanism_type (operational adaptation process).
+
+### Rationale
+Conflating finance-institutional arrangements with operational adaptation mechanisms would collapse a useful structural distinction. The four-axis split (who funds → how they're accredited → what instrument carries the capital → what the solution physically does) is the resolution the ontology already commits to; this decision extends it cleanly.
 
 ---
 

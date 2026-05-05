@@ -1,7 +1,7 @@
 {
   "_source": "IPCC AR6 WGII (vulnerable groups), UNDRR Sendai Framework (at-risk populations), EDF equity framework (Shi 2024 rubric), and existing case library demographic analysis",
   "_usage": "Solution.target_populations[], Vulnerability.affected_group[], ExposureUnit.affected_group[]",
-  "_note": "Controlled vocabulary for population groups facing disproportionate climate vulnerability. Groups are socially-defined (not geographic) to support equity analysis across justice dimensions. Used to bind previously free-text affected_group fields. Sprint 5 addition — designed for EDF/Cornell AI equity impact study.",
+  "_note": "Controlled vocabulary for population groups facing disproportionate climate vulnerability. Groups are socially-defined (not geographic) to support equity analysis across justice dimensions. Used to bind previously free-text affected_group fields. Sprint 5 addition — designed for EDF/Cornell AI equity impact study. v0.1.1: added housing-tenure axis entries (manufactured/mobile home residents, cooperative/condo residents, tenure-insecure residents) per Shelters in the Storm (2025) framing of housing tenure as a distinct vulnerability driver. Intersectional vulnerability is expressed by listing multiple atomic groups on the same Vulnerability or Solution node — queries derive the intersection rather than the vocabulary hard-coding it.",
   "populations": [
     {
       "id": "low_income_households",
@@ -133,6 +133,30 @@
       "ipcc_ar6": false,
       "undrr": false,
       "_note": "Aggregate EJ term; prefer more specific groups when documented. Aligns with EPA EJScreen, US Justice40 criteria, and EDF equity framing."
+    },
+    {
+      "id": "manufactured_mobile_home_residents",
+      "name": "Manufactured / Mobile Home Residents",
+      "description": "Residents of manufactured housing, mobile homes, and trailer parks. Disproportionately exposed to wind, flood, and heat hazards due to building envelope vulnerability and frequent siting in hazard-prone areas; often face land-tenure insecurity (renting the lot beneath an owned home).",
+      "ipcc_ar6": false,
+      "undrr": false,
+      "_note": "Housing-tenure axis. Cites Shelters in the Storm (Bradshaw et al. 2025) on tenure-form vulnerability. US-relevant for EDF/Cornell study; manufactured housing is the largest source of unsubsidized affordable housing in the US."
+    },
+    {
+      "id": "cooperative_condo_residents",
+      "name": "Cooperative / Condominium Residents",
+      "description": "Residents of housing co-operatives and condominiums where adaptation investments require collective decision-making across owner-residents, often slowing response to climate risk and producing uneven outcomes when budgets are constrained.",
+      "ipcc_ar6": false,
+      "undrr": false,
+      "_note": "Housing-tenure axis. Distinct vulnerability mechanism: collective-action friction in adaptation decisions even when residents have means."
+    },
+    {
+      "id": "tenure_insecure_residents",
+      "name": "Tenure-Insecure Residents",
+      "description": "Residents holding informal, contested, or otherwise insecure rights to the land or dwelling they occupy — distinct from formal renters and informal-settlement residents. Includes squatters, holders of customary tenure without title, and residents of land subject to displacement or eviction risk.",
+      "ipcc_ar6": false,
+      "undrr": true,
+      "_note": "Housing-tenure axis. Tenure insecurity is a primary driver of exclusion from property-tied adaptation programs and recovery aid; distinct from informal_settlement_residents (which is settlement-form) and renters (which is formal lease)."
     }
   ]
 }
