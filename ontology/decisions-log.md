@@ -12,7 +12,7 @@ This log documents key design decisions in the ontology development process, inc
 
 ---
 
-## Decision 28 (v0.2): Resilience finance extension — CapitalProject entity, debt-service properties, FUNDED_BY relationship, monetized co-benefits
+## Decision 28 (v0.2): Resilience finance extension — CapitalProject entity, debt-service properties, multi-source funding stack via USES_INSTRUMENT/CHANNELS_THROUGH, monetized co-benefits
 
 **Date:** 2026-05-05
 **Context:** Meeting with Andy Salkin (Resilient Cities Catalyst), NYC, 5 May 2026. Salkin's brief: help cities prioritize resilience spending in their Capital Improvement Plans (CIPs), and surface evidence to justify more debt-financed adaptation work. Analytical core: *plan↔budget alignment* — comparing what a climate plan says with what the capital budget actually commits.
@@ -35,10 +35,15 @@ Bump to **v0.2** (minor — schema change). Six coordinated additions:
 
 **D. New relationships:**
 - `REALIZES` (CapitalProject → Action) — bridges climate-plan language and budget-document execution. The plan↔budget alignment edge.
-- `FUNDED_BY` (CapitalProject → FinancingSource) — closes the financing chain. Edge properties: `amount_usd`, `share_percent`, `financing_model` (bound to the previously-orphaned `enums.json#financing_model`). Multi-source funding stacks are modeled as multiple FUNDED_BY rows from one CapitalProject.
 - `COMMISSIONED_BY` (CapitalProject → Stakeholder) — sponsoring agency, distinct from `IMPLEMENTED_BY` (executing party).
 
-**E. Existing relationships extended (duplicate-id rows for CapitalProject as source/target):** `DEPLOYED_IN`, `USES_INSTRUMENT`, `IMPLEMENTED_BY`, `PRODUCES`, `FACES`, and `SPECIFIES` (Plan → CapitalProject). The viewer's edge keying (`id:source:target` per inspector.js:237) tolerates duplicate ids — this preserves semantic identity (the relationship means the same thing whether the source is Action or CapitalProject) without cluttering the schema with parallel names.
+**E. Existing relationships extended (duplicate-id rows for CapitalProject as source/target):** `DEPLOYED_IN`, `USES_INSTRUMENT`, `IMPLEMENTED_BY`, `PRODUCES`, and `SPECIFIES` (Plan → CapitalProject). The viewer's edge keying (`id:source:target` per inspector.js:237) tolerates duplicate ids — this preserves semantic identity (the relationship means the same thing whether the source is Action or CapitalProject) without cluttering the schema with parallel names.
+
+`USES_INSTRUMENT` (CapitalProject → FinancialInstrument) carries the full funding-stack per instrument: `amount_usd` (draw amount), `share_percent` (fraction of total project cost), `financing_model` (bound to `enums.json#financing_model`). A multi-source stack is modeled as multiple `USES_INSTRUMENT` edges — one per instrument — each pointing to a `FinancialInstrument` that is itself capitalized by one or more `FinancingSource` nodes via `CHANNELS_THROUGH`.
+
+`CHANNELS_THROUGH` (FinancingSource → FinancialInstrument) extended with `amount_usd` to capture how much a source contributes to an instrument pool (revolving fund tranche, grant award, bond capitalization). For single-source instruments this is the total award; for pooled vehicles (revolving funds, blended finance) it differentiates each contributor's share.
+
+`FACES` is **not** extended to CapitalProject. Capital projects in a CIP have cleared political, financial, and technical vetting to win a budget allocation — modeling them as still facing barriers represents the wrong state.
 
 **F. `Outcome` monetary valuation** — new properties: `monetized_value_usd`, `value_recurrence` (one_time/annual/lifetime), `valuation_method` (free-text), `beneficiary_program` (array, new `municipal_program` enum: transportation, parks_recreation, public_safety, public_health, housing, schools, water_utilities, energy_utilities, pensions, general_revenue, other). `co_benefit_type` extended with five finance-relevant categories: `asset_protection`, `revenue_stability`, `operational_cost_reduction`, `tax_base_protection`, `service_continuity`.
 
@@ -59,10 +64,6 @@ CapitalProject omits direct edges that are reachable via multi-hop paths:
 
 `BUNDLES_WITH` (CapitalProject ↔ CapitalProject) for cross-program co-financing is deferred until first CIP ingestion shows whether bundles are extractable. `INTERSECTS_RISK_SHED` (CapitalProject → Hazard) is similarly deferred — currently derivable via shared Location/ExposureUnit.
 
-### Why FUNDED_BY at the project grain is a different question from the 2026-04-26 rejection
-
-The corpus-mining team's 2026-04-26 rejection of `FUNDED_BY` was scoped to the **Plan** node, with the rationale "these will almost all be funded by municipalities" — i.e., plans themselves are funded by their issuing city, and that's not interesting. At the **project grain**, multi-source funding (federal cost-share + state SRF + revenue bond + municipal appropriation) is the *central* analytical question and the whole point of resilience-finance reasoning. Different grain, different relevance.
-
 ### Five-axis split (extension of Decision 27)
 
 Decision 27 (v0.1.1) established a four-axis split: who funds (`FinancingSource`) → how accredited (`accreditation_modality`) → what instrument carries the capital (`FinancialInstrument`) → what the solution physically does (`Mechanism`).
@@ -70,10 +71,10 @@ Decision 27 (v0.1.1) established a four-axis split: who funds (`FinancingSource`
 v0.2 adds a fifth axis at the project grain: **what budget line item receives it** (`CapitalProject`), with debt-service detail surfaced on `FinancialInstrument` (principal, term, rate, annual debt service). The full project-level financing chain:
 
 ```
-FinancingSource ←FUNDED_BY← CapitalProject →USES_INSTRUMENT→ FinancialInstrument
-                                                            ↑
-                                       FinancingSource →CHANNELS_THROUGH→
+FinancingSource →CHANNELS_THROUGH(amount)→ FinancialInstrument ←USES_INSTRUMENT(amount, share, model)← CapitalProject
 ```
+
+Sources mix in the instrument (a revolving fund pools multiple source contributions; a bond is backed by one). The instrument then delivers capital to the project. For typical CIP cases (one source, one instrument) the chain degenerates gracefully to a single path; for pooled vehicles, multiple `CHANNELS_THROUGH` edges distinguish each contributor's tranche.
 
 ### Worked example — multi-source funding stack
 
@@ -85,10 +86,15 @@ CapitalProject {
   total_capex_usd: 50000000,
   asset_life_years: 50
 }
-  └─ FUNDED_BY → FinancingSource(name="FEMA BRIC")        [amount: 30M, share: 60%, financing_model: "grants"]
-  └─ FUNDED_BY → FinancingSource(name="State SRF")        [amount: 10M, share: 20%, financing_model: "regional_funds"]
-  └─ FUNDED_BY → FinancingSource(name="City Water Dept")  [amount: 10M, share: 20%, financing_model: "municipal_budget"]
-  └─ USES_INSTRUMENT → FinancialInstrument(instrument_type: "revenue_bond", principal: 10M, term: 30, rate: 0.045, annual_debt_service: 615000)
+  └─ USES_INSTRUMENT(amount: 30M, share: 60%, financing_model: "grants")
+       → FinancialInstrument(instrument_type: "federal_cost_share")
+            └─ CHANNELS_THROUGH(amount: 30M) ← FinancingSource(name="FEMA BRIC")
+  └─ USES_INSTRUMENT(amount: 10M, share: 20%, financing_model: "revolving_loan")
+       → FinancialInstrument(instrument_type: "revolving_fund")
+            └─ CHANNELS_THROUGH(amount: 60M) ← FinancingSource(name="State SRF")   ← full fund capitalization
+  └─ USES_INSTRUMENT(amount: 10M, share: 20%, financing_model: "debt")
+       → FinancialInstrument(instrument_type: "revenue_bond", principal: 10M, term: 30, rate: 0.045, annual_debt_service: 615000)
+            └─ CHANNELS_THROUGH ← FinancingSource(name="City Water Dept — ratepayer revenue")
   └─ COMMISSIONED_BY → Stakeholder(name="Department of Environmental Protection")
   └─ DEPLOYED_IN → Location(name="South Watershed District")
   └─ REALIZES → Action(action_name="Reduce stormwater flooding in vulnerable neighborhoods")
@@ -108,7 +114,7 @@ RETURN g, a, cp, p2
 ### Counts
 
 - v0.1.1: 20 types, 44 relationship rows (the v0.1.1 metadata listed 45; it was off by one), 6 vocabularies
-- v0.2: 21 types (+CapitalProject), 53 relationship rows (+9: REALIZES, FUNDED_BY, COMMISSIONED_BY new ids; DEPLOYED_IN, USES_INSTRUMENT, IMPLEMENTED_BY, PRODUCES, FACES, SPECIFIES duplicate-id rows), 6 vocabularies (enums.json gained 5 authoritative blocks: instrument_type, asset_class, construction_phase, municipal_program, value_recurrence)
+- v0.2: 21 types (+CapitalProject), 51 relationship rows (+7: REALIZES, COMMISSIONED_BY new ids; DEPLOYED_IN, USES_INSTRUMENT, IMPLEMENTED_BY, PRODUCES, SPECIFIES duplicate-id rows), 6 vocabularies (enums.json gained 5 authoritative blocks: instrument_type, asset_class, construction_phase, municipal_program, value_recurrence)
 
 ---
 

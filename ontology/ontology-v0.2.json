@@ -1,6 +1,6 @@
 {
   "version": "v0.2",
-  "update_note": "Resilience finance extension: new CapitalProject entity for budget-document line items, debt-service properties on FinancialInstrument, new FUNDED_BY (CapitalProject → FinancingSource) and COMMISSIONED_BY (CapitalProject → Stakeholder) and REALIZES (CapitalProject → Action) relationships, extended source sets on DEPLOYED_IN/USES_INSTRUMENT/IMPLEMENTED_BY/PRODUCES/FACES/SPECIFIES, monetary co-benefit valuation properties on Outcome, capital_improvement_plan + capital_budget plan types, US municipal CIP financing instruments (GO bonds, revenue bonds, ratepayer-funded, etc.), bound previously-orphaned financing_status and financing_model enums.",
+  "update_note": "Resilience finance extension: new CapitalProject entity for budget-document line items, debt-service properties on FinancialInstrument, new COMMISSIONED_BY (CapitalProject \u2192 Stakeholder) and REALIZES (CapitalProject \u2192 Action) relationships, extended USES_INSTRUMENT to carry funding-stack properties (amount_usd, share_percent, financing_model) at the project level, extended CHANNELS_THROUGH to carry source capitalization amount, extended source sets on DEPLOYED_IN/USES_INSTRUMENT/IMPLEMENTED_BY/PRODUCES/SPECIFIES, monetary co-benefit valuation properties on Outcome, capital_improvement_plan + capital_budget plan types, US municipal CIP financing instruments (GO bonds, revenue bonds, ratepayer-funded, etc.), bound previously-orphaned financing_status and financing_model enums.",
   "updated": "2026-05-05T00:00:00.000Z",
   "domain": "urban-climate-adaptation",
   "domain_label": "Urban Climate Adaptation and Resilience Solutions",
@@ -620,7 +620,7 @@
             "general_revenue",
             "other"
           ],
-          "note": "Other municipal programs that benefit from this outcome. Captures cross-program 'ripple effects' — e.g., green stormwater infrastructure benefits both water utilities (reduced stormwater treatment cost) and parks (recreational space). v0.2."
+          "note": "Other municipal programs that benefit from this outcome. Captures cross-program 'ripple effects' \u2014 e.g., green stormwater infrastructure benefits both water utilities (reduced stormwater treatment cost) and parks (recreational space). v0.2."
         },
         {
           "id": "co_benefit_type_other_description",
@@ -899,7 +899,7 @@
             "feasibility_stage",
             "not_applicable"
           ],
-          "note": "Funding status of the action. v0.2 — bound to enums.json#financing_status (previously orphaned)."
+          "note": "Funding status of the action. v0.2 \u2014 bound to enums.json#financing_status (previously orphaned)."
         }
       ],
       "vocabulary_bindings": [
@@ -2210,6 +2210,12 @@
       "definition": "The financing source channels capital through this financial instrument. Captures the 'who funds via what mechanism' linkage (e.g., 'World Bank channels funding through a green bond').",
       "properties": [
         {
+          "id": "amount_usd",
+          "type": "number",
+          "required": false,
+          "note": "Amount this source contributes to capitalizing the instrument (pool contribution or grant award)"
+        },
+        {
           "id": "claim_ids",
           "type": "array<uuid>",
           "required": true
@@ -2634,56 +2640,6 @@
       "extract_hint": "Look for cross-references between CIPs and climate plans \u2014 e.g., 'this project implements Action 4.2 of the 2024 Resilience Strategy', 'fulfills the Heat Action Plan's cooling-center commitment', 'one of two CIP projects delivering on Goal 7 of the climate plan'."
     },
     {
-      "id": "FUNDED_BY",
-      "label": "funded by",
-      "source": "CapitalProject",
-      "target": "FinancingSource",
-      "definition": "The capital project receives funding from this financing source. Edges carry per-source amount and percentage share, allowing a multi-source funding stack (e.g., 40% federal grant + 30% revenue bond + 30% municipal appropriation) to be modeled as multiple FUNDED_BY rows from one CapitalProject.",
-      "properties": [
-        {
-          "id": "amount_usd",
-          "type": "number",
-          "required": false,
-          "note": "Amount in USD contributed by this source to this project."
-        },
-        {
-          "id": "share_percent",
-          "type": "number",
-          "required": false,
-          "note": "Percentage of project funding (0-100) coming from this source. Sum across all FUNDED_BY edges for one project should approximate 100."
-        },
-        {
-          "id": "financing_model",
-          "type": "enum",
-          "required": false,
-          "vocabulary": "enums",
-          "values": [
-            "grants",
-            "municipal_budget",
-            "national_government",
-            "regional_funds",
-            "public_private_partnership",
-            "commercial_loans",
-            "development_banks",
-            "climate_funds",
-            "green_bonds",
-            "blended_finance",
-            "private_sector",
-            "international_oda"
-          ],
-          "note": "Bound to enums.json#financing_model (previously orphaned; bound in v0.2). Captures the structural model of funding from this source."
-        },
-        {
-          "id": "claim_ids",
-          "type": "array<uuid>",
-          "required": true
-        }
-      ],
-      "cardinality": "many-to-many",
-      "notes": "v0.2. Closes the financing chain that Decision 17 (v0.1) implied but didn't implement: FinancingSource \u2190FUNDED_BY\u2190 CapitalProject \u2192USES_INSTRUMENT\u2192 FinancialInstrument \u2190CHANNELS_THROUGH\u2190 FinancingSource. The corpus-mining team's 2026-04-26 rejection of FUNDED_BY at the Plan grain ('plans are funded by their issuing municipality') doesn't apply at the project grain, where multi-source funding is the central analytical question.",
-      "extract_hint": "Look for funding-source attribution at the project level \u2014 e.g., 'this project is funded 60% by FEMA BRIC, 40% by city water revenue bonds', 'Green Climate Fund grant covering $25M', 'co-funded by the state revolving fund and municipal capital appropriation'. Capture amount and share whenever stated."
-    },
-    {
       "id": "USES_INSTRUMENT",
       "label": "uses financial instrument",
       "source": "CapitalProject",
@@ -2694,6 +2650,19 @@
           "id": "amount_usd",
           "type": "number",
           "required": false
+        },
+        {
+          "id": "share_percent",
+          "type": "number",
+          "required": false,
+          "note": "Fraction of total project cost covered by this instrument (0\u20131)"
+        },
+        {
+          "id": "financing_model",
+          "type": "enum",
+          "required": false,
+          "vocab": "financing_model",
+          "note": "How capital is structured for this draw (grant, debt, equity, etc.)"
         },
         {
           "id": "description",
@@ -2791,23 +2760,6 @@
       "cardinality": "one-to-many",
       "notes": "v0.2. Mirrors Solution PRODUCES Outcome. Project-level outcomes are typically monetized (avoided damages, revenue stability, operational savings) and tagged with beneficiary_program to capture cross-program ripple effects (transit, parks, public safety, etc.).",
       "extract_hint": "Look for documented project benefits \u2014 e.g., 'project protects $500M in coastal property', 'reduces stormwater treatment cost by $2M/yr', 'avoids an estimated $80M in flood damages over the asset life'. Capture monetized_value_usd, value_recurrence, and beneficiary_program on the resulting Outcome."
-    },
-    {
-      "id": "FACES",
-      "label": "faces",
-      "source": "CapitalProject",
-      "target": "Barrier",
-      "definition": "The capital project encounters this barrier during planning, design, or implementation. Mirrors Action FACES Barrier at the project grain.",
-      "properties": [
-        {
-          "id": "claim_ids",
-          "type": "array<uuid>",
-          "required": true
-        }
-      ],
-      "cardinality": "many-to-many",
-      "notes": "v0.2. Mirrors Action FACES Barrier. Captures project-level obstacles \u2014 common types include financial (insufficient debt capacity, lack of dedicated revenue), regulatory (permitting), and political (lack of authorization to issue bonds).",
-      "extract_hint": "Look for stated obstacles to project advancement \u2014 e.g., 'project deferred pending federal cost-share confirmation', 'awaiting Coastal Commission permit', 'GO bond authorization not yet on the ballot'."
     },
     {
       "id": "SPECIFIES",
@@ -2908,7 +2860,7 @@
   ],
   "metadata": {
     "types_count": 21,
-    "relationships_count": 53,
+    "relationships_count": 51,
     "vocabularies_count": 6,
     "change_history": [
       "v0.2 (2026-05-05): Resilience finance extension \u2014 CapitalProject entity, debt-service properties on FinancialInstrument, FUNDED_BY/COMMISSIONED_BY/REALIZES relationships, US municipal CIP financing instruments, monetized co-benefit valuation, capital_improvement_plan + capital_budget plan types, bound previously-orphaned financing_status and financing_model enums",
@@ -2933,16 +2885,16 @@
         "note": "Four relationship types connect to ResilienceGoal, forming an epistemic hierarchy from aspiration to evidence: SETS_GOAL (plan aspiration), TARGETS_GOAL (action intent from plan/disclosure), CONTRIBUTES_TO (solution-class claim), DEMONSTRATES_PROGRESS_ON (measured outcome evidence)."
       },
       {
-        "topic": "Resilience Finance — Five-Axis Split (v0.2)",
-        "note": "v0.2 extends Decision 27's four-axis split (who funds → how accredited → what instrument → what mechanism) with a fifth axis at the project grain: who funds (FinancingSource) → how accredited (accreditation_modality) → what instrument carries the capital, with debt-service terms (FinancialInstrument: principal/term/rate/annual debt service) → what budget line item receives it (CapitalProject) → what the solution physically does (Mechanism). The full project-level financing chain is now: FinancingSource ←FUNDED_BY← CapitalProject →USES_INSTRUMENT→ FinancialInstrument ←CHANNELS_THROUGH← FinancingSource."
+        "topic": "Resilience Finance \u2014 Five-Axis Split (v0.2)",
+        "note": "v0.2 extends Decision 27's four-axis split (who funds \u2192 how accredited \u2192 what instrument \u2192 what mechanism) with a fifth axis at the project grain: who funds (FinancingSource) \u2192 how accredited (accreditation_modality) \u2192 what instrument carries the capital, with debt-service terms (FinancialInstrument: principal/term/rate/annual debt service) \u2192 what budget line item receives it (CapitalProject) \u2192 what the solution physically does (Mechanism). The full project-level financing chain is now: FinancingSource \u2190FUNDED_BY\u2190 CapitalProject \u2192USES_INSTRUMENT\u2192 FinancialInstrument \u2190CHANNELS_THROUGH\u2190 FinancingSource."
       },
       {
         "topic": "Action vs CapitalProject (v0.2)",
-        "note": "Action is what a climate plan commits to doing; CapitalProject is what a capital budget actually programs and funds. Distinct entities with distinct provenance (climate plan vs CIP/budget document). The REALIZES edge bridges them and is the axis of the plan↔budget alignment query: which CapitalProjects REALIZE Actions that PURSUE a ResilienceGoal? Conversely, which Actions have no CapitalProjects realizing them (unfunded commitments)?"
+        "note": "Action is what a climate plan commits to doing; CapitalProject is what a capital budget actually programs and funds. Distinct entities with distinct provenance (climate plan vs CIP/budget document). The REALIZES edge bridges them and is the axis of the plan\u2194budget alignment query: which CapitalProjects REALIZE Actions that PURSUE a ResilienceGoal? Conversely, which Actions have no CapitalProjects realizing them (unfunded commitments)?"
       },
       {
         "topic": "CapitalProject Edge Economy (v0.2)",
-        "note": "CapitalProject deliberately omits direct edges that are reachable via multi-hop paths: IMPLEMENTS Solution (reach via REALIZES Action → IMPLEMENTS Solution); MITIGATES Hazard / REDUCES_EXPOSURE / REDUCES Vulnerability (reach via Solution); PURSUES ResilienceGoal (reach via Action); OPERATES_ON UrbanSystem (collapsed into asset_class property); PROTECTS ExposureUnit (reach via Solution → REDUCES_EXPOSURE). BUNDLES_WITH (CapitalProject ↔ CapitalProject) for cross-program co-financing is deferred until first CIP ingestion shows whether bundles are extractable in practice."
+        "note": "CapitalProject deliberately omits direct edges that are reachable via multi-hop paths: IMPLEMENTS Solution (reach via REALIZES Action \u2192 IMPLEMENTS Solution); MITIGATES Hazard / REDUCES_EXPOSURE / REDUCES Vulnerability (reach via Solution); PURSUES ResilienceGoal (reach via Action); OPERATES_ON UrbanSystem (collapsed into asset_class property); PROTECTS ExposureUnit (reach via Solution \u2192 REDUCES_EXPOSURE). BUNDLES_WITH (CapitalProject \u2194 CapitalProject) for cross-program co-financing is deferred until first CIP ingestion shows whether bundles are extractable in practice."
       }
     ]
   },
@@ -2950,7 +2902,7 @@
     {
       "version": "v0.2",
       "date": "2026-05-05",
-      "summary": "Resilience finance extension — CapitalProject entity for budget-document line items, debt-service modeling, structured multi-source funding stack, monetized co-benefits with cross-program tagging. Source: meeting with Andy Salkin (Resilient Cities Catalyst), NYC, 5 May 2026.",
+      "summary": "Resilience finance extension \u2014 CapitalProject entity for budget-document line items, debt-service modeling, structured multi-source funding stack, monetized co-benefits with cross-program tagging. Source: meeting with Andy Salkin (Resilient Cities Catalyst), NYC, 5 May 2026.",
       "changes": [
         {
           "type": "added",
@@ -2966,19 +2918,15 @@
         },
         {
           "type": "added",
-          "text": "FUNDED_BY relationship (CapitalProject → FinancingSource) with edge properties amount_usd, share_percent, financing_model — supports multi-source funding stacks"
+          "text": "REALIZES relationship (CapitalProject \u2192 Action) \u2014 bridges climate-plan commitments and capital-budget execution, enables plan\u2194budget alignment queries"
         },
         {
           "type": "added",
-          "text": "REALIZES relationship (CapitalProject → Action) — bridges climate-plan commitments and capital-budget execution, enables plan↔budget alignment queries"
+          "text": "COMMISSIONED_BY relationship (CapitalProject \u2192 Stakeholder) \u2014 captures sponsoring agency, distinct from IMPLEMENTED_BY"
         },
         {
           "type": "added",
-          "text": "COMMISSIONED_BY relationship (CapitalProject → Stakeholder) — captures sponsoring agency, distinct from IMPLEMENTED_BY"
-        },
-        {
-          "type": "added",
-          "text": "USES_INSTRUMENT, IMPLEMENTED_BY, PRODUCES, FACES, DEPLOYED_IN, SPECIFIES extended (as duplicate-id rows) to also accept CapitalProject as source/target where appropriate"
+          "text": "USES_INSTRUMENT, IMPLEMENTED_BY, PRODUCES, DEPLOYED_IN, SPECIFIES extended (as duplicate-id rows) to also accept CapitalProject as source/target. USES_INSTRUMENT (CapitalProject \u2192 FinancialInstrument) carries funding-stack properties: amount_usd, share_percent, financing_model."
         },
         {
           "type": "added",
@@ -2997,15 +2945,15 @@
           "text": "Action.financing_status property bound to enums.json#financing_status (previously orphaned)"
         },
         {
-          "type": "fixed",
-          "text": "Bound previously-orphaned enums.json#financing_status and enums.json#financing_model — financing_status to CapitalProject and Action; financing_model to FUNDED_BY edge property"
+          "type": "extended",
+          "text": "CHANNELS_THROUGH (FinancingSource \u2192 FinancialInstrument) extended with amount_usd \u2014 captures how much a source contributes to capitalising an instrument pool (revolving fund tranche, grant award, bond capitalization)"
         }
       ]
     },
     {
       "version": "v0.1.1",
       "date": "2026-05-04",
-      "summary": "Peer review response — vocabulary alignment with UNDRR HIPs 2025, ICLEI pathways, EbA/CbA, informal urban systems, housing tenure, AF/GCF accreditation",
+      "summary": "Peer review response \u2014 vocabulary alignment with UNDRR HIPs 2025, ICLEI pathways, EbA/CbA, informal urban systems, housing tenure, AF/GCF accreditation",
       "changes": [
         {
           "type": "changed",
@@ -3041,7 +2989,7 @@
         },
         {
           "type": "added",
-          "text": "urban-systems.json: informal_service_systems subsector under socioeconomic_health (informal water, sanitation, solid waste, transport, energy, food, community-led disaster response) — addresses IPCC AR6 Ch. 6 critique that ISO 37120 misses informal urban systems"
+          "text": "urban-systems.json: informal_service_systems subsector under socioeconomic_health (informal water, sanitation, solid waste, transport, energy, food, community-led disaster response) \u2014 addresses IPCC AR6 Ch. 6 critique that ISO 37120 misses informal urban systems"
         },
         {
           "type": "added",
@@ -3053,7 +3001,7 @@
         },
         {
           "type": "fixed",
-          "text": "Resolved conceptual confusion in peer review: AF/GCF terminology (NIEs, direct access, pooled facilities) belongs on FinancingSource, not on mechanism_vocabulary, which describes operational adaptation processes (absorb/redirect/harden/etc.) — left mechanism_vocabulary unchanged"
+          "text": "Resolved conceptual confusion in peer review: AF/GCF terminology (NIEs, direct access, pooled facilities) belongs on FinancingSource, not on mechanism_vocabulary, which describes operational adaptation processes (absorb/redirect/harden/etc.) \u2014 left mechanism_vocabulary unchanged"
         }
       ]
     },

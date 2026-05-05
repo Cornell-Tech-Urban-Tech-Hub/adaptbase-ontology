@@ -22,6 +22,7 @@
     // Finance — capital flows and instruments
     'FinancingSource': 'Finance',
     'FinancialInstrument': 'Finance',
+    'CapitalProject': 'Finance',
     // Outcomes — goals, results, measurement
     'Outcome': 'Outcomes',
     'Indicator': 'Outcomes',
