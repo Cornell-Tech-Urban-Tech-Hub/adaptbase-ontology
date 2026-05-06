@@ -47,34 +47,30 @@ body {
   display: block;
 }
 .brand-divider {
-  width: 1px; height: 22px; background: var(--border-soft);
+  width: 1px; height: 22px; background: var(--border-soft); flex-shrink: 0;
 }
 .brand-title {
-  display: flex; flex-direction: row; align-items: baseline; gap: var(--sp-3); line-height: 1.1; white-space: nowrap;
+  display: flex; flex-direction: row; align-items: center; gap: var(--sp-3); line-height: 1.1; white-space: nowrap;
 }
-.brand-title .eyebrow-mono {
+a.brand-title {
+  text-decoration: none;
+}
+a.brand-title:hover { text-decoration: none; }
+.brand-title .project-name {
   font-family: var(--font-mono);
-  font-size: var(--fs-xs);
   font-weight: 500;
+  font-size: var(--fs-md);
   color: var(--fg-brand);
-  letter-spacing: 0.14em;
+  letter-spacing: 0.10em;
   text-transform: uppercase;
 }
-.brand-title .project-name {
+.brand-title .brand-section {
   font-family: var(--font-display);
   font-weight: 500;
   font-size: var(--fs-md);
   color: var(--fg-1);
   font-variation-settings: "opsz" 24;
   letter-spacing: -0.01em;
-}
-.brand-subtitle {
-  font-family: var(--font-mono);
-  font-size: var(--fs-xs);
-  font-weight: 500;
-  color: var(--fg-brand);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
 }
 
 .header-actions {
@@ -728,9 +724,8 @@ body {
   body { overflow: visible; height: auto; min-height: 100vh; width: 100%; max-width: 100vw; }
   .site-header { padding: 10px 12px; gap: var(--sp-3); flex-wrap: wrap; }
   .brand-lockup { min-width: 0; max-width: 100%; }
-  .brand-title { flex-direction: column; align-items: flex-start; gap: 4px; white-space: normal; }
-  .brand-title .project-name { white-space: nowrap; font-size: clamp(26px, 9vw, 40px); }
-  .brand-title .brand-subtitle { white-space: normal; font-size: 12px; letter-spacing: 0.12em; }
+  .brand-title { white-space: nowrap; }
+  .brand-title .project-name, .brand-title .brand-section { font-size: var(--fs-sm); }
   .header-actions { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
   .hero { padding: var(--sp-5) 12px; max-height: none; }
   .hero h1 { font-size: clamp(28px, 9vw, 42px); line-height: 1.08; }
