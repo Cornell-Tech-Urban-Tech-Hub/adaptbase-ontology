@@ -127,6 +127,7 @@
             ? p.values
             : (p.vocabulary_binding ? window.OntologyAdapter.resolveEnumValues(p.vocabulary_binding) : []);
           const vocabLabel = p.vocabulary_binding ? p.vocabulary_binding.field : p.vocabulary;
+          const isLookupId = p.id.endsWith('_id') && vocabLabel;
           return `
           <li class="prop-item">
             <span class="name">${esc(p.id)}</span>
@@ -135,7 +136,7 @@
               ${isEnum && enumValues.length ? `<span class="enum-hover">${enumValues.length}<span class="enum-tooltip">${enumValues.map(v => `<span class="enum-val">${esc(v)}</span>`).join('')}</span></span>` : ''}
             </span>
             ${p.note ? `<span class="note">${esc(p.note)}</span>` : ''}
-            ${vocabLabel ? `<span class="vocab-tag" data-vocab="${esc(vocabLabel)}">${esc(vocabLabel)}</span>` : ''}
+            ${vocabLabel ? `<span class="vocab-tag" data-vocab="${esc(vocabLabel)}">${esc(vocabLabel)}${isLookupId ? ' → label' : ''}</span>` : ''}
           </li>`;
         }).join('')}
       </ul>

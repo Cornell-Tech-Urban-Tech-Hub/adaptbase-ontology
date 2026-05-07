@@ -113,11 +113,69 @@
     };
   }
 
+  const vocabCache = {};
+  const VOCAB_PATHS = {
+    'hazards': '../ontology/vocabularies/hazards.json',
+    'urban-systems': '../ontology/vocabularies/urban-systems.json',
+    'solution-categories': '../ontology/vocabularies/solution-categories.json',
+    'crf-goals': '../ontology/vocabularies/crf-goals.json',
+    'vulnerable-populations': '../ontology/vocabularies/vulnerable-populations.json',
+  };
+
+  async function loadVocab(vocabId) {
+    if (vocabCache[vocabId]) return vocabCache[vocabId];
+    const path = VOCAB_PATHS[vocabId];
+    if (!path) return null;
+    try {
+      const res = await fetch(path + '?t=' + Date.now());
+      if (!res.ok) return null;
+      const data = await res.json();
+      vocabCache[vocabId] = data;
+      return data;
+    } catch { return null; }
+  }
+
+  function resolveLabel(vocabId, id) {
+    const data = vocabCache[vocabId];
+    if (!data) return id;
+    if (vocabId === 'hazards') {
+      for (const cat of (data.categories || [])) {
+        const h = (cat.hazards || []).find(h => h.id === id);
+        if (h) return h.name;
+      }
+    } else if (vocabId === 'crf-goals') {
+      for (const dim of (data.dimensions || [])) {
+        const g = (dim.goals || []).find(g => g.id === id);
+        if (g) return g.text || g.name || id;
+      }
+    } else if (vocabId === 'urban-systems') {
+      for (const sec of (data.sectors || [])) {
+        if (sec.id === id) return sec.name;
+        for (const sys of (sec.systems || [])) {
+          if (sys.id === id) return sys.name;
+        }
+      }
+    } else if (vocabId === 'solution-categories') {
+      for (const cat of (data.categories || [])) {
+        if (cat.id === id) return cat.name;
+        for (const sub of (cat.subcategories || [])) {
+          if (sub.id === id) return sub.name;
+        }
+      }
+    } else if (vocabId === 'vulnerable-populations') {
+      const pop = (data.populations || data.items || []).find(p => p.id === id);
+      if (pop) return pop.name || pop.label || id;
+    }
+    return id;
+  }
+
   window.OntologyAdapter = {
     loadOntology,
     loadVersions,
     loadEnums,
+    loadVocab,
     resolveEnumValues,
+    resolveLabel,
     ontologyToGraph,
     getCurrentOntology: () => currentOntology,
     getCurrentVersion: () => currentVersion,
