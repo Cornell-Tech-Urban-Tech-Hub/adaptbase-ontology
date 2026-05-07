@@ -46,10 +46,12 @@
 
   function showEmpty() {
     const featured = [
-      { id: 'Solution', lede: 'The central hub — all other solution-domain entities connect to it, with additional relationships between them.' },
+      { id: 'Solution', lede: 'The central hub — interventions classified by identity, with function expressed via typed relationships.' },
       { id: 'Hazard',   lede: 'Bound to the C40/Arup typology with 13 categories and 31 specific hazards.' },
+      { id: 'Plan',     lede: 'Binds goals, prescribed solutions, actions, and policy frameworks.' },
+      { id: 'ResilienceGoal', lede: 'CRF 2024 objectives — bridges planning intent and measured outcomes.' },
+      { id: 'CapitalProject', lede: 'CIP line items — tests whether capital budgets align with climate plans.' },
       { id: 'Vulnerability', lede: 'IPCC AR6 framing — exposure × sensitivity × adaptive capacity.' },
-      { id: 'Plan',     lede: 'New in v0.1.2; binds goals, prescribed solutions, and policy.' },
     ];
 
     el().innerHTML = `

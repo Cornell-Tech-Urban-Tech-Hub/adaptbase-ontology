@@ -8,7 +8,7 @@
     {
       "id": "Solution",
       "label": "Solution",
-      "definition": "A climate adaptation intervention, technology, or approach deployed or proposed to reduce vulnerability or increase adaptive capacity. Classified by identity (what it IS), not function (expressed via typed relationships).",
+      "definition": "A climate adaptation intervention, technology, or approach deployed or proposed to reduce vulnerability or increase adaptive capacity. Classified by identity (what it IS); function is expressed via typed relationships (MITIGATES, OPERATES_ON, WORKS_BY, PRODUCES).",
       "properties": [
         {
           "id": "name",
@@ -96,7 +96,7 @@
           "field": "target_populations"
         }
       ],
-      "notes": "Solutions are reusable classes of intervention, independent of any specific deployment location or plan. Function is expressed through relationships: MITIGATES (hazards), OPERATES_ON (urban systems), WORKS_BY (mechanisms), PRODUCES (outcomes).",
+      "notes": "Solutions are reusable classes of intervention, independent of any specific deployment location or plan.",
       "extract_hint": "Look for named interventions, technologies, programs, or projects described as addressing climate risks \u2014 e.g., 'green roof program', 'flood early warning system', 'mangrove restoration initiative'."
     },
     {
@@ -215,7 +215,7 @@
           "note": "RCC non-climate acute shocks (hazard_source=rcc). See alignment/framework-crosswalk.md \u00a74.1."
         }
       ],
-      "notes": "Primary vocabulary: C40/Arup climate hazard typology. Secondary vocabulary: RCC non-climate acute shocks (cyber attack, earthquake, disease outbreak) via hazard_source=rcc. Slow-onset stresses (sea level rise, environmental degradation) also map here.",
+      "notes": "Slow-onset stresses (sea level rise, environmental degradation) also map here via the C40/Arup typology.",
       "extract_hint": "Look for named climate threats, weather extremes, or environmental stressors \u2014 e.g., 'urban heat island', 'coastal flooding', 'drought', 'sea level rise'. Also look for non-climate shocks when flagged (earthquakes, pandemics)."
     },
     {
@@ -287,7 +287,7 @@
           "field": "condition"
         }
       ],
-      "notes": "Hierarchical structure enables interdependency queries. Infrastructure properties (condition, capacity) are optional \u2014 used when physical infrastructure state is documented.",
+      "notes": "Infrastructure properties (condition, capacity) are optional \u2014 used when physical infrastructure state is documented.",
       "extract_hint": "Look for references to urban infrastructure, services, or systems \u2014 e.g., 'stormwater drainage', 'public transit', 'power grid', 'urban canopy', 'housing stock', 'water treatment'."
     },
     {
@@ -318,7 +318,7 @@
           "field": "mechanism_vocabulary"
         }
       ],
-      "notes": "Functional adaptation mechanisms only. Must be a physical or operational process, not a financial instrument or governance enabler.",
+      "notes": "See also: FinancialInstrument (financial mechanisms), EnablingCondition (governance enablers).",
       "extract_hint": "Look for HOW a solution works \u2014 verbs and processes like 'absorbs runoff', 'redirects floodwater', 'monitors soil moisture', 'detects heat anomalies', 'hardens infrastructure against wind load'."
     },
     {
@@ -648,7 +648,7 @@
           "field": "outcome_type, evidence_level, justice_dimension, value_recurrence, beneficiary_program"
         }
       ],
-      "notes": "Aggregates effectiveness, co-benefits, and failure modes into a single node type. The outcome_type property differentiates between categories. Effectiveness indicators have additional Indicator children with baseline/target/measured values. v0.2 added monetized_value_usd, value_recurrence, valuation_method, and beneficiary_program to support resilience-finance valuation and cross-program co-benefit attribution. Outcomes can attach to Solution (PRODUCES), Action (RESULTS_IN), or CapitalProject (PRODUCES extended in v0.2).",
+      "notes": "The outcome_type property differentiates between categories. Effectiveness indicators have additional Indicator children with baseline/target/measured values. v0.2 added monetized_value_usd, value_recurrence, valuation_method, and beneficiary_program for resilience-finance valuation. Outcomes attach to Solution (PRODUCES), Action (RESULTS_IN), or CapitalProject (PRODUCES). v0.3: FinancialInstrument may link here via CONTINGENT_ON for pay-for-success instruments.",
       "extract_hint": "Look for reported results, measured impacts, observed benefits, or documented failures \u2014 e.g., 'reduced flood events by 40%', 'improved air quality as co-benefit', 'system failed during extreme heat event'."
     },
     {
@@ -813,7 +813,7 @@
         }
       ],
       "vocabulary_bindings": [],
-      "notes": "Plans connect to goals (SETS_GOAL), solutions (PRESCRIBES), actions (CONTAINS_ACTION), stakeholders (ENGAGES, ISSUES), locations (COVERS_LOCATION), hazards (ADDRESSES_HAZARD), urban systems (TARGETS_URBAN_SYSTEM), and data sources (INFORMS).",
+      "notes": "Plans connect to goals (SETS), solutions (PRESCRIBES), actions (SPECIFIES), stakeholders (ENGAGES, ISSUES), locations (COVERS), hazards (ADDRESSES), urban systems (TARGETS), capital projects (SPECIFIES), and data sources (INFORMS).",
       "extract_hint": "Look for named planning documents \u2014 e.g., 'Climate Action Plan', 'Resilience Strategy', 'Adaptation Plan', 'Heat Action Plan'. Also look for plan metadata: adoption year, planning horizon, budget, monitoring approach."
     },
     {
@@ -896,7 +896,7 @@
           "field": "financing_status"
         }
       ],
-      "notes": "CDP city action records are Action instances. Actions may optionally be linked to a Solution class via IMPLEMENTS, but many actions cannot be resolved to a known solution class. Actions connect directly to goals (TARGETS_GOAL) and outcomes (RESULTS_IN) independent of solution resolution. v0.2: bound financing_status enum, and a CapitalProject may REALIZE this Action when a CIP line item delivers on this commitment.",
+      "notes": "CDP city action records are Action instances. Actions may optionally be linked to a Solution class via IMPLEMENTS, but many actions cannot be resolved to a known solution class. Actions connect directly to goals (PURSUES) and outcomes (RESULTS_IN) independent of solution resolution. A CapitalProject may REALIZES this Action when a CIP line item delivers on the commitment.",
       "extract_hint": "Look for specific planned or committed initiatives with timelines or budgets \u2014 e.g., 'install 500 rain gardens by 2028', 'establish cooling centers in 12 districts', 'retrofit 1,000 buildings for flood resilience'. Distinct from general solution descriptions."
     },
     {
@@ -1140,13 +1140,13 @@
           "note": "CDP project finance vocabulary, extended in v0.2 with US municipal CIP terms"
         }
       ],
-      "notes": "Distinguishes how money is structured from who provides it (FinancingSource). v0.2 added debt-service properties (principal, interest rate, term, annual debt service, maturity, issuer, credit rating) to support amortization and budget-impact analysis on Capital Improvement Plan line items. Now also referenced from CapitalProject via USES_INSTRUMENT.",
+      "notes": "v0.2 added debt-service properties (principal, interest rate, term, annual_debt_service, maturity, issuer, credit_rating) for amortization and budget-impact analysis. v0.3 added outcome_bond type and CONTINGENT_ON edge to Outcome for pay-for-success instruments.",
       "extract_hint": "Look for named financing mechanisms \u2014 e.g., 'general obligation bond', 'revenue bond backed by water rates', 'green bond', 'revolving loan fund', 'blended finance facility', 'grant from federal government', 'special assessment district'. For debt instruments, capture principal, term, interest rate, and annual debt service when stated."
     },
     {
       "id": "CapitalProject",
       "label": "Capital Project",
-      "definition": "A line item in a capital budget or Capital Improvement Plan (CIP): a discrete, named, multi-year capital expenditure with a project identifier, scope, cost profile, and financing structure. Distinct from Action: a CapitalProject is sourced from a budget document (e.g., a city CIP, OpenGov listing) and may or may not be climate-relevant \u2014 analysis of climate relevance happens after ingestion via REALIZES Action (the bridge to climate-plan commitments) and via inferred paths to Hazard/Vulnerability/ExposureUnit through any IMPLEMENTS Solution that REALIZES-linked Actions provide.",
+      "definition": "A line item in a capital budget or Capital Improvement Plan (CIP): a discrete, named, multi-year capital expenditure with a project identifier, scope, cost profile, and financing structure. May or may not be climate-relevant \u2014 climate relevance is inferred via REALIZES (Action) and through Solution-linked paths.",
       "properties": [
         {
           "id": "project_id",
@@ -1278,7 +1278,7 @@
           "field": "financing_status"
         }
       ],
-      "notes": "Added in v0.2 in response to the Salkin (Resilient Cities Catalyst, 5 May 2026) brief on resilience finance. Models the budget-document line item, distinct from the climate-plan commitment (Action). Lets the graph ingest a full Capital Improvement Plan (e.g., from OpenGov) and then test for climate relevance \u2014 the 'is the capital budget aligned with the climate plan?' question. Linked to plan commitments via REALIZES (CapitalProject \u2192 Action), to financing via FUNDED_BY (CapitalProject \u2192 FinancingSource) and USES_INSTRUMENT (CapitalProject \u2192 FinancialInstrument), to geography via DEPLOYED_IN, to outcomes via PRODUCES, to barriers via FACES, and to ownership via COMMISSIONED_BY and IMPLEMENTED_BY. Edges that are reachable via multi-hop (IMPLEMENTS Solution, MITIGATES Hazard, REDUCES_EXPOSURE, PURSUES ResilienceGoal, PROTECTS ExposureUnit) are deliberately not added directly to keep the schema lean.",
+      "notes": "Added v0.2 (Salkin/RCC resilience finance brief). Distinct from Action (climate-plan commitment): CapitalProject is sourced from budget documents (CIP, OpenGov) and tested for climate relevance post-ingestion. Edges reachable via multi-hop (MITIGATES, REDUCES_EXPOSURE, PURSUES) are deliberately omitted to keep the schema lean.",
       "extract_hint": "Look for budget-document line items \u2014 e.g., a CIP entry like 'Project 23-WTR-015: Watershed Drainage Improvements, $50M total, FY26\u2013FY30, water utility, revenue-bond financed', or 'Capital Project: South Beach Resilience Wall, $120M, federal cost-share + GO bond'. Capture project_id whenever stated. Distinct from action descriptions in climate plans (those are Actions); when a CIP entry can be tied to a climate-plan action, link via REALIZES."
     },
     {
@@ -2887,6 +2887,37 @@
     ]
   },
   "version_notes": [
+    {
+      "version": "v0.3",
+      "date": "2026-05-07",
+      "summary": "Schema cleanup and outcome-linked finance — remove redundant IMPROVES relationship, drop denormalized label columns, add performance-linked finance support.",
+      "changes": [
+        {
+          "type": "removed",
+          "text": "IMPROVES relationship (Solution → UrbanSystem). System improvements should be routed through Outcome nodes via PRODUCES."
+        },
+        {
+          "type": "removed",
+          "text": "Hazard.hazard_name property (denormalized label — resolve via vocabulary join on hazard_id)"
+        },
+        {
+          "type": "removed",
+          "text": "ResilienceGoal.goal_text property (denormalized label — resolve via vocabulary join on goal_id)"
+        },
+        {
+          "type": "added",
+          "text": "FinancialInstrument.instrument_type: outcome_bond (pay-for-success / environmental impact bond — repayment contingent on measured outcomes)"
+        },
+        {
+          "type": "added",
+          "text": "CONTINGENT_ON relationship (FinancialInstrument → Outcome) with trigger_threshold and evaluation_period properties — models pay-for-success instruments"
+        },
+        {
+          "type": "changed",
+          "text": "Definition/notes deconflicted across all entity types: removed redundancies, updated Plan/Action notes to reference current relationship IDs, shortened CapitalProject definition"
+        }
+      ]
+    },
     {
       "version": "v0.2",
       "date": "2026-05-05",
