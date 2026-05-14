@@ -29,31 +29,6 @@
     ]
   },
 
-  "scale_of_deployment": {
-    "_usage": "implementation.scale_of_deployment.value",
-    "values": [
-      { "id": "site", "name": "Site" },
-      { "id": "building", "name": "Building" },
-      { "id": "neighborhood", "name": "Neighborhood" },
-      { "id": "district", "name": "District" },
-      { "id": "city", "name": "City" },
-      { "id": "regional", "name": "Regional" },
-      { "id": "national", "name": "National" },
-      { "id": "multi_city", "name": "Multi-city" }
-    ]
-  },
-
-  "implementation_status": {
-    "_usage": "implementation.implementation_status.value",
-    "values": [
-      { "id": "proposed", "name": "Proposed" },
-      { "id": "scoping", "name": "Scoping" },
-      { "id": "pilot", "name": "Pilot" },
-      { "id": "operational", "name": "Operational" },
-      { "id": "scaling", "name": "Scaling" },
-      { "id": "completed", "name": "Completed" }
-    ]
-  },
 
   "evidence_level": {
     "_usage": "Outcome.evidence_level, PRODUCES.evidence_level, RESULTS_IN.evidence_level",
@@ -88,15 +63,21 @@
   },
 
   "co_benefit_category": {
-    "_source": "Aligned with CDP action_cobenefits categories",
-    "_usage": "outcomes.co_benefits[].category",
+    "_source": "Extended in v0.2 from CDP action_cobenefits with finance-oriented categories per Salkin framing",
+    "_usage": "Outcome.co_benefit_type",
     "values": [
-      { "id": "economic", "name": "Economic" },
       { "id": "public_health", "name": "Public Health" },
-      { "id": "environmental", "name": "Environmental" },
-      { "id": "social", "name": "Social" },
-      { "id": "governance", "name": "Governance" },
-      { "id": "mitigation", "name": "Mitigation (GHG reduction co-benefit)" }
+      { "id": "ecological", "name": "Ecological" },
+      { "id": "economic", "name": "Economic" },
+      { "id": "social_cohesion", "name": "Social Cohesion" },
+      { "id": "carbon_sequestration", "name": "Carbon Sequestration" },
+      { "id": "aesthetic_recreational", "name": "Aesthetic/Recreational" },
+      { "id": "asset_protection", "name": "Asset Protection" },
+      { "id": "revenue_stability", "name": "Revenue Stability" },
+      { "id": "operational_cost_reduction", "name": "Operational Cost Reduction" },
+      { "id": "tax_base_protection", "name": "Tax Base Protection" },
+      { "id": "service_continuity", "name": "Service Continuity" },
+      { "id": "other", "name": "Other" }
     ]
   },
 
@@ -256,6 +237,7 @@
       { "id": "municipal_capital_appropriation", "name": "Municipal Capital Appropriation", "description": "Direct appropriation from the city's own capital budget — 'pay-as-you-go' rather than bond-financed" },
       { "id": "ratepayer_funded", "name": "Ratepayer Funded", "description": "Funded directly through utility rates (Salkin's 'enterprise/revenue-supported pass-through to ratepayers'). Distinct from revenue_bond — ratepayer_funded is current-revenue funding, not debt issuance secured by future ratepayer revenue." },
       { "id": "direct_allocation", "name": "Direct Allocation", "description": "Direct public budget allocation without a structured instrument" },
+      { "id": "outcome_bond", "name": "Outcome Bond", "description": "Bond whose repayment or interest rate is contingent on achieving measurable adaptation outcomes (e.g., flood damage avoidance, heat mortality reduction). Linked via CONTINGENT_ON relationship to Outcome nodes." },
       { "id": "other", "name": "Other", "description": "Instrument type not covered by the above values. Use with instrument_type_other_description." }
     ]
   },

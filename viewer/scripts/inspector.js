@@ -47,7 +47,7 @@
   function showEmpty() {
     const featured = [
       { id: 'Solution', lede: 'The central hub — interventions classified by identity, with function expressed via typed relationships.' },
-      { id: 'Hazard',   lede: 'Bound to the C40/Arup typology with 13 categories and 31 specific hazards.' },
+      { id: 'Hazard',   lede: 'Structured by UNDRR HIPs 2025 — 7 hazard clusters and 50 specific hazards.' },
       { id: 'Plan',     lede: 'Binds goals, prescribed solutions, actions, and policy frameworks.' },
       { id: 'ResilienceGoal', lede: 'CRF 2024 objectives — bridges planning intent and measured outcomes.' },
       { id: 'CapitalProject', lede: 'CIP line items — tests whether capital budgets align with climate plans.' },
