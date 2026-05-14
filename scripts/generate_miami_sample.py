@@ -69,7 +69,9 @@ def build_ontology_context(ontology: dict) -> str:
             pid = p.get("name", p.get("id", "?"))
             rprops.append(pid)
         pstr = f" [properties: {', '.join(rprops)}]" if rprops else ""
-        lines.append(f"- {r['id']}: {r['source']} --{r['label']}--> {r['target']}{pstr}")
+        lines.append(
+            f"- {r['id']}: {r['source']} --{r['label']}--> {r['target']}{pstr}"
+        )
         if r.get("definition"):
             lines.append(f"  {r['definition']}")
 
@@ -124,16 +126,16 @@ Each edge:
 
 ## The Solution to Extract For
 
-Supabase ID: {solution['id']}
-Category: {c.get('category', '?')}
-Subcategory: {c.get('subcategory', '?')}
-Quote from plan: {c.get('quote', '')}
-Context from plan: {c.get('context', '')}
+Supabase ID: {solution["id"]}
+Category: {c.get("category", "?")}
+Subcategory: {c.get("subcategory", "?")}
+Quote from plan: {c.get("quote", "")}
+Context from plan: {c.get("context", "")}
 
 ## Location Context
-City: {city['name']}
-Latitude: {city['latitude']}, Longitude: {city['longitude']}
-Population: {city['population']}
+City: {city["name"]}
+Latitude: {city["latitude"]}, Longitude: {city["longitude"]}
+Population: {city["population"]}
 
 Extract all ontology entities and relationships connected to THIS specific solution. The solution is an action or intervention described in the plan — the plan itself is a separate Plan node that PRESCRIBES this solution."""
 
@@ -246,7 +248,8 @@ def extract_for_solution(
 
     # Count dangling edges (for diagnostics)
     dangling = sum(
-        1 for e in llm_edges
+        1
+        for e in llm_edges
         if e["source"] not in seen_ids or e["target"] not in seen_ids
     )
 
@@ -257,8 +260,12 @@ def extract_for_solution(
     for e in edges:
         rel_counts[e["type"]] = rel_counts.get(e["type"], 0) + 1
 
-    print(f"      Nodes: {len(nodes)} ({', '.join(f'{t}:{c}' for t, c in sorted(type_counts.items()))})")
-    print(f"      Edges: {len(edges)} ({', '.join(f'{t}:{c}' for t, c in sorted(rel_counts.items()))})")
+    print(
+        f"      Nodes: {len(nodes)} ({', '.join(f'{t}:{c}' for t, c in sorted(type_counts.items()))})"
+    )
+    print(
+        f"      Edges: {len(edges)} ({', '.join(f'{t}:{c}' for t, c in sorted(rel_counts.items()))})"
+    )
     if dangling:
         print(f"      ({dangling} dangling edges dropped)")
 
@@ -294,11 +301,15 @@ def slugify(text: str) -> str:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Generate per-solution Miami ontology samples")
+    parser = argparse.ArgumentParser(
+        description="Generate per-solution Miami ontology samples"
+    )
     parser.add_argument(
         "--pdf",
         type=Path,
-        default=Path.home() / "Downloads" / "miami-forever-climate-ready-2020-strategy.pdf",
+        default=Path.home()
+        / "Downloads"
+        / "miami-forever-climate-ready-2020-strategy.pdf",
     )
     parser.add_argument(
         "--output-dir",
@@ -333,16 +344,23 @@ def main():
     key = env["SUPABASE_SERVICE_ROLE_KEY"]
 
     print("Querying Supabase...")
-    cities = query_supabase(url, key, "cities?name=eq.Miami&select=id,name,loc_id,latitude,longitude,population")
+    cities = query_supabase(
+        url,
+        key,
+        "cities?name=eq.Miami&select=id,name,loc_id,latitude,longitude,population",
+    )
     if not cities:
         print("ERROR: Miami not found")
         sys.exit(1)
     city = cities[0]
     print(f"  City: {city['name']} (loc_id={city['loc_id']})")
 
-    solutions = query_supabase(url, key, "solutions?loc_id=eq.76&select=id,publication,crawler,taxonomy")
+    solutions = query_supabase(
+        url, key, "solutions?loc_id=eq.76&select=id,publication,crawler,taxonomy"
+    )
     published = [
-        s for s in solutions
+        s
+        for s in solutions
         if s.get("publication", {}).get("status") == "published"
         or s.get("publication", {}).get("visibility") == "public"
     ]
@@ -350,7 +368,9 @@ def main():
 
     # Extract PDF
     pdf_text = extract_pdf_text(args.pdf)
-    print(f"  PDF: {len(pdf_text)} chars from {len(PdfReader(str(args.pdf)).pages)} pages")
+    print(
+        f"  PDF: {len(pdf_text)} chars from {len(PdfReader(str(args.pdf)).pages)} pages"
+    )
 
     # Process each solution
     args.output_dir.mkdir(parents=True, exist_ok=True)
