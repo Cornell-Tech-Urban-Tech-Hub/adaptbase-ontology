@@ -1,0 +1,109 @@
+{
+  "_source": "AdaptBase classification of administrative jurisdiction types. Designed to span global governance structures from national to sub-municipal level.",
+  "_usage": "jurisdiction.jurisdiction_kind",
+  "_note": "Flat vocabulary (no hierarchy) — admin_level integer on Jurisdiction provides ordering hints. Values cover the most common forms of governed territory encountered in climate adaptation planning literature globally.",
+  "terms": [
+    {
+      "id": "country",
+      "name": "Country",
+      "description": "Sovereign nation-state (admin_level ~2).",
+      "examples": "United States, India, Netherlands"
+    },
+    {
+      "id": "state_province",
+      "name": "State / Province",
+      "description": "First-level subnational division with significant legislative autonomy.",
+      "examples": "California, Maharashtra, Queensland, Ontario"
+    },
+    {
+      "id": "prefecture",
+      "name": "Prefecture",
+      "description": "First-level subnational unit in systems using prefectural governance (Japan, Greece, etc.).",
+      "examples": "Tokyo-to, Osaka-fu, Attica"
+    },
+    {
+      "id": "region",
+      "name": "Region",
+      "description": "Subnational administrative region, typically between state and county level.",
+      "examples": "Ile-de-France, Lombardy, Western Cape"
+    },
+    {
+      "id": "county",
+      "name": "County",
+      "description": "Second- or third-level administrative division, often encompassing multiple municipalities.",
+      "examples": "Miami-Dade County, King County, Surrey"
+    },
+    {
+      "id": "municipality",
+      "name": "Municipality",
+      "description": "General-purpose local government unit — the most common jurisdiction type for city-level adaptation planning.",
+      "examples": "Rotterdam, Medellín, Surat, Portland"
+    },
+    {
+      "id": "consolidated_city_county",
+      "name": "Consolidated City-County",
+      "description": "Merged city and county government functioning as a single entity.",
+      "examples": "Jacksonville-Duval, Nashville-Davidson, San Francisco"
+    },
+    {
+      "id": "metropolitan_government",
+      "name": "Metropolitan Government",
+      "description": "Governing authority spanning a metropolitan area, often cross-municipal.",
+      "examples": "Greater London Authority, Metro Manila Development Authority, Tokyo Metropolitan Government"
+    },
+    {
+      "id": "combined_authority",
+      "name": "Combined Authority",
+      "description": "Formally constituted group of local authorities governing jointly, especially in the UK devolution model.",
+      "examples": "Greater Manchester Combined Authority, West Midlands Combined Authority"
+    },
+    {
+      "id": "regional_council",
+      "name": "Regional Council",
+      "description": "Elected or appointed body governing at a regional level, often with planning and infrastructure powers.",
+      "examples": "Auckland Council, Bay of Plenty Regional Council"
+    },
+    {
+      "id": "special_district",
+      "name": "Special District",
+      "description": "Limited-purpose government for a specific function (water, flood control, transit) within defined boundaries.",
+      "examples": "South Florida Water Management District, Bay Area Air Quality Management District"
+    },
+    {
+      "id": "tribal_nation",
+      "name": "Tribal Nation",
+      "description": "Sovereign indigenous government with jurisdiction over defined territory.",
+      "examples": "Navajo Nation, Lummi Nation, Torres Strait Island Regional Council"
+    },
+    {
+      "id": "autonomous_region",
+      "name": "Autonomous Region",
+      "description": "Subnational entity with significant self-governance, often based on ethnic, cultural, or geographic distinctiveness.",
+      "examples": "Hong Kong SAR, Catalonia, Kurdistan Region"
+    },
+    {
+      "id": "district",
+      "name": "District",
+      "description": "Sub-municipal or sub-county administrative division.",
+      "examples": "Dharavi (Mumbai), Kreuzberg (Berlin), Wards in Dar es Salaam"
+    },
+    {
+      "id": "neighborhood",
+      "name": "Neighborhood",
+      "description": "Smallest recognized administrative or community-defined area within a municipality.",
+      "examples": "Overtown (Miami), Fener-Balat (Istanbul)"
+    },
+    {
+      "id": "borough",
+      "name": "Borough",
+      "description": "Administrative division within a larger city, with some degree of self-governance.",
+      "examples": "Manhattan (NYC), Southwark (London), Ixelles (Brussels)"
+    },
+    {
+      "id": "other",
+      "name": "Other",
+      "description": "Jurisdiction type not captured by the above categories. Use sparingly and note the specific type in entity description.",
+      "examples": "Free economic zone, military district, papal territory"
+    }
+  ]
+}

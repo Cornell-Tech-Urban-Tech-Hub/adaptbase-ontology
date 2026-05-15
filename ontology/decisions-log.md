@@ -1,14 +1,67 @@
 # Ontology Design Decisions Log
 
 **Project:** Resilience Scanner - Climate Adaptation Solutions Ontology  
-**Version:** 0.2  
-**Last Updated:** 2026-05-05
+**Version:** 0.5.0  
+**Last Updated:** 2026-05-15
 
 ---
 
 ## Purpose
 
 This log documents key design decisions in the ontology development process, including rationale, alternatives considered, and implications for future work.
+
+---
+
+## Decision 29 (v0.5.0): Location → Jurisdiction rename + Place entity + Wikidata QID as canonical PK
+
+**Date:** 2026-05-15  
+**Context:** Replacing the legacy `loc_id` / `cities.csv` lookup system with a proper geographic entity model. The WRI 980-city dataset used arbitrary integers (`loc_id`) as join keys — non-standard, not resolvable externally, limiting. Climate adaptation literature overwhelmingly references jurisdictions (cities, districts, regions), with non-jurisdictional geographic features (watersheds, corridors) as a minority case.
+
+### Decision
+
+Bump to **v0.5.0** (minor — schema change). Four coordinated changes:
+
+**A. Rename `Location` → `Jurisdiction`** — reflects that the vast majority of geographic entities in adaptation planning are governed territories. Updated definition, extract_hint, and all inbound relationships (IMPLEMENTED_IN, COVERS, DEPLOYED_IN, LOCATED_IN, WITHIN).
+
+**B. Rework Jurisdiction properties:**
+- **Added:** `wikidata_qid` (canonical PK, required), `jurisdiction_kind` (vocabulary-bound, required), `admin_level` (OSM-style integer hint), `name_local`, `iso_3166_2`, `country_iso` (replaces `country`), `codes` (object: osm_relation_id, geonames_id, gadm_gid, oecd_fua_code), `aliases`, `population_year`
+- **Kept:** `name`, `population`, `climate_zone`, `coastal_status`, `income_classification`, `geometry` (redefined as centroid Point only from Wikidata P625)
+- **Dropped:** `loc_id` (replaced by wikidata_qid), `deployment_context` (vague, unused), `region` (redundant with admin hierarchy via WITHIN), `location_type` (replaced by jurisdiction_kind vocabulary)
+
+**C. New entity: `Place`** — lightweight type for non-jurisdictional geographic features (watershed, corridor, coastline, site, park, infrastructure_zone). Properties: name (required), place_type (enum, required), geometry, description, wikidata_qid (optional). Linked to containing Jurisdiction via WITHIN.
+
+**D. New relationship: `GOVERNS` (Stakeholder → Jurisdiction)** — models the city-as-institution (Stakeholder, e.g. "City of Miami") governing the city-as-place (Jurisdiction, e.g. "Miami, FL"). This dual modeling is intentional: spatial properties and institutional properties do not belong on the same node.
+
+### Why Wikidata QID as canonical PK
+
+1. **Globally unique** — no collisions, no local integer sequences
+2. **CC0 licensed** — zero risk of license contamination
+3. **Built-in crosswalks** — ISO 3166, GeoNames, OSM, GADM via Wikidata properties
+4. **Resolvable** — any QID can be dereferenced to structured data via SPARQL
+5. **Community maintained** — far more durable than any single research dataset
+
+### Why one Jurisdiction type with vocabulary, not class hierarchy
+
+A class hierarchy (City extends Jurisdiction, County extends Jurisdiction, etc.) would:
+- Bloat the type list with 15+ near-identical entity structures
+- Require promotion/demotion when classifications are debated
+- Force extraction models to commit to a class at entity-creation time
+
+Instead: a single `Jurisdiction` type with `jurisdiction_kind` (vocabulary-bound) that can be updated without schema changes, and `admin_level` as a loose ordering hint.
+
+### Why admin_level is a loose hint, not strict hierarchy
+
+OSM admin_levels vary by country (admin_level=6 is a county in the US, a municipality in Germany). We store it as a numeric hint for display/sorting but do NOT enforce hierarchy from it — the WITHIN relationship carries the actual topology.
+
+### ODbL avoidance
+
+OSM relation IDs are stored as passive pointers (`codes.osm_relation_id`) — no geometry, tag data, or derived attributes imported. This keeps all AdaptBase data unencumbered by ODbL share-alike requirements.
+
+### Alternatives considered
+
+- **Option A: Keep Location, add Jurisdiction as separate type** — rejected; would require disambiguating which type to use for cities, creating confusion.
+- **Option B: Split into Place + Government** — rejected; overly abstract for the domain. Most geographic entities in adaptation literature ARE jurisdictions.
+- **Option C (chosen): Rename Location → Jurisdiction, add Place for non-jurisdictional** — cleanest separation, zero rewiring cost (no Location data exists in DB yet).
 
 ---
 

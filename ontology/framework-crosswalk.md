@@ -427,3 +427,58 @@ These are urban growth and spatial planning challenges — they provide context 
 | Urban Blight | Infrastructure.condition | Vulnerability | Physical-social compound |
 | Water Insecurity | UrbanSystem (hydrological_water) | Vulnerability | System + vulnerability |
 | Youth Disenfranchisement | Vulnerability.affected_group | — | Specific vulnerable group |
+
+---
+
+## 5. Geographic and Jurisdictional Coding Standards
+
+**Added:** v0.5.0 (2026-05-15)
+
+This section documents the external identifier systems used to code Jurisdiction entities
+and their license/usage constraints.
+
+### 5.1 Canonical Identifier: Wikidata QID
+
+| Attribute | Value |
+|-----------|-------|
+| Example | Q60 (New York City), Q36091 (Miami) |
+| License | CC0 (public domain) |
+| Coverage | Global — ~200K administrative entities |
+| Crosswalks built-in | ISO 3166, GeoNames, OSM, GADM, NUTS, FIPS |
+| API | wbsearchentities, SPARQL (query.wikidata.org) |
+| Role in AdaptBase | **Primary key** for Jurisdiction entities |
+
+**Why Wikidata QID:** Globally unique, zero licensing risk, maintained by a large community,
+provides structured properties (coordinates, population, admin hierarchy) via SPARQL.
+The previous `loc_id` (arbitrary WRI dataset integer) was non-standard, not resolvable
+externally, and limited to ~980 cities.
+
+### 5.2 Secondary Identifiers (passive pointers in `codes` object)
+
+| System | Property | License | Usage in AdaptBase |
+|--------|----------|---------|-------------------|
+| ISO 3166-1 alpha-2 | `country_iso` | Free standard | Country code (top-level property) |
+| ISO 3166-2 | `iso_3166_2` | Free standard | Subdivision code (top-level property) |
+| GeoNames ID | `codes.geonames_id` | CC-BY 4.0 | Pointer only — no bulk data import |
+| OSM Relation ID | `codes.osm_relation_id` | ODbL | **Pointer only** — no geometry or attribute import |
+| GADM GID | `codes.gadm_gid` | Non-commercial | Pointer only — no geometry import |
+| OECD FUA Code | `codes.oecd_fua_code` | Free | Functional urban area crosswalk (~30 countries) |
+
+### 5.3 License Constraints
+
+- **ODbL (OpenStreetMap):** Any dataset that incorporates OSM-derived data must be
+  released under ODbL. We store the OSM relation ID as a crosswalk pointer only —
+  no geometry, tag data, or derived attributes are imported. This keeps AdaptBase
+  data unencumbered.
+- **GeoNames CC-BY:** Attribution required if data is used. We store the ID for
+  crosswalk purposes but do not bulk-import GeoNames data.
+- **GADM non-commercial:** Cannot be used in commercial products. Pointer only.
+- **Wikidata CC0:** No restrictions. All Wikidata-sourced properties (coordinates,
+  population, admin hierarchy) are safe to store and redistribute.
+
+### 5.4 Geometry Policy
+
+- **Centroids (Point):** Sourced from Wikidata P625 (CC0). Stored in `geometry`.
+- **Polygons:** Not currently stored. If polygon boundaries are needed in future,
+  they should come from a separate ODbL-compliant layer or from CC0/public-domain
+  sources (e.g., Natural Earth for country/state boundaries).
