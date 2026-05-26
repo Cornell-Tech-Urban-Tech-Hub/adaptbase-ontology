@@ -8,7 +8,8 @@
     'ExposureUnit': 'Risk',
     'Barrier': 'Risk',
     // Context — where solutions operate and who governs them
-    'Location': 'Context',
+    'Jurisdiction': 'Context',
+    'Place': 'Context',
     'UrbanSystem': 'Context',
     'Stakeholder': 'Context',
     'Supplier': 'Finance',
