@@ -20,15 +20,9 @@
     outerRadius: 460,
   };
 
-  // Sector angles per cluster (radians, starting from top going clockwise)
-  // Order: Risk, Programs, Outcomes, Finance, Context
-  const SECTOR_ANGLES = {
-    'Risk':     -Math.PI / 2,                    // top (12 o'clock)
-    'Programs':  -Math.PI / 2 + 2*Math.PI/5,    // top-right
-    'Outcomes':  -Math.PI / 2 + 4*Math.PI/5,    // bottom-right
-    'Finance':   -Math.PI / 2 + 6*Math.PI/5,    // bottom-left
-    'Context':   -Math.PI / 2 + 8*Math.PI/5,    // top-left
-  };
+  // Semantic sector order, clockwise with Risk centered at 12 o'clock.
+  // This keeps the graph shape stable while still computing node positions.
+  const SECTOR_ORDER = ['Risk', 'Finance', 'Outcomes', 'Programs', 'Context'];
 
   // No hard ring assignments — radius is computed continuously from node degree
 
@@ -59,6 +53,20 @@
     return 22 + Math.min(58, Math.sqrt(deg) * 13);
   }
 
+  function seededRandom(seedText) {
+    let seed = 2166136261;
+    for (let i = 0; i < seedText.length; i++) {
+      seed ^= seedText.charCodeAt(i);
+      seed = Math.imul(seed, 16777619);
+    }
+    return () => {
+      seed = Math.imul(seed ^ (seed >>> 15), 2246822507);
+      seed = Math.imul(seed ^ (seed >>> 13), 3266489909);
+      seed ^= seed >>> 16;
+      return (seed >>> 0) / 4294967296;
+    };
+  }
+
   // Per-node sector constraints (populated during layout)
   let nodeSectorBounds = new Map();
   // Sector geometry for drawing separators
@@ -81,52 +89,13 @@
       clusterBuckets.get(n.cluster).push(n);
     }
 
-    // Determine optimal sector order to minimize inter-cluster edge length
-    const clusterNames = Object.keys(SECTOR_ANGLES);
-
-    const interClusterEdges = {};
-    for (const a of clusterNames) for (const b of clusterNames) {
-      interClusterEdges[a + '::' + b] = 0;
-    }
-    for (const l of links) {
-      const ca = l.source.cluster, cb = l.target.cluster;
-      if (ca === 'Solution' || cb === 'Solution') continue;
-      if (ca !== cb) {
-        interClusterEdges[ca + '::' + cb]++;
-        interClusterEdges[cb + '::' + ca]++;
-      }
-    }
-
-    function permutations(arr) {
-      if (arr.length <= 1) return [arr];
-      const result = [];
-      for (let i = 0; i < arr.length; i++) {
-        const rest = [...arr.slice(0, i), ...arr.slice(i + 1)];
-        for (const p of permutations(rest)) result.push([arr[i], ...p]);
-      }
-      return result;
-    }
-
-    function scorePerm(perm) {
-      let cost = 0;
-      for (let i = 0; i < perm.length; i++) {
-        for (let j = i + 1; j < perm.length; j++) {
-          const dist = Math.min(j - i, perm.length - (j - i));
-          const edges = interClusterEdges[perm[i] + '::' + perm[j]];
-          cost += edges * dist;
-        }
-      }
-      return cost;
-    }
-
-    let bestOrder = clusterNames;
-    let bestCost = Infinity;
-    for (const perm of permutations(clusterNames)) {
-      const c = scorePerm(perm);
-      if (c < bestCost) { bestCost = c; bestOrder = perm; }
-    }
-
-    const sectorNames = bestOrder;
+    const unknownClusters = [...clusterBuckets.keys()]
+      .filter(cluster => !SECTOR_ORDER.includes(cluster))
+      .sort();
+    const sectorNames = [
+      ...SECTOR_ORDER.filter(cluster => clusterBuckets.has(cluster)),
+      ...unknownClusters,
+    ];
     const totalGap = sectorNames.length * 0.04;
     const availableArc = 2 * Math.PI - totalGap;
     const gapArc = totalGap / sectorNames.length;
@@ -317,6 +286,7 @@
     }
 
     const sim = d3.forceSimulation(nodes)
+      .randomSource(seededRandom('adaptbase-ontology-layout-v1'))
       .force('charge', d3.forceManyBody().strength(-200).distanceMax(400))
       .force('collide', d3.forceCollide().radius(d => radiusFor(d) + 16).strength(1).iterations(3))
       .force('radial', d3.forceRadial(
@@ -380,16 +350,36 @@
     const cx = (minX + maxX) / 2;
     const cy = (minY + maxY) / 2;
 
-    // Padding around graph (10% on each side)
-    const padding = 0.92;
-    const scaleX = (W * padding) / graphW;
-    const scaleY = (H * padding) / graphH;
-    const k = Math.min(scaleX, scaleY, 1.5); // cap at 1.5x to avoid over-zooming small graphs
+    const toolbar = document.querySelector('.graph-toolbar');
+    const legend = document.querySelector('.graph-legend');
+    const logo = document.querySelector('.jacobs-float');
+    const toolbarHeight = toolbar && getComputedStyle(toolbar).display !== 'none'
+      ? toolbar.getBoundingClientRect().height
+      : 0;
+    const legendVisible = legend && getComputedStyle(legend).display !== 'none';
+    const logoVisible = logo && getComputedStyle(logo).display !== 'none';
+    const sideInset = legendVisible ? 48 : 28;
+
+    const insets = {
+      top: Math.min(H * 0.24, toolbarHeight + 24),
+      right: sideInset,
+      bottom: logoVisible ? 52 : 32,
+      left: sideInset,
+    };
+    const viewW = Math.max(280, W - insets.left - insets.right);
+    const viewH = Math.max(240, H - insets.top - insets.bottom);
+    const viewCX = insets.left + viewW / 2;
+    const viewCY = insets.top + viewH / 2;
+
+    const padding = 0.9;
+    const scaleX = (viewW * padding) / graphW;
+    const scaleY = (viewH * padding) / graphH;
+    const k = Math.min(scaleX, scaleY, 1.2);
 
     transform = {
       k: k,
-      x: W / 2 - cx * k,
-      y: H / 2 - cy * k,
+      x: viewCX - cx * k,
+      y: viewCY - cy * k,
     };
   }
 
@@ -972,6 +962,8 @@
 
   // --- mobile inspector toggle ---
   let mobileInspectorToggle = null;
+  let graphPane = null;
+  let fullscreenToggle = null;
 
   function setMobileToggleUI(open) {
     if (!mobileInspectorToggle) return;
@@ -1000,6 +992,57 @@
   function resetZoom() {
     fitToView();
     draw();
+  }
+
+  function currentFullscreenElement() {
+    return document.fullscreenElement || document.webkitFullscreenElement || null;
+  }
+
+  function isGraphFullscreen() {
+    return currentFullscreenElement() === graphPane || graphPane?.classList.contains('graph-pane-fullscreen');
+  }
+
+  function setFullscreenUI(open) {
+    if (!fullscreenToggle || !graphPane) return;
+    fullscreenToggle.setAttribute('aria-label', open ? 'Exit graph fullscreen' : 'Enter graph fullscreen');
+    fullscreenToggle.setAttribute('title', open ? 'Exit fullscreen' : 'Enter fullscreen');
+    fullscreenToggle.textContent = open ? '×' : '⛶';
+    document.body.classList.toggle('graph-fullscreen-open', open);
+    if (!open) graphPane.classList.remove('graph-pane-fullscreen');
+    requestAnimationFrame(() => {
+      resize();
+      fitToView();
+      draw();
+    });
+  }
+
+  async function toggleGraphFullscreen() {
+    if (!graphPane) return;
+
+    if (isGraphFullscreen()) {
+      if (currentFullscreenElement()) {
+        const exit = document.exitFullscreen || document.webkitExitFullscreen;
+        if (exit) await exit.call(document);
+        else setFullscreenUI(false);
+      } else {
+        setFullscreenUI(false);
+      }
+      return;
+    }
+
+    const enter = graphPane.requestFullscreen || graphPane.webkitRequestFullscreen;
+    if (enter) {
+      try {
+        await enter.call(graphPane);
+        setFullscreenUI(true);
+      } catch {
+        graphPane.classList.add('graph-pane-fullscreen');
+        setFullscreenUI(true);
+      }
+    } else {
+      graphPane.classList.add('graph-pane-fullscreen');
+      setFullscreenUI(true);
+    }
   }
 
   function animateTransition(duration, onTick, onDone) {
@@ -1153,6 +1196,7 @@
 
 
   function init() {
+    graphPane = document.getElementById('graph-pane');
     canvas = document.getElementById('graph');
 
     canvas.addEventListener('mousemove', onMouseMove);
@@ -1175,6 +1219,15 @@
     document.getElementById('zoom-in').onclick = () => zoomAt(W/2, H/2, 1.25);
     document.getElementById('zoom-out').onclick = () => zoomAt(W/2, H/2, 1/1.25);
     document.getElementById('zoom-reset').onclick = resetZoom;
+    fullscreenToggle = document.getElementById('graph-fullscreen');
+    if (fullscreenToggle) fullscreenToggle.addEventListener('click', toggleGraphFullscreen);
+    document.addEventListener('fullscreenchange', () => setFullscreenUI(currentFullscreenElement() === graphPane));
+    document.addEventListener('webkitfullscreenchange', () => setFullscreenUI(currentFullscreenElement() === graphPane));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && graphPane?.classList.contains('graph-pane-fullscreen')) {
+        setFullscreenUI(false);
+      }
+    });
 
     mobileInspectorToggle = document.getElementById('mobile-inspector-toggle');
     if (mobileInspectorToggle) {
