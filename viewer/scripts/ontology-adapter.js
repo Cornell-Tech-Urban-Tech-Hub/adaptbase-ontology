@@ -67,6 +67,14 @@
   }
 
   function ontologyToGraph(ontology) {
+    const unmappedTypes = ontology.types.filter(type => !CLUSTER_ASSIGNMENTS[type.id]);
+    if (unmappedTypes.length) {
+      console.warn(
+        'Ontology types missing viewer cluster assignments:',
+        unmappedTypes.map(type => type.id).join(', ')
+      );
+    }
+
     const nodes = ontology.types.map(type => {
       const cluster = CLUSTER_ASSIGNMENTS[type.id] || 'Planning';
       const outgoing = ontology.relationships.filter(r => r.source === type.id).length;

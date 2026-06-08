@@ -56,25 +56,30 @@
 
     el().innerHTML = `
       <div class="inspector-empty">
-        <span class="mono-eyebrow">Inspector</span>
-        <h3>Select a node or relationship to inspect it.</h3>
-        <p class="small" style="color:var(--fg-3); font-size:13px; line-height:1.55; margin:0;">Or start with one of these:</p>
-        <ul>
-          ${featured.map((f, i) => {
-            const n = window.Graph.getNodeById(f.id);
-            if (!n) return '';
-            const color = window.Graph.getClusterColor(n.cluster);
-            return `
-              <li data-featured="${f.id}">
-                <span class="dot" style="width:8px; height:8px; border-radius:50%; background:${color}; display:inline-block; flex-shrink:0; margin-top:6px;"></span>
-                <span style="display:flex; flex-direction:column; gap:4px; flex:1;">
-                  <strong style="color:var(--fg-1);">${esc(n.label)}</strong>
-                  <span style="color:var(--fg-3);">${esc(f.lede)}</span>
-                </span>
-              </li>
-            `;
-          }).join('')}
-        </ul>
+        <div class="inspector-empty-head">
+          <span class="mono-eyebrow">Inspector</span>
+          <h3>Select a node or relationship.</h3>
+          <p>Review definitions, properties, relationship context, design notes, and comments.</p>
+        </div>
+        <div class="quick-picks">
+          <h4>Quick picks</h4>
+          <ul>
+            ${featured.map((f) => {
+              const n = window.Graph.getNodeById(f.id);
+              if (!n) return '';
+              const color = window.Graph.getClusterColor(n.cluster);
+              return `
+                <li data-featured="${f.id}">
+                  <span class="dot" style="background:${color};"></span>
+                  <span class="quick-pick-text">
+                    <strong>${esc(n.label)}</strong>
+                    <span>${esc(f.lede)}</span>
+                  </span>
+                </li>
+              `;
+            }).join('')}
+          </ul>
+        </div>
       </div>
     `;
     el().querySelectorAll('[data-featured]').forEach(li => {
