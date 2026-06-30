@@ -148,6 +148,20 @@ GCoM CRF is the strongest alignment case. Our planning + solutions nodes were im
 
 **Standardization opportunity**: GCoM uses a specific action category vocabulary (~20 categories). We should create a crosswalk from our `Solution.category_id` values to GCoM categories and document it in `vocabularies/`. This is metadata work, not a schema change.
 
+### CDP action-, goal-, and project-grain fields → Ontology edges (v0.6)
+
+CDP city-action rows and the 2024 resilience fact table tag hazards, sectors, and funders at the **action** and **resilience-goal** grain — not the plan grain. v0.6 added typed edges so these map to queryable graph edges instead of being downgraded to plan-level statements, mis-attributed, or buried in a property. The edges reuse the existing `ADDRESSES` / `TARGETS` / `FUNDED_BY` relationship ids, distinguished by `source` (see decisions-log Decision 30).
+
+| CDP / 2024 fact-table field | Ontology edge | Coverage | Notes |
+|---|---|---|---|
+| `climate_hazard_s_that_action` | `ADDRESSES` (Action → Hazard) | **Full** | Action-grain; not the same as plan-level `Plan ADDRESSES Hazard` or solution-level `Solution MITIGATES Hazard` |
+| `goal_hazards` | `ADDRESSES` (ResilienceGoal → Hazard) | **Full** | Goal-grain risk target; not downgraded to plan- or action-level |
+| `sectors_adaptation_action` | `TARGETS` (Action → UrbanSystem) | **Full** | Action-grain; no `Action → Solution` resolution required |
+| `project_area` | `TARGETS` (CapitalProject → UrbanSystem) | **Full** | Promotes system domain from `CapitalProject.asset_class` property to a queryable edge |
+| `funding_source_s` | `FUNDED_BY` (Action → FinancingSource) | **Full** | Action-grain funder; no `CapitalProject` / `FinancialInstrument` resolution required |
+
+> The GCoM CRF table above already mapped `FUNDED_BY.amount_usd` and `FinancingSource.source_type`. The `FUNDED_BY` relationship itself was referenced from v0.2 but not actually defined in the ontology until v0.6, which adds both the `Action → FinancingSource` and `CapitalProject → FinancingSource` rows.
+
 ---
 
 ## 4. RCC Shocks + Stresses Integration Decision

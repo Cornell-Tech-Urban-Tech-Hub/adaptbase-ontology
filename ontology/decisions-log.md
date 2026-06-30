@@ -1,14 +1,55 @@
 # Ontology Design Decisions Log
 
 **Project:** Resilience Scanner - Climate Adaptation Solutions Ontology  
-**Version:** 0.5.0  
-**Last Updated:** 2026-05-15
+**Version:** 0.6  
+**Last Updated:** 2026-06-30
 
 ---
 
 ## Purpose
 
 This log documents key design decisions in the ontology development process, including rationale, alternatives considered, and implications for future work.
+
+---
+
+## Decision 30 (v0.6): Action-, goal-, and project-level edges for CDP / 2024 fact-table data; land the FUNDED_BY relationship
+
+**Date:** 2026-06-30
+**Context:** CDP city-action records and the 2024 resilience "fact table" tag hazards, sectors, and funders at the **action** and **resilience-goal** grain. The ontology could previously express these only at the **plan** grain (`Plan ADDRESSES Hazard`, `Plan TARGETS UrbanSystem`) or via the solution path (`Solution OPERATES_ON UrbanSystem`, `Solution MITIGATES Hazard`). So an action that addresses a hazard, a goal that targets a hazard, an action that names a funder, or a capital project whose system domain is known were all either downgraded to a plan-level statement, mis-attributed, or buried in a property. Most CDP actions are free-text operational actions that cannot be resolved to a canonical `Solution`, so an `Action → Solution → …` path is not a viable carrier for these fields.
+
+### Decision
+
+Bump to **v0.6** (minor — schema change). Add six relationship rows, **reusing existing relationship ids** across new `(source, target)` pairs. The viewer and graph model key edges by `id + source + target` (see `viewer/scripts/ontology-adapter.js`), and v0.2 already established this duplicate-id pattern (`DEPLOYED_IN`, `SPECIFIES`, `USES_INSTRUMENT`, `PRODUCES`, `IMPLEMENTED_BY`), so the grains coexist cleanly.
+
+| CDP / 2024 fact-table field | New edge | Grain |
+|---|---|---|
+| `climate_hazard_s_that_action` | `ADDRESSES` (Action → Hazard) | action |
+| `goal_hazards` | `ADDRESSES` (ResilienceGoal → Hazard) | resilience goal |
+| `sectors_adaptation_action` | `TARGETS` (Action → UrbanSystem) | action |
+| `project_area` | `TARGETS` (CapitalProject → UrbanSystem) | capital project |
+| `funding_source_s` | `FUNDED_BY` (Action → FinancingSource) | action |
+| — (latent bug fix) | `FUNDED_BY` (CapitalProject → FinancingSource) | capital project |
+
+### Why reuse `ADDRESSES` / `TARGETS` rather than mint new ids
+
+`ADDRESSES` already means "this thing identifies/targets this hazard" and `TARGETS` already means "this thing focuses on this urban system." The action/goal/project versions are the same semantics at a finer grain; distinguishing them by `source` (not by a new id like `ACTION_ADDRESSES`) keeps the relationship vocabulary small and matches the established duplicate-id convention. The `Action`/`ResilienceGoal` `ADDRESSES Hazard` rows deliberately omit `assessment_scope`/`assessment_year` — those are plan-assessment concepts that don't apply at the action/goal grain.
+
+### Why `CapitalProject TARGETS UrbanSystem` reverses part of Decision 28
+
+The v0.2 "CapitalProject Edge Economy" decision deliberately omitted a direct `CapitalProject → UrbanSystem` edge and collapsed system domain into the `asset_class` property, reasoning it was reachable via `REALIZES Action → IMPLEMENTS Solution → OPERATES_ON UrbanSystem`. In practice that path rarely resolves (most CIP/CDP project rows never reach a canonical Solution), and `asset_class` is a coarse local annotation, not a queryable graph edge. CDP `project_area` gives the system domain directly. v0.6 therefore adds the direct edge using `TARGETS` (program-grain "focuses on this system"), **not** `OPERATES_ON` (Solution-grain "deployed within/modifies"). `asset_class` is retained alongside the edge as the budget-document's own annotation.
+
+### Why land `FUNDED_BY` now
+
+`FUNDED_BY` was referenced in v0.2's `change_history`, the "Resilience Finance — Five-Axis Split" design note, and the `CapitalProject USES_INSTRUMENT` notes — all stating `CapitalProject FUNDED_BY FinancingSource` — but **no `FUNDED_BY` relationship object was ever added to the relationships array** (Decision 28 claimed it; it was never implemented). Adding the requested `Action FUNDED_BY FinancingSource` is the moment to also land the long-referenced `CapitalProject FUNDED_BY FinancingSource` row, completing the documented financing chain `FinancingSource ←FUNDED_BY← CapitalProject →USES_INSTRUMENT→ FinancialInstrument ←CHANNELS_THROUGH← FinancingSource`. `FUNDED_BY` names *who provides the money*; `USES_INSTRUMENT` names *the structural form of the capital* — they are complementary, not redundant.
+
+### Also corrected
+
+Stale metadata counts: `relationships_count` 51 → 60 (the v0.5.1 array already held 54 rows but declared 51; +6 new v0.6 rows) and `types_count` 21 → 22 (`Place`, added in v0.5.0, was never counted).
+
+### Implications / not done
+
+- No new entity types, vocabularies, or enum values; no viewer code changes (rendering is generic and all six entities already have cluster assignments).
+- Provenance: every new row carries `claim_ids` (optional), consistent with the action/plan-grain convention.
 
 ---
 
