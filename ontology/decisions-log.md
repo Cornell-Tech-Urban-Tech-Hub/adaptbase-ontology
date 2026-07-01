@@ -1,14 +1,38 @@
 # Ontology Design Decisions Log
 
 **Project:** Resilience Scanner - Climate Adaptation Solutions Ontology  
-**Version:** 0.6  
-**Last Updated:** 2026-06-30
+**Version:** 0.6.1  
+**Last Updated:** 2026-07-01
 
 ---
 
 ## Purpose
 
 This log documents key design decisions in the ontology development process, including rationale, alternatives considered, and implications for future work.
+
+---
+
+## Decision 31 (v0.6.1): CDP hazard value crosswalk
+
+**Date:** 2026-07-01
+**Context:** Decision 30 (v0.6) added the `Action ADDRESSES Hazard` and `ResilienceGoal ADDRESSES Hazard` edges so CDP's action/goal-grain hazard tags could be represented structurally. That decision covered the edge *shape* but not whether the raw CDP hazard strings actually resolve to `hazard_id` values. Checking against the 2024 fact table (`research/resources/CDP_cities_adaptation_fact_table/`, 5,552 actions) showed `action_hazards_en` and `goal_hazards` share a closed enum of 23 controlled values (plus a sentinel and a long tail of free-text write-ins) that had never been crosswalked to `hazards.json`.
+
+### Decision
+
+Bump to **v0.6.1** (patch — vocabulary/metadata addition, no schema change). Add `ontology/vocabularies/cdp-hazard-crosswalk.json`, mapping each of the 23 controlled CDP hazard values to one or more `hazard_id`s, tagged with a `match_type`: `exact` (17), `broader` (4, one CDP value spans a whole `c40_arup_category` cluster), `ambiguous` (2, unresolvable without the paired action text), `partial` (1), or `gap` (1, no hazard-side analog). The sentinel `Action does not address hazard` is documented under `excluded_values`, not mapped. See `framework-crosswalk.md` section 3 ("CDP hazard value crosswalk") for the summary table.
+
+### Why a separate crosswalk file rather than editing `hazards.json`
+
+`hazards.json`'s existing `c40_arup_category` and `undrr_terms` fields already serve as crosswalks to other frameworks (C40/Arup, UNDRR HIPs source-text matching); overloading them with CDP's specific disclosure strings would conflate three different external vocabularies inside one hazard vocabulary file. A dedicated crosswalk file keeps `hazards.json` framework-agnostic and makes the CDP-specific mapping independently versionable.
+
+### Known gap surfaced, not fixed here
+
+CDP treats `Drought` and `Water stress` as distinct disclosure values, but hazards.json's single `drought` hazard_id already carries `water stress` / `water shortage` as `undrr_terms`, so both collapse onto the same `hazard_id`. Splitting them into distinct hazards would be a `hazards.json` schema change (minor version bump), not a crosswalk fix — left as a future item rather than done opportunistically here.
+
+### Implications / not done
+
+- No changes to `types`, `relationships`, or `hazards.json` — this is additive vocabulary/metadata work only.
+- The ~440 free-text `Other: ...` write-in values (many non-English) are explicitly out of scope; they'd need individual triage if ever ingested, not a table entry each.
 
 ---
 

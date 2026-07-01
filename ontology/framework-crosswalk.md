@@ -162,6 +162,22 @@ CDP city-action rows and the 2024 resilience fact table tag hazards, sectors, an
 
 > The GCoM CRF table above already mapped `FUNDED_BY.amount_usd` and `FinancingSource.source_type`. The `FUNDED_BY` relationship itself was referenced from v0.2 but not actually defined in the ontology until v0.6, which adds both the `Action → FinancingSource` and `CapitalProject → FinancingSource` rows.
 
+### CDP hazard value crosswalk (v0.6.1)
+
+The "Full" rating on the `climate_hazard_s_that_action` / `goal_hazards` rows above is a **structural** rating — it means the edge shape (Action/ResilienceGoal → Hazard via `ADDRESSES`) is right. It says nothing about whether every individual CDP hazard *string* resolves cleanly to a `hazard_id`. It doesn't: `action_hazards_en` and `goal_hazards` share a closed enum of 23 controlled values (empirically confirmed against the 5,552-row 2024 fact table in `research/resources/CDP_cities_adaptation_fact_table/`), plus `action_hazards_en`'s sentinel `Action does not address hazard`, plus a long tail (~440 distinct strings) of free-text `Other: ...` write-ins.
+
+`ontology/vocabularies/cdp-hazard-crosswalk.json` maps those 23 controlled values to `hazard_id`s. Of the 23:
+
+- **17 exact** — e.g. `Extreme heat` → `extreme_hot_weather`, `Drought` → `drought`.
+- **4 broader** — one CDP value spans a whole `c40_arup_category` cluster with no further disambiguation in the row (e.g. `Mass movement` → `avalanche` / `landslide` / `rockfall` / `subsidence`).
+- **2 ambiguous** — CDP's own bucket is too generic to resolve without reading the paired action text (`Storm`; `Other coastal events` / `Oceanic events`).
+- **1 partial** — closest available `hazard_id`, but not equivalent (`Loss of green space/green cover` → `rcc.environmental_degradation`).
+- **1 gap** — no hazard-side analog exists (`Increased water demand`, a demand-side driver rather than a hazard).
+
+The crosswalk file also flags a real ontology limitation surfaced by this work: `Drought` and `Water stress` are distinct CDP values, but both collapse onto the single `drought` `hazard_id` — hazards.json doesn't yet distinguish acute meteorological drought from chronic water-supply stress. Splitting them would be a `hazards.json` schema change, not a crosswalk fix, and is left as a future item.
+
+The free-text `Other: ...` write-ins are out of scope for this crosswalk; they're long-tail (nearly all under 15 occurrences), partly non-English, and should be triaged individually against `hazards.json` if ever ingested.
+
 ---
 
 ## 4. RCC Shocks + Stresses Integration Decision
