@@ -746,8 +746,10 @@
     return null;
   }
 
+  const EDGE_HIT_TOLERANCE_PX = 14; // screen-space, independent of zoom
+
   function edgeAt(wx, wy) {
-    let best = null, bestDist = 6; // world-space tolerance
+    let best = null, bestDist = EDGE_HIT_TOLERANCE_PX / transform.k;
     for (const l of links) {
       if (l.source === l.target) continue;
       if (!isClusterOn(l.source.cluster) || !isClusterOn(l.target.cluster)) continue;
