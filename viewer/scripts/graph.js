@@ -1063,9 +1063,11 @@
 
   function selectNode(n) {
     selectedEdge = null;
+    const wasFocused = focusMode;
 
-    // If already in focus mode, deselect first (spring back), don't re-focus
-    if (focusMode) {
+    // Clicking the current center exits focus mode. Clicking a neighbor makes
+    // that node the new center while preserving the original layout for Close.
+    if (wasFocused && selectedNode === n) {
       deselect();
       return;
     }
@@ -1075,10 +1077,17 @@
 
     selectedNode = n;
 
-    // Stash current positions and transform
-    stashedPositions = new Map();
-    for (const nd of nodes) stashedPositions.set(nd.id, { x: nd.x, y: nd.y });
-    stashedTransform = { ...transform };
+    // Stash the full-graph layout only on first entry into focus mode.
+    // Subsequent node-to-node navigation must keep the same return point.
+    if (!wasFocused) {
+      stashedPositions = new Map();
+      for (const nd of nodes) stashedPositions.set(nd.id, { x: nd.x, y: nd.y });
+      stashedTransform = { ...transform };
+    }
+
+    const startPositions = new Map();
+    for (const nd of nodes) startPositions.set(nd.id, { x: nd.x, y: nd.y });
+    const startTransform = { ...transform };
 
     // Compute 1-hop subgraph
     const neighborIds = new Set();
@@ -1118,11 +1127,9 @@
     };
 
     focusMode = true;
-    const startPositions = new Map(stashedPositions);
-    const startTransform = { ...stashedTransform };
 
     animateTransition(400, (ease) => {
-      focusProgress = ease;
+      focusProgress = wasFocused ? 1 : ease;
       for (const nd of nodes) {
         const from = startPositions.get(nd.id);
         const to = targetPositions.get(nd.id);
