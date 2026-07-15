@@ -1141,7 +1141,6 @@
   }
 
   function selectEdge(l) {
-    if (focusMode) { deselect(); return; }
     selectedEdge = l;
     selectedNode = null;
     draw();

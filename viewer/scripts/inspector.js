@@ -193,7 +193,7 @@
                   const srcLabel = out ? n.label : other.label;
                   const tgtLabel = out ? other.label : n.label;
                   const selfIsSrc = out;
-                  return `<li class="rel-item" data-nid="${esc(other.id)}" data-eid="${esc(l.id)}">
+                  return `<li class="rel-item" data-source-id="${esc(l.source.id)}" data-target-id="${esc(l.target.id)}" data-eid="${esc(l.id)}">
                     <span class="rel-sentence">
                       <span class="${selfIsSrc ? 'rel-self' : 'rel-other'}" ${!selfIsSrc ? `style="color:${color}"` : ''}>${esc(srcLabel)}</span>
                       <span class="rel-label">${esc(l.label)}</span>
@@ -372,7 +372,14 @@
       li.addEventListener('click', () => window.Graph.focusNode(li.dataset.nid));
     });
     el().querySelectorAll('.rel-item').forEach(li => {
-      li.addEventListener('click', () => window.Graph.focusNode(li.dataset.nid));
+      li.addEventListener('click', () => {
+        const edge = window.Graph.getLinks().find(l =>
+          l.id === li.dataset.eid &&
+          l.source.id === li.dataset.sourceId &&
+          l.target.id === li.dataset.targetId
+        );
+        if (edge) window.Graph.selectEdge(edge);
+      });
     });
   }
 
