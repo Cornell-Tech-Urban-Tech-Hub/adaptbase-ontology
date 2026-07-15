@@ -45,6 +45,9 @@
   let stashedPositions = null;
   let stashedTransform = null;
   let focusAnimFrame = null;
+  // Node ids visible in the current focus subgraph (focused node + its neighbors).
+  // Used to restrict hit-testing so only the zoomed subgraph is interactive.
+  let focusSubgraphIds = new Set();
 
   function colorFor(cluster) { return CLUSTER_COLORS[cluster] || '#4A4F57'; }
 
@@ -739,6 +742,9 @@
     for (let i = nodes.length - 1; i >= 0; i--) {
       const n = nodes[i];
       if (!isClusterOn(n.cluster)) continue;
+      // In focus mode only the zoomed subgraph is interactive; ignore the
+      // faded-out nodes still parked at their overview positions.
+      if (focusMode && !focusSubgraphIds.has(n.id)) continue;
       const r = radiusFor(n);
       const dx = wx - n.x, dy = wy - n.y;
       if (dx*dx + dy*dy <= (r + 2) * (r + 2)) return n;
@@ -753,6 +759,10 @@
     for (const l of links) {
       if (l.source === l.target) continue;
       if (!isClusterOn(l.source.cluster) || !isClusterOn(l.target.cluster)) continue;
+      // In focus mode only edges incident to the focused node are drawn; limit
+      // hit-testing to those so faded background edges aren't clickable.
+      if (focusMode && selectedNode &&
+          l.source.id !== selectedNode.id && l.target.id !== selectedNode.id) continue;
       const cp = getCurveControl(l);
       let d;
       if (cp) {
@@ -797,7 +807,7 @@
     if (dragNode) {
       dragNode.x = wx; dragNode.y = wy;
       dragNode.fx = wx; dragNode.fy = wy;
-      if (simulation) simulation.alphaTarget(0.1).restart();
+      if (simulation && !focusMode) simulation.alphaTarget(0.1).restart();
       draw();
       return;
     }
@@ -825,7 +835,7 @@
       dragNode = hit;
       dragStart = { mx: e.clientX, my: e.clientY, moved: false };
       hit.fx = hit.x; hit.fy = hit.y;
-      if (simulation) simulation.alphaTarget(0.1).restart();
+      if (simulation && !focusMode) simulation.alphaTarget(0.1).restart();
     } else {
       isPanning = true;
       panStart = { mx: e.clientX, my: e.clientY, tx: transform.x, ty: transform.y };
@@ -839,7 +849,7 @@
         // treat as click
         selectNode(dragNode);
       }
-      if (simulation) simulation.alphaTarget(0);
+      if (simulation && !focusMode) simulation.alphaTarget(0);
       dragNode.fx = dragNode.x; dragNode.fy = dragNode.y;
       dragNode = null;
       draw();
@@ -1062,10 +1072,8 @@
   }
 
   function selectNode(n) {
-    selectedEdge = null;
-
-    // If already in focus mode, deselect first (spring back), don't re-focus
-    if (focusMode) {
+    // Clicking the already-focused center node toggles focus off (spring back).
+    if (focusMode && n === selectedNode) {
       deselect();
       return;
     }
@@ -1073,12 +1081,17 @@
     // Stop simulation so it doesn't fight the focus layout
     if (simulation) simulation.stop();
 
+    const wasFocused = focusMode;
+    selectedEdge = null;
     selectedNode = n;
 
-    // Stash current positions and transform
-    stashedPositions = new Map();
-    for (const nd of nodes) stashedPositions.set(nd.id, { x: nd.x, y: nd.y });
-    stashedTransform = { ...transform };
+    // Stash overview positions only on first entry, so navigating between
+    // neighbors keeps the original graph to spring back to on exit.
+    if (!wasFocused) {
+      stashedPositions = new Map();
+      for (const nd of nodes) stashedPositions.set(nd.id, { x: nd.x, y: nd.y });
+      stashedTransform = { ...transform };
+    }
 
     // Compute 1-hop subgraph
     const neighborIds = new Set();
@@ -1087,12 +1100,13 @@
       neighborIds.add(l.target.id);
     }
     neighborIds.delete(n.id);
+    focusSubgraphIds = new Set([n.id, ...neighborIds]);
 
     // Compute target positions: focused node at (0,0), neighbors on a ring
     const neighbors = [...neighborIds].map(id => nodeById[id]).filter(Boolean);
     neighbors.sort((a, b) => (b.degree || 1) - (a.degree || 1));
     // Ring radius accounts for largest nodes to prevent overlap
-    const maxNeighborR = Math.max(...neighbors.map(nd => radiusFor(nd)));
+    const maxNeighborR = neighbors.length ? Math.max(...neighbors.map(nd => radiusFor(nd))) : 0;
     const ringRadius = Math.max(300, radiusFor(n) + maxNeighborR + 120);
     const targetPositions = new Map();
     targetPositions.set(n.id, { x: 0, y: 0 });
@@ -1103,10 +1117,10 @@
         y: Math.sin(angle) * ringRadius,
       });
     }
-    // Non-subgraph nodes: keep at stashed (they'll be invisible anyway)
+    // Non-subgraph nodes: keep at their current position (they'll be invisible)
     for (const nd of nodes) {
       if (!targetPositions.has(nd.id)) {
-        targetPositions.set(nd.id, stashedPositions.get(nd.id));
+        targetPositions.set(nd.id, { x: nd.x, y: nd.y });
       }
     }
 
@@ -1118,11 +1132,15 @@
     };
 
     focusMode = true;
-    const startPositions = new Map(stashedPositions);
-    const startTransform = { ...stashedTransform };
+    // Animate from wherever nodes currently are — works for a fresh focus and
+    // for re-focusing on a neighbor while already zoomed in.
+    const startPositions = new Map();
+    for (const nd of nodes) startPositions.set(nd.id, { x: nd.x, y: nd.y });
+    const startTransform = { ...transform };
+    const startProgress = focusProgress;
 
     animateTransition(400, (ease) => {
-      focusProgress = ease;
+      focusProgress = startProgress + (1 - startProgress) * ease;
       for (const nd of nodes) {
         const from = startPositions.get(nd.id);
         const to = targetPositions.get(nd.id);
@@ -1141,7 +1159,15 @@
   }
 
   function selectEdge(l) {
-    if (focusMode) { deselect(); return; }
+    // In focus mode, inspect the edge without leaving the zoomed subgraph —
+    // keep selectedNode so the focus layout and dimming stay intact.
+    if (focusMode) {
+      selectedEdge = l;
+      draw();
+      window.Inspector && window.Inspector.showEdge(l);
+      if (window.innerWidth <= 767) openMobileInspector();
+      return;
+    }
     selectedEdge = l;
     selectedNode = null;
     draw();
@@ -1153,6 +1179,7 @@
     if (!focusMode) {
       selectedNode = null;
       selectedEdge = null;
+      focusSubgraphIds = new Set();
       draw();
       window.Inspector && window.Inspector.showEmpty();
       return;
@@ -1186,6 +1213,7 @@
       focusProgress = 0;
       stashedPositions = null;
       stashedTransform = null;
+      focusSubgraphIds = new Set();
     });
 
     window.Inspector && window.Inspector.showEmpty();
