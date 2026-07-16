@@ -177,7 +177,7 @@
         }
       }
 
-      sectorBoundaries.push({ cluster, startAngle, endAngle, color: CLUSTER_COLORS[cluster] });
+      sectorBoundaries.push({ cluster, startAngle, endAngle, color: colorFor(cluster) });
       cursor = endAngle + gapArc;
     }
   }
@@ -1274,6 +1274,23 @@
   function load(graphData) {
     window.ONTOLOGY = graphData;
     if (simulation) simulation.stop();
+    if (focusAnimFrame) { cancelAnimationFrame(focusAnimFrame); focusAnimFrame = null; }
+
+    // Selection/focus state references nodes and links from the previous
+    // version's data. Entity ids can be added, removed, or renamed between
+    // versions (e.g. GovernanceStructure removed in v0.7), so a stale
+    // reference left over from before a version switch can point at
+    // something that no longer exists — reset everything up front.
+    hoverNode = null; hoverEdge = null;
+    selectedNode = null; selectedEdge = null;
+    dragNode = null; dragStart = null;
+    isPanning = false; panStart = null;
+    focusMode = false;
+    focusProgress = 0;
+    stashedPositions = null;
+    stashedTransform = null;
+    focusSubgraphIds = new Set();
+
     transform = { x: 0, y: 0, k: 1 };
     setup(graphData);
     resize();

@@ -9,6 +9,7 @@
     'Barrier': 'Risk',
     // Context — where solutions operate and who governs them
     'Jurisdiction': 'Context',
+    'Location': 'Context', // pre-v0.5.0 name for Jurisdiction
     'Place': 'Context',
     'UrbanSystem': 'Context',
     'Stakeholder': 'Context',
