@@ -1,14 +1,39 @@
 # Ontology Design Decisions Log
 
 **Project:** Resilience Scanner - Climate Adaptation Solutions Ontology  
-**Version:** 0.6.1  
-**Last Updated:** 2026-07-01
+**Version:** 0.7  
+**Last Updated:** 2026-07-07
 
 ---
 
 ## Purpose
 
 This log documents key design decisions in the ontology development process, including rationale, alternatives considered, and implications for future work.
+
+---
+
+## Decision 32 (v0.7): Merge GovernanceStructure into Stakeholder
+
+**Date:** 2026-07-07
+**Context:** Gold-annotation review of AI-classified extractions (Greater Christchurch Resilience Strategy corpus) surfaced a systematic classification fork. For a named public agency like the NZ Earthquake Commission, both type definitions claim the entity — `Stakeholder` explicitly includes "government agencies" and `GovernanceStructure` explicitly includes "public agencies" (`structure_type: public_agency`). Classifiers resolve the tie pragmatically: `Stakeholder` participates in 8 relationship signatures (`IMPLEMENTED_BY` ×2, `PARTICIPATES_IN`, `ISSUES`, `ENGAGES`, `COORDINATES_WITH`, `COMMISSIONED_BY`, `GOVERNS → Jurisdiction`, `MEMBER_OF`), while `GovernanceStructure` participates in only 2 (`GOVERNS → Plan`, target of `MEMBER_OF`). Typing an agency as GovernanceStructure strands it from `IMPLEMENTED_BY` and every other actor edge; annotation data even showed schema-violating `IMPLEMENTED_BY → GovernanceStructure` triplets as models tried to have it both ways.
+
+### Decision
+
+Bump to **v0.7** (minor — schema change). Remove the `GovernanceStructure` type and fold it into `Stakeholder`, reversing Decision 22's call ("GovernanceStructure as a separate type", v0.3). This applies the ontology's own core principle — classify by identity, express function through relationships — to actors: a governance body's identity is *organization* (Stakeholder); its governance mandate is a *function*, now carried by edges and optional properties.
+
+- **Stakeholder gains optional properties:** `org_form` (enum: `interagency_body`, `public_agency`, `advisory_committee`, `task_force`, `public_private_partnership`, `other` — the former `structure_type`), `org_form_other_description`, `authority_level` (`advisory`/`regulatory`/`operational`/`other`), `authority_level_other_description`, `mandate_description`.
+- **`GOVERNS` (GovernanceStructure → Plan) retargeted to Stakeholder → Plan**, coexisting with `GOVERNS` (Stakeholder → Jurisdiction) under the established duplicate-id convention (Decision 30).
+- **`MEMBER_OF` (Stakeholder → GovernanceStructure) retargeted to Stakeholder → Stakeholder** — standard org-to-org membership; composition queries over task forces and committees work unchanged.
+
+### Why merge rather than narrow
+
+The alternative — keeping GovernanceStructure but restricting it to multi-party arrangements (dropping `public_agency` from its enum) — preserves the v0.3 peer-review intent but keeps the annotation fork alive: plans routinely treat task forces as actors ("the Task Force will oversee…"), so even narrowly-scoped GovernanceStructure nodes want Stakeholder's edges. Two types with overlapping extents produce systematic inter-annotator disagreement that poisons gold data. The governance semantics the v0.3 review asked for (formal mandate, authority level, plan oversight) survive intact as properties plus the `GOVERNS → Plan` edge.
+
+### Implications
+
+- Downstream extractors/annotation tooling should map existing `GovernanceStructure` instances to `Stakeholder` with `org_form` set from `structure_type` and `authority_level`/`mandate_description` carried over.
+- The viewer's cluster mapping retains the `GovernanceStructure → Context` entry so pre-v0.7 ontology versions still render.
+- Type count drops from 22 to 21; relationship count stays 60 (two edges retargeted, none added or removed).
 
 ---
 
