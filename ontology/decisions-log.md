@@ -1,14 +1,48 @@
 # Ontology Design Decisions Log
 
 **Project:** Resilience Scanner - Climate Adaptation Solutions Ontology  
-**Version:** 0.7  
-**Last Updated:** 2026-07-07
+**Version:** 0.8  
+**Last Updated:** 2026-08-13
 
 ---
 
 ## Purpose
 
 This log documents key design decisions in the ontology development process, including rationale, alternatives considered, and implications for future work.
+
+---
+
+## Decision 33 (v0.8): Catalog-node edge re-anchoring — deployment facts move to Action grain
+
+**Date:** 2026-08-13
+**Context:** In the AdaptBase knowledge graph, catalog-type entities (Solution, Hazard, UrbanSystem, …) merge by normalized name: one "Green infrastructure" node is deliberately shared by every city that mentions the concept (48 cities on that node alone; 115 CDP-seeded category Solutions carry 94.1% of all 2,255 `IMPLEMENTS` edges). The graph's identity guardrails already forbid context-dependent *properties* on shared nodes, but nothing forbade context-dependent *edges* — and a two-hop traversal through a shared node silently transfers one city's facts to every other city touching the same concept ("What finances coastal-flood adaptation in Legazpi City?" → "Miami Forever Bond", via `Action ─IMPLEMENTS→ Solution ─USES_INSTRUMENT→ FinancialInstrument`). Reported as adaptbase-core issue #170 / audit memo `SUPERNODE-EDGE-LEAKAGE-20260810`; every catalog-touching edge family was then enumerated against both the live graph and the pending-extraction staging tables and judged one by one against real evidence spans (adaptbase-core `_planning/to-do/CATALOG-EDGE-REANCHOR-PLAN.md`).
+
+### Decision
+
+Bump to **v0.8** (minor — schema change). Six edge rows whose extracted facts are always one deployment's context move off the shared Solution node to the instance-grain `Action`; the deliberately class-level channels stay, guarded by precedence rules. **60 edges → 60 edges; 48 predicate ids unchanged.**
+
+**Re-anchored (source Solution → Action):** `USES_INSTRUMENT → FinancialInstrument` (financing is always one deployment's fact; the new row drops `share_percent` — an Action has no project-total — and gains `financing_model`, completing the action-grain financing triangle with the v0.6 `Action FUNDED_BY FinancingSource`), `IMPLEMENTED_BY → Stakeholder` (the name-merged node destroys the boundary between co-implementers of one deployment and unrelated cities' implementers; `is_lead` semantics survive the move; CapitalProject variant unchanged), `GENERATES → PlanningData` (every extracted object is a city-specific dataset; the class-level reading is tautological), `REDUCES_EXPOSURE → ExposureUnit` (the AR6 triad's only instance-target edge; `MITIGATES`/`REDUCES` keep the class layer intact).
+
+**Re-targeted (target Solution → Action):** `Stakeholder PARTICIPATES_IN` (designed partner of IMPLEMENTED_BY — lead and non-lead involvement must sit at the same grain; the largest pending extraction family), `Supplier SUPPLIES` (extracted facts are one city's procurement relations; vendor-to-class views remain derivable via `SUPPLIES` + `IMPLEMENTS` aggregation).
+
+### Kept, with rules
+
+- **`PRODUCES` (Solution → Outcome)** — deliberately class-level by design, paired with `RESULTS_IN` at instance grain; "cool roofs reduce AC load by as much as 55%" is legitimate shared knowledge. A blanket re-anchor would destroy the class-knowledge channel. New extract-hint precedence rule (both directions): measured single-deployment results go to `RESULTS_IN` from the implementing Action. Note the discriminator is claim aboutness (typicality/tense), **not** the presence of a number — class knowledge carries numbers too.
+- **`IMPLEMENTED_IN` (Solution → Jurisdiction)** — *not* a leak: the context IS the object ("affordable housing implemented in NYC" is self-contextualizing), and it is the designed replication-tracking channel. New precedence rule: prefer `Action DEPLOYED_IN` when a concrete action exists; consumers union both paths.
+- **`EXPOSES` (Hazard → ExposureUnit)** — the assertion is not an action's fact and EXPOSES is the UNDRR risk-pathway core, but ExposureUnit is instance-typed and place-bound while Hazard has the graph's largest fan-in. Fixed by closing a triangle the ontology already designed: `ExposureUnit ─LOCATED_IN→ Jurisdiction` becomes the anchor for city-scoped exposure queries (pipelines auto-emit it when the source document carries a `wikidata_qid`), so queries need not traverse the shared Hazard node.
+- **`FUNDED_BY` (both variants) and the financing triangle** — retained as-is. Evidence spans are dominated by source-only facts ("municipal funds", "internal staff time") where an instrument path has no first hop, and path inference through a pooled instrument gives only pool-level attribution. Extractors record only the triangle sides the text asserts; consumers aggregate amounts through a single lens to avoid double-counting.
+
+Catalog↔catalog laterals (`WORKS_BY`, `OPERATES_ON`, `REQUIRES`, `MITIGATES`, `REDUCES`, `CONTRIBUTES_TO`, `DEPENDS_ON`, `BLOCKS`, `SHAPES`, `ResilienceGoal ADDRESSES`) transfer no named instance and are untouched. The other five catalog types (UrbanSystem, ResilienceGoal, Mechanism, EnablingCondition, Vulnerability) audited clean.
+
+### Why re-anchor rather than annotate
+
+The alternative — keeping the edges and recording jurisdiction context in edge properties — fails structurally: the leak is topological, so every consumer (recursive CTEs, `find_path`, LLM traversal) would need its own filtering rule, and any one that forgets serves wrong answers. Moving the edge to the instance grain makes the wrong query inexpressible.
+
+### Implications
+
+- **Typing pressure is structural.** After the cuts, a named city program mistyped as Solution has no legal edge for its deployment facts — extraction either retypes it as Action (making every deployment edge legal) or cannot emit the fact. The schema teaches this zero-shot; no typing hints were added (2026-08-11 call: rules only, no instance examples in hints).
+- Downstream (adaptbase-core): `predicate_edges` seed migration (additions via generator, removals handwritten, forward-only); staged Solution-source edges in the cut families will fail promotion validation and quarantine (~1,500 pending — expected, not a regression); live legacy edges (~190) stay in place with full `evidence` provenance until a separate reversible backfill re-points them via the implementing Action.
+- The viewer keys edges by id+source+target, so the six moved rows render as new signatures under existing predicate ids; no viewer changes needed.
 
 ---
 
