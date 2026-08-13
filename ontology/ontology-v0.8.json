@@ -1,6 +1,6 @@
 {
   "version": "v0.8",
-  "update_note": "Catalog-node edge re-anchoring (issue adaptbase-core#170). Catalog-type entities (Solution, Hazard, …) merge by normalized name, so one node is shared by every city that mentions the concept; context-dependent edges hanging off such a node silently transfer one city's facts to every other city two hops away ('What finances coastal-flood adaptation in Legazpi City?' → 'Miami Forever Bond'). Six edge rows whose extracted facts are always one deployment's context move from the shared Solution node to the instance-grain Action: USES_INSTRUMENT, IMPLEMENTED_BY, GENERATES, REDUCES_EXPOSURE (Solution as source) and PARTICIPATES_IN, SUPPLIES (Solution as target). 60 edges → 60 edges; no predicate ids added or removed. PRODUCES keeps its deliberately class-level Solution signature with a new precedence rule against RESULTS_IN; IMPLEMENTED_IN (self-contextualizing) and EXPOSES (UNDRR risk core; fixed by anchoring ExposureUnits via LOCATED_IN) are retained with rules. See Decision 33.",
+  "update_note": "Catalog-node edge re-anchoring (issue adaptbase-core#170). Catalog-type entities (Solution, Hazard, …) merge by normalized name, so one node is shared by every city that mentions the concept; context-dependent edges hanging off such a node silently transfer one city's facts to every other city two hops away ('What finances coastal-flood adaptation in Legazpi City?' → 'Miami Forever Bond'). Seven edge rows whose extracted facts are always one deployment's context move from the shared Solution node to the instance-grain Action: USES_INSTRUMENT, IMPLEMENTED_BY, GENERATES, REDUCES_EXPOSURE, SHIFTS_RISK_TO (Solution as source) and PARTICIPATES_IN, SUPPLIES (Solution as target). 60 edges → 60 edges; no predicate ids added or removed. PRODUCES keeps its deliberately class-level Solution signature with a new precedence rule against RESULTS_IN; IMPLEMENTED_IN (self-contextualizing) and EXPOSES (UNDRR risk core; fixed by anchoring ExposureUnits via LOCATED_IN) are retained with rules. See Decision 33.",
   "updated": "2026-08-13T12:00:00.000Z",
   "domain": "urban-climate-adaptation",
   "domain_label": "Urban Climate Adaptation and Resilience Solutions",
@@ -2480,9 +2480,9 @@
     {
       "id": "SHIFTS_RISK_TO",
       "label": "shifts risk to",
-      "source": "Solution",
+      "source": "Action",
       "target": "ExposureUnit",
-      "definition": "The solution transfers or displaces climate risk to this exposure unit — a spatial maladaptation pattern where risk reduction in one area increases risk in another.",
+      "definition": "The action transfers or displaces climate risk to this exposure unit — a spatial maladaptation pattern where risk reduction in one area increases risk in another.",
       "properties": [
         {
           "id": "mechanism",
@@ -2497,8 +2497,8 @@
         }
       ],
       "cardinality": "many-to-many",
-      "notes": "Captures spatial maladaptation: solutions that protect one group by shifting risk to another. Complements Outcome.outcome_type = maladaptation (which captures temporal/functional maladaptation).",
-      "extract_hint": "Look for language about displaced risk or burden shifting — e.g., 'sea wall protects city center but increases flood risk in unprotected downstream communities'."
+      "notes": "v0.8: retargeted from Solution (removed — catalog-node edge leakage, Decision 33). Mirror of REDUCES_EXPOSURE at the same grain: who a deployment displaces risk onto is that deployment's fact, and ExposureUnit is instance-typed and place-bound. Zero live and staged volume at the time of the change — re-anchored pre-emptively so the leak signature cannot begin to fill. Captures spatial maladaptation: complements Outcome.outcome_type = maladaptation (which captures temporal/functional maladaptation).",
+      "extract_hint": "Look for language about displaced risk or burden shifting by a concrete action or project — e.g., 'the sea wall protects the city center but increases flood risk in unprotected downstream communities'."
     },
     {
       "id": "GOVERNS",
@@ -3104,7 +3104,7 @@
     "relationships_count": 60,
     "vocabularies_count": 7,
     "change_history": [
-      "v0.8 (2026-08-13): Catalog-node edge re-anchoring — six deployment-fact edges moved from the shared Solution node to Action grain (USES_INSTRUMENT, IMPLEMENTED_BY, GENERATES, REDUCES_EXPOSURE as source; PARTICIPATES_IN, SUPPLIES as target); precedence rules added to PRODUCES/RESULTS_IN and IMPLEMENTED_IN; 60 edges unchanged in count",
+      "v0.8 (2026-08-13): Catalog-node edge re-anchoring — seven deployment-fact edges moved from the shared Solution node to Action grain (USES_INSTRUMENT, IMPLEMENTED_BY, GENERATES, REDUCES_EXPOSURE, SHIFTS_RISK_TO as source; PARTICIPATES_IN, SUPPLIES as target); precedence rules added to PRODUCES/RESULTS_IN and IMPLEMENTED_IN; 60 edges unchanged in count",
       "v0.7 (2026-07-07): Merged GovernanceStructure into Stakeholder — org_form, authority_level, and mandate_description become optional Stakeholder properties; GOVERNS (→ Plan) retargeted to Stakeholder → Plan; MEMBER_OF retargeted to Stakeholder → Stakeholder; GovernanceStructure type removed (reverses v0.3)",
       "v0.6.1 (2026-07-01): Added cdp-hazard-crosswalk.json vocabulary mapping CDP's 23 controlled hazard values to ontology hazard_ids; no schema changes",
       "v0.6 (2026-06-30): Action-, goal-, and project-level edges for CDP city-action and 2024 fact-table data — Action ADDRESSES Hazard, Action TARGETS UrbanSystem, Action FUNDED_BY FinancingSource, ResilienceGoal ADDRESSES Hazard, CapitalProject TARGETS UrbanSystem; landed the FUNDED_BY relationship (CapitalProject → FinancingSource) referenced since v0.2 but never defined",
@@ -3151,7 +3151,7 @@
     {
       "version": "v0.8",
       "date": "2026-08-13",
-      "summary": "Catalog-node edge re-anchoring (issue adaptbase-core#170): catalog entities merge by name and are shared across cities, so deployment-context edges on them leak one city's facts into another's two-hop queries. Six edge rows move to the instance-grain Action; the class-knowledge channels (PRODUCES, IMPLEMENTED_IN, EXPOSES) stay, guarded by precedence rules. Edge count unchanged at 60.",
+      "summary": "Catalog-node edge re-anchoring (issue adaptbase-core#170): catalog entities merge by name and are shared across cities, so deployment-context edges on them leak one city's facts into another's two-hop queries. Seven edge rows move to the instance-grain Action; the class-knowledge channels (PRODUCES, IMPLEMENTED_IN, EXPOSES) stay, guarded by precedence rules. Edge count unchanged at 60.",
       "changes": [
         {
           "type": "removed",
@@ -3168,6 +3168,10 @@
         {
           "type": "removed",
           "text": "Solution → REDUCES_EXPOSURE → ExposureUnit — the AR6 triad's only instance-target edge; who-is-protected is a deployment claim"
+        },
+        {
+          "type": "removed",
+          "text": "Solution → SHIFTS_RISK_TO → ExposureUnit — mirror of REDUCES_EXPOSURE on the maladaptation side; zero live and staged volume, so re-anchored pre-emptively at zero backfill cost"
         },
         {
           "type": "removed",
@@ -3192,6 +3196,10 @@
         {
           "type": "added",
           "text": "Action → REDUCES_EXPOSURE → ExposureUnit — instance grain on both ends"
+        },
+        {
+          "type": "added",
+          "text": "Action → SHIFTS_RISK_TO → ExposureUnit — mechanism carried over"
         },
         {
           "type": "added",
