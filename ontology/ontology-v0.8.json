@@ -1142,7 +1142,7 @@
     {
       "id": "FinancialInstrument",
       "label": "Financial Instrument",
-      "definition": "A specific financial mechanism used to fund a solution or capital project (e.g., green bond, general obligation bond, revenue bond, sustainability-linked loan, resilience bond, blended finance, grant, direct allocation).",
+      "definition": "A specific financial mechanism used to fund an action or capital project (e.g., green bond, general obligation bond, revenue bond, sustainability-linked loan, resilience bond, blended finance, grant, direct allocation).",
       "properties": [
         {
           "id": "instrument_type",
@@ -1386,7 +1386,7 @@
     {
       "id": "Supplier",
       "label": "Supplier",
-      "definition": "A vendor, manufacturer, or service provider that supplies technology, components, or services for a solution.",
+      "definition": "A vendor, manufacturer, or service provider that supplies technology, components, or services for an adaptation action.",
       "properties": [
         {
           "id": "supplier_name",
@@ -2337,7 +2337,7 @@
       "target": "Plan",
       "definition": "This data source informed the development of the plan. Captures the evidence base underlying planning decisions — e.g., downscaled climate projections, hazard maps, vulnerability assessments.",
       "properties": [],
-      "notes": "Links PlanningData to Plan. Complements GENERATES (Solution → PlanningData) to form the chain: Solution GENERATES PlanningData, PlanningData INFORMS Plan.",
+      "notes": "Links PlanningData to Plan. Complements GENERATES (Action → PlanningData, retargeted v0.8) to form the chain: Action GENERATES PlanningData, PlanningData INFORMS Plan.",
       "extract_hint": "Look for data references in plan methodology sections — e.g., 'informed by NOAA downscaled climate projections', 'based on the 2024 citywide vulnerability assessment', 'uses flood hazard mapping from FEMA'.",
       "cardinality": "many-to-many"
     },
@@ -2440,7 +2440,7 @@
         }
       ],
       "cardinality": "many-to-many",
-      "notes": "Plan-level stakeholder involvement. Distinct from IMPLEMENTED_BY (solution-level implementation) and PARTICIPATES_IN (solution-level participation).",
+      "notes": "Plan-level stakeholder involvement. Distinct from IMPLEMENTED_BY (action/project-level implementation) and PARTICIPATES_IN (action-level participation).",
       "extract_hint": "Look for stakeholder involvement in planning processes — e.g., 'developed in consultation with community groups', 'overseen by the Climate Resilience Commission', 'engages the private sector in implementation governance'."
     },
     {
@@ -2594,7 +2594,7 @@
         }
       ],
       "cardinality": "many-to-many",
-      "notes": "Extends PARTICIPATES_IN (Stakeholder → Solution) to the governance layer. Enables queries about institutional composition of governance bodies. Target was GovernanceStructure before v0.7.",
+      "notes": "Extends PARTICIPATES_IN (Stakeholder → Action, retargeted v0.8) to the governance layer. Enables queries about institutional composition of governance bodies. Target was GovernanceStructure before v0.7.",
       "extract_hint": "Look for membership language — e.g., 'the water utility is represented on the task force', 'community organizations sit on the advisory committee'."
     },
     {
@@ -3115,7 +3115,7 @@
     "design_notes": [
       {
         "topic": "IPCC AR6 Risk-Reduction Pathways",
-        "note": "The ontology represents three pathways through which solutions reduce climate risk per IPCC AR6 (Risk = f(Hazard, Exposure, Vulnerability)): (1) Solution MITIGATES Hazard — reduce hazard intensity or frequency; (2) Solution REDUCES_EXPOSURE ExposureUnit — shield, relocate, or protect exposed populations/assets; (3) Solution REDUCES Vulnerability — reduce sensitivity or build adaptive capacity. Mechanism (via WORKS_BY) describes the functional process by which a solution achieves any of these pathways."
+        "note": "The ontology represents three pathways through which adaptation reduces climate risk per IPCC AR6 (Risk = f(Hazard, Exposure, Vulnerability)): (1) Solution MITIGATES Hazard — reduce hazard intensity or frequency; (2) REDUCES_EXPOSURE ExposureUnit — shield, relocate, or protect exposed populations/assets (asserted at deployment grain by the implementing Action since v0.8, because ExposureUnit is instance-typed and place-bound); (3) Solution REDUCES Vulnerability — reduce sensitivity or build adaptive capacity. Mechanism (via WORKS_BY) describes the functional process by which a solution achieves any of these pathways."
       },
       {
         "topic": "Socially Constructed Vulnerability",
