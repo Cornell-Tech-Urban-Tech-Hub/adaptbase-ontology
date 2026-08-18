@@ -5,7 +5,7 @@ maps the entities, relationships, and vocabularies needed to organize, compare, 
 analyze how cities respond to climate hazards.
 
 **Live viewer:** [ontology.adaptbase.us](https://ontology.adaptbase.us/)
-**Current version:** v0.7 (2026-07-07)
+**Current version:** v0.8 (2026-08-13)
 
 ---
 
