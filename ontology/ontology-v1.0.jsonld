@@ -4,7 +4,7 @@
   "@type": "owl:Ontology",
   "version": "v1.0",
   "update_note": "JSON-LD source migration (no schema change from v0.8): the ontology's source format is now JSON-LD 1.1 with a shared @context, so it is directly consumable by standard RDF tooling (rdflib, Protege, SPARQL). Every entity type and relationship carries an @id/@type; the 10 duplicate-predicate-id groups each gained a specific @id per (source,target) row, linked via rdfs:subPropertyOf to a shared umbrella @id for the predicate. vocabulary_binding shapes were normalized (6 properties + 1 malformed 'vocab' key fixed to the explicit {vocab,field} form) and the vocabularies[] manifest now lists each enums.json block and jurisdiction-kind individually instead of one opaque 'enums' row. No entity types, relationships, or predicate ids were added, removed, or renamed.",
-  "updated": "2026-08-13T12:00:00.000Z",
+  "updated": "2026-08-18T12:00:00.000Z",
   "domain": "urban-climate-adaptation",
   "domain_label": "Urban Climate Adaptation and Resilience Solutions",
   "types": [
@@ -4075,6 +4075,7 @@
     "relationships_count": 60,
     "vocabularies_count": 27,
     "change_history": [
+      "v1.0 (2026-08-18): Migrated ontology source to JSON-LD — context.jsonld, ontology-v1.0.jsonld, and 8 vocabulary .jsonld files with @id/@type throughout; CI-generated OWL/Turtle/SKOS exports; two live vocabulary-binding bugs fixed along the way. No schema change (still 21 types, 60 relationships, 48 predicate ids).",
       "v0.8 (2026-08-13): Catalog-node edge re-anchoring — seven deployment-fact edges moved from the shared Solution node to Action grain (USES_INSTRUMENT, IMPLEMENTED_BY, GENERATES, REDUCES_EXPOSURE, SHIFTS_RISK_TO as source; PARTICIPATES_IN, SUPPLIES as target); precedence rules added to PRODUCES/RESULTS_IN and IMPLEMENTED_IN; 60 edges unchanged in count",
       "v0.7 (2026-07-07): Merged GovernanceStructure into Stakeholder — org_form, authority_level, and mandate_description become optional Stakeholder properties; GOVERNS (→ Plan) retargeted to Stakeholder → Plan; MEMBER_OF retargeted to Stakeholder → Stakeholder; GovernanceStructure type removed (reverses v0.3)",
       "v0.6.1 (2026-07-01): Added cdp-hazard-crosswalk.json vocabulary mapping CDP's 23 controlled hazard values to ontology hazard_ids; no schema changes",
@@ -4119,6 +4120,45 @@
     ]
   },
   "version_notes": [
+    {
+      "version": "v1.0",
+      "date": "2026-08-18",
+      "summary": "JSON-LD source migration (no ontology schema change from v0.8 — same 21 types, 60 relationships, 48 predicate ids): the ontology's source format is now JSON-LD 1.1 with a shared @context, directly consumable by standard RDF tooling (rdflib, Protege, SPARQL). OWL/Turtle/SKOS exports generate in CI from this source instead of being hand-maintained separately. Two live data bugs found and fixed while building the context; full rationale in Decision 34.",
+      "changes": [
+        {
+          "type": "added",
+          "text": "ontology/context.jsonld — shared JSON-LD 1.1 @context; ab: (https://ontology.adaptbase.us/ont/) and abv: (https://ontology.adaptbase.us/vocab/) namespaces"
+        },
+        {
+          "type": "added",
+          "text": "@id/@type on every type (owl:Class) and relationship (owl:ObjectProperty); the 10 duplicate-predicate-id groups each gained a specific @id per (source,target) row (e.g. ab:actionDeployedInJurisdiction), linked via rdfs:subPropertyOf to a shared umbrella @id (e.g. ab:deployedIn)"
+        },
+        {
+          "type": "added",
+          "text": "ontology/vocabularies/*.jsonld (8 files) — skos:ConceptScheme/skos:Concept typing; enums.json's 20 blocks each get their own scheme id (abv:enums-<block>) instead of one opaque manifest row"
+        },
+        {
+          "type": "added",
+          "text": "scripts/export/generate_exports.py — rdflib-based Turtle/OWL/SKOS export, wired into the GitHub Pages CI workflow; exports/ is generated fresh on every deploy, not committed"
+        },
+        {
+          "type": "changed",
+          "text": "vocabularies[] manifest expanded from 7 to 27 rows — one row per enums.json block plus the previously-missing jurisdiction-kind, instead of one opaque 'enums' row with bound_to: ['various']"
+        },
+        {
+          "type": "fixed",
+          "text": "Outcome.beneficiary_program's stale 'vocabulary': 'enums' pointer (no matching block; values were already inline) — same bug class already fixed once for UrbanSystem in v0.4.1"
+        },
+        {
+          "type": "fixed",
+          "text": "USES_INSTRUMENT(CapitalProject).financing_model's malformed 'vocab' key (should have been 'vocabulary_binding') — the viewer's inspector never read that key, so its enum options were silently not rendering"
+        },
+        {
+          "type": "changed",
+          "text": "6 properties with 'vocabulary': 'enums' (relying on an unwritten property-id-matches-block-name convention) normalized to explicit vocabulary_binding: {vocab, field}"
+        }
+      ]
+    },
     {
       "version": "v0.8",
       "date": "2026-08-13",
