@@ -1,0 +1,1418 @@
+{
+  "@context": "../context.jsonld",
+  "_source": "Advanced urban systems taxonomy for climate adaptation. Multi-tiered hierarchy mapping physical, ecological, and socio-economic urban subsystems.",
+  "_usage": "urban_systems.systems_affected[].system_id and sector",
+  "_sync_with": "None - conceptual taxonomy for classification",
+  "_note": "This taxonomy enables precise classification of where a solution is deployed and what it protects. Supports interdependency analysis and critical bottleneck identification. v0.1.1: added informal_service_systems subsector under socioeconomic_health to capture service provision filled by informal actors where formal systems are absent — addresses IPCC AR6 Ch. 6 critique that ISO 37120 misses informal urban systems entirely.",
+  "sectors": [
+    {
+      "id": "built_environment",
+      "name": "Built Environment & Land Use",
+      "description": "Physical structures and spatial zoning. Solutions involve retrofitting, managed retreat, or building code changes.",
+      "subsectors": [
+        {
+          "id": "residential_fabric",
+          "name": "Residential Fabric",
+          "systems": [
+            {
+              "id": "high_density_residential",
+              "name": "High-Density / Multi-Family",
+              "examples": "Apartment blocks, high-rises",
+              "@id": "abv:urban-systems-built_environment-residential_fabric-high_density_residential",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-built_environment-residential_fabric"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "low_density_residential",
+              "name": "Low-Density / Single-Family",
+              "examples": "Suburban tracts",
+              "@id": "abv:urban-systems-built_environment-residential_fabric-low_density_residential",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-built_environment-residential_fabric"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "informal_settlements",
+              "name": "Informal Settlements / Slums",
+              "examples": "Highly vulnerable areas lacking formal infrastructure",
+              "@id": "abv:urban-systems-built_environment-residential_fabric-informal_settlements",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-built_environment-residential_fabric"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            }
+          ],
+          "@id": "abv:urban-systems-built_environment-residential_fabric",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:urban-systems-built_environment"
+          },
+          "skos:inScheme": {
+            "@id": "abv:urban-systems"
+          }
+        },
+        {
+          "id": "commercial_industrial",
+          "name": "Commercial & Industrial Zones",
+          "systems": [
+            {
+              "id": "central_business_districts",
+              "name": "Central Business Districts (CBDs)",
+              "examples": "Downtown commercial cores",
+              "@id": "abv:urban-systems-built_environment-commercial_industrial-central_business_districts",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-built_environment-commercial_industrial"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "heavy_industry",
+              "name": "Heavy Industry / Manufacturing",
+              "examples": "Industrial parks, factories",
+              "@id": "abv:urban-systems-built_environment-commercial_industrial-heavy_industry",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-built_environment-commercial_industrial"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "logistics_warehousing",
+              "name": "Logistics & Warehousing",
+              "examples": "Distribution centers, storage facilities",
+              "@id": "abv:urban-systems-built_environment-commercial_industrial-logistics_warehousing",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-built_environment-commercial_industrial"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            }
+          ],
+          "@id": "abv:urban-systems-built_environment-commercial_industrial",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:urban-systems-built_environment"
+          },
+          "skos:inScheme": {
+            "@id": "abv:urban-systems"
+          }
+        },
+        {
+          "id": "civic_institutional",
+          "name": "Civic & Institutional (Critical Hubs)",
+          "systems": [
+            {
+              "id": "healthcare_facilities",
+              "name": "Healthcare Facilities",
+              "examples": "Hospitals, clinics, emergency medical centers",
+              "@id": "abv:urban-systems-built_environment-civic_institutional-healthcare_facilities",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-built_environment-civic_institutional"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "educational_facilities",
+              "name": "Educational Facilities",
+              "examples": "Schools, universities, research centers",
+              "@id": "abv:urban-systems-built_environment-civic_institutional-educational_facilities",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-built_environment-civic_institutional"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "government_emergency",
+              "name": "Government & Emergency Response",
+              "examples": "Municipal buildings, fire stations, police stations, EOCs",
+              "@id": "abv:urban-systems-built_environment-civic_institutional-government_emergency",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-built_environment-civic_institutional"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            }
+          ],
+          "@id": "abv:urban-systems-built_environment-civic_institutional",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:urban-systems-built_environment"
+          },
+          "skos:inScheme": {
+            "@id": "abv:urban-systems"
+          }
+        },
+        {
+          "id": "land_use_topology",
+          "name": "Land Use & Topology (The Substrate)",
+          "systems": [
+            {
+              "id": "floodplains_coastal",
+              "name": "Floodplains & Low-Lying Coastal Zones",
+              "examples": "High flood risk areas",
+              "@id": "abv:urban-systems-built_environment-land_use_topology-floodplains_coastal",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-built_environment-land_use_topology"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "steep_slopes",
+              "name": "Steep Slopes",
+              "examples": "Landslide and erosion risk zones",
+              "@id": "abv:urban-systems-built_environment-land_use_topology-steep_slopes",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-built_environment-land_use_topology"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "brownfields_reclaimed",
+              "name": "Brownfields & Reclaimed Land",
+              "examples": "Former industrial sites, landfills",
+              "@id": "abv:urban-systems-built_environment-land_use_topology-brownfields_reclaimed",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-built_environment-land_use_topology"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "subsurface_space",
+              "name": "Subsurface Space",
+              "examples": "Basements, underground parking, tunnels",
+              "@id": "abv:urban-systems-built_environment-land_use_topology-subsurface_space",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-built_environment-land_use_topology"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            }
+          ],
+          "@id": "abv:urban-systems-built_environment-land_use_topology",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:urban-systems-built_environment"
+          },
+          "skos:inScheme": {
+            "@id": "abv:urban-systems"
+          }
+        }
+      ],
+      "@id": "abv:urban-systems-built_environment",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:urban-systems"
+      }
+    },
+    {
+      "id": "mobility_transport",
+      "name": "Mobility & Transport Networks",
+      "description": "Systems for moving people and goods. Solutions maintain flow during extreme events and prevent material degradation.",
+      "subsectors": [
+        {
+          "id": "surface_transportation",
+          "name": "Surface Transportation",
+          "systems": [
+            {
+              "id": "arterial_roads",
+              "name": "Arterial Roads & Highways",
+              "examples": "Major roadways, expressways",
+              "@id": "abv:urban-systems-mobility_transport-surface_transportation-arterial_roads",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-mobility_transport-surface_transportation"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "local_streets",
+              "name": "Local/Municipal Street Networks",
+              "examples": "Neighborhood streets, collector roads",
+              "@id": "abv:urban-systems-mobility_transport-surface_transportation-local_streets",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-mobility_transport-surface_transportation"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "bridges_tunnels",
+              "name": "Bridges, Tunnels, and Viaducts",
+              "examples": "Critical crossing infrastructure",
+              "@id": "abv:urban-systems-mobility_transport-surface_transportation-bridges_tunnels",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-mobility_transport-surface_transportation"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "active_mobility",
+              "name": "Active Mobility Networks",
+              "examples": "Pedestrian paths, cycling infrastructure, greenways",
+              "@id": "abv:urban-systems-mobility_transport-surface_transportation-active_mobility",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-mobility_transport-surface_transportation"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            }
+          ],
+          "@id": "abv:urban-systems-mobility_transport-surface_transportation",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:urban-systems-mobility_transport"
+          },
+          "skos:inScheme": {
+            "@id": "abv:urban-systems"
+          }
+        },
+        {
+          "id": "mass_transit",
+          "name": "Mass Transit Systems",
+          "systems": [
+            {
+              "id": "rail_networks",
+              "name": "Rail Networks",
+              "examples": "Subway/Underground, light rail, commuter rail",
+              "@id": "abv:urban-systems-mobility_transport-mass_transit-rail_networks",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-mobility_transport-mass_transit"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "bus_systems",
+              "name": "Bus Rapid Transit (BRT) & Surface Bus",
+              "examples": "Bus lanes, bus networks",
+              "@id": "abv:urban-systems-mobility_transport-mass_transit-bus_systems",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-mobility_transport-mass_transit"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "transit_nodes",
+              "name": "Transit Nodes",
+              "examples": "Stations, terminals, depots, maintenance yards",
+              "@id": "abv:urban-systems-mobility_transport-mass_transit-transit_nodes",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-mobility_transport-mass_transit"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            }
+          ],
+          "@id": "abv:urban-systems-mobility_transport-mass_transit",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:urban-systems-mobility_transport"
+          },
+          "skos:inScheme": {
+            "@id": "abv:urban-systems"
+          }
+        },
+        {
+          "id": "freight_logistics",
+          "name": "Freight & Macro-Logistics",
+          "systems": [
+            {
+              "id": "maritime_ports",
+              "name": "Maritime Ports & Harbors",
+              "examples": "Seaports highly exposed to sea-level rise",
+              "@id": "abv:urban-systems-mobility_transport-freight_logistics-maritime_ports",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-mobility_transport-freight_logistics"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "airports",
+              "name": "Airports",
+              "examples": "Runways, terminal infrastructure",
+              "@id": "abv:urban-systems-mobility_transport-freight_logistics-airports",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-mobility_transport-freight_logistics"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "freight_rail",
+              "name": "Freight Rail Yards",
+              "examples": "Cargo rail terminals",
+              "@id": "abv:urban-systems-mobility_transport-freight_logistics-freight_rail",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-mobility_transport-freight_logistics"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            }
+          ],
+          "@id": "abv:urban-systems-mobility_transport-freight_logistics",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:urban-systems-mobility_transport"
+          },
+          "skos:inScheme": {
+            "@id": "abv:urban-systems"
+          }
+        }
+      ],
+      "@id": "abv:urban-systems-mobility_transport",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:urban-systems"
+      }
+    },
+    {
+      "id": "hydrological_water",
+      "name": "Hydrological & Water Infrastructure",
+      "description": "Water sourcing, distribution, and management. Most heavily impacted by climate change.",
+      "subsectors": [
+        {
+          "id": "potable_water",
+          "name": "Potable / Drinking Water Supply",
+          "systems": [
+            {
+              "id": "source_water",
+              "name": "Source Water",
+              "examples": "Reservoirs, aquifers, surface catchments",
+              "@id": "abv:urban-systems-hydrological_water-potable_water-source_water",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-hydrological_water-potable_water"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "treatment_facilities",
+              "name": "Treatment Facilities",
+              "examples": "Desalination plants, purification centers, water treatment plants",
+              "@id": "abv:urban-systems-hydrological_water-potable_water-treatment_facilities",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-hydrological_water-potable_water"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "distribution_networks",
+              "name": "Distribution Networks",
+              "examples": "Pumping stations, water mains, storage tanks",
+              "@id": "abv:urban-systems-hydrological_water-potable_water-distribution_networks",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-hydrological_water-potable_water"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            }
+          ],
+          "@id": "abv:urban-systems-hydrological_water-potable_water",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:urban-systems-hydrological_water"
+          },
+          "skos:inScheme": {
+            "@id": "abv:urban-systems"
+          }
+        },
+        {
+          "id": "stormwater_management",
+          "name": "Stormwater Management",
+          "systems": [
+            {
+              "id": "collection_networks",
+              "name": "Collection Networks",
+              "examples": "Storm sewers, combined sewer systems",
+              "@id": "abv:urban-systems-hydrological_water-stormwater_management-collection_networks",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-hydrological_water-stormwater_management"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "outfalls_discharge",
+              "name": "Outfalls & Discharge Points",
+              "examples": "Stormwater discharge infrastructure",
+              "@id": "abv:urban-systems-hydrological_water-stormwater_management-outfalls_discharge",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-hydrological_water-stormwater_management"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "surface_conveyance",
+              "name": "Surface Conveyance",
+              "examples": "Culverts, drainage channels, swales",
+              "@id": "abv:urban-systems-hydrological_water-stormwater_management-surface_conveyance",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-hydrological_water-stormwater_management"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            }
+          ],
+          "@id": "abv:urban-systems-hydrological_water-stormwater_management",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:urban-systems-hydrological_water"
+          },
+          "skos:inScheme": {
+            "@id": "abv:urban-systems"
+          }
+        },
+        {
+          "id": "wastewater_sanitation",
+          "name": "Wastewater / Sanitation",
+          "systems": [
+            {
+              "id": "wastewater_treatment",
+              "name": "Wastewater Treatment Plants (WWTPs)",
+              "examples": "Sewage treatment facilities",
+              "@id": "abv:urban-systems-hydrological_water-wastewater_sanitation-wastewater_treatment",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-hydrological_water-wastewater_sanitation"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "sanitary_sewers",
+              "name": "Sanitary Sewer Networks",
+              "examples": "Underground sewer pipes",
+              "@id": "abv:urban-systems-hydrological_water-wastewater_sanitation-sanitary_sewers",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-hydrological_water-wastewater_sanitation"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "decentralized_sanitation",
+              "name": "Decentralized Sanitation",
+              "examples": "Septic systems, localized treatment",
+              "@id": "abv:urban-systems-hydrological_water-wastewater_sanitation-decentralized_sanitation",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-hydrological_water-wastewater_sanitation"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            }
+          ],
+          "@id": "abv:urban-systems-hydrological_water-wastewater_sanitation",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:urban-systems-hydrological_water"
+          },
+          "skos:inScheme": {
+            "@id": "abv:urban-systems"
+          }
+        },
+        {
+          "id": "coastal_riverine_defenses",
+          "name": "Coastal & Riverine Defenses",
+          "systems": [
+            {
+              "id": "hard_engineering",
+              "name": "Hard Engineering",
+              "examples": "Seawalls, levees, tidal barrages, dikes",
+              "@id": "abv:urban-systems-hydrological_water-coastal_riverine_defenses-hard_engineering",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-hydrological_water-coastal_riverine_defenses"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "managed_waterways",
+              "name": "Managed Waterways",
+              "examples": "Canals, dredged channels, flood control structures",
+              "@id": "abv:urban-systems-hydrological_water-coastal_riverine_defenses-managed_waterways",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-hydrological_water-coastal_riverine_defenses"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            }
+          ],
+          "@id": "abv:urban-systems-hydrological_water-coastal_riverine_defenses",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:urban-systems-hydrological_water"
+          },
+          "skos:inScheme": {
+            "@id": "abv:urban-systems"
+          }
+        }
+      ],
+      "@id": "abv:urban-systems-hydrological_water",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:urban-systems"
+      }
+    },
+    {
+      "id": "energy_telecom",
+      "name": "Energy & Telecommunications",
+      "description": "The nervous system. Solutions prevent cascading failures from flooded substations affecting hospitals and communications.",
+      "subsectors": [
+        {
+          "id": "energy_generation",
+          "name": "Energy Generation",
+          "systems": [
+            {
+              "id": "centralized_power",
+              "name": "Centralized Power Plants",
+              "examples": "Fossil fuel, nuclear, large-scale hydro",
+              "@id": "abv:urban-systems-energy_telecom-energy_generation-centralized_power",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-energy_telecom-energy_generation"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "distributed_generation",
+              "name": "Decentralized / Distributed Generation",
+              "examples": "Rooftop solar, micro-turbines, CHP",
+              "@id": "abv:urban-systems-energy_telecom-energy_generation-distributed_generation",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-energy_telecom-energy_generation"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "district_systems",
+              "name": "District Heating & Cooling",
+              "examples": "Centralized thermal distribution systems",
+              "@id": "abv:urban-systems-energy_telecom-energy_generation-district_systems",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-energy_telecom-energy_generation"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            }
+          ],
+          "@id": "abv:urban-systems-energy_telecom-energy_generation",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:urban-systems-energy_telecom"
+          },
+          "skos:inScheme": {
+            "@id": "abv:urban-systems"
+          }
+        },
+        {
+          "id": "energy_transmission",
+          "name": "Energy Transmission & Distribution",
+          "systems": [
+            {
+              "id": "transmission_lines",
+              "name": "High-Voltage Transmission",
+              "examples": "Transmission lines, towers, overhead cables",
+              "@id": "abv:urban-systems-energy_telecom-energy_transmission-transmission_lines",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-energy_telecom-energy_transmission"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "substations",
+              "name": "Substations & Transformers",
+              "examples": "High vulnerability to flooding",
+              "@id": "abv:urban-systems-energy_telecom-energy_transmission-substations",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-energy_telecom-energy_transmission"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "local_grid",
+              "name": "Local Grid / Last-Mile Distribution",
+              "examples": "Distribution lines, underground cables",
+              "@id": "abv:urban-systems-energy_telecom-energy_transmission-local_grid",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-energy_telecom-energy_transmission"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "energy_storage",
+              "name": "Energy Storage",
+              "examples": "Grid-scale batteries, pumped hydro",
+              "@id": "abv:urban-systems-energy_telecom-energy_transmission-energy_storage",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-energy_telecom-energy_transmission"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            }
+          ],
+          "@id": "abv:urban-systems-energy_telecom-energy_transmission",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:urban-systems-energy_telecom"
+          },
+          "skos:inScheme": {
+            "@id": "abv:urban-systems"
+          }
+        },
+        {
+          "id": "telecommunications",
+          "name": "Telecommunications & Data",
+          "systems": [
+            {
+              "id": "data_centers",
+              "name": "Data Centers",
+              "examples": "High cooling needs, heatwave vulnerability",
+              "@id": "abv:urban-systems-energy_telecom-telecommunications-data_centers",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-energy_telecom-telecommunications"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "physical_networks",
+              "name": "Physical Networks",
+              "examples": "Fiber optics, underground cables",
+              "@id": "abv:urban-systems-energy_telecom-telecommunications-physical_networks",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-energy_telecom-telecommunications"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "wireless_networks",
+              "name": "Wireless Networks",
+              "examples": "Cell towers, emergency radio repeaters",
+              "@id": "abv:urban-systems-energy_telecom-telecommunications-wireless_networks",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-energy_telecom-telecommunications"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            }
+          ],
+          "@id": "abv:urban-systems-energy_telecom-telecommunications",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:urban-systems-energy_telecom"
+          },
+          "skos:inScheme": {
+            "@id": "abv:urban-systems"
+          }
+        }
+      ],
+      "@id": "abv:urban-systems-energy_telecom",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:urban-systems"
+      }
+    },
+    {
+      "id": "urban_ecology",
+      "name": "Urban Ecology & Natural Capital",
+      "description": "Urban nature as functional infrastructure providing ecosystem services (cooling, water retention).",
+      "subsectors": [
+        {
+          "id": "managed_green_spaces",
+          "name": "Managed Green Spaces",
+          "systems": [
+            {
+              "id": "parks_plazas",
+              "name": "Public Parks & Plazas",
+              "examples": "Urban parks, squares, recreational areas",
+              "@id": "abv:urban-systems-urban_ecology-managed_green_spaces-parks_plazas",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-urban_ecology-managed_green_spaces"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "streetscapes_canopies",
+              "name": "Streetscapes & Urban Canopies",
+              "examples": "Street trees, parklets, boulevard plantings",
+              "@id": "abv:urban-systems-urban_ecology-managed_green_spaces-streetscapes_canopies",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-urban_ecology-managed_green_spaces"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "institutional_grounds",
+              "name": "Institutional Grounds",
+              "examples": "Cemeteries, golf courses, campus landscapes",
+              "@id": "abv:urban-systems-urban_ecology-managed_green_spaces-institutional_grounds",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-urban_ecology-managed_green_spaces"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            }
+          ],
+          "@id": "abv:urban-systems-urban_ecology-managed_green_spaces",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:urban-systems-urban_ecology"
+          },
+          "skos:inScheme": {
+            "@id": "abv:urban-systems"
+          }
+        },
+        {
+          "id": "blue_green_infrastructure",
+          "name": "Blue-Green Infrastructure (BGI)",
+          "systems": [
+            {
+              "id": "constructed_wetlands",
+              "name": "Constructed Wetlands & Bioswales",
+              "examples": "Engineered natural filtration systems",
+              "@id": "abv:urban-systems-urban_ecology-blue_green_infrastructure-constructed_wetlands",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-urban_ecology-blue_green_infrastructure"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "permeable_surfaces",
+              "name": "Permeable Surfaces",
+              "examples": "Pervious pavement, infiltration areas",
+              "@id": "abv:urban-systems-urban_ecology-blue_green_infrastructure-permeable_surfaces",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-urban_ecology-blue_green_infrastructure"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "green_roofs_walls",
+              "name": "Green Roofs & Vertical Gardens",
+              "examples": "Building-integrated vegetation",
+              "@id": "abv:urban-systems-urban_ecology-blue_green_infrastructure-green_roofs_walls",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-urban_ecology-blue_green_infrastructure"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            }
+          ],
+          "@id": "abv:urban-systems-urban_ecology-blue_green_infrastructure",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:urban-systems-urban_ecology"
+          },
+          "skos:inScheme": {
+            "@id": "abv:urban-systems"
+          }
+        },
+        {
+          "id": "periurban_wildland",
+          "name": "Peri-Urban & Wildland Interfaces",
+          "systems": [
+            {
+              "id": "urban_forests",
+              "name": "Urban Forests & Greenbelts",
+              "examples": "Protected woodland areas, buffer zones",
+              "@id": "abv:urban-systems-urban_ecology-periurban_wildland-urban_forests",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-urban_ecology-periurban_wildland"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "coastal_buffers",
+              "name": "Coastal Buffers",
+              "examples": "Mangroves, salt marshes, dune systems",
+              "@id": "abv:urban-systems-urban_ecology-periurban_wildland-coastal_buffers",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-urban_ecology-periurban_wildland"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "riparian_zones",
+              "name": "Riparian Zones",
+              "examples": "Riverbanks, floodplains, stream corridors",
+              "@id": "abv:urban-systems-urban_ecology-periurban_wildland-riparian_zones",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-urban_ecology-periurban_wildland"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            }
+          ],
+          "@id": "abv:urban-systems-urban_ecology-periurban_wildland",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:urban-systems-urban_ecology"
+          },
+          "skos:inScheme": {
+            "@id": "abv:urban-systems"
+          }
+        }
+      ],
+      "@id": "abv:urban-systems-urban_ecology",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:urban-systems"
+      }
+    },
+    {
+      "id": "socioeconomic_health",
+      "name": "Socio-Economic & Public Health Systems",
+      "description": "Operational and social systems. Solutions include early warning systems, cooling centers, and community networks.",
+      "subsectors": [
+        {
+          "id": "public_health",
+          "name": "Public Health",
+          "systems": [
+            {
+              "id": "vulnerable_populations",
+              "name": "Vulnerable Population Demographics",
+              "examples": "Elderly, low-income, disabled communities",
+              "@id": "abv:urban-systems-socioeconomic_health-public_health-vulnerable_populations",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-socioeconomic_health-public_health"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "disease_monitoring",
+              "name": "Vector-Borne Disease Monitoring",
+              "examples": "Surveillance systems, prevention programs",
+              "@id": "abv:urban-systems-socioeconomic_health-public_health-disease_monitoring",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-socioeconomic_health-public_health"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "emergency_medical",
+              "name": "Emergency Medical Services (EMS)",
+              "examples": "Ambulance capacity, first responders",
+              "@id": "abv:urban-systems-socioeconomic_health-public_health-emergency_medical",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-socioeconomic_health-public_health"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            }
+          ],
+          "@id": "abv:urban-systems-socioeconomic_health-public_health",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:urban-systems-socioeconomic_health"
+          },
+          "skos:inScheme": {
+            "@id": "abv:urban-systems"
+          }
+        },
+        {
+          "id": "economic_systems",
+          "name": "Economic Systems",
+          "systems": [
+            {
+              "id": "supply_chains",
+              "name": "Local Supply Chains",
+              "examples": "Food security, essential goods distribution",
+              "@id": "abv:urban-systems-socioeconomic_health-economic_systems-supply_chains",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-socioeconomic_health-economic_systems"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "retail_services",
+              "name": "Retail & Service Sectors",
+              "examples": "Commercial activity, local businesses",
+              "@id": "abv:urban-systems-socioeconomic_health-economic_systems-retail_services",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-socioeconomic_health-economic_systems"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "informal_economies",
+              "name": "Informal Economies",
+              "examples": "Street vendors, unregistered labor - highly vulnerable",
+              "@id": "abv:urban-systems-socioeconomic_health-economic_systems-informal_economies",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-socioeconomic_health-economic_systems"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            }
+          ],
+          "@id": "abv:urban-systems-socioeconomic_health-economic_systems",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:urban-systems-socioeconomic_health"
+          },
+          "skos:inScheme": {
+            "@id": "abv:urban-systems"
+          }
+        },
+        {
+          "id": "social_capital",
+          "name": "Social Capital",
+          "systems": [
+            {
+              "id": "community_networks",
+              "name": "Community Networks & NGOs",
+              "examples": "Local organizations, civic groups",
+              "@id": "abv:urban-systems-socioeconomic_health-social_capital-community_networks",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-socioeconomic_health-social_capital"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "resilience_hubs",
+              "name": "Resilience Hubs",
+              "examples": "Community centers equipped for off-grid survival",
+              "@id": "abv:urban-systems-socioeconomic_health-social_capital-resilience_hubs",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-socioeconomic_health-social_capital"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            }
+          ],
+          "@id": "abv:urban-systems-socioeconomic_health-social_capital",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:urban-systems-socioeconomic_health"
+          },
+          "skos:inScheme": {
+            "@id": "abv:urban-systems"
+          }
+        },
+        {
+          "id": "informal_service_systems",
+          "name": "Informal Service Systems",
+          "_note": "Service provision filled by informal actors and arrangements where formal systems are absent, insufficient, or inaccessible. Critical for modeling adaptation in cities of the Global South per IPCC AR6 Ch. 6, which observes that ISO 37120 and similar formal taxonomies miss these systems even when they serve a majority of residents.",
+          "systems": [
+            {
+              "id": "informal_water_supply",
+              "name": "Informal Water Supply",
+              "examples": "Water vendors, tanker trucks, private boreholes serving communities without piped supply",
+              "@id": "abv:urban-systems-socioeconomic_health-informal_service_systems-informal_water_supply",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-socioeconomic_health-informal_service_systems"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "informal_sanitation",
+              "name": "Informal Sanitation",
+              "examples": "Pit latrines, manual desludging services, decentralized community toilets",
+              "@id": "abv:urban-systems-socioeconomic_health-informal_service_systems-informal_sanitation",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-socioeconomic_health-informal_service_systems"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "informal_solid_waste",
+              "name": "Informal Solid Waste & Recycling",
+              "examples": "Waste pickers, informal recyclers, neighborhood collection arrangements",
+              "@id": "abv:urban-systems-socioeconomic_health-informal_service_systems-informal_solid_waste",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-socioeconomic_health-informal_service_systems"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "informal_transport",
+              "name": "Informal Transport",
+              "examples": "Paratransit, jitneys, motorcycle taxis, informal minibus networks",
+              "@id": "abv:urban-systems-socioeconomic_health-informal_service_systems-informal_transport",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-socioeconomic_health-informal_service_systems"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "informal_energy",
+              "name": "Informal Energy Provision",
+              "examples": "Unmetered grid connections, charcoal/biomass markets, shared generators",
+              "@id": "abv:urban-systems-socioeconomic_health-informal_service_systems-informal_energy",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-socioeconomic_health-informal_service_systems"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "community_disaster_response",
+              "name": "Community-Led Disaster Response",
+              "examples": "Mutual aid networks, neighborhood watch, volunteer evacuation coordination, faith-based response",
+              "@id": "abv:urban-systems-socioeconomic_health-informal_service_systems-community_disaster_response",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-socioeconomic_health-informal_service_systems"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "informal_food_systems",
+              "name": "Informal Food Systems",
+              "examples": "Street vendors, wet markets, urban subsistence agriculture, mutual food banks",
+              "@id": "abv:urban-systems-socioeconomic_health-informal_service_systems-informal_food_systems",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-socioeconomic_health-informal_service_systems"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            }
+          ],
+          "@id": "abv:urban-systems-socioeconomic_health-informal_service_systems",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:urban-systems-socioeconomic_health"
+          },
+          "skos:inScheme": {
+            "@id": "abv:urban-systems"
+          }
+        }
+      ],
+      "@id": "abv:urban-systems-socioeconomic_health",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:urban-systems"
+      }
+    },
+    {
+      "id": "governance_finance",
+      "name": "Governance, Policy & Finance",
+      "description": "Rules of the game. Many adaptation solutions are purely administrative or financial interventions.",
+      "subsectors": [
+        {
+          "id": "regulatory_frameworks",
+          "name": "Regulatory Frameworks",
+          "systems": [
+            {
+              "id": "building_codes",
+              "name": "Building Codes & Standards",
+              "examples": "Construction regulations, energy codes",
+              "@id": "abv:urban-systems-governance_finance-regulatory_frameworks-building_codes",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-governance_finance-regulatory_frameworks"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "zoning_planning",
+              "name": "Zoning & Spatial Planning",
+              "examples": "Land use regulations, development controls",
+              "@id": "abv:urban-systems-governance_finance-regulatory_frameworks-zoning_planning",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-governance_finance-regulatory_frameworks"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            }
+          ],
+          "@id": "abv:urban-systems-governance_finance-regulatory_frameworks",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:urban-systems-governance_finance"
+          },
+          "skos:inScheme": {
+            "@id": "abv:urban-systems"
+          }
+        },
+        {
+          "id": "financial_risk",
+          "name": "Financial & Risk Mechanisms",
+          "systems": [
+            {
+              "id": "municipal_finance",
+              "name": "Municipal Finance",
+              "examples": "Green bonds, resilience budgets, climate funds",
+              "@id": "abv:urban-systems-governance_finance-financial_risk-municipal_finance",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-governance_finance-financial_risk"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "insurance_markets",
+              "name": "Insurance Markets",
+              "examples": "Parametric insurance, property risk markets",
+              "@id": "abv:urban-systems-governance_finance-financial_risk-insurance_markets",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-governance_finance-financial_risk"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            }
+          ],
+          "@id": "abv:urban-systems-governance_finance-financial_risk",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:urban-systems-governance_finance"
+          },
+          "skos:inScheme": {
+            "@id": "abv:urban-systems"
+          }
+        },
+        {
+          "id": "emergency_management",
+          "name": "Emergency Management Operations",
+          "systems": [
+            {
+              "id": "early_warning",
+              "name": "Early Warning Systems (EWS)",
+              "examples": "Alert systems, monitoring networks",
+              "@id": "abv:urban-systems-governance_finance-emergency_management-early_warning",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-governance_finance-emergency_management"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            },
+            {
+              "id": "evacuation_sheltering",
+              "name": "Evacuation & Sheltering",
+              "examples": "Evacuation protocols, emergency shelters",
+              "@id": "abv:urban-systems-governance_finance-emergency_management-evacuation_sheltering",
+              "@type": "skos:Concept",
+              "skos:broader": {
+                "@id": "abv:urban-systems-governance_finance-emergency_management"
+              },
+              "skos:inScheme": {
+                "@id": "abv:urban-systems"
+              }
+            }
+          ],
+          "@id": "abv:urban-systems-governance_finance-emergency_management",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:urban-systems-governance_finance"
+          },
+          "skos:inScheme": {
+            "@id": "abv:urban-systems"
+          }
+        }
+      ],
+      "@id": "abv:urban-systems-governance_finance",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:urban-systems"
+      }
+    },
+    {
+      "id": "agriculture__food_systems",
+      "name": "Agriculture & Food Systems",
+      "description": "Climate adaptation actions focused on agricultural practices, crop management, livestock improvement, paludiculture, and food production systems. Includes technological interventions (crop varieties, genetic techniques), behavioral changes (cropping practices, agroecology), and agricultural extension services.",
+      "subsectors": [],
+      "source": "corpus_mining_distribution_v0",
+      "@id": "abv:urban-systems-agriculture__food_systems",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:urban-systems"
+      }
+    },
+    {
+      "id": "emergency__disaster_management",
+      "name": "Emergency & Disaster Management",
+      "description": "Actions focused on disaster planning, preparedness, emergency response protocols, and scenario exercises for climate-related hazards. Distinct from general governance by emphasizing operational readiness and emergency coordination.",
+      "subsectors": [],
+      "source": "corpus_mining_distribution_v0",
+      "@id": "abv:urban-systems-emergency__disaster_management",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:urban-systems"
+      }
+    }
+  ],
+  "@id": "abv:urban-systems",
+  "@type": "skos:ConceptScheme"
+}

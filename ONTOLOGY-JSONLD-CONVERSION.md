@@ -1,5 +1,19 @@
 # Plan: Migrate Ontology Source to JSON-LD (v1.0)
 
+## Status (2026-08-18)
+
+Phases 1-3 (critical path) are **done**: `ontology/context.jsonld`,
+`ontology/ontology-v1.0.jsonld`, `ontology/vocabularies/*.jsonld` (8 files),
+and `scripts/export/generate_exports.py` + the CI step in
+`.github/workflows/pages.yml` all exist and are verified (viewer smoke-tested
+against v1.0, all three exported RDF files round-trip parse clean with
+rdflib). This doc was written 2026-05-07 against the then-current schema
+(v0.3, published the same day) and was never updated across the five
+ontology versions that shipped afterward (v0.4 -> v0.7), so several factual
+claims below were stale by the time the migration actually ran. Corrections
+are inline, marked `[2026-08-18]`. Phase 2b (editor rebuild) and Phase 4
+(docs/discovery polish) remain undone, per plan.
+
 ## Why
 
 The ontology is currently a proprietary JSON structure that only our viewer can consume. By making the source format JSON-LD, the ontology *is* a standard linked-data artifact — no sync layer, no dual-source maintenance, and anyone with RDF tooling can consume it directly. OWL/Turtle and SKOS exports become one-way CI-generated artifacts from a standard source.
@@ -51,7 +65,26 @@ Create `ontology/context.jsonld` — a standalone JSON-LD 1.1 context that maps 
 }
 ```
 
-This is illustrative — the real context will need to handle all field names in the current JSON. The important thing: existing fields get semantic meaning without renaming them.
+This was illustrative — the real context, `ontology/context.jsonld`, is the
+ground truth now; **[2026-08-18]** it covers every field actually in use
+(the illustrative version above missed `notes`, `extract_hint`,
+`vocabulary_bindings`, `update_note`, `version_notes`, `domain_label`, and
+more), plus the vocab-file container fields (`categories`, `hazards`,
+`dimensions`, `sectors`, etc.) that turned out to need their own terms too —
+without them, rdflib silently drops those keys during JSON-LD expansion
+rather than erroring, which is easy to miss (each vocab file round-tripped
+through with only 0-1 triples until this was caught). One correction to the
+approach itself: `source`/`target` (and `vocabulary`) can't use
+`"@type": "@id"` the way this draft assumed, because their values are plain
+strings like `"Solution"` (kept that way so the existing viewer keeps
+reading them unchanged) — under `@type: "@id"` those resolve as *relative to
+the document's base URI*, not through the `ab:`/`abv:` prefixes, producing
+garbage IRIs like `file:///.../ontology/Solution`. Fixed by emitting
+explicit, already-resolved `rdfs:domain`/`rdfs:range`/`ab:boundToVocabulary`
+keys directly in the migration script instead of relying on context-driven
+coercion for those three fields. The important thing from the original plan
+still holds: existing fields keep their literal values and gain semantic
+meaning without being renamed.
 
 ### 1b. Convert ontology-v1.0.json to JSON-LD
 
@@ -84,7 +117,12 @@ Each vocabulary file (`hazards.json`, `solution-categories.json`, etc.) gets a `
 The viewer's `ontology-adapter.js` already transforms the raw JSON into a graph structure. JSON-LD keys it doesn't recognize (`@context`, `@id`, `@type`) are simply ignored by the existing transform. The required changes:
 
 - Update `versions.json` paths to point to `.jsonld` files
-- In `ontologyToGraph()`: read `@id` as the canonical type identifier (fallback to `id` for backwards compat during transition)
+- **[2026-08-18] Correction:** no `ontologyToGraph()` change was needed.
+  Confirmed by reading the actual code: it builds nodes/edges from
+  `type.id` / `rel.source` / `rel.target` / `rel.id` directly and never
+  touches `@id` at all — there's no "canonical identifier" fallback to add.
+  Verified end-to-end: v1.0.jsonld loads with the same 21 nodes / 60 edges
+  as v0.8.json, zero console errors, zero code changes.
 - Vocabulary loader: unchanged (JSON-LD is still JSON — `categories[].hazards[]` still works)
 
 ### 2b. Editor
@@ -108,20 +146,48 @@ A single Python script that:
 
 Because the source is already JSON-LD, rdflib can parse it directly — no custom mapping layer needed. The script is ~100 lines, not a multi-module system.
 
-### 3b. Handle the 5 duplicate relationship IDs
+### 3b. Handle the duplicate relationship IDs
 
-In the JSON-LD source, give each duplicate a distinct `@id`:
+**[2026-08-18]** This was 5 when the doc was written (2026-05-07, same day
+v0.3 shipped with exactly 5: `DEPLOYED_IN`, `IMPLEMENTED_BY`, `PRODUCES`,
+`SPECIFIES`, `USES_INSTRUMENT`). It grew across the versions this doc wasn't
+updated for — 7 as of v0.5.0 (+`GOVERNS`, `WITHIN`), **10** as of v0.6
+(+`ADDRESSES` and `TARGETS`, each with 3 rows, +`FUNDED_BY`) — and has held
+at 10 since. v0.8 didn't change the count (the seven re-anchored edges shift
+*which* source duplicates an existing id, not whether one does).
 
-```json
-{ "@id": "ab:actionDeployedIn", "id": "DEPLOYED_IN", "source": "Action", "target": "Location", ... }
-{ "@id": "ab:capitalProjectDeployedIn", "id": "DEPLOYED_IN", "source": "CapitalProject", "target": "Location", ... }
-```
-
-Add `rdfs:subPropertyOf` linking both to `ab:deployedIn`. The viewer still keys on `id` field ("DEPLOYED_IN") so existing behavior is preserved.
+Implemented naming rule, applied uniformly to all 48 predicate ids (not just
+the 10 that need it today — see rationale below): every predicate gets an
+umbrella `@id`, `ab:` + camelCase(predicate id) — e.g. `ab:deployedIn`,
+`ab:usesInstrument` — as the `owl:ObjectProperty` carrying `rdfs:label` /
+`rdfs:comment` / the extract hint. For the 10 duplicated predicates, each
+`(source, target)` row *additionally* gets a specific `@id`,
+`ab:{source}{Predicate}{Target}` in camelCase — e.g.
+`ab:actionDeployedInJurisdiction`, `ab:capitalProjectDeployedInJurisdiction`
+— declared `rdfs:subPropertyOf` the umbrella, with that row's own
+`rdfs:domain`/`rdfs:range`. For the other 38 single-row predicates the
+umbrella IRI *is* the specific IRI; no second one is minted. Minting the
+umbrella for all 48 up front means a currently-unique predicate that later
+gains a second row never needs its existing IRI renamed — it just gains a
+new child IRI under the umbrella that's already there. The viewer still
+keys on `id` + `source` + `target` (unchanged literal fields), so existing
+behavior is fully preserved — confirmed by smoke test, zero code changes.
 
 ### 3c. Handle RDF-star edge properties
 
-For the 48 relationships with `claim_ids` and typed properties, the Turtle export uses RDF-star syntax:
+**[2026-08-18] Correction:** 48 is the distinct predicate-*id* count, not
+the count of relationship *rows* carrying `claim_ids` — that's 57 of the 60
+rows (three have none: `SHAPES`, `REDUCES_EXPOSURE`, `INFORMS` — worth a
+follow-up on whether that's intentional). More fundamentally, RDF-star
+doesn't apply to `scripts/export/generate_exports.py`'s output at all: this
+repo's JSON-LD is the ontology *schema* (TBox — class/property
+definitions), not asserted instance edges, so there's nothing to reify here.
+`claim_ids` already resolves to `prov:wasDerivedFrom` via the context. The
+syntax below becomes relevant only if/when the *instance* knowledge graph
+(adaptbase-core, Supabase-backed, out of this repo's scope) is exported with
+its actual per-edge claim provenance:
+
+For the relationships with `claim_ids` and typed properties, the Turtle export would use RDF-star syntax:
 
 ```turtle
 <<:solution1 ab:mitigates :hazard1>> ab:isPrimary true ;
@@ -181,8 +247,8 @@ Phases 1–3 are the critical path. Phase 4–7 can follow incrementally.
 
 ---
 
-## Open Questions (resolve before starting)
+## Open Questions
 
-- **Vocabulary file extension:** Use `.jsonld` (clear signal) or keep `.json` with a `@context` inside (less disruption to existing tooling)?
-- **Context location:** Inline in each file, or a shared external `context.jsonld` referenced via relative path?
-- **Claim IRI pattern:** `https://ontology.adaptbase.us/claims/{uuid}` — confirm this is the right base even though claims live in Supabase?
+- **Vocabulary file extension:** ~~Use `.jsonld`...~~ **[2026-08-18] Resolved: `.jsonld`.** Done — all 8 files converted.
+- **Context location:** ~~Inline...~~ **[2026-08-18] Resolved: shared external `ontology/context.jsonld`,** referenced via relative path (`./context.jsonld` from the ontology source, `../context.jsonld` from `vocabularies/*.jsonld`). `enums.jsonld` additionally layers a file-local `@vocab` fallback on top of the shared context (see §1c note) — its 20 blocks are dynamically-named top-level keys, not an array under one field name like every other vocab file, so a static context term list can't enumerate them.
+- **Claim IRI pattern:** `https://ontology.adaptbase.us/claims/{uuid}` — **still open.** `claim_ids` resolves to `prov:wasDerivedFrom` in the context, but this ontology repo's JSON-LD is schema-only (TBox) — there's no instance data here to attach a claim IRI to. This matters when the *instance* knowledge graph (adaptbase-core, Supabase-backed) is exported with real per-edge claim provenance, which is out of this repo's scope; confirm the base URL with whoever owns that schema before treating it as load-bearing there.

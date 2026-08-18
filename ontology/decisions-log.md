@@ -1,14 +1,43 @@
 # Ontology Design Decisions Log
 
 **Project:** Resilience Scanner - Climate Adaptation Solutions Ontology  
-**Version:** 0.8  
-**Last Updated:** 2026-08-13
+**Version:** 1.0  
+**Last Updated:** 2026-08-18
 
 ---
 
 ## Purpose
 
 This log documents key design decisions in the ontology development process, including rationale, alternatives considered, and implications for future work.
+
+---
+
+## Decision 34 (v1.0): Migrate ontology source to JSON-LD
+
+**Date:** 2026-08-18
+**Context:** The ontology was a proprietary JSON structure readable only by this repo's own viewer/editor. Making the source format JSON-LD lets it stand as a real linked-data artifact — no sync layer, no dual-source maintenance — with OWL/Turtle/SKOS exports generated in CI from the same source rather than hand-maintained separately. Planned in `ONTOLOGY-JSONLD-CONVERSION.md` (2026-05-07); that doc sat untouched through five schema versions (v0.4-v0.7) before this migration executed against it, so several of its factual claims (duplicate-predicate-id count, `claim_ids` coverage, the illustrative `@context`) were stale by the time the work started — corrections are inline in that doc, dated 2026-08-18.
+
+### Decision
+
+New source files: `ontology/context.jsonld` (shared context, `ab:`/`abv:` namespaces), `ontology/ontology-v1.0.jsonld` (replaces `ontology-v0.8.json` as the live source; v0.8.json and all prior versions stay as immutable archive snapshots, browsable via the version dropdown), `ontology/vocabularies/*.jsonld` (8 files, `.jsonld` extension chosen over keeping `.json`). Every type gets `@id`/`@type: owl:Class`; every relationship gets `@id`/`@type: owl:ObjectProperty` per the naming rule below; every vocabulary file gets `skos:ConceptScheme`/`skos:Concept` typing. Existing field names and their literal values are unchanged throughout — `id`, `label`, `source`, `target`, etc. still hold exactly what the viewer already reads; JSON-LD keys are additive.
+
+**Relationship `@id` naming rule**, applied to all 48 predicate ids (not only the 10 that need it today): every predicate gets an umbrella IRI, `ab:` + camelCase(predicate id) — e.g. `ab:deployedIn` — as the declared `owl:ObjectProperty`. The 10 predicates with more than one `(source, target)` row (`ADDRESSES`×3, `DEPLOYED_IN`, `FUNDED_BY`, `GOVERNS`, `IMPLEMENTED_BY`, `PRODUCES`, `SPECIFIES`, `TARGETS`×3, `USES_INSTRUMENT`, `WITHIN` — 10 groups, unchanged by the v0.8 re-anchor, up from 5 when the conversion doc was written and 7 after v0.5.0) each additionally get a specific IRI, `ab:{source}{Predicate}{Target}` — e.g. `ab:actionDeployedInJurisdiction` — declared `rdfs:subPropertyOf` the umbrella. Minting the umbrella for all 48 up front (not only the 10 duplicated today) means a currently-unique predicate that later gains a second row never needs its shipped IRI renamed.
+
+**Two bugs found and fixed in the source data as part of building the context**, not merely JSON-LD modeling concerns:
+- Properties bound to a controlled vocabulary used three inconsistent shapes: 21 as bare `"vocabulary": "<id>"`, 10 as `"vocabulary_binding": {"vocab", "field"}`, and one — `USES_INSTRUMENT(CapitalProject).financing_model` — as a malformed `"vocab": "<id>"`. The viewer's `inspector.js` only reads `vocabulary_binding`, falling back to `vocabulary`; it never reads `vocab`, so that one property's enum options were silently not rendering. Normalized: the 6 bare `"vocabulary": "enums"` uses (relying on an unwritten property-id-matches-block-name convention) and the 1 `"vocab"` typo were converted to explicit `vocabulary_binding`. The 15 uses that name a real standalone vocab file are unchanged.
+- `Outcome.beneficiary_program` carried a `"vocabulary": "enums"` pointer to a block that doesn't exist in `enums.json` (its values are inline) — the same stale-pointer bug already fixed once for `UrbanSystem` in v0.4.1. Fixed the same way: dropped the pointer, kept the inline values.
+
+**`vocabularies[]` manifest expanded from 7 to 27 rows.** It previously had exactly one row for all of `enums.json` (`bound_to: ["various"]`), leaving its 20 individually-meaningful blocks (`financing_model`, `instrument_type`, …) undiscoverable at the metadata layer, and no row at all for `jurisdiction-kind.json`. Rather than split `enums.json` into 20 files — its blocks are flat 3-18-value picklists with no independent versioning story, unlike the six standalone taxonomies (109-739 lines each, hierarchical, crosswalked against external standards) — the manifest now lists each block individually (`abv:enums-<block>`, `skos:ConceptScheme`) while the file stays physically one. `enums.json`'s 20 blocks are dynamically-named top-level keys rather than an array under one field name like every other vocab file, so its `.jsonld` conversion layers a file-local `@vocab` fallback on top of the shared context instead of trying to enumerate 20 block names as static context terms.
+
+**`source`/`target`/`vocabulary` needed explicit resolved keys, not `@context`-driven `@type: "@id"` coercion.** Their literal values (`"Solution"`, `"hazards"`, …) have to stay exactly as the viewer already reads them, but under `@type: "@id"` those bare strings resolve *relative to the document's base URI*, not through the `ab:`/`abv:` prefixes — producing garbage IRIs. Fixed by having the migration script emit already-resolved `rdfs:domain`, `rdfs:range`, and `ab:boundToVocabulary` keys directly alongside the untouched literal fields.
+
+### Verification
+
+All three exports (`ontology.ttl`, `ontology.owl`, `vocabularies.ttl`, 3,042 + 3,323 triples) round-trip parse clean with rdflib. Viewer smoke-tested against `ontology-v1.0.jsonld`: same 21 nodes / 60 edges as v0.8, vocab tag resolution unaffected (loader still reads the original `.json` vocab files, untouched), zero console errors, zero `ontology-adapter.js` code changes needed — it reads plain fields (`type.id`, `rel.source`, etc.) and was already ignoring `@`-prefixed keys.
+
+### Scope not covered by this decision
+
+Editor rebuild (`editor-app.js`/`editor-server.py` preserving `@`-keys on save) and documentation/content-negotiation/download-button polish are deferred to a later pass — independent of the core migration, don't block it. `scripts/export/generate_exports.py` runs in CI (`.github/workflows/pages.yml`, added as a step before the existing Pages artifact upload) on every push to `main`; `exports/` is gitignored, never committed.
 
 ---
 

@@ -23,3 +23,6 @@ mining/corpus/plans/
 # Editor
 .vscode/settings.json
 .playwright-mcp
+
+# JSON-LD RDF exports (CI-generated from ontology/*.jsonld, not committed source)
+/exports/

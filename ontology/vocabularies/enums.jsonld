@@ -1,0 +1,1717 @@
+{
+  "_description": "Non-table-backed controlled vocabularies used across the extraction schema",
+  "ipcc_action_type": {
+    "_source": "IPCC AR6 Chapter 14 adaptation action typology",
+    "_usage": "identity.ipcc_action_type.values",
+    "values": [
+      {
+        "id": "structural_physical",
+        "name": "Structural/Physical",
+        "description": "Engineered and built environment, technological, ecosystem-based adaptation",
+        "@id": "abv:enums-ipcc_action_type-structural_physical",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-ipcc_action_type"
+        }
+      },
+      {
+        "id": "social",
+        "name": "Social",
+        "description": "Educational, informational, behavioral",
+        "@id": "abv:enums-ipcc_action_type-social",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-ipcc_action_type"
+        }
+      },
+      {
+        "id": "institutional",
+        "name": "Institutional",
+        "description": "Economic, laws/regulations, government policies and programs",
+        "@id": "abv:enums-ipcc_action_type-institutional",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-ipcc_action_type"
+        }
+      },
+      {
+        "id": "ecosystem_based",
+        "name": "Ecosystem-based",
+        "description": "Nature-based solutions, green infrastructure, ecological restoration",
+        "@id": "abv:enums-ipcc_action_type-ecosystem_based",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-ipcc_action_type"
+        }
+      }
+    ],
+    "@id": "abv:enums-ipcc_action_type",
+    "@type": "skos:ConceptScheme"
+  },
+  "implementing_actor_type": {
+    "_source": "Derived from case library and CDP data analysis",
+    "_usage": "identity.implementing_actor_types.values, implementation.key_actors[].type",
+    "_note": "Use multiple actor types in arrays instead of 'multi_stakeholder' to preserve specific actor information",
+    "values": [
+      {
+        "id": "municipal_government",
+        "name": "Municipal Government",
+        "@id": "abv:enums-implementing_actor_type-municipal_government",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-implementing_actor_type"
+        }
+      },
+      {
+        "id": "regional_government",
+        "name": "Regional Government",
+        "@id": "abv:enums-implementing_actor_type-regional_government",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-implementing_actor_type"
+        }
+      },
+      {
+        "id": "national_government",
+        "name": "National Government",
+        "@id": "abv:enums-implementing_actor_type-national_government",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-implementing_actor_type"
+        }
+      },
+      {
+        "id": "utility",
+        "name": "Utility",
+        "@id": "abv:enums-implementing_actor_type-utility",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-implementing_actor_type"
+        }
+      },
+      {
+        "id": "private_sector",
+        "name": "Private Sector",
+        "@id": "abv:enums-implementing_actor_type-private_sector",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-implementing_actor_type"
+        }
+      },
+      {
+        "id": "ngo",
+        "name": "NGO",
+        "@id": "abv:enums-implementing_actor_type-ngo",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-implementing_actor_type"
+        }
+      },
+      {
+        "id": "community",
+        "name": "Community",
+        "@id": "abv:enums-implementing_actor_type-community",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-implementing_actor_type"
+        }
+      },
+      {
+        "id": "academic",
+        "name": "Academic / Research",
+        "@id": "abv:enums-implementing_actor_type-academic",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-implementing_actor_type"
+        }
+      },
+      {
+        "id": "international_organization",
+        "name": "International Organization",
+        "@id": "abv:enums-implementing_actor_type-international_organization",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-implementing_actor_type"
+        }
+      }
+    ],
+    "@id": "abv:enums-implementing_actor_type",
+    "@type": "skos:ConceptScheme"
+  },
+  "evidence_level": {
+    "_usage": "Outcome.evidence_level, PRODUCES.evidence_level, RESULTS_IN.evidence_level",
+    "values": [
+      {
+        "id": "anecdotal",
+        "name": "Anecdotal",
+        "description": "Qualitative reports without systematic measurement",
+        "@id": "abv:enums-evidence_level-anecdotal",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-evidence_level"
+        }
+      },
+      {
+        "id": "measured",
+        "name": "Measured",
+        "description": "Quantitative data collected but not rigorously controlled",
+        "@id": "abv:enums-evidence_level-measured",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-evidence_level"
+        }
+      },
+      {
+        "id": "rigorously_evaluated",
+        "name": "Rigorously Evaluated",
+        "description": "Controlled studies, peer-reviewed evaluations",
+        "@id": "abv:enums-evidence_level-rigorously_evaluated",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-evidence_level"
+        }
+      }
+    ],
+    "@id": "abv:enums-evidence_level",
+    "@type": "skos:ConceptScheme"
+  },
+  "outcome_type": {
+    "_usage": "Outcome.outcome_type, PRODUCES.outcome_type, RESULTS_IN.outcome_type",
+    "values": [
+      {
+        "id": "effectiveness_indicator",
+        "name": "Effectiveness Indicator",
+        "description": "A measure of how well the solution reduces the target hazard or vulnerability",
+        "@id": "abv:enums-outcome_type-effectiveness_indicator",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-outcome_type"
+        }
+      },
+      {
+        "id": "co_benefit",
+        "name": "Co-benefit",
+        "description": "A secondary positive effect beyond the primary adaptation goal",
+        "@id": "abv:enums-outcome_type-co_benefit",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-outcome_type"
+        }
+      },
+      {
+        "id": "failure_mode",
+        "name": "Failure Mode",
+        "description": "A documented way the solution failed or underperformed",
+        "@id": "abv:enums-outcome_type-failure_mode",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-outcome_type"
+        }
+      },
+      {
+        "id": "maladaptation",
+        "name": "Maladaptation",
+        "description": "The solution worked as intended but transferred or increased risk elsewhere",
+        "@id": "abv:enums-outcome_type-maladaptation",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-outcome_type"
+        }
+      },
+      {
+        "id": "other",
+        "name": "Other",
+        "description": "Outcome type not covered by the above values",
+        "@id": "abv:enums-outcome_type-other",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-outcome_type"
+        }
+      }
+    ],
+    "@id": "abv:enums-outcome_type",
+    "@type": "skos:ConceptScheme"
+  },
+  "enabling_condition_type": {
+    "_usage": "context.enabling_conditions[].type, context.barriers[].type",
+    "values": [
+      {
+        "id": "regulatory",
+        "name": "Regulatory",
+        "@id": "abv:enums-enabling_condition_type-regulatory",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-enabling_condition_type"
+        }
+      },
+      {
+        "id": "financial",
+        "name": "Financial",
+        "@id": "abv:enums-enabling_condition_type-financial",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-enabling_condition_type"
+        }
+      },
+      {
+        "id": "technical",
+        "name": "Technical",
+        "@id": "abv:enums-enabling_condition_type-technical",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-enabling_condition_type"
+        }
+      },
+      {
+        "id": "social",
+        "name": "Social",
+        "@id": "abv:enums-enabling_condition_type-social",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-enabling_condition_type"
+        }
+      },
+      {
+        "id": "institutional",
+        "name": "Institutional",
+        "@id": "abv:enums-enabling_condition_type-institutional",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-enabling_condition_type"
+        }
+      },
+      {
+        "id": "political",
+        "name": "Political",
+        "@id": "abv:enums-enabling_condition_type-political",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-enabling_condition_type"
+        }
+      }
+    ],
+    "@id": "abv:enums-enabling_condition_type",
+    "@type": "skos:ConceptScheme"
+  },
+  "co_benefit_category": {
+    "_source": "Extended in v0.2 from CDP action_cobenefits with finance-oriented categories per Salkin framing",
+    "_usage": "Outcome.co_benefit_type",
+    "values": [
+      {
+        "id": "public_health",
+        "name": "Public Health",
+        "@id": "abv:enums-co_benefit_category-public_health",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-co_benefit_category"
+        }
+      },
+      {
+        "id": "ecological",
+        "name": "Ecological",
+        "@id": "abv:enums-co_benefit_category-ecological",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-co_benefit_category"
+        }
+      },
+      {
+        "id": "economic",
+        "name": "Economic",
+        "@id": "abv:enums-co_benefit_category-economic",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-co_benefit_category"
+        }
+      },
+      {
+        "id": "social_cohesion",
+        "name": "Social Cohesion",
+        "@id": "abv:enums-co_benefit_category-social_cohesion",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-co_benefit_category"
+        }
+      },
+      {
+        "id": "carbon_sequestration",
+        "name": "Carbon Sequestration",
+        "@id": "abv:enums-co_benefit_category-carbon_sequestration",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-co_benefit_category"
+        }
+      },
+      {
+        "id": "aesthetic_recreational",
+        "name": "Aesthetic/Recreational",
+        "@id": "abv:enums-co_benefit_category-aesthetic_recreational",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-co_benefit_category"
+        }
+      },
+      {
+        "id": "asset_protection",
+        "name": "Asset Protection",
+        "@id": "abv:enums-co_benefit_category-asset_protection",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-co_benefit_category"
+        }
+      },
+      {
+        "id": "revenue_stability",
+        "name": "Revenue Stability",
+        "@id": "abv:enums-co_benefit_category-revenue_stability",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-co_benefit_category"
+        }
+      },
+      {
+        "id": "operational_cost_reduction",
+        "name": "Operational Cost Reduction",
+        "@id": "abv:enums-co_benefit_category-operational_cost_reduction",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-co_benefit_category"
+        }
+      },
+      {
+        "id": "tax_base_protection",
+        "name": "Tax Base Protection",
+        "@id": "abv:enums-co_benefit_category-tax_base_protection",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-co_benefit_category"
+        }
+      },
+      {
+        "id": "service_continuity",
+        "name": "Service Continuity",
+        "@id": "abv:enums-co_benefit_category-service_continuity",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-co_benefit_category"
+        }
+      },
+      {
+        "id": "other",
+        "name": "Other",
+        "@id": "abv:enums-co_benefit_category-other",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-co_benefit_category"
+        }
+      }
+    ],
+    "@id": "abv:enums-co_benefit_category",
+    "@type": "skos:ConceptScheme"
+  },
+  "claim_source_type": {
+    "_usage": "All claim objects: source_type",
+    "values": [
+      {
+        "id": "case_library",
+        "name": "Case Library",
+        "description": "Curated research from the existing 200+ case library",
+        "@id": "abv:enums-claim_source_type-case_library",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-claim_source_type"
+        }
+      },
+      {
+        "id": "cdp",
+        "name": "CDP",
+        "description": "City self-reported data from CDP disclosure",
+        "@id": "abv:enums-claim_source_type-cdp",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-claim_source_type"
+        }
+      },
+      {
+        "id": "academic",
+        "name": "Academic",
+        "description": "Peer-reviewed journal articles, conference papers",
+        "@id": "abv:enums-claim_source_type-academic",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-claim_source_type"
+        }
+      },
+      {
+        "id": "government",
+        "name": "Government",
+        "description": "Government reports, plans, policy documents",
+        "@id": "abv:enums-claim_source_type-government",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-claim_source_type"
+        }
+      },
+      {
+        "id": "news",
+        "name": "News",
+        "description": "News articles, press releases",
+        "@id": "abv:enums-claim_source_type-news",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-claim_source_type"
+        }
+      },
+      {
+        "id": "ngo",
+        "name": "NGO",
+        "description": "Reports from NGOs, international organizations",
+        "@id": "abv:enums-claim_source_type-ngo",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-claim_source_type"
+        }
+      },
+      {
+        "id": "other",
+        "name": "Other",
+        "@id": "abv:enums-claim_source_type-other",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-claim_source_type"
+        }
+      }
+    ],
+    "@id": "abv:enums-claim_source_type",
+    "@type": "skos:ConceptScheme"
+  },
+  "claim_confidence": {
+    "_usage": "All claim objects: confidence",
+    "values": [
+      {
+        "id": "measured",
+        "name": "Measured",
+        "description": "Quantitative data from direct measurement",
+        "@id": "abv:enums-claim_confidence-measured",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-claim_confidence"
+        }
+      },
+      {
+        "id": "modeled",
+        "name": "Modeled",
+        "description": "Output from simulation or modeling",
+        "@id": "abv:enums-claim_confidence-modeled",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-claim_confidence"
+        }
+      },
+      {
+        "id": "anecdotal",
+        "name": "Anecdotal",
+        "description": "Qualitative or informal observation",
+        "@id": "abv:enums-claim_confidence-anecdotal",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-claim_confidence"
+        }
+      },
+      {
+        "id": "self_reported",
+        "name": "Self-reported",
+        "description": "CDP and similar self-disclosure. Default for CDP data.",
+        "@id": "abv:enums-claim_confidence-self_reported",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-claim_confidence"
+        }
+      },
+      {
+        "id": "expert_assessment",
+        "name": "Expert Assessment",
+        "description": "Professional judgment without systematic data",
+        "@id": "abv:enums-claim_confidence-expert_assessment",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-claim_confidence"
+        }
+      }
+    ],
+    "@id": "abv:enums-claim_confidence",
+    "@type": "skos:ConceptScheme"
+  },
+  "mechanism_vocabulary": {
+    "_description": "Authoritative controlled vocabulary for mechanism dimension (v0.3 — upgraded from guidance-only seed). Extractors must use these values; use 'other' + free-text for outliers.",
+    "_usage": "mechanisms.primary_mechanism.value, mechanisms.secondary_mechanisms[].value",
+    "_note": "v0.3: added restore, relocate, buffer, insulate, regulate + other. Status changed from guidance-only to authoritative. Sprint 4: added sense_and_detect, forecast_and_model, automate_and_control, inform_and_alert. 'monitor' is retained for general observation but now complemented by more specific digital-process types. See decisions-log.md §15.",
+    "values": [
+      {
+        "id": "absorb",
+        "name": "Absorb",
+        "description": "Buffer, attenuate, or absorb the impact (e.g., green infrastructure absorbing stormwater)",
+        "@id": "abv:enums-mechanism_vocabulary-absorb",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-mechanism_vocabulary"
+        }
+      },
+      {
+        "id": "redirect",
+        "name": "Redirect",
+        "description": "Divert, channel, or redistribute the hazard (e.g., flood channels, drainage rerouting)",
+        "@id": "abv:enums-mechanism_vocabulary-redirect",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-mechanism_vocabulary"
+        }
+      },
+      {
+        "id": "harden",
+        "name": "Harden",
+        "description": "Strengthen, fortify, or protect against impact (e.g., building hardening, seawalls)",
+        "@id": "abv:enums-mechanism_vocabulary-harden",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-mechanism_vocabulary"
+        }
+      },
+      {
+        "id": "monitor",
+        "name": "Monitor",
+        "description": "Observe, measure, or track conditions over time without automated response (e.g., manual sensor readings, periodic surveys, environmental monitoring programs)",
+        "@id": "abv:enums-mechanism_vocabulary-monitor",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-mechanism_vocabulary"
+        }
+      },
+      {
+        "id": "govern",
+        "name": "Govern",
+        "description": "Regulate, plan, coordinate, or incentivize (e.g., building codes, zoning, carbon pricing)",
+        "@id": "abv:enums-mechanism_vocabulary-govern",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-mechanism_vocabulary"
+        }
+      },
+      {
+        "id": "shift_risk",
+        "name": "Shift Risk",
+        "description": "Transfer, insure, or redistribute risk (e.g., parametric insurance, risk pooling)",
+        "@id": "abv:enums-mechanism_vocabulary-shift_risk",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-mechanism_vocabulary"
+        }
+      },
+      {
+        "id": "adapt_behavior",
+        "name": "Adapt Behavior",
+        "description": "Change practices, educate, or build awareness (e.g., demand response, heat action behavior campaigns)",
+        "@id": "abv:enums-mechanism_vocabulary-adapt_behavior",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-mechanism_vocabulary"
+        }
+      },
+      {
+        "id": "restore_regenerate",
+        "name": "Restore/Regenerate",
+        "description": "Rehabilitate, restore, or regenerate natural or built systems (e.g., ecosystem restoration, urban forest regeneration)",
+        "@id": "abv:enums-mechanism_vocabulary-restore_regenerate",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-mechanism_vocabulary"
+        }
+      },
+      {
+        "id": "restore",
+        "name": "Restore",
+        "description": "Bring a degraded ecosystem or system back to a prior functional state (e.g., wetland restoration, riparian zone recovery). Use when restoration is the primary mechanism, distinct from broader regeneration.",
+        "@id": "abv:enums-mechanism_vocabulary-restore",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-mechanism_vocabulary"
+        }
+      },
+      {
+        "id": "relocate",
+        "name": "Relocate",
+        "description": "Move people, assets, or infrastructure away from the hazard zone (e.g., managed retreat, infrastructure relocation out of flood plains)",
+        "@id": "abv:enums-mechanism_vocabulary-relocate",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-mechanism_vocabulary"
+        }
+      },
+      {
+        "id": "buffer",
+        "name": "Buffer",
+        "description": "Create protective zones or transition spaces that reduce hazard intensity before it reaches assets (e.g., coastal buffer strips, urban green belts, windbreaks). Distinct from 'absorb' — buffering acts at a distance from the asset.",
+        "@id": "abv:enums-mechanism_vocabulary-buffer",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-mechanism_vocabulary"
+        }
+      },
+      {
+        "id": "insulate",
+        "name": "Insulate",
+        "description": "Create thermal or physical barriers that prevent hazard transmission into a system (e.g., thermal insulation against heat, acoustic barriers, flood-proof walls on individual structures). Distinct from 'harden' — insulation prevents transmission rather than strengthening resistance.",
+        "@id": "abv:enums-mechanism_vocabulary-insulate",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-mechanism_vocabulary"
+        }
+      },
+      {
+        "id": "regulate",
+        "name": "Regulate",
+        "description": "Apply rules, standards, permits, or enforcement mechanisms to control hazard-relevant behaviors or land use (e.g., floodplain zoning enforcement, emission limits, water use restrictions). More specific than 'govern' — focused on rule-based compliance mechanisms.",
+        "@id": "abv:enums-mechanism_vocabulary-regulate",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-mechanism_vocabulary"
+        }
+      },
+      {
+        "id": "sense_and_detect",
+        "name": "Sense and Detect",
+        "description": "Actively sense environmental or system conditions and detect discrete events or threshold crossings using digital sensors, IoT devices, or remote sensing (e.g., flood sensors triggering alerts, wildfire detection cameras, structural health monitoring)",
+        "@id": "abv:enums-mechanism_vocabulary-sense_and_detect",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-mechanism_vocabulary"
+        }
+      },
+      {
+        "id": "forecast_and_model",
+        "name": "Forecast and Model",
+        "description": "Use computational models, AI/ML, or simulation to produce forward-looking predictions or scenario analyses (e.g., hydrological models forecasting flood depth, digital twins simulating heat distribution, ML-based drought prediction)",
+        "@id": "abv:enums-mechanism_vocabulary-forecast_and_model",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-mechanism_vocabulary"
+        }
+      },
+      {
+        "id": "automate_and_control",
+        "name": "Automate and Control",
+        "description": "Execute closed-loop machine actuation or automated system control in response to sensed conditions without requiring human decision in the loop (e.g., automated pump activation during storm events, DERMS load balancing, smart irrigation responding to soil moisture sensors)",
+        "@id": "abv:enums-mechanism_vocabulary-automate_and_control",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-mechanism_vocabulary"
+        }
+      },
+      {
+        "id": "inform_and_alert",
+        "name": "Inform and Alert",
+        "description": "Disseminate information, warnings, or targeted communications to populations, responders, or decision-makers to trigger human action (e.g., heat-wave SMS alerts, early-warning broadcasts, real-time dashboard for emergency managers). Distinct from automate_and_control — the response is human.",
+        "@id": "abv:enums-mechanism_vocabulary-inform_and_alert",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-mechanism_vocabulary"
+        }
+      },
+      {
+        "id": "other",
+        "name": "Other",
+        "description": "Mechanism not covered by the above values. Use with mechanism_other_description.",
+        "@id": "abv:enums-mechanism_vocabulary-other",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-mechanism_vocabulary"
+        }
+      }
+    ],
+    "@id": "abv:enums-mechanism_vocabulary",
+    "@type": "skos:ConceptScheme"
+  },
+  "financing_model": {
+    "_source": "CDP project_financing_model and action_funding_sources fields",
+    "_usage": "FUNDED_BY.financing_model (v0.2 binding — CapitalProject → FinancingSource edge property)",
+    "_note": "v0.2: bound to FUNDED_BY edge on CapitalProject → FinancingSource. Previously unbound.",
+    "values": [
+      {
+        "id": "grants",
+        "name": "Grants",
+        "description": "Grant funding from government, foundations, or international organizations",
+        "@id": "abv:enums-financing_model-grants",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-financing_model"
+        }
+      },
+      {
+        "id": "municipal_budget",
+        "name": "Municipal Budget",
+        "description": "City's own budget and resources",
+        "@id": "abv:enums-financing_model-municipal_budget",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-financing_model"
+        }
+      },
+      {
+        "id": "national_government",
+        "name": "National Government Funding",
+        "description": "National-level public finance",
+        "@id": "abv:enums-financing_model-national_government",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-financing_model"
+        }
+      },
+      {
+        "id": "regional_funds",
+        "name": "Regional Funds and Programmes",
+        "description": "Regional development banks, EU funds, etc.",
+        "@id": "abv:enums-financing_model-regional_funds",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-financing_model"
+        }
+      },
+      {
+        "id": "public_private_partnership",
+        "name": "Public-Private Partnership (PPP)",
+        "description": "Structured partnership between public and private sectors",
+        "@id": "abv:enums-financing_model-public_private_partnership",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-financing_model"
+        }
+      },
+      {
+        "id": "commercial_loans",
+        "name": "Commercial Bank Loans",
+        "description": "Loans from commercial banking sector",
+        "@id": "abv:enums-financing_model-commercial_loans",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-financing_model"
+        }
+      },
+      {
+        "id": "development_banks",
+        "name": "Development Bank Financing",
+        "description": "World Bank, regional development banks, etc.",
+        "@id": "abv:enums-financing_model-development_banks",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-financing_model"
+        }
+      },
+      {
+        "id": "climate_funds",
+        "name": "Climate Funds",
+        "description": "Green Climate Fund, Adaptation Fund, etc.",
+        "@id": "abv:enums-financing_model-climate_funds",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-financing_model"
+        }
+      },
+      {
+        "id": "green_bonds",
+        "name": "Green Bonds",
+        "description": "Municipal or corporate green bonds",
+        "@id": "abv:enums-financing_model-green_bonds",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-financing_model"
+        }
+      },
+      {
+        "id": "blended_finance",
+        "name": "Blended Finance",
+        "description": "Mix of public, private, and philanthropic capital",
+        "@id": "abv:enums-financing_model-blended_finance",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-financing_model"
+        }
+      },
+      {
+        "id": "private_sector",
+        "name": "Private Sector Investment",
+        "description": "Direct private investment",
+        "@id": "abv:enums-financing_model-private_sector",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-financing_model"
+        }
+      },
+      {
+        "id": "international_oda",
+        "name": "International ODA",
+        "description": "Official development assistance",
+        "@id": "abv:enums-financing_model-international_oda",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-financing_model"
+        }
+      }
+    ],
+    "@id": "abv:enums-financing_model",
+    "@type": "skos:ConceptScheme"
+  },
+  "accreditation_modality": {
+    "_source": "Adaptation Fund (AF) and Green Climate Fund (GCF) access modalities for adaptation finance. Captures the institutional arrangement through which a financing source delivers capital to a project, distinct from the financing model (the structural form of the funds).",
+    "_usage": "FinancingSource.accreditation_modality",
+    "_note": "v0.1.1: added per peer review recommendation that AF/GCF terminology (NIEs, direct access, pooled facilities) be modeled. Belongs on FinancingSource — distinct from the operational mechanism_vocabulary, which describes how a Solution physically achieves adaptation effect.",
+    "values": [
+      {
+        "id": "national_implementing_entity",
+        "name": "National Implementing Entity (NIE)",
+        "description": "AF/GCF-accredited entity within the recipient country with direct access to climate finance",
+        "@id": "abv:enums-accreditation_modality-national_implementing_entity",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-accreditation_modality"
+        }
+      },
+      {
+        "id": "regional_implementing_entity",
+        "name": "Regional Implementing Entity (RIE)",
+        "description": "AF/GCF-accredited regional entity (e.g., regional development bank) with direct access on behalf of multiple countries",
+        "@id": "abv:enums-accreditation_modality-regional_implementing_entity",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-accreditation_modality"
+        }
+      },
+      {
+        "id": "multilateral_implementing_entity",
+        "name": "Multilateral Implementing Entity (MIE)",
+        "description": "International accredited entity (UNDP, World Bank, regional MDBs) channeling AF/GCF funds — the international-access default",
+        "@id": "abv:enums-accreditation_modality-multilateral_implementing_entity",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-accreditation_modality"
+        }
+      },
+      {
+        "id": "direct_access",
+        "name": "Direct Access",
+        "description": "Recipient-country institution applies for and receives funds directly without an MIE intermediary",
+        "@id": "abv:enums-accreditation_modality-direct_access",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-accreditation_modality"
+        }
+      },
+      {
+        "id": "enhanced_direct_access",
+        "name": "Enhanced Direct Access (EDA)",
+        "description": "GCF modality devolving project-level decision-making to in-country accredited entities; deeper subsidiarity than baseline direct access",
+        "@id": "abv:enums-accreditation_modality-enhanced_direct_access",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-accreditation_modality"
+        }
+      },
+      {
+        "id": "pooled_facility",
+        "name": "Pooled Facility",
+        "description": "Multiple sources or instruments aggregated into a single funding facility serving a portfolio of projects (e.g., national climate funds, blended-finance vehicles)",
+        "@id": "abv:enums-accreditation_modality-pooled_facility",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-accreditation_modality"
+        }
+      },
+      {
+        "id": "readiness_programme",
+        "name": "Readiness / Preparatory Support",
+        "description": "Capacity-building and project-preparation grants (GCF Readiness, AF Readiness Grants) — funds the preparatory work rather than the adaptation project itself",
+        "@id": "abv:enums-accreditation_modality-readiness_programme",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-accreditation_modality"
+        }
+      },
+      {
+        "id": "not_applicable",
+        "name": "Not Applicable",
+        "description": "Source is outside the AF/GCF accreditation framework (e.g., commercial loan, municipal budget, private investment)",
+        "@id": "abv:enums-accreditation_modality-not_applicable",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-accreditation_modality"
+        }
+      }
+    ],
+    "@id": "abv:enums-accreditation_modality",
+    "@type": "skos:ConceptScheme"
+  },
+  "financing_status": {
+    "_source": "CDP project_financing_status field",
+    "_usage": "CapitalProject.financing_status, Action.financing_status (v0.2 bindings)",
+    "_note": "v0.2: bound to CapitalProject and Action. Previously unbound.",
+    "values": [
+      {
+        "id": "fully_funded",
+        "name": "Fully Funded",
+        "description": "Complete funding secured",
+        "@id": "abv:enums-financing_status-fully_funded",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-financing_status"
+        }
+      },
+      {
+        "id": "partially_funded",
+        "name": "Partially Funded",
+        "description": "Some funding secured, seeking additional",
+        "@id": "abv:enums-financing_status-partially_funded",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-financing_status"
+        }
+      },
+      {
+        "id": "seeking_full_funding",
+        "name": "Seeking Full Funding",
+        "description": "No funding secured, seeking complete funding",
+        "@id": "abv:enums-financing_status-seeking_full_funding",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-financing_status"
+        }
+      },
+      {
+        "id": "seeking_partial_funding",
+        "name": "Seeking Partial Funding",
+        "description": "No funding secured, seeking partial funding",
+        "@id": "abv:enums-financing_status-seeking_partial_funding",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-financing_status"
+        }
+      },
+      {
+        "id": "feasibility_stage",
+        "name": "Feasibility Stage",
+        "description": "Feasibility studies and finance-ready project preparation in progress",
+        "@id": "abv:enums-financing_status-feasibility_stage",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-financing_status"
+        }
+      },
+      {
+        "id": "not_applicable",
+        "name": "Not Applicable",
+        "description": "Financing not required or not relevant",
+        "@id": "abv:enums-financing_status-not_applicable",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-financing_status"
+        }
+      }
+    ],
+    "@id": "abv:enums-financing_status",
+    "@type": "skos:ConceptScheme"
+  },
+  "equity_focus": {
+    "_source": "EDF equity framework (Shi 2024 rubric) — adapted for solution-level classification",
+    "_usage": "solution.equity_focus",
+    "values": [
+      {
+        "id": "none",
+        "name": "None",
+        "description": "No equity framing documented in the solution",
+        "@id": "abv:enums-equity_focus-none",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-equity_focus"
+        }
+      },
+      {
+        "id": "co_benefit",
+        "name": "Co-Benefit",
+        "description": "Equity benefits are secondary — not the design target, but documented as a co-benefit for vulnerable populations",
+        "@id": "abv:enums-equity_focus-co_benefit",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-equity_focus"
+        }
+      },
+      {
+        "id": "primary_target",
+        "name": "Primary Target",
+        "description": "Solution is explicitly designed to serve, protect, or empower vulnerable populations",
+        "@id": "abv:enums-equity_focus-primary_target",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-equity_focus"
+        }
+      }
+    ],
+    "@id": "abv:enums-equity_focus",
+    "@type": "skos:ConceptScheme"
+  },
+  "justice_dimension": {
+    "_source": "Shi (2024) equity rubric — four justice dimensions for climate adaptation outcomes",
+    "_usage": "outcome.justice_dimension[]",
+    "_note": "Applied to Outcome nodes to characterize what type of equity impact is documented. Multiple dimensions can apply to a single outcome. See decisions-log.md §16.",
+    "values": [
+      {
+        "id": "distributive",
+        "name": "Distributive",
+        "description": "Who bears the costs and who receives the benefits — distributional fairness of outcomes and burdens",
+        "@id": "abv:enums-justice_dimension-distributive",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-justice_dimension"
+        }
+      },
+      {
+        "id": "procedural",
+        "name": "Procedural",
+        "description": "Who participates in and shapes decisions — fairness of decision-making processes",
+        "@id": "abv:enums-justice_dimension-procedural",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-justice_dimension"
+        }
+      },
+      {
+        "id": "recognitional",
+        "name": "Recognitional",
+        "description": "Whose knowledge, history, and lived experience are acknowledged and meaningfully incorporated",
+        "@id": "abv:enums-justice_dimension-recognitional",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-justice_dimension"
+        }
+      },
+      {
+        "id": "epistemic",
+        "name": "Epistemic",
+        "description": "How knowledge is produced, what counts as valid evidence, and whose expertise is legitimized",
+        "@id": "abv:enums-justice_dimension-epistemic",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-justice_dimension"
+        }
+      }
+    ],
+    "@id": "abv:enums-justice_dimension",
+    "@type": "skos:ConceptScheme"
+  },
+  "governance_relationship_type": {
+    "_source": "Student's ontology schema (ruowen-climate-adaptation.py)",
+    "_usage": "context.governance_relationships.policies_enabling[].relationship_type, context.governance_relationships.policies_hindering[].relationship_type",
+    "values": [
+      {
+        "id": "MANDATES",
+        "description": "Policy mandates or requires the action",
+        "@id": "abv:enums-governance_relationship_type-MANDATES",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-governance_relationship_type"
+        }
+      },
+      {
+        "id": "FACILITATED_BY",
+        "description": "Policy or mechanism enables or supports the action",
+        "@id": "abv:enums-governance_relationship_type-FACILITATED_BY",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-governance_relationship_type"
+        }
+      },
+      {
+        "id": "ISSUED_BY",
+        "description": "Policy issued by an actor",
+        "@id": "abv:enums-governance_relationship_type-ISSUED_BY",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-governance_relationship_type"
+        }
+      },
+      {
+        "id": "IMPLEMENTS",
+        "description": "Actor implements the action",
+        "@id": "abv:enums-governance_relationship_type-IMPLEMENTS",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-governance_relationship_type"
+        }
+      },
+      {
+        "id": "HINDERED_BY",
+        "description": "Policy or condition blocks or constrains the action",
+        "@id": "abv:enums-governance_relationship_type-HINDERED_BY",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-governance_relationship_type"
+        }
+      },
+      {
+        "id": "CONSTRAINED_BY",
+        "description": "Action constrained by regulation or resource limitation",
+        "@id": "abv:enums-governance_relationship_type-CONSTRAINED_BY",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-governance_relationship_type"
+        }
+      }
+    ],
+    "@id": "abv:enums-governance_relationship_type",
+    "@type": "skos:ConceptScheme"
+  },
+  "instrument_type": {
+    "_source": "CDP project finance vocabulary, extended in v0.2 with US municipal CIP terms",
+    "_usage": "FinancialInstrument.instrument_type",
+    "_note": "v0.2: extended with US municipal CIP language (general_obligation_bond, revenue_bond, tax_increment_financing, special_assessment, federal_cost_share, state_cost_share, municipal_capital_appropriation, ratepayer_funded). All previous values retained.",
+    "values": [
+      {
+        "id": "green_bond",
+        "name": "Green Bond",
+        "description": "Municipal or corporate green bond",
+        "@id": "abv:enums-instrument_type-green_bond",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_type"
+        }
+      },
+      {
+        "id": "general_obligation_bond",
+        "name": "General Obligation Bond",
+        "description": "Municipal bond backed by the full faith and credit (and taxing power) of the issuing government. Per Salkin: 'no one is using this' for resilience — opportunity area.",
+        "@id": "abv:enums-instrument_type-general_obligation_bond",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_type"
+        }
+      },
+      {
+        "id": "revenue_bond",
+        "name": "Revenue Bond",
+        "description": "Municipal bond backed by revenues from a specific source (water rates, tolls, etc.). Includes enterprise/ratepayer-supported financing.",
+        "@id": "abv:enums-instrument_type-revenue_bond",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_type"
+        }
+      },
+      {
+        "id": "tax_increment_financing",
+        "name": "Tax Increment Financing (TIF)",
+        "description": "Bond or special-district financing repaid from the future incremental tax revenue generated by improvements in a defined area",
+        "@id": "abv:enums-instrument_type-tax_increment_financing",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_type"
+        }
+      },
+      {
+        "id": "special_assessment",
+        "name": "Special Assessment",
+        "description": "Levy on property owners within a defined benefit district to pay for improvements that directly benefit them (e.g., flood-control assessment districts)",
+        "@id": "abv:enums-instrument_type-special_assessment",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_type"
+        }
+      },
+      {
+        "id": "sustainability_linked_loan",
+        "name": "Sustainability-Linked Loan",
+        "description": "Loan with sustainability performance targets",
+        "@id": "abv:enums-instrument_type-sustainability_linked_loan",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_type"
+        }
+      },
+      {
+        "id": "climate_bond",
+        "name": "Climate Bond",
+        "description": "Bond earmarked for climate projects",
+        "@id": "abv:enums-instrument_type-climate_bond",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_type"
+        }
+      },
+      {
+        "id": "resilience_bond",
+        "name": "Resilience Bond",
+        "description": "Bond tied to adaptation/resilience outcomes",
+        "@id": "abv:enums-instrument_type-resilience_bond",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_type"
+        }
+      },
+      {
+        "id": "blended_finance",
+        "name": "Blended Finance",
+        "description": "Mix of public, private, philanthropic capital",
+        "@id": "abv:enums-instrument_type-blended_finance",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_type"
+        }
+      },
+      {
+        "id": "revolving_fund",
+        "name": "Revolving Fund",
+        "description": "Loan fund with repayments recycled into new loans (e.g., state Clean Water SRF)",
+        "@id": "abv:enums-instrument_type-revolving_fund",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_type"
+        }
+      },
+      {
+        "id": "grant",
+        "name": "Grant",
+        "description": "Non-repayable funding",
+        "@id": "abv:enums-instrument_type-grant",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_type"
+        }
+      },
+      {
+        "id": "federal_cost_share",
+        "name": "Federal Cost Share",
+        "description": "Federal funding covering a portion of project cost (e.g., FEMA BRIC, USACE cost-share, FHWA federal-aid)",
+        "@id": "abv:enums-instrument_type-federal_cost_share",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_type"
+        }
+      },
+      {
+        "id": "state_cost_share",
+        "name": "State Cost Share",
+        "description": "State funding covering a portion of project cost",
+        "@id": "abv:enums-instrument_type-state_cost_share",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_type"
+        }
+      },
+      {
+        "id": "municipal_capital_appropriation",
+        "name": "Municipal Capital Appropriation",
+        "description": "Direct appropriation from the city's own capital budget — 'pay-as-you-go' rather than bond-financed",
+        "@id": "abv:enums-instrument_type-municipal_capital_appropriation",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_type"
+        }
+      },
+      {
+        "id": "ratepayer_funded",
+        "name": "Ratepayer Funded",
+        "description": "Funded directly through utility rates (Salkin's 'enterprise/revenue-supported pass-through to ratepayers'). Distinct from revenue_bond — ratepayer_funded is current-revenue funding, not debt issuance secured by future ratepayer revenue.",
+        "@id": "abv:enums-instrument_type-ratepayer_funded",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_type"
+        }
+      },
+      {
+        "id": "direct_allocation",
+        "name": "Direct Allocation",
+        "description": "Direct public budget allocation without a structured instrument",
+        "@id": "abv:enums-instrument_type-direct_allocation",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_type"
+        }
+      },
+      {
+        "id": "outcome_bond",
+        "name": "Outcome Bond",
+        "description": "Bond whose repayment or interest rate is contingent on achieving measurable adaptation outcomes (e.g., flood damage avoidance, heat mortality reduction). Linked via CONTINGENT_ON relationship to Outcome nodes.",
+        "@id": "abv:enums-instrument_type-outcome_bond",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_type"
+        }
+      },
+      {
+        "id": "other",
+        "name": "Other",
+        "description": "Instrument type not covered by the above values. Use with instrument_type_other_description.",
+        "@id": "abv:enums-instrument_type-other",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_type"
+        }
+      }
+    ],
+    "@id": "abv:enums-instrument_type",
+    "@type": "skos:ConceptScheme"
+  },
+  "asset_class": {
+    "_source": "Adapted from US municipal capital-budget asset categorization (BLS public infrastructure schema, GFOA capital-asset taxonomy).",
+    "_usage": "CapitalProject.asset_class",
+    "_note": "v0.2: introduced with CapitalProject. Local annotation from the budget document; when the project's solution class is resolvable via REALIZES Action → IMPLEMENTS Solution → OPERATES_ON UrbanSystem, the multi-hop path is authoritative.",
+    "values": [
+      {
+        "id": "water",
+        "name": "Water Supply",
+        "@id": "abv:enums-asset_class-water",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-asset_class"
+        }
+      },
+      {
+        "id": "wastewater",
+        "name": "Wastewater",
+        "@id": "abv:enums-asset_class-wastewater",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-asset_class"
+        }
+      },
+      {
+        "id": "stormwater",
+        "name": "Stormwater",
+        "@id": "abv:enums-asset_class-stormwater",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-asset_class"
+        }
+      },
+      {
+        "id": "transportation",
+        "name": "Transportation",
+        "@id": "abv:enums-asset_class-transportation",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-asset_class"
+        }
+      },
+      {
+        "id": "parks_open_space",
+        "name": "Parks & Open Space",
+        "@id": "abv:enums-asset_class-parks_open_space",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-asset_class"
+        }
+      },
+      {
+        "id": "public_safety",
+        "name": "Public Safety",
+        "@id": "abv:enums-asset_class-public_safety",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-asset_class"
+        }
+      },
+      {
+        "id": "public_buildings",
+        "name": "Public Buildings",
+        "@id": "abv:enums-asset_class-public_buildings",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-asset_class"
+        }
+      },
+      {
+        "id": "housing",
+        "name": "Housing",
+        "@id": "abv:enums-asset_class-housing",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-asset_class"
+        }
+      },
+      {
+        "id": "schools",
+        "name": "Schools",
+        "@id": "abv:enums-asset_class-schools",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-asset_class"
+        }
+      },
+      {
+        "id": "energy",
+        "name": "Energy",
+        "@id": "abv:enums-asset_class-energy",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-asset_class"
+        }
+      },
+      {
+        "id": "solid_waste",
+        "name": "Solid Waste",
+        "@id": "abv:enums-asset_class-solid_waste",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-asset_class"
+        }
+      },
+      {
+        "id": "telecom",
+        "name": "Telecommunications",
+        "@id": "abv:enums-asset_class-telecom",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-asset_class"
+        }
+      },
+      {
+        "id": "coastal_protection",
+        "name": "Coastal Protection",
+        "@id": "abv:enums-asset_class-coastal_protection",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-asset_class"
+        }
+      },
+      {
+        "id": "other",
+        "name": "Other",
+        "description": "Asset class not covered above. Use with asset_class_other_description.",
+        "@id": "abv:enums-asset_class-other",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-asset_class"
+        }
+      }
+    ],
+    "@id": "abv:enums-asset_class",
+    "@type": "skos:ConceptScheme"
+  },
+  "construction_phase": {
+    "_source": "Generic capital-project lifecycle stages",
+    "_usage": "CapitalProject.construction_phase",
+    "_note": "v0.2: introduced with CapitalProject. Distinct from Action.status (which is plan-commitment status: committed/in_planning/under_implementation/completed/cancelled). A capital project has its own lifecycle independent of plan commitment.",
+    "values": [
+      {
+        "id": "proposed",
+        "name": "Proposed",
+        "description": "Listed in the CIP but pre-design",
+        "@id": "abv:enums-construction_phase-proposed",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-construction_phase"
+        }
+      },
+      {
+        "id": "design",
+        "name": "Design",
+        "description": "Engineering and design underway",
+        "@id": "abv:enums-construction_phase-design",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-construction_phase"
+        }
+      },
+      {
+        "id": "permitting",
+        "name": "Permitting",
+        "description": "Awaiting regulatory permits or approvals",
+        "@id": "abv:enums-construction_phase-permitting",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-construction_phase"
+        }
+      },
+      {
+        "id": "under_construction",
+        "name": "Under Construction",
+        "description": "Construction in progress",
+        "@id": "abv:enums-construction_phase-under_construction",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-construction_phase"
+        }
+      },
+      {
+        "id": "commissioned",
+        "name": "Commissioned",
+        "description": "Project complete and in service",
+        "@id": "abv:enums-construction_phase-commissioned",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-construction_phase"
+        }
+      },
+      {
+        "id": "decommissioned",
+        "name": "Decommissioned",
+        "description": "Asset retired from service",
+        "@id": "abv:enums-construction_phase-decommissioned",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-construction_phase"
+        }
+      }
+    ],
+    "@id": "abv:enums-construction_phase",
+    "@type": "skos:ConceptScheme"
+  },
+  "municipal_program": {
+    "_source": "Municipal capital-program categories common across US cities",
+    "_usage": "Outcome.beneficiary_program",
+    "_note": "v0.2: introduced. Captures cross-program ripple effects — when a resilience project produces outcomes that benefit other municipal programs (transit, parks, public safety, pensions, etc.). Per Salkin: 'show how investments in these solutions connect to other capital programs.'",
+    "values": [
+      {
+        "id": "transportation",
+        "name": "Transportation",
+        "@id": "abv:enums-municipal_program-transportation",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-municipal_program"
+        }
+      },
+      {
+        "id": "parks_recreation",
+        "name": "Parks & Recreation",
+        "@id": "abv:enums-municipal_program-parks_recreation",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-municipal_program"
+        }
+      },
+      {
+        "id": "public_safety",
+        "name": "Public Safety",
+        "@id": "abv:enums-municipal_program-public_safety",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-municipal_program"
+        }
+      },
+      {
+        "id": "public_health",
+        "name": "Public Health",
+        "@id": "abv:enums-municipal_program-public_health",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-municipal_program"
+        }
+      },
+      {
+        "id": "housing",
+        "name": "Housing",
+        "@id": "abv:enums-municipal_program-housing",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-municipal_program"
+        }
+      },
+      {
+        "id": "schools",
+        "name": "Schools",
+        "@id": "abv:enums-municipal_program-schools",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-municipal_program"
+        }
+      },
+      {
+        "id": "water_utilities",
+        "name": "Water Utilities",
+        "@id": "abv:enums-municipal_program-water_utilities",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-municipal_program"
+        }
+      },
+      {
+        "id": "energy_utilities",
+        "name": "Energy Utilities",
+        "@id": "abv:enums-municipal_program-energy_utilities",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-municipal_program"
+        }
+      },
+      {
+        "id": "pensions",
+        "name": "Pensions",
+        "@id": "abv:enums-municipal_program-pensions",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-municipal_program"
+        }
+      },
+      {
+        "id": "general_revenue",
+        "name": "General Revenue",
+        "@id": "abv:enums-municipal_program-general_revenue",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-municipal_program"
+        }
+      },
+      {
+        "id": "other",
+        "name": "Other",
+        "@id": "abv:enums-municipal_program-other",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-municipal_program"
+        }
+      }
+    ],
+    "@id": "abv:enums-municipal_program",
+    "@type": "skos:ConceptScheme"
+  },
+  "value_recurrence": {
+    "_source": "Standard benefit-cost analysis recurrence categories",
+    "_usage": "Outcome.value_recurrence",
+    "_note": "v0.2: introduced. Distinguishes one-time avoided losses from recurring annual benefits from lifetime-integrated value, so that monetized_value_usd can be interpreted correctly.",
+    "values": [
+      {
+        "id": "one_time",
+        "name": "One-time",
+        "description": "Lump-sum value (e.g., avoided damages from a single hazard event)",
+        "@id": "abv:enums-value_recurrence-one_time",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-value_recurrence"
+        }
+      },
+      {
+        "id": "annual",
+        "name": "Annual",
+        "description": "Recurring per-year value (e.g., reduced stormwater treatment cost)",
+        "@id": "abv:enums-value_recurrence-annual",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-value_recurrence"
+        }
+      },
+      {
+        "id": "lifetime",
+        "name": "Lifetime",
+        "description": "Value integrated over the asset's useful life",
+        "@id": "abv:enums-value_recurrence-lifetime",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-value_recurrence"
+        }
+      }
+    ],
+    "@id": "abv:enums-value_recurrence",
+    "@type": "skos:ConceptScheme"
+  },
+  "@context": [
+    "../context.jsonld",
+    {
+      "@vocab": "https://ontology.adaptbase.us/vocab/"
+    }
+  ]
+}

@@ -1,0 +1,279 @@
+{
+  "@context": "../context.jsonld",
+  "_source": "CDP Cities climate hazard disclosure fields, derived empirically from research/resources/CDP_cities_adaptation_fact_table/fact_table_climate_adaptation.csv (5,552 city actions, 2024 fact table). Two fields carry the same closed enum of 23 controlled hazard values plus free-text 'Other: ...' write-ins: action_hazards_en (action-grain) and goal_hazards (resilience-goal grain). action_hazards_en additionally carries the sentinel value 'Action does not address hazard'.",
+  "_usage": "Join key for mapping CDP action_hazards_en / goal_hazards string values onto ontology/vocabularies/hazards.json hazard ids, when materializing the v0.6 Action ADDRESSES Hazard and ResilienceGoal ADDRESSES Hazard edges (see ontology/framework-crosswalk.md section 3 and decisions-log.md Decision 30) from raw CDP rows.",
+  "_note": "match_type values: 'exact' (CDP value and hazard_id denote the same concept), 'broader' (one CDP value spans a c40_arup_category cluster of several hazard ids and the raw row doesn't disambiguate further), 'ambiguous' (CDP value is too generic to resolve to a single hazard id; candidates are listed but a human/LLM pass over the paired action text is needed to pick one), 'partial' (closest available hazard id, but the concepts aren't equivalent), 'gap' (no corresponding hazard id exists in the ontology today). Multi-value CDP cells are comma-delimited except for the single literal value 'Hurricanes, cyclones, and/or typhoons', which contains an internal comma and must not be split further.",
+  "mappings": [
+    {
+      "cdp_value": "Extreme heat",
+      "match_type": "exact",
+      "hazard_ids": [
+        "extreme_hot_weather"
+      ],
+      "skos:exactMatch": [
+        {
+          "@id": "abv:hazards-extreme_hot_weather"
+        }
+      ]
+    },
+    {
+      "cdp_value": "Heat stress",
+      "match_type": "exact",
+      "hazard_ids": [
+        "heat_wave"
+      ],
+      "note": "hazards.json lists 'heat stress' as an undrr_term of heat_wave, distinct from extreme_hot_weather.",
+      "skos:exactMatch": [
+        {
+          "@id": "abv:hazards-heat_wave"
+        }
+      ]
+    },
+    {
+      "cdp_value": "Extreme cold",
+      "match_type": "exact",
+      "hazard_ids": [
+        "extreme_cold_weather"
+      ],
+      "skos:exactMatch": [
+        {
+          "@id": "abv:hazards-extreme_cold_weather"
+        }
+      ]
+    },
+    {
+      "cdp_value": "Urban flooding",
+      "match_type": "exact",
+      "hazard_ids": [
+        "flash_surface_flood"
+      ],
+      "skos:exactMatch": [
+        {
+          "@id": "abv:hazards-flash_surface_flood"
+        }
+      ]
+    },
+    {
+      "cdp_value": "River flooding",
+      "match_type": "exact",
+      "hazard_ids": [
+        "river_flood"
+      ],
+      "skos:exactMatch": [
+        {
+          "@id": "abv:hazards-river_flood"
+        }
+      ]
+    },
+    {
+      "cdp_value": "Coastal flooding (incl. sea level rise)",
+      "match_type": "exact",
+      "hazard_ids": [
+        "coastal_flood",
+        "rcc.sea_level_rise"
+      ],
+      "note": "CDP's own label bundles the acute (coastal_flood) and chronic (sea_level_rise) hazards; both ids apply.",
+      "skos:exactMatch": [
+        {
+          "@id": "abv:hazards-coastal_flood"
+        },
+        {
+          "@id": "abv:hazards-rcc.sea_level_rise"
+        }
+      ]
+    },
+    {
+      "cdp_value": "Heavy precipitation",
+      "match_type": "exact",
+      "hazard_ids": [
+        "rain_storm"
+      ],
+      "skos:exactMatch": [
+        {
+          "@id": "abv:hazards-rain_storm"
+        }
+      ]
+    },
+    {
+      "cdp_value": "Snow and ice",
+      "match_type": "broader",
+      "hazard_ids": [
+        "heavy_snow",
+        "ice_hail_freezing_rain"
+      ],
+      "note": "CDP does not distinguish snowfall from icing/freezing rain."
+    },
+    {
+      "cdp_value": "Drought",
+      "match_type": "exact",
+      "hazard_ids": [
+        "drought"
+      ],
+      "skos:exactMatch": [
+        {
+          "@id": "abv:hazards-drought"
+        }
+      ]
+    },
+    {
+      "cdp_value": "Water stress",
+      "match_type": "exact",
+      "hazard_ids": [
+        "drought"
+      ],
+      "note": "hazards.json's 'drought' entry already carries 'water stress' / 'water shortage' as undrr_terms. CDP treats 'Drought' and 'Water stress' as distinct disclosure values that both collapse onto the single ontology hazard_id 'drought' today — see top-level gap note below.",
+      "skos:exactMatch": [
+        {
+          "@id": "abv:hazards-drought"
+        }
+      ]
+    },
+    {
+      "cdp_value": "Increased water demand",
+      "match_type": "gap",
+      "hazard_ids": [],
+      "note": "A demand-side driver/impact, not a physical hazard. No corresponding hazard_id exists; closest analog is 'drought' but that would conflate cause and effect."
+    },
+    {
+      "cdp_value": "Extreme wind",
+      "match_type": "exact",
+      "hazard_ids": [
+        "severe_wind"
+      ],
+      "skos:exactMatch": [
+        {
+          "@id": "abv:hazards-severe_wind"
+        }
+      ]
+    },
+    {
+      "cdp_value": "Storm",
+      "match_type": "ambiguous",
+      "hazard_ids": [
+        "rain_storm",
+        "severe_wind",
+        "electrical_storm"
+      ],
+      "note": "Generic term; CDP does not indicate whether the paired action addresses precipitation, wind, or lightning. Disambiguate from action text if possible."
+    },
+    {
+      "cdp_value": "Hurricanes, cyclones, and/or typhoons",
+      "match_type": "exact",
+      "hazard_ids": [
+        "cyclone_hurricane_typhoon"
+      ],
+      "note": "Literal CDP value contains an internal comma; do not split on ',' without first protecting this value.",
+      "skos:exactMatch": [
+        {
+          "@id": "abv:hazards-cyclone_hurricane_typhoon"
+        }
+      ]
+    },
+    {
+      "cdp_value": "Fire weather (risk of wildfires)",
+      "match_type": "broader",
+      "hazard_ids": [
+        "forest_fire",
+        "land_fire"
+      ],
+      "note": "Maps to the full c40_arup_category 'wild_fire' cluster; CDP does not distinguish forest from land/grassland fire."
+    },
+    {
+      "cdp_value": "Mass movement",
+      "match_type": "broader",
+      "hazard_ids": [
+        "avalanche",
+        "landslide",
+        "rockfall",
+        "subsidence"
+      ],
+      "note": "Maps to the full c40_arup_category 'mass_movement' cluster. Excludes the RCC-sourced 'rcc.liquefaction' and 'rcc.subsidence_chronic' entries, which require an explicit seismic or anthropogenic trigger not signaled by this generic CDP value."
+    },
+    {
+      "cdp_value": "Biodiversity loss",
+      "match_type": "exact",
+      "hazard_ids": [
+        "rcc.loss_of_biodiversity"
+      ],
+      "skos:exactMatch": [
+        {
+          "@id": "abv:hazards-rcc.loss_of_biodiversity"
+        }
+      ]
+    },
+    {
+      "cdp_value": "Loss of green space/green cover",
+      "match_type": "partial",
+      "hazard_ids": [
+        "rcc.environmental_degradation"
+      ],
+      "note": "Closest available hazard, but 'loss of green space/green cover' is a land-use outcome, not equivalent to general ecosystem/land degradation."
+    },
+    {
+      "cdp_value": "Soil degradation/erosion",
+      "match_type": "exact",
+      "hazard_ids": [
+        "rcc.environmental_degradation"
+      ],
+      "note": "hazards.json's 'Environmental Degradation' entry lists 'soil degradation' as an undrr_term.",
+      "skos:exactMatch": [
+        {
+          "@id": "abv:hazards-rcc.environmental_degradation"
+        }
+      ]
+    },
+    {
+      "cdp_value": "Other forms of climate-induced landscape shift/degradation",
+      "match_type": "broader",
+      "hazard_ids": [
+        "rcc.environmental_degradation"
+      ],
+      "note": "CDP's own catch-all bucket; maps to the same broad hazard as 'Loss of green space/green cover' and 'Soil degradation/erosion'."
+    },
+    {
+      "cdp_value": "Infectious disease",
+      "match_type": "exact",
+      "hazard_ids": [
+        "rcc.disease_outbreak"
+      ],
+      "skos:exactMatch": [
+        {
+          "@id": "abv:hazards-rcc.disease_outbreak"
+        }
+      ]
+    },
+    {
+      "cdp_value": "Other coastal events",
+      "match_type": "ambiguous",
+      "hazard_ids": [
+        "storm_surge",
+        "tsunami"
+      ],
+      "note": "CDP's residual coastal bucket (excludes 'Coastal flooding (incl. sea level rise)', which is a separate value). No single best match."
+    },
+    {
+      "cdp_value": "Oceanic events",
+      "match_type": "ambiguous",
+      "hazard_ids": [
+        "storm_surge",
+        "tsunami",
+        "ocean_acidification"
+      ],
+      "note": "Distinct CDP value from 'Other coastal events'; likely intended for open-ocean phenomena, but the ontology has no dedicated open-ocean hazard cluster beyond these three."
+    }
+  ],
+  "excluded_values": [
+    {
+      "cdp_value": "Action does not address hazard",
+      "reason": "Sentinel value on action_hazards_en meaning the action was tagged as not hazard-specific. Filter these rows out before generating Action ADDRESSES Hazard edges; do not map to a hazard_id."
+    }
+  ],
+  "write_in_values": {
+    "note": "Both action_hazards_en and goal_hazards also carry free-text 'Other: <value>' write-ins beyond the 23 controlled values mapped above — roughly 440 distinct strings across the two fields (many non-English: Spanish, Portuguese). These are long-tail, low-frequency (nearly all n<15 occurrences) and not covered by this crosswalk. If ingesting write-ins, triage them individually against ontology/vocabularies/hazards.json rather than extending this table."
+  },
+  "known_gaps": [
+    "Ontology's single 'drought' hazard_id absorbs both CDP 'Drought' and CDP 'Water stress', which CDP's own schema treats as distinct concepts (acute meteorological drought vs. chronic water-supply stress). Splitting these would require a new hazard entry in hazards.json, not just a crosswalk change.",
+    "'Increased water demand' has no hazard-side analog; it is a demand-side driver rather than a hazard.",
+    "'Storm', 'Other coastal events', and 'Oceanic events' are generic CDP buckets that do not resolve to a single hazard_id without additional context from the paired action text."
+  ]
+}
