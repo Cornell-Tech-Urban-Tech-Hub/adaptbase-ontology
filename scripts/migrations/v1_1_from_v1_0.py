@@ -1073,7 +1073,7 @@ def main() -> None:
                     "text": "FundingAllocation type; FUNDS, PROVIDED_BY, ADMINISTERED_BY, ISSUED_BY edges; USES_INSTRUMENT retargeted to FundingAllocation (Decision 43)",
                 },
                 {
-                    "type": "renamed",
+                    "type": "changed",
                     "text": "FinancingSource → FundingStream; source_type → stream_type; amount_usd replaced by max_award (Decision 43)",
                 },
                 {
