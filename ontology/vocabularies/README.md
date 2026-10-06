@@ -27,7 +27,7 @@ These vocabularies sync with Supabase database tables:
 
 - **`solution-categories.json`**: Solution taxonomy, tiers 1–2
   - Source: `solution_taxonomy` table (is_active = true), extended in v1.1
-  - Structure: 12 categories (Water, Food, Buildings, …, Governance & Policy), 97 subcategories
+  - Structure: 12 categories (Water, Food, Buildings, …, Governance & Policy), 101 subcategories
   - Usage: `Solution.category_id` and `subcategory_id` — **derived** from the concept
     (Decision 35): the seeder copies them from `solution-concepts.json`; extraction never writes them
 

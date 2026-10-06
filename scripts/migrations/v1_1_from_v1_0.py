@@ -853,7 +853,7 @@ def main() -> None:
     V = o["vocabularies"]
     sc = by_id(V, "solution-categories")
     sc["description"] = (
-        "12 categories and 97 subcategories; the tier above solution-concepts. v1.1 added a governance_and_policy category and non-tech subcategories."
+        "12 categories and 101 subcategories; the tier above solution-concepts. v1.1 added a governance_and_policy category and non-tech subcategories."
     )
     sc["bound_to"] = [
         "Solution.category_id",
@@ -1018,7 +1018,7 @@ def main() -> None:
                 },
                 {
                     "type": "added",
-                    "text": "vocabularies/solution-concepts.json (112 concepts, v0) bound to Solution.concept_id; solution-categories + governance_and_policy category and 5 subcategories (Decision 35)",
+                    "text": "vocabularies/solution-concepts.json (112 concepts, v0) bound to Solution.concept_id; solution-categories + governance_and_policy category (5 subcategories) and 4 non-tech subcategories elsewhere, 92 → 101 (Decision 35)",
                 },
                 {
                     "type": "removed",
