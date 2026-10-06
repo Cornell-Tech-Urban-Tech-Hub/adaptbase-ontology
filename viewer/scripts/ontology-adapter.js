@@ -22,7 +22,9 @@
     'Mechanism': 'Programs',
     'EnablingCondition': 'Programs',
     // Finance — capital flows and instruments
-    'FinancingSource': 'Finance',
+    'FinancingSource': 'Finance',   // ≤ v1.0
+    'FundingStream': 'Finance',     // v1.1
+    'FundingAllocation': 'Finance', // v1.1
     'FinancialInstrument': 'Finance',
     'CapitalProject': 'Finance',
     // Outcomes — goals, results, measurement
@@ -128,6 +130,7 @@
     'hazards': '../ontology/vocabularies/hazards.json',
     'urban-systems': '../ontology/vocabularies/urban-systems.json',
     'solution-categories': '../ontology/vocabularies/solution-categories.json',
+    'solution-concepts': '../ontology/vocabularies/solution-concepts.json',
     'crf-goals': '../ontology/vocabularies/crf-goals.json',
     'vulnerable-populations': '../ontology/vocabularies/vulnerable-populations.json',
   };
@@ -175,6 +178,9 @@
     } else if (vocabId === 'vulnerable-populations') {
       const pop = (data.populations || data.items || []).find(p => p.id === id);
       if (pop) return pop.name || pop.label || id;
+    } else if (vocabId === 'solution-concepts') {
+      const c = (data.concepts || []).find(c => c.id === id);
+      if (c) return c.name;
     }
     return id;
   }

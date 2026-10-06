@@ -331,6 +331,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     'hazards': '../ontology/vocabularies/hazards.json',
     'urban-systems': '../ontology/vocabularies/urban-systems.json',
     'solution-categories': '../ontology/vocabularies/solution-categories.json',
+    'solution-concepts': '../ontology/vocabularies/solution-concepts.json',
     'crf-goals': '../ontology/vocabularies/crf-goals.json',
     'enums': '../ontology/vocabularies/enums.json',
     'vulnerable-populations': '../ontology/vocabularies/vulnerable-populations.json',
@@ -470,6 +471,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   function renderVocabData(vocabId, data) {
     if (vocabId === 'hazards') return renderHierarchy(data.categories, 'hazards');
     if (vocabId === 'solution-categories') return renderHierarchy(data.categories, 'subcategories');
+    if (vocabId === 'solution-concepts') return renderConcepts(data.concepts);
     if (vocabId === 'urban-systems') return renderSectors(data.sectors);
     if (vocabId === 'crf-goals') return renderCrfGoals(data.dimensions);
     if (vocabId === 'enums') return renderEnums(data);
@@ -602,6 +604,40 @@ document.addEventListener('DOMContentLoaded', async () => {
           ` : ''}
         </li>`;
     }).join('')}</ul>`;
+  }
+
+  // solution-concepts: flat list grouped by category_id, each concept with its
+  // one-line definition and aliases (v1.1).
+  function renderConcepts(concepts) {
+    if (!concepts || !concepts.length) return '<div class="vocab-empty">Empty.</div>';
+    const groups = new Map();
+    for (const c of concepts) {
+      const key = c.category_id || 'uncategorized';
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(c);
+    }
+    return `<ul class="vocab-tree">${[...groups.entries()].map(([cat, items]) => `
+      <li class="vocab-tree-node has-children">
+        <div class="vocab-tree-header" data-expandable>
+          <span class="vocab-tree-chevron">▶</span>
+          <span class="vocab-tree-name">${escapeHtml(cat)}</span>
+          <span class="vocab-tree-count">${items.length}</span>
+        </div>
+        <ul class="vocab-tree-children" hidden>
+          ${items.map(c => `
+            <li class="vocab-tree-node">
+              <div class="vocab-tree-header">
+                <span class="vocab-tree-leaf">·</span>
+                <span class="vocab-tree-name">${escapeHtml(c.name)}</span>
+                ${c.status && c.status !== 'active' ? `<span class="vocab-badge vocab-badge-type">${escapeHtml(c.status)}</span>` : ''}
+                ${c.definition ? `<span class="vocab-tree-note">${escapeHtml(c.definition)}</span>` : ''}
+                ${(c.aliases || []).length ? `<span class="vocab-tree-note">aka: ${escapeHtml(c.aliases.join(', '))}</span>` : ''}
+              </div>
+            </li>
+          `).join('')}
+        </ul>
+      </li>
+    `).join('')}</ul>`;
   }
 
   function renderFlatList(items, nameKey) {

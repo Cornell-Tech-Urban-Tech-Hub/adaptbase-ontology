@@ -25,10 +25,19 @@ These vocabularies sync with Supabase database tables:
   - Structure: 13 categories, 30+ specific hazards
   - Usage: `hazards.hazards_addressed[].hazard_id` and `hazard_category`
 
-- **`solution-categories.json`**: Solution taxonomy
-  - Source: `solution_taxonomy` table (is_active = true)
-  - Structure: 7 categories (Water, Food, Buildings, etc.), 80+ subcategories
-  - Usage: `identity.solution_category.category_id` and `subcategory_id`
+- **`solution-categories.json`**: Solution taxonomy, tiers 1–2
+  - Source: `solution_taxonomy` table (is_active = true), extended in v1.1
+  - Structure: 12 categories (Water, Food, Buildings, …, Governance & Policy), 97 subcategories
+  - Usage: `Solution.category_id` and `subcategory_id` — **derived** from the concept
+    (Decision 35): the seeder copies them from `solution-concepts.json`; extraction never writes them
+
+- **`solution-concepts.json`**: Solution taxonomy, tier 3 (v1.1, Decision 35)
+  - Source: seeded from the 115 CDP 2023 controlled action labels, the Solution names reused
+    by two or more plans, and subcategories that name a concrete intervention
+  - Structure: flat list of concepts, each with `aliases`, a one-line `definition`,
+    `category_id`, `subcategory_id`, `ipcc_action_types`, `cdp_labels`, `status`, `added_in`
+  - Usage: `Solution.concept_id`. Closed to the extractor; grows only through the proposal
+    queue (a PR to this file). Deprecate with `status: deprecated` + `replaced_by`
 
 ### Enum-Based Vocabularies
 
@@ -55,10 +64,25 @@ Controlled vocabularies not backed by database tables:
   - Evidence levels
   - Enabling condition types
   - Co-benefit categories
-  - Financing models (grants, PPP, green bonds, climate funds, etc.)
+  - Action status (with a definition per value, v1.1)
+  - Finance axes (v1.1, Decision 43): `source_tier` (who pays), `instrument_class` (in what
+    form), `funding_status`, `amount_qualifier`, `stream_type`; `financing_model` is
+    deprecated with a per-value `replaced_by`
   - Financing status (fully funded, seeking funding, feasibility stage, etc.)
   - Claim source types
   - Mechanism seed vocabulary (guidance, not constraint)
+
+### JSON-LD twins
+
+Every `*.json` here has a `*.jsonld` twin (the same content plus the shared
+`../context.jsonld` and SKOS typing). The twins are generated — never edit them by hand:
+
+```bash
+uv run scripts/export/build_vocab_jsonld.py          # regenerate all twins
+uv run scripts/export/build_vocab_jsonld.py --check  # exit 1 if any twin is stale
+```
+
+A new vocabulary file needs a rule in that script's `SCHEMES` table.
 
 ## Integration Pattern
 
