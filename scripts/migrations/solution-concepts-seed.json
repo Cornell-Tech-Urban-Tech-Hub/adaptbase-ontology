@@ -283,7 +283,7 @@
    "outdoor watering limits"
   ],
   "definition": "Rules that limit water use during drought or shortage.",
-  "subcategory_id": "usage_metering,_conservation_tools_and_water_risk_",
+  "subcategory_id": "water_demand_management",
   "ipcc_action_types": [
    "institutional"
   ],
@@ -301,7 +301,7 @@
    "tiered water rates"
   ],
   "definition": "Price structures that reward lower or off-peak water use.",
-  "subcategory_id": "usage_metering,_conservation_tools_and_water_risk_",
+  "subcategory_id": "water_demand_management",
   "ipcc_action_types": [
    "institutional"
   ],
@@ -490,9 +490,7 @@
   "ipcc_action_types": [
    "ecosystem_based"
   ],
-  "cdp_labels": [
-   "Beach nourishment"
-  ]
+  "cdp_labels": []
  },
  {
   "id": "beach_nourishment",
@@ -509,7 +507,9 @@
    "structural_physical",
    "ecosystem_based"
   ],
-  "cdp_labels": []
+  "cdp_labels": [
+   "Beach nourishment"
+  ]
  },
  {
   "id": "mangrove_restoration",
@@ -1292,7 +1292,7 @@
    "community hub"
   ],
   "definition": "A trusted community facility equipped to support residents before, during and after a hazard event.",
-  "subcategory_id": "public_cooling_facilities",
+  "subcategory_id": "community_resilience_hubs",
   "ipcc_action_types": [
    "structural_physical",
    "social"
@@ -1328,7 +1328,7 @@
    "check-in programme"
   ],
   "definition": "Coordinated public-health response to extreme heat, including outreach and warnings.",
-  "subcategory_id": "heat_stress_monitoring",
+  "subcategory_id": "heat_action_planning",
   "ipcc_action_types": [
    "social",
    "institutional"
@@ -1651,7 +1651,7 @@
    "relocation"
   ],
   "definition": "Moving people and assets out of hazard zones through buyouts or relocation.",
-  "subcategory_id": "migration_and_resettlement_management",
+  "subcategory_id": "retreat_and_buyouts",
   "ipcc_action_types": [
    "social",
    "institutional"
@@ -1672,7 +1672,7 @@
    "easements"
   ],
   "definition": "Land-use rules that limit development in hazard-prone areas.",
-  "subcategory_id": "decision_support_for_climate_adaptation_planning_a",
+  "subcategory_id": "land_use_and_zoning",
   "ipcc_action_types": [
    "institutional"
   ],
@@ -1691,7 +1691,7 @@
    "adaptive management"
   ],
   "definition": "A planning process or instrument for adaptation, recorded as a Solution only when a plan prescribes planning as a measure.",
-  "subcategory_id": "decision_support_for_climate_adaptation_planning_a",
+  "subcategory_id": "adaptation_planning_process",
   "ipcc_action_types": [
    "institutional"
   ],
@@ -1710,7 +1710,7 @@
    "DRR law"
   ],
   "definition": "Institutional preparation for hazard events.",
-  "subcategory_id": "decision_support_for_climate_adaptation_planning_a",
+  "subcategory_id": "adaptation_planning_process",
   "ipcc_action_types": [
    "institutional"
   ],
@@ -1949,7 +1949,7 @@
    "in-situ upgrading"
   ],
   "definition": "Improving services, housing and drainage in informal settlements.",
-  "subcategory_id": "adaptation_governance",
+  "subcategory_id": "informal_settlement_upgrading",
   "ipcc_action_types": [
    "structural_physical",
    "social"
