@@ -1,0 +1,112 @@
+[
+ {
+  "label": "Green infrastructure",
+  "was": "green_infrastructure",
+  "reason": "Umbrella term; a plan that names nothing narrower gets no Solution (review 2026-10-06)."
+ },
+ {
+  "label": "Fisheries management",
+  "was": "fisheries_management",
+  "reason": "Rural-sector rules rarely in city plans (review 2026-10-06)."
+ },
+ {
+  "label": "Fishing quotas",
+  "was": "fisheries_management",
+  "reason": "Rural-sector rules rarely in city plans (review 2026-10-06)."
+ },
+ {
+  "label": "Fisheries co-management",
+  "was": "fisheries_management",
+  "reason": "Rural-sector rules rarely in city plans (review 2026-10-06)."
+ },
+ {
+  "label": "Controlling overfishing",
+  "was": "fisheries_management",
+  "reason": "Rural-sector rules rarely in city plans (review 2026-10-06)."
+ },
+ {
+  "label": "Renewable energy technologies",
+  "was": "solar_pv",
+  "reason": "Mitigation or housing policy, outside the adaptation catalog (review 2026-10-06)."
+ },
+ {
+  "label": "Second-generation biofuels",
+  "was": "renewable_energy",
+  "reason": "Mitigation or housing policy, outside the adaptation catalog (review 2026-10-06)."
+ },
+ {
+  "label": "Ecosystem-based management",
+  "was": "ecosystem_based_adaptation",
+  "reason": "Umbrella term; a plan that names nothing narrower gets no Solution (review 2026-10-06)."
+ },
+ {
+  "label": "Hazard resistant infrastructure design and construction",
+  "was": "infrastructure_hardening",
+  "reason": "Umbrella term; a plan that names nothing narrower gets no Solution (review 2026-10-06)."
+ },
+ {
+  "label": "Traditional technologies and methods",
+  "was": "infrastructure_hardening",
+  "reason": "Umbrella term; a plan that names nothing narrower gets no Solution (review 2026-10-06)."
+ },
+ {
+  "label": "Development of targeted plan/program to address hazard(s) selected",
+  "was": "adaptation_plan",
+  "reason": "A plan is a Plan node, not a Solution (review 2026-10-06)."
+ },
+ {
+  "label": "Adaptive management",
+  "was": "adaptation_plan",
+  "reason": "A plan is a Plan node, not a Solution (review 2026-10-06)."
+ },
+ {
+  "label": "Essential public health services",
+  "was": "disease_surveillance",
+  "reason": "Too general to classify (review 2026-10-06)."
+ },
+ {
+  "label": "Public health policies to improve nutrition (including improved access to healthy foods)",
+  "was": "disease_surveillance",
+  "reason": "Health policy, not adaptation (review 2026-10-06)."
+ },
+ {
+  "label": "Citizen dietary shift",
+  "was": "food_security_programme",
+  "reason": "Diet or procurement policy: health or mitigation, not adaptation (review 2026-10-06)."
+ },
+ {
+  "label": "Community engagement/awareness campaigns on the climate and health benefits of sustainable healthy diets",
+  "was": "food_security_programme",
+  "reason": "Diet or procurement policy: health or mitigation, not adaptation (review 2026-10-06)."
+ },
+ {
+  "label": "Engagement with retailers (including restaurants) to expand and encourage sustainable, healthy food choices",
+  "was": "food_security_programme",
+  "reason": "Diet or procurement policy: health or mitigation, not adaptation (review 2026-10-06)."
+ },
+ {
+  "label": "Municipal/jurisdictional food procurement policies that align with guidelines for sustainable, healthy diets (including school procurement, etc.)",
+  "was": "food_security_programme",
+  "reason": "Diet or procurement policy: health or mitigation, not adaptation (review 2026-10-06)."
+ },
+ {
+  "label": "Municipal/jurisdictional food procurement policies that support sustainable food production practices (including school procurement, etc.)",
+  "was": "food_security_programme",
+  "reason": "Diet or procurement policy: health or mitigation, not adaptation (review 2026-10-06)."
+ },
+ {
+  "label": "Public policies to encourage citizen dietary shift to sustainable, healthy diets (including incentivizing purchase of low-carbon foods, plant-based or alternative proteins)",
+  "was": "food_security_programme",
+  "reason": "Diet or procurement policy: health or mitigation, not adaptation (review 2026-10-06)."
+ },
+ {
+  "label": "Economic diversification measures",
+  "was": "economic_diversification",
+  "reason": "Umbrella term; a plan that names nothing narrower gets no Solution (review 2026-10-06)."
+ },
+ {
+  "label": "Livelihood diversification",
+  "was": "economic_diversification",
+  "reason": "Umbrella term; a plan that names nothing narrower gets no Solution (review 2026-10-06)."
+ }
+]

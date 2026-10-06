@@ -2,7 +2,7 @@
   "@context": "../context.jsonld",
   "_source": "solution_taxonomy table in Supabase (is_active = true)",
   "_usage": "identity.solution_category.category_id and subcategory_id",
-  "_note": "framework_mappings added Sprint 3. c40_action_categories: C40 Cities adaptation intervention labels. gcom_hazard_focus: primary GCoM CRF hazard categories these solutions address. ipcc_action_types: IPCC AR6 WGII action classification. iclei_milestone: primary ICLEI milestone (all solutions primarily = D.Implement). v0.1.1: added iclei_pathways[] mapping each category to ICLEI's five urban development pathways (low-emission, nature-based, circular, resilient, equitable_people_centered). Added Ecosystem-based Adaptation (EbA) under nature and Community-based Adaptation (CbA) under communication_and_community per UNFCCC and IPCC AR6 distinctions.",
+  "_note": "framework_mappings added Sprint 3. c40_action_categories: C40 Cities adaptation intervention labels. gcom_hazard_focus: primary GCoM CRF hazard categories these solutions address. ipcc_action_types: IPCC AR6 WGII action classification. iclei_milestone: primary ICLEI milestone (all solutions primarily = D.Implement). v0.1.1: added iclei_pathways[] mapping each category to ICLEI's five urban development pathways (low-emission, nature-based, circular, resilient, equitable_people_centered). Added Ecosystem-based Adaptation (EbA) under nature and Community-based Adaptation (CbA) under communication_and_community per UNFCCC and IPCC AR6 distinctions. v1.1 (Decision 35): tier 1–2 of the Solution taxonomy; tier 3 is solution-concepts.json. Added governance_and_policy (zoning, codes, insurance mandates, retreat, governance bodies) and non-tech subcategories the corpus needed (resilience hubs, heat action planning, informal-settlement upgrading, water demand management). Vendor-grain subcategory names are kept for id stability in adaptbase-core's vocabulary_terms.",
   "categories": [
     {
       "id": "water",
@@ -207,6 +207,18 @@
           "id": "water_treatment,_filtration,_and_distributed_treat",
           "name": "Water Treatment, Filtration, and Distributed Treatment Facilities",
           "@id": "abv:solution-categories-water-water_treatment,_filtration,_and_distributed_treat",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:solution-categories-water"
+          },
+          "skos:inScheme": {
+            "@id": "abv:solution-categories"
+          }
+        },
+        {
+          "id": "water_demand_management",
+          "name": "Water Demand Management (restrictions, pricing)",
+          "@id": "abv:solution-categories-water-water_demand_management",
           "@type": "skos:Concept",
           "skos:broader": {
             "@id": "abv:solution-categories-water"
@@ -509,6 +521,18 @@
           "id": "wildfire_resilience_systems",
           "name": "Wildfire Resilience Systems",
           "@id": "abv:solution-categories-buildings-wildfire_resilience_systems",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:solution-categories-buildings"
+          },
+          "skos:inScheme": {
+            "@id": "abv:solution-categories"
+          }
+        },
+        {
+          "id": "informal_settlement_upgrading",
+          "name": "Informal Settlement Upgrading",
+          "@id": "abv:solution-categories-buildings-informal_settlement_upgrading",
           "@type": "skos:Concept",
           "skos:broader": {
             "@id": "abv:solution-categories-buildings"
@@ -1172,6 +1196,30 @@
           "skos:inScheme": {
             "@id": "abv:solution-categories"
           }
+        },
+        {
+          "id": "community_resilience_hubs",
+          "name": "Community Resilience Hubs",
+          "@id": "abv:solution-categories-health-community_resilience_hubs",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:solution-categories-health"
+          },
+          "skos:inScheme": {
+            "@id": "abv:solution-categories"
+          }
+        },
+        {
+          "id": "heat_action_planning",
+          "name": "Heat Action Planning and Response",
+          "@id": "abv:solution-categories-health-heat_action_planning",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:solution-categories-health"
+          },
+          "skos:inScheme": {
+            "@id": "abv:solution-categories"
+          }
         }
       ],
       "@id": "abv:solution-categories-health",
@@ -1509,6 +1557,96 @@
         }
       ],
       "@id": "abv:solution-categories-communication_and_community",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-categories"
+      }
+    },
+    {
+      "id": "governance_and_policy",
+      "name": "Governance, Policy and Planning Instruments",
+      "framework_mappings": {
+        "c40_action_categories": [
+          "Governance & Planning"
+        ],
+        "gcom_hazard_focus": [],
+        "ipcc_action_types": [
+          "institutional"
+        ],
+        "iclei_milestone": "C. Plan",
+        "iclei_pathways": [
+          "resilient",
+          "equitable_people_centered"
+        ],
+        "sdg_goals": [
+          "SDG11",
+          "SDG13",
+          "SDG16"
+        ]
+      },
+      "subcategories": [
+        {
+          "id": "adaptation_governance",
+          "name": "Adaptation Governance Bodies and Mainstreaming",
+          "@id": "abv:solution-categories-governance_and_policy-adaptation_governance",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:solution-categories-governance_and_policy"
+          },
+          "skos:inScheme": {
+            "@id": "abv:solution-categories"
+          }
+        },
+        {
+          "id": "land_use_and_zoning",
+          "name": "Land Use, Zoning and Development Regulation",
+          "@id": "abv:solution-categories-governance_and_policy-land_use_and_zoning",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:solution-categories-governance_and_policy"
+          },
+          "skos:inScheme": {
+            "@id": "abv:solution-categories"
+          }
+        },
+        {
+          "id": "codes_and_standards",
+          "name": "Codes, Standards and Mandates",
+          "@id": "abv:solution-categories-governance_and_policy-codes_and_standards",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:solution-categories-governance_and_policy"
+          },
+          "skos:inScheme": {
+            "@id": "abv:solution-categories"
+          }
+        },
+        {
+          "id": "retreat_and_buyouts",
+          "name": "Managed Retreat and Buyout Programmes",
+          "@id": "abv:solution-categories-governance_and_policy-retreat_and_buyouts",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:solution-categories-governance_and_policy"
+          },
+          "skos:inScheme": {
+            "@id": "abv:solution-categories"
+          }
+        },
+        {
+          "id": "adaptation_planning_process",
+          "name": "Adaptation Planning and Monitoring Frameworks",
+          "@id": "abv:solution-categories-governance_and_policy-adaptation_planning_process",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:solution-categories-governance_and_policy"
+          },
+          "skos:inScheme": {
+            "@id": "abv:solution-categories"
+          }
+        }
+      ],
+      "@id": "abv:solution-categories-governance_and_policy",
       "@type": "skos:Concept",
       "skos:topConceptOf": {
         "@id": "abv:solution-categories"

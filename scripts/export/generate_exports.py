@@ -7,7 +7,7 @@
 """Generate OWL/Turtle/SKOS exports from the JSON-LD ontology source.
 
 Run with: uv run scripts/export/generate_exports.py
-Reads ontology/ontology-v1.0.jsonld + ontology/vocabularies/*.jsonld,
+Reads ontology/ontology-v1.1.jsonld + ontology/vocabularies/*.jsonld,
 writes exports/ontology.ttl, exports/ontology.owl (RDF/XML), and
 exports/vocabularies.ttl (combined SKOS).
 
@@ -18,13 +18,12 @@ context.jsonld; RDF-star quoted triples become relevant only when the
 *instance* knowledge graph (adaptbase-core, Supabase-backed, out of this
 repo's scope) is exported with its actual per-edge claim provenance.
 """
-import json
 from pathlib import Path
 
 from rdflib import Graph
 
 REPO = Path(__file__).resolve().parents[2]
-ONTOLOGY_SRC = REPO / "ontology" / "ontology-v1.0.jsonld"
+ONTOLOGY_SRC = REPO / "ontology" / "ontology-v1.1.jsonld"
 VOCAB_DIR = REPO / "ontology" / "vocabularies"
 EXPORTS_DIR = REPO / "exports"
 

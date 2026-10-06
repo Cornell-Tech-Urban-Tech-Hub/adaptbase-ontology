@@ -733,13 +733,14 @@
   },
   "financing_model": {
     "_source": "CDP project_financing_model and action_funding_sources fields",
-    "_usage": "FUNDED_BY.financing_model (v0.2 binding — CapitalProject → FinancingSource edge property)",
+    "_usage": "none (deprecated); was USES_INSTRUMENT.financing_model",
     "_note": "v0.2: bound to FUNDED_BY edge on CapitalProject → FinancingSource. Previously unbound.",
     "values": [
       {
         "id": "grants",
         "name": "Grants",
         "description": "Grant funding from government, foundations, or international organizations",
+        "replaced_by": "instrument_class:grant",
         "@id": "abv:enums-financing_model-grants",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -750,6 +751,7 @@
         "id": "municipal_budget",
         "name": "Municipal Budget",
         "description": "City's own budget and resources",
+        "replaced_by": "source_tier:local_government + instrument_class:own_revenue",
         "@id": "abv:enums-financing_model-municipal_budget",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -760,6 +762,7 @@
         "id": "national_government",
         "name": "National Government Funding",
         "description": "National-level public finance",
+        "replaced_by": "source_tier:national",
         "@id": "abv:enums-financing_model-national_government",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -770,6 +773,7 @@
         "id": "regional_funds",
         "name": "Regional Funds and Programmes",
         "description": "Regional development banks, EU funds, etc.",
+        "replaced_by": "source_tier:regional_or_state",
         "@id": "abv:enums-financing_model-regional_funds",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -780,6 +784,7 @@
         "id": "public_private_partnership",
         "name": "Public-Private Partnership (PPP)",
         "description": "Structured partnership between public and private sectors",
+        "replaced_by": "instrument_class:public_private_partnership",
         "@id": "abv:enums-financing_model-public_private_partnership",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -790,6 +795,7 @@
         "id": "commercial_loans",
         "name": "Commercial Bank Loans",
         "description": "Loans from commercial banking sector",
+        "replaced_by": "instrument_class:debt (instrument_type:loan)",
         "@id": "abv:enums-financing_model-commercial_loans",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -800,6 +806,7 @@
         "id": "development_banks",
         "name": "Development Bank Financing",
         "description": "World Bank, regional development banks, etc.",
+        "replaced_by": "source_tier:international_multilateral",
         "@id": "abv:enums-financing_model-development_banks",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -810,6 +817,7 @@
         "id": "climate_funds",
         "name": "Climate Funds",
         "description": "Green Climate Fund, Adaptation Fund, etc.",
+        "replaced_by": "source_tier:international_multilateral",
         "@id": "abv:enums-financing_model-climate_funds",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -820,6 +828,7 @@
         "id": "green_bonds",
         "name": "Green Bonds",
         "description": "Municipal or corporate green bonds",
+        "replaced_by": "instrument_class:debt (instrument_type:green_bond)",
         "@id": "abv:enums-financing_model-green_bonds",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -830,6 +839,7 @@
         "id": "blended_finance",
         "name": "Blended Finance",
         "description": "Mix of public, private, and philanthropic capital",
+        "replaced_by": "instrument_class:blended",
         "@id": "abv:enums-financing_model-blended_finance",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -840,6 +850,7 @@
         "id": "private_sector",
         "name": "Private Sector Investment",
         "description": "Direct private investment",
+        "replaced_by": "source_tier:private",
         "@id": "abv:enums-financing_model-private_sector",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -850,6 +861,7 @@
         "id": "international_oda",
         "name": "International ODA",
         "description": "Official development assistance",
+        "replaced_by": "source_tier:international_multilateral",
         "@id": "abv:enums-financing_model-international_oda",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -857,6 +869,7 @@
         }
       }
     ],
+    "_deprecated": "v1.1 (Decision 43). Mixed 'who pays' and 'in what form'. Not bound to any property; each value maps to source_tier or instrument_class as listed on the value (replaced_by).",
     "@id": "abv:enums-financing_model",
     "@type": "skos:ConceptScheme"
   },
@@ -951,7 +964,7 @@
   },
   "financing_status": {
     "_source": "CDP project_financing_status field",
-    "_usage": "CapitalProject.financing_status, Action.financing_status (v0.2 bindings)",
+    "_usage": "Action.financing_status, CapitalProject.financing_status",
     "_note": "v0.2: bound to CapitalProject and Action. Previously unbound.",
     "values": [
       {
@@ -1020,7 +1033,7 @@
   },
   "equity_focus": {
     "_source": "EDF equity framework (Shi 2024 rubric) — adapted for solution-level classification",
-    "_usage": "solution.equity_focus",
+    "_usage": "Action.equity_focus (v1.1, from solution.equity_focus)",
     "values": [
       {
         "id": "none",
@@ -1169,13 +1182,14 @@
   },
   "instrument_type": {
     "_source": "CDP project finance vocabulary, extended in v0.2 with US municipal CIP terms",
-    "_usage": "FinancialInstrument.instrument_type",
-    "_note": "v0.2: extended with US municipal CIP language (general_obligation_bond, revenue_bond, tax_increment_financing, special_assessment, federal_cost_share, state_cost_share, municipal_capital_appropriation, ratepayer_funded). All previous values retained.",
+    "_usage": "FinancialInstrument.instrument_type, FundingAllocation.instrument_type",
+    "_note": "v0.2: extended with US municipal CIP language (general_obligation_bond, revenue_bond, tax_increment_financing, special_assessment, federal_cost_share, state_cost_share, municipal_capital_appropriation, ratepayer_funded). All previous values retained. v1.1 (Decision 43): now also the optional subtype of FundingAllocation.instrument_class; added loan, tax_abatement, insurance, ground_lease. Not added: community land trust (an ownership model), developer agreement (a contract), investment fund (a FundingStream).",
     "values": [
       {
         "id": "green_bond",
         "name": "Green Bond",
         "description": "Municipal or corporate green bond",
+        "instrument_class": "debt",
         "@id": "abv:enums-instrument_type-green_bond",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -1186,6 +1200,7 @@
         "id": "general_obligation_bond",
         "name": "General Obligation Bond",
         "description": "Municipal bond backed by the full faith and credit (and taxing power) of the issuing government. Per Salkin: 'no one is using this' for resilience — opportunity area.",
+        "instrument_class": "debt",
         "@id": "abv:enums-instrument_type-general_obligation_bond",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -1196,6 +1211,7 @@
         "id": "revenue_bond",
         "name": "Revenue Bond",
         "description": "Municipal bond backed by revenues from a specific source (water rates, tolls, etc.). Includes enterprise/ratepayer-supported financing.",
+        "instrument_class": "debt",
         "@id": "abv:enums-instrument_type-revenue_bond",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -1206,6 +1222,7 @@
         "id": "tax_increment_financing",
         "name": "Tax Increment Financing (TIF)",
         "description": "Bond or special-district financing repaid from the future incremental tax revenue generated by improvements in a defined area",
+        "instrument_class": "tax_based",
         "@id": "abv:enums-instrument_type-tax_increment_financing",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -1216,6 +1233,7 @@
         "id": "special_assessment",
         "name": "Special Assessment",
         "description": "Levy on property owners within a defined benefit district to pay for improvements that directly benefit them (e.g., flood-control assessment districts)",
+        "instrument_class": "fee_or_levy",
         "@id": "abv:enums-instrument_type-special_assessment",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -1226,6 +1244,7 @@
         "id": "sustainability_linked_loan",
         "name": "Sustainability-Linked Loan",
         "description": "Loan with sustainability performance targets",
+        "instrument_class": "debt",
         "@id": "abv:enums-instrument_type-sustainability_linked_loan",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -1236,6 +1255,7 @@
         "id": "climate_bond",
         "name": "Climate Bond",
         "description": "Bond earmarked for climate projects",
+        "instrument_class": "debt",
         "@id": "abv:enums-instrument_type-climate_bond",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -1246,6 +1266,7 @@
         "id": "resilience_bond",
         "name": "Resilience Bond",
         "description": "Bond tied to adaptation/resilience outcomes",
+        "instrument_class": "debt",
         "@id": "abv:enums-instrument_type-resilience_bond",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -1256,6 +1277,7 @@
         "id": "blended_finance",
         "name": "Blended Finance",
         "description": "Mix of public, private, philanthropic capital",
+        "instrument_class": "blended",
         "@id": "abv:enums-instrument_type-blended_finance",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -1266,6 +1288,7 @@
         "id": "revolving_fund",
         "name": "Revolving Fund",
         "description": "Loan fund with repayments recycled into new loans (e.g., state Clean Water SRF)",
+        "instrument_class": "debt",
         "@id": "abv:enums-instrument_type-revolving_fund",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -1276,6 +1299,7 @@
         "id": "grant",
         "name": "Grant",
         "description": "Non-repayable funding",
+        "instrument_class": "grant",
         "@id": "abv:enums-instrument_type-grant",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -1286,6 +1310,7 @@
         "id": "federal_cost_share",
         "name": "Federal Cost Share",
         "description": "Federal funding covering a portion of project cost (e.g., FEMA BRIC, USACE cost-share, FHWA federal-aid)",
+        "instrument_class": "grant",
         "@id": "abv:enums-instrument_type-federal_cost_share",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -1296,6 +1321,7 @@
         "id": "state_cost_share",
         "name": "State Cost Share",
         "description": "State funding covering a portion of project cost",
+        "instrument_class": "grant",
         "@id": "abv:enums-instrument_type-state_cost_share",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -1306,6 +1332,7 @@
         "id": "municipal_capital_appropriation",
         "name": "Municipal Capital Appropriation",
         "description": "Direct appropriation from the city's own capital budget — 'pay-as-you-go' rather than bond-financed",
+        "instrument_class": "own_revenue",
         "@id": "abv:enums-instrument_type-municipal_capital_appropriation",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -1316,6 +1343,7 @@
         "id": "ratepayer_funded",
         "name": "Ratepayer Funded",
         "description": "Funded directly through utility rates (Salkin's 'enterprise/revenue-supported pass-through to ratepayers'). Distinct from revenue_bond — ratepayer_funded is current-revenue funding, not debt issuance secured by future ratepayer revenue.",
+        "instrument_class": "fee_or_levy",
         "@id": "abv:enums-instrument_type-ratepayer_funded",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -1326,6 +1354,7 @@
         "id": "direct_allocation",
         "name": "Direct Allocation",
         "description": "Direct public budget allocation without a structured instrument",
+        "instrument_class": "own_revenue",
         "@id": "abv:enums-instrument_type-direct_allocation",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -1336,7 +1365,52 @@
         "id": "outcome_bond",
         "name": "Outcome Bond",
         "description": "Bond whose repayment or interest rate is contingent on achieving measurable adaptation outcomes (e.g., flood damage avoidance, heat mortality reduction). Linked via CONTINGENT_ON relationship to Outcome nodes.",
+        "instrument_class": "debt",
         "@id": "abv:enums-instrument_type-outcome_bond",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_type"
+        }
+      },
+      {
+        "id": "loan",
+        "name": "Loan",
+        "description": "A plain loan from a bank, agency or fund, not otherwise typed",
+        "instrument_class": "debt",
+        "@id": "abv:enums-instrument_type-loan",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_type"
+        }
+      },
+      {
+        "id": "tax_abatement",
+        "name": "Tax abatement",
+        "description": "Forgone property or other tax used to finance a project",
+        "instrument_class": "tax_based",
+        "@id": "abv:enums-instrument_type-tax_abatement",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_type"
+        }
+      },
+      {
+        "id": "insurance",
+        "name": "Insurance",
+        "description": "An insurance or risk-transfer contract financing recovery",
+        "instrument_class": "risk_transfer",
+        "@id": "abv:enums-instrument_type-insurance",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_type"
+        }
+      },
+      {
+        "id": "ground_lease",
+        "name": "Ground lease",
+        "description": "A long-term lease of public land used to finance development",
+        "instrument_class": "land_or_in_kind",
+        "@id": "abv:enums-instrument_type-ground_lease",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
           "@id": "abv:enums-instrument_type"
@@ -1346,6 +1420,7 @@
         "id": "other",
         "name": "Other",
         "description": "Instrument type not covered by the above values. Use with instrument_type_other_description.",
+        "instrument_class": "other",
         "@id": "abv:enums-instrument_type-other",
         "@type": "skos:Concept",
         "skos:topConceptOf": {
@@ -1706,6 +1781,611 @@
       }
     ],
     "@id": "abv:enums-value_recurrence",
+    "@type": "skos:ConceptScheme"
+  },
+  "action_status": {
+    "_source": "C40 / ICLEI / GCoM action status vocabularies, with definitions written for v1.1 from the Christchurch and Houston status briefs (adaptbase-core #264–#268, #336)",
+    "_usage": "Action.status, PRESCRIBES.implementation_stage; the `value` of each *_observations element",
+    "_note": "v1.1 (Decision 39). One definition per value so extraction, the researcher and reviewers read the same thing; adaptbase-core's VALUE_GLOSSES copy is deleted once these reach its prompts.",
+    "values": [
+      {
+        "id": "not_started",
+        "name": "Not started",
+        "description": "Declared by a plan or report; no work has begun. Covers 'no action to date', 'no progress to date', 'not progressed', 'lead agency still to be determined'.",
+        "@id": "abv:enums-action_status-not_started",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-action_status"
+        }
+      },
+      {
+        "id": "committed",
+        "name": "Committed",
+        "description": "Adopted and resourced (budget, lead or timeline assigned) but delivery has not begun. Use not_started when the source says nothing has happened.",
+        "@id": "abv:enums-action_status-committed",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-action_status"
+        }
+      },
+      {
+        "id": "in_planning",
+        "name": "In planning",
+        "description": "Work has begun but nothing is delivered: scoping, brief agreed, design, consultant appointed, feasibility, 'preliminary work undertaken'.",
+        "@id": "abv:enums-action_status-in_planning",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-action_status"
+        }
+      },
+      {
+        "id": "under_implementation",
+        "name": "Under implementation",
+        "description": "Delivery is underway: in progress, being progressed, partially delivered, delivered and ongoing.",
+        "@id": "abv:enums-action_status-under_implementation",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-action_status"
+        }
+      },
+      {
+        "id": "on_hold",
+        "name": "On hold",
+        "description": "Work began and is paused or delayed with no stated end: 'on hold', 'paused', 'delayed pending funding'. Distinct from cancelled.",
+        "@id": "abv:enums-action_status-on_hold",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-action_status"
+        }
+      },
+      {
+        "id": "completed",
+        "name": "Completed",
+        "description": "Done: delivered, adopted, established, launched, built.",
+        "@id": "abv:enums-action_status-completed",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-action_status"
+        }
+      },
+      {
+        "id": "cancelled",
+        "name": "Cancelled",
+        "description": "Will not proceed: 'not proceeding', 'did not proceed', 'dropped', 'lacks feasibility'.",
+        "@id": "abv:enums-action_status-cancelled",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-action_status"
+        }
+      }
+    ],
+    "@id": "abv:enums-action_status",
+    "@type": "skos:ConceptScheme"
+  },
+  "plan_status": {
+    "_source": "v1.1 (Decision 40)",
+    "_usage": "Plan.plan_status",
+    "values": [
+      {
+        "id": "draft",
+        "name": "Draft",
+        "description": "Published for consultation or internal review; not adopted.",
+        "@id": "abv:enums-plan_status-draft",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-plan_status"
+        }
+      },
+      {
+        "id": "adopted",
+        "name": "Adopted",
+        "description": "Formally adopted or approved by the issuing body and in force.",
+        "@id": "abv:enums-plan_status-adopted",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-plan_status"
+        }
+      },
+      {
+        "id": "under_review",
+        "name": "Under review",
+        "description": "An adopted plan being revised or evaluated for replacement.",
+        "@id": "abv:enums-plan_status-under_review",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-plan_status"
+        }
+      },
+      {
+        "id": "superseded",
+        "name": "Superseded",
+        "description": "Replaced by a later plan (see Plan SUPERSEDES Plan).",
+        "@id": "abv:enums-plan_status-superseded",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-plan_status"
+        }
+      },
+      {
+        "id": "expired",
+        "name": "Expired",
+        "description": "Past its horizon with no successor named.",
+        "@id": "abv:enums-plan_status-expired",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-plan_status"
+        }
+      }
+    ],
+    "@id": "abv:enums-plan_status",
+    "@type": "skos:ConceptScheme"
+  },
+  "system_condition": {
+    "_source": "v1.1 (Decision 37); was UrbanSystem.condition",
+    "_usage": "TARGETS.condition",
+    "values": [
+      {
+        "id": "excellent",
+        "name": "Excellent",
+        "description": "New or as-new; no deficiencies.",
+        "@id": "abv:enums-system_condition-excellent",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-system_condition"
+        }
+      },
+      {
+        "id": "good",
+        "name": "Good",
+        "description": "Minor deficiencies; performs as intended.",
+        "@id": "abv:enums-system_condition-good",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-system_condition"
+        }
+      },
+      {
+        "id": "fair",
+        "name": "Fair",
+        "description": "Noticeable deterioration; performance affected.",
+        "@id": "abv:enums-system_condition-fair",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-system_condition"
+        }
+      },
+      {
+        "id": "poor",
+        "name": "Poor",
+        "description": "Significant deterioration; failure likely without intervention.",
+        "@id": "abv:enums-system_condition-poor",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-system_condition"
+        }
+      },
+      {
+        "id": "critical",
+        "name": "Critical",
+        "description": "Failed or failing; service at risk.",
+        "@id": "abv:enums-system_condition-critical",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-system_condition"
+        }
+      }
+    ],
+    "@id": "abv:enums-system_condition",
+    "@type": "skos:ConceptScheme"
+  },
+  "stream_type": {
+    "_source": "v1.1 (Decision 43); replaces FinancingSource.source_type",
+    "_usage": "FundingStream.stream_type",
+    "values": [
+      {
+        "id": "programme",
+        "name": "Programme",
+        "description": "A recurring grant or assistance programme (HMGP, BRIC).",
+        "@id": "abv:enums-stream_type-programme",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-stream_type"
+        }
+      },
+      {
+        "id": "fund",
+        "name": "Fund",
+        "description": "A standing fund (Green Climate Fund, a resilience trust fund).",
+        "@id": "abv:enums-stream_type-fund",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-stream_type"
+        }
+      },
+      {
+        "id": "budget_line",
+        "name": "Budget line",
+        "description": "A named line in a government budget (General Fund, a CIP line).",
+        "@id": "abv:enums-stream_type-budget_line",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-stream_type"
+        }
+      },
+      {
+        "id": "ballot_measure",
+        "name": "Ballot measure",
+        "description": "A voter-approved measure or bond act (Measure FF).",
+        "@id": "abv:enums-stream_type-ballot_measure",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-stream_type"
+        }
+      },
+      {
+        "id": "fee_or_levy",
+        "name": "Fee or levy",
+        "description": "A dedicated fee, rate or levy (stormwater utility fee).",
+        "@id": "abv:enums-stream_type-fee_or_levy",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-stream_type"
+        }
+      },
+      {
+        "id": "appropriation",
+        "name": "Appropriation",
+        "description": "A one-off legislative appropriation.",
+        "@id": "abv:enums-stream_type-appropriation",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-stream_type"
+        }
+      },
+      {
+        "id": "other",
+        "name": "Other",
+        "description": "None of the above.",
+        "@id": "abv:enums-stream_type-other",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-stream_type"
+        }
+      }
+    ],
+    "@id": "abv:enums-stream_type",
+    "@type": "skos:ConceptScheme"
+  },
+  "source_tier": {
+    "_source": "v1.1 (Decision 43); axis A of the finance model",
+    "_usage": "FundingAllocation.source_tier (stated when no funder is named; derived from the funder's stakeholder_type otherwise)",
+    "values": [
+      {
+        "id": "local_government",
+        "name": "Local government",
+        "description": "City, county or municipal government money.",
+        "@id": "abv:enums-source_tier-local_government",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-source_tier"
+        }
+      },
+      {
+        "id": "regional_or_state",
+        "name": "Regional or state",
+        "description": "State, province, region or metropolitan authority.",
+        "@id": "abv:enums-source_tier-regional_or_state",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-source_tier"
+        }
+      },
+      {
+        "id": "national",
+        "name": "National",
+        "description": "National government and its agencies.",
+        "@id": "abv:enums-source_tier-national",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-source_tier"
+        }
+      },
+      {
+        "id": "international_multilateral",
+        "name": "International / multilateral",
+        "description": "Development banks, climate funds, UN agencies, foreign aid.",
+        "@id": "abv:enums-source_tier-international_multilateral",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-source_tier"
+        }
+      },
+      {
+        "id": "private",
+        "name": "Private",
+        "description": "Companies, developers, lenders, investors.",
+        "@id": "abv:enums-source_tier-private",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-source_tier"
+        }
+      },
+      {
+        "id": "philanthropic",
+        "name": "Philanthropic",
+        "description": "Foundations and charitable giving.",
+        "@id": "abv:enums-source_tier-philanthropic",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-source_tier"
+        }
+      },
+      {
+        "id": "utility_ratepayer",
+        "name": "Utility ratepayer",
+        "description": "Utility revenue from rates and charges.",
+        "@id": "abv:enums-source_tier-utility_ratepayer",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-source_tier"
+        }
+      },
+      {
+        "id": "mixed",
+        "name": "Mixed",
+        "description": "The source states several tiers for one allocation and does not split them.",
+        "@id": "abv:enums-source_tier-mixed",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-source_tier"
+        }
+      }
+    ],
+    "@id": "abv:enums-source_tier",
+    "@type": "skos:ConceptScheme"
+  },
+  "instrument_class": {
+    "_source": "v1.1 (Decision 43); axis B of the finance model; instrument_type values nest under these",
+    "_usage": "FundingAllocation.instrument_class",
+    "values": [
+      {
+        "id": "grant",
+        "name": "Grant",
+        "description": "Non-repayable funding: grants, cost-shares.",
+        "@id": "abv:enums-instrument_class-grant",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_class"
+        }
+      },
+      {
+        "id": "debt",
+        "name": "Debt",
+        "description": "Borrowed money: bonds, loans, revolving funds.",
+        "@id": "abv:enums-instrument_class-debt",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_class"
+        }
+      },
+      {
+        "id": "own_revenue",
+        "name": "Own revenue",
+        "description": "Pay-as-you-go from the owner's own budget: appropriations, direct allocation.",
+        "@id": "abv:enums-instrument_class-own_revenue",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_class"
+        }
+      },
+      {
+        "id": "fee_or_levy",
+        "name": "Fee or levy",
+        "description": "Dedicated charges on users or property: special assessments, rates.",
+        "@id": "abv:enums-instrument_class-fee_or_levy",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_class"
+        }
+      },
+      {
+        "id": "tax_based",
+        "name": "Tax-based",
+        "description": "Instruments built on tax flows: tax increment financing, tax abatement.",
+        "@id": "abv:enums-instrument_class-tax_based",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_class"
+        }
+      },
+      {
+        "id": "private_investment",
+        "name": "Private investment",
+        "description": "Equity or direct private capital.",
+        "@id": "abv:enums-instrument_class-private_investment",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_class"
+        }
+      },
+      {
+        "id": "public_private_partnership",
+        "name": "Public-private partnership",
+        "description": "A structured PPP or concession.",
+        "@id": "abv:enums-instrument_class-public_private_partnership",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_class"
+        }
+      },
+      {
+        "id": "risk_transfer",
+        "name": "Risk transfer",
+        "description": "Insurance and similar.",
+        "@id": "abv:enums-instrument_class-risk_transfer",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_class"
+        }
+      },
+      {
+        "id": "land_or_in_kind",
+        "name": "Land or in-kind",
+        "description": "Ground leases, land contributions, in-kind works.",
+        "@id": "abv:enums-instrument_class-land_or_in_kind",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_class"
+        }
+      },
+      {
+        "id": "blended",
+        "name": "Blended",
+        "description": "A stated mix of public, private and philanthropic capital in one allocation.",
+        "@id": "abv:enums-instrument_class-blended",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_class"
+        }
+      },
+      {
+        "id": "other",
+        "name": "Other",
+        "description": "None of the above; describe in the evidence.",
+        "@id": "abv:enums-instrument_class-other",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-instrument_class"
+        }
+      }
+    ],
+    "@id": "abv:enums-instrument_class",
+    "@type": "skos:ConceptScheme"
+  },
+  "funding_status": {
+    "_source": "v1.1 (Decision 43; adaptbase-core#298 §4.4)",
+    "_usage": "FundingAllocation.funding_status",
+    "values": [
+      {
+        "id": "potential",
+        "name": "Potential",
+        "description": "Identified as a possible source; nothing sought.",
+        "@id": "abv:enums-funding_status-potential",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-funding_status"
+        }
+      },
+      {
+        "id": "applied",
+        "name": "Applied",
+        "description": "An application or request has been made.",
+        "@id": "abv:enums-funding_status-applied",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-funding_status"
+        }
+      },
+      {
+        "id": "committed",
+        "name": "Committed",
+        "description": "The funder has committed; nothing awarded yet.",
+        "@id": "abv:enums-funding_status-committed",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-funding_status"
+        }
+      },
+      {
+        "id": "awarded",
+        "name": "Awarded",
+        "description": "Formally awarded or appropriated.",
+        "@id": "abv:enums-funding_status-awarded",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-funding_status"
+        }
+      },
+      {
+        "id": "disbursed",
+        "name": "Disbursed",
+        "description": "Money has been paid out.",
+        "@id": "abv:enums-funding_status-disbursed",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-funding_status"
+        }
+      },
+      {
+        "id": "withdrawn",
+        "name": "Withdrawn",
+        "description": "Rescinded, declined or lapsed.",
+        "@id": "abv:enums-funding_status-withdrawn",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-funding_status"
+        }
+      }
+    ],
+    "@id": "abv:enums-funding_status",
+    "@type": "skos:ConceptScheme"
+  },
+  "amount_qualifier": {
+    "_source": "v1.1 (Decision 43; adaptbase-core#298 §4.4)",
+    "_usage": "FundingAllocation.amount_qualifier",
+    "values": [
+      {
+        "id": "exact",
+        "name": "Exact",
+        "description": "The stated figure is the allocation.",
+        "@id": "abv:enums-amount_qualifier-exact",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-amount_qualifier"
+        }
+      },
+      {
+        "id": "up_to",
+        "name": "Up to",
+        "description": "A ceiling ('up to $5M').",
+        "@id": "abv:enums-amount_qualifier-up_to",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-amount_qualifier"
+        }
+      },
+      {
+        "id": "approximately",
+        "name": "Approximately",
+        "description": "A rounded or estimated figure.",
+        "@id": "abv:enums-amount_qualifier-approximately",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-amount_qualifier"
+        }
+      },
+      {
+        "id": "total_programme",
+        "name": "Total programme",
+        "description": "The figure is the whole programme or bond, not this allocation's share.",
+        "@id": "abv:enums-amount_qualifier-total_programme",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-amount_qualifier"
+        }
+      },
+      {
+        "id": "share_of_total",
+        "name": "Share of total",
+        "description": "The figure is a share of a larger stated total.",
+        "@id": "abv:enums-amount_qualifier-share_of_total",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-amount_qualifier"
+        }
+      }
+    ],
+    "@id": "abv:enums-amount_qualifier",
     "@type": "skos:ConceptScheme"
   },
   "@context": [

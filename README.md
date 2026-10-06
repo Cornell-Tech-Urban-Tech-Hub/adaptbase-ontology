@@ -5,7 +5,7 @@ maps the entities, relationships, and vocabularies needed to organize, compare, 
 analyze how cities respond to climate hazards.
 
 **Live viewer:** [ontology.adaptbase.us](https://ontology.adaptbase.us/)
-**Current version:** v1.0 (2026-08-18)
+**Current version:** v1.1 (2026-10-06)
 
 ---
 
@@ -14,7 +14,23 @@ analyze how cities respond to climate hazards.
 This is the running inbox for things to address in upcoming cycles. We populate it as
 issues come up; items here are the next things we work on.
 
-- _Add planned improvements here._
+- **Re-review the Solution concept list after the full extraction.** `vocabularies/solution-concepts.json`
+  (101 concepts) was reviewed on 2026-10-06 on the rule "if we can't classify it more
+  narrowly, we shouldn't record it" (Decision 35). It is provisional: once every plan in the
+  corpus has been extracted, review it again against what plans actually prescribe (proposed
+  concepts, Solutions with no `concept_id`, the dropped umbrellas, the 22 unmapped CDP labels)
+  and revise it in one versioned pass.
+- **`IMPLEMENTED_IN` deployment properties** (`deployment_context`, `zone_type`,
+  `area_km2`, `population_density`, `land_use_type`) have the one-edge-per-pair problem
+  Decision 38 found for `deployment_year`; move or drop them.
+- **Finance follow-ons** (Decision 43 §10): a `FundingAward` registry with external ids
+  (USAspending, SAM); currency conversion at read time; repayment flows.
+- **A population-group concept node** so equity intent can be lifted from
+  `Action.target_populations` onto edges (Decision 36, v1.2 candidate).
+- **`Action.action_kind`** (ontology#18 §3) once the kinds are aligned with IPCC action
+  types and inter-run agreement is measured; and a Mechanism concept list (CQ-43).
+- **`instrument_type` gaps** not taken in v1.1: community land trust, developer
+  agreement, investment fund — decide whether any is an instrument at all.
 
 > **For Claude / future planning sessions:** Before starting any non-trivial change,
 > read this section. If your work intersects an item, advance that item rather than

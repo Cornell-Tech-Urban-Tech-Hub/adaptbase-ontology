@@ -331,6 +331,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     'hazards': '../ontology/vocabularies/hazards.json',
     'urban-systems': '../ontology/vocabularies/urban-systems.json',
     'solution-categories': '../ontology/vocabularies/solution-categories.json',
+    'solution-concepts': '../ontology/vocabularies/solution-concepts.json',
     'crf-goals': '../ontology/vocabularies/crf-goals.json',
     'enums': '../ontology/vocabularies/enums.json',
     'vulnerable-populations': '../ontology/vocabularies/vulnerable-populations.json',
@@ -339,6 +340,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function fetchVocabData(vocabId) {
     if (vocabCache[vocabId]) return vocabCache[vocabId];
+    if (vocabId.startsWith('enums.')) {
+      const all = await fetchVocabData('enums');
+      const block = all && all[vocabId.slice(6)];
+      return block ? { [vocabId.slice(6)]: block } : null;
+    }
     const path = vocabFileMap[vocabId];
     if (!path) return null;
     try {
@@ -470,9 +476,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   function renderVocabData(vocabId, data) {
     if (vocabId === 'hazards') return renderHierarchy(data.categories, 'hazards');
     if (vocabId === 'solution-categories') return renderHierarchy(data.categories, 'subcategories');
+    if (vocabId === 'solution-concepts') return renderConcepts(data.concepts);
     if (vocabId === 'urban-systems') return renderSectors(data.sectors);
     if (vocabId === 'crf-goals') return renderCrfGoals(data.dimensions);
-    if (vocabId === 'enums') return renderEnums(data);
+    if (vocabId === 'enums' || vocabId.startsWith('enums.')) return renderEnums(data);
     if (vocabId === 'vulnerable-populations') return renderFlatList(data.populations);
     return '<div class="vocab-empty">Unknown vocabulary format.</div>';
   }
@@ -604,6 +611,40 @@ document.addEventListener('DOMContentLoaded', async () => {
     }).join('')}</ul>`;
   }
 
+  // solution-concepts: flat list grouped by category_id, each concept with its
+  // one-line definition and aliases (v1.1).
+  function renderConcepts(concepts) {
+    if (!concepts || !concepts.length) return '<div class="vocab-empty">Empty.</div>';
+    const groups = new Map();
+    for (const c of concepts) {
+      const key = c.category_id || 'uncategorized';
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(c);
+    }
+    return `<ul class="vocab-tree">${[...groups.entries()].map(([cat, items]) => `
+      <li class="vocab-tree-node has-children">
+        <div class="vocab-tree-header" data-expandable>
+          <span class="vocab-tree-chevron">▶</span>
+          <span class="vocab-tree-name">${escapeHtml(cat)}</span>
+          <span class="vocab-tree-count">${items.length}</span>
+        </div>
+        <ul class="vocab-tree-children" hidden>
+          ${items.map(c => `
+            <li class="vocab-tree-node">
+              <div class="vocab-tree-header">
+                <span class="vocab-tree-leaf">·</span>
+                <span class="vocab-tree-name">${escapeHtml(c.name)}</span>
+                ${c.status && c.status !== 'active' ? `<span class="vocab-badge vocab-badge-type">${escapeHtml(c.status)}</span>` : ''}
+                ${c.definition ? `<span class="vocab-tree-note">${escapeHtml(c.definition)}</span>` : ''}
+                ${(c.aliases || []).length ? `<span class="vocab-tree-note">aka: ${escapeHtml(c.aliases.join(', '))}</span>` : ''}
+              </div>
+            </li>
+          `).join('')}
+        </ul>
+      </li>
+    `).join('')}</ul>`;
+  }
+
   function renderFlatList(items, nameKey) {
     if (!items || !items.length) return '<div class="vocab-empty">Empty.</div>';
     return `<ul class="vocab-tree">${items.map(item => `
@@ -637,9 +678,40 @@ document.addEventListener('DOMContentLoaded', async () => {
     );
   }
 
+  // Every term in every vocabulary, flattened for search (ontology#14). Built
+  // once, on first focus of the search box: any object with an id and a name
+  // is a term; enums.json terms point at their block's manifest row.
+  let vocabIndex = null;
+  async function buildVocabIndex() {
+    if (vocabIndex) return vocabIndex;
+    const ontology = window.OntologyAdapter.getCurrentOntology();
+    const labels = Object.fromEntries((ontology?.vocabularies || []).map(v => [v.id, v.label]));
+    const out = [];
+    const walk = (node, vocabId) => {
+      if (Array.isArray(node)) { node.forEach(n => walk(n, vocabId)); return; }
+      if (!node || typeof node !== 'object') return;
+      if (typeof node.id === 'string' && typeof node.name === 'string') {
+        const alt = [...(node.aliases || []), ...(node.undrr_terms || [])].filter(a => typeof a === 'string');
+        out.push({ vocabId, id: node.id, name: node.name, alt, hay: [node.name, node.id, ...alt].join(' ').toLowerCase() });
+      }
+      for (const [k, v] of Object.entries(node)) if (k !== 'aliases' && k !== 'undrr_terms' && typeof v === 'object') walk(v, vocabId);
+    };
+    for (const vocabId of Object.keys(vocabFileMap)) {
+      const data = await fetchVocabData(vocabId);
+      if (!data) continue;
+      if (vocabId === 'enums') {
+        for (const [block, body] of Object.entries(data)) if (body && body.values) walk(body.values, 'enums.' + block);
+      } else walk(data, vocabId);
+    }
+    out.forEach(t => { t.vocabLabel = labels[t.vocabId] || t.vocabId; });
+    vocabIndex = out;
+    return out;
+  }
+
   function wireSearch() {
     const input = document.getElementById('search');
     const results = document.getElementById('search-results');
+    input.addEventListener('focus', () => { buildVocabIndex().catch(() => {}); }, { once: true });
 
     function match(q) {
       q = q.trim().toLowerCase();
@@ -658,7 +730,12 @@ document.addEventListener('DOMContentLoaded', async () => {
           out.push({ kind: 'edge', l });
         }
       }
-      return out.slice(0, 10);
+      const graphHits = out.slice(0, 8);
+      const terms = (vocabIndex || []).filter(t => t.hay.includes(q))
+        .sort((a, b) => (b.name.toLowerCase().startsWith(q) - a.name.toLowerCase().startsWith(q)) || a.name.localeCompare(b.name))
+        .slice(0, 12 - graphHits.length)
+        .map(t => ({ kind: 'term', t }));
+      return [...graphHits, ...terms];
     }
 
     function render(list) {
@@ -676,6 +753,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             <span>${escapeHtml(r.n.label)}</span>
             <span class="kind">${escapeHtml(r.n.cluster)}</span>
           </div>`;
+        } else if (r.kind === 'term') {
+          const via = r.t.alt.find(a => a.toLowerCase().includes(input.value.trim().toLowerCase()));
+          return `<div class="result" data-idx="${i}" data-kind="term" data-vocab="${escapeHtml(r.t.vocabId)}">
+            <span class="swatch" style="background:var(--fg-4)"></span>
+            <span>${escapeHtml(r.t.name)}${via && !r.t.name.toLowerCase().includes(input.value.trim().toLowerCase()) ? ` <span style="color:var(--fg-4); font-size:11px;">aka ${escapeHtml(via)}</span>` : ''} <span style="color:var(--fg-4); font-size:11px;">${escapeHtml(r.t.vocabLabel)}</span></span>
+            <span class="kind">term</span>
+          </div>`;
         } else {
           return `<div class="result" data-idx="${i}" data-kind="edge" data-sid="${r.l.source.id}" data-tid="${r.l.target.id}" data-eid="${r.l.id}">
             <span class="swatch" style="background:#B31B1B"></span>
@@ -691,6 +775,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         el.addEventListener('click', () => {
           if (el.dataset.kind === 'node') {
             window.Graph.focusNode(el.dataset.id);
+          } else if (el.dataset.kind === 'term') {
+            showVocabulary(el.dataset.vocab);
           } else {
             const links = window.Graph.getLinks();
             const edge = links.find(l => l.id === el.dataset.eid);

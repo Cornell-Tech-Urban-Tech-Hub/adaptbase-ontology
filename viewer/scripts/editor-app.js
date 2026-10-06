@@ -981,7 +981,7 @@
     'Location': 'Place', 'UrbanSystem': 'Place',
     'Stakeholder': 'Actors', 'Supplier': 'Actors',
     'Outcome': 'Outcomes', 'Indicator': 'Outcomes', 'ResilienceGoal': 'Outcomes',
-    'FinancingSource': 'Finance', 'FinancialInstrument': 'Finance',
+    'FinancingSource': 'Finance', 'FundingStream': 'Finance', 'FundingAllocation': 'Finance', 'FinancialInstrument': 'Finance',
     'Plan': 'Planning', 'EnablingCondition': 'Planning', 'Mechanism': 'Planning', 'PlanningData': 'Planning',
   };
   function clusterOf(id) { return CLUSTER_ASSIGNMENTS[id] || 'Other'; }

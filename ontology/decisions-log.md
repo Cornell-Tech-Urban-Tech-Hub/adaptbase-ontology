@@ -1,14 +1,105 @@
 # Ontology Design Decisions Log
 
 **Project:** Resilience Scanner - Climate Adaptation Solutions Ontology  
-**Version:** 1.0  
-**Last Updated:** 2026-08-18
+**Version:** 1.1  
+**Last Updated:** 2026-10-06
 
 ---
 
 ## Purpose
 
 This log documents key design decisions in the ontology development process, including rationale, alternatives considered, and implications for future work.
+
+---
+
+## Decision 44 (v1.1): site-level anchoring, and one path for a capital project's outcomes
+
+- **`DEPLOYED_IN` may target `Place`** (ontology#13), from Action and from CapitalProject, beside the existing Jurisdiction target. Until now `Place` had one edge (`WITHIN` Jurisdiction), so a named site ("wetland restoration in the Carruthers Creek watershed", "flood-proofing Morningside Park") could not be tied to the action that happens there; 6–9% of CDP 2023 action rows name such a site. Fengze's option B (extend `DEPLOYED_IN`) over option A (a new `LOCATED_AT`): it is the same relation at a finer grain, and the existing multi-target pattern carries it. The Place keeps `WITHIN` its Jurisdiction for the city rollup.
+- **`CapitalProject —PRODUCES→ Outcome` removed** (ontology#4). A capital project's outcomes go `CapitalProject —REALIZES→ Action —RESULTS_IN→ Outcome`, one path instead of two parallel ones. `PRODUCES` is again only the class-level `Solution → Outcome` edge; it keeps the IRI it shipped with (`ab:solutionProducesOutcome`), per Decision 34's rule that shipped IRIs are never renamed. In core, live `CapitalProject PRODUCES` edges are re-pointed through the realized Action where one exists; otherwise they stay as evidence until an Action is recorded.
+- Net v1.1: 64 relationships, 50 predicate ids.
+
+---
+
+## Decisions 35–43 (v1.1): the single bump of 2026-10-06
+
+**Date:** 2026-10-06
+**Context:** adaptbase-core's October worklist item 4 asked for "one ontology bump" carrying every change the September–October research briefs had surfaced: Solution-as-catalog (core#321, ontology#20), plan goals on edges, status definitions and dated observations (ontology#18), the hazard vocabulary (ontology#19), and the financing model (core#298, #342). Fengze's change list (`review/V1.1-CHANGE-LIST.md`, PR #21) put eleven open decisions in one table. Anthony closed them on 2026-10-06 after consulting Fengze; the finance part was rebuilt rather than patched (`review/FINANCE-MODEL-PROPOSAL.md`). The migration is `scripts/migrations/v1_1_from_v1_0.py`; every rule in it cites the decision below that it implements.
+
+Two rules sit behind all nine decisions: a catalog node never holds a value that depends on one place or one plan (that context lives on the Action or on the asserting edge), and a fact enters the graph at the precision its source states.
+
+### Decision 35: Solution keeps only class-level properties; a governed concept list
+
+A Solution property must be true of every deployment of the class. "Green roofs are structural/physical" passes; "green roofs were deployed in 2019" and "green roofs target low-income residents" fail. On 2026-10-01, 232 Solutions carried `year_of_deployment`, 45 `maturity_level`, 30 `equity_focus`, 46 `target_populations`, and 85–87% of those values sat on nodes nobody implements, most of them named single-place programmes typed as Solutions because the v1.0 hint invited "programs, or projects".
+
+- Removed `year_of_deployment` (the fact is `Action.start_year`), `maturity_level` (class maturity is a query over Actions; a researched value may return later with criteria), `equity_focus` and `target_populations` (to Action, Decision 36).
+- `description` is the class definition; chunk extraction stops writing it.
+- Definition and `extract_hint` rewritten: a named programme, project, ordinance or pilot is an Action that IMPLEMENTS the class.
+- New `vocabularies/solution-concepts.json`, bound to `Solution.concept_id`: the tier below the 12 categories and 101 subcategories, seeded (v0, 112 concepts) from the 115 CDP 2023 controlled action labels (every label is a concept or an alias of one), the names reused by two or more plans in the graph, and the subcategories that name a concrete intervention. Closed to the extractor (an unlisted class is emitted `proposed: true`), open through a maintainer-reviewed proposal queue; new entries arrive as a PR to this file. `tech_enabled` is not on the concept or the node (core#321 D7).
+- `category_id`, `subcategory_id` and `ipcc_action_types` are **derived**: copied from the concept by the seeder when `concept_id` is set, never written by extraction, present exactly when the concept is. `category_id` was "required" at 1.7% fill; the required flag is dropped and the question goes away. Two writers (an extractor's category and a judge's concept on one node) were the risk; one writer removes it. The copy is stored, not resolved at read time, so category queries stay cheap; re-seeding is a step of every version adoption.
+- `solution-categories.json` gains a `governance_and_policy` category (zoning, codes, mandates, retreat, governance bodies) and non-tech subcategories (resilience hubs, heat action planning, informal-settlement upgrading, water demand management). Vendor-grain subcategory names are kept for id stability in core's `vocabulary_terms`.
+
+**Review of the concept list (2026-10-06).** Anthony reviewed the seeded list with a triage page (21 judgment calls, 37 boundary checks, 54 routine rows) and settled it on one rule: *if we can't classify it more narrowly, we shouldn't record it*. 112 → 101 concepts:
+
+- Dropped as umbrellas: *Green infrastructure*, *Urban greening*, *Ecosystem-based adaptation*, *Critical infrastructure hardening*, *Economic and livelihood diversification*. A plan that names nothing narrower gets no Solution; its Action stays.
+- Dropped as out of scope (mitigation or housing policy): *Solar photovoltaics*, *Renewable energy*, *Energy efficiency*, *Fleet electrification*, *Transit-oriented development*, *Affordable and climate-safe housing*. Battery storage and microgrids (backup power) stay.
+- Dropped as another type: *Adaptation and resilience planning* (a Plan), *Climate risk and vulnerability assessment* (PlanningData), *Climate mainstreaming*; and *Fisheries management* (rural-sector rules).
+- Ecosystem-based adaptation split, per Anthony's note: land use gets its own concept (*Adaptive land-use planning and management*, beside *Hazard-based zoning*), because land use is among a city government's strongest powers; forest management joins tree canopy (*Urban forest and tree canopy*); *Community-based natural resource management*, *Payments for ecosystem services* and *Species and genetic conservation* stand alone; soil conservation joins *Slope and erosion control*.
+- Narrowed: *Air quality monitoring and management*, *Climate-sensitive disease surveillance and prevention*, *Food access and redistribution* (diet and procurement policy labels removed).
+- 22 of the 115 CDP labels now map to no concept, each listed with its reason in the file's `unmapped_cdp_labels`; a CDP action carrying only those gets no `IMPLEMENTS`.
+- **The list is provisional.** It will be reviewed again once every plan in the corpus has been extracted, against what plans actually prescribe: concepts proposed through the queue, Solutions left without a `concept_id`, the dropped umbrellas and the unmapped CDP labels. That revision is one versioned pass with its own decisions-log entry (README › Future ontology improvements; the file's `_revision_plan`).
+
+**Alternatives rejected:** keeping `category_id` required and letting the migration fill it (core#321 §3.1: two writers); making it merely optional (ontology#20: leaves the derivation undeclared); resolving the three fields from the concept at read time (never stale, but every consumer breaks and every category query joins).
+
+### Decision 36: equity intent lives on Action, as two properties
+
+Where `equity_focus` and `target_populations` go once they leave Solution. Anthony's D3 position was the exposure triplet (`Action —REDUCES_EXPOSURE→ ExposureUnit —EXPERIENCES→ Vulnerability`, with `equity_focus` derived); Fengze's was two vocabulary-bound properties on Action. Chosen: the properties. "The cooling-centre programme is aimed at low-income seniors" is design intent, which plans state constantly; "the programme cut the number of seniors exposed to heat" is effect, which `REDUCES_EXPOSURE` asserts and plans rarely state. Routing intent through the triplet would mint an ExposureUnit per action and assert a reduction the text never made. Both homes use the `vulnerable-populations` vocabulary (`ExposureUnit.affected_group` already does), so they can be queried together, and a vocabulary-bound property can be lifted to edges later without loss. ExposureUnit and Vulnerability are untouched; their chain (`Hazard —EXPOSES→ ExposureUnit`, `SHIFTS_RISK_TO`, `Solution —REDUCES→ Vulnerability`) records risk assessment, not design intent. Cost: "who benefits?" reads two places. A population-group concept node stays a v1.2 candidate.
+
+### Decision 37: deployment detail on edges, not on catalog nodes (core#321 D4, D5)
+
+- `IMPLEMENTS` (Action → Solution) gains `scale_quantity`, `scale_unit`, `is_primary`. Not cost, status, year, equity or local wording: the Action already holds those (no duplicate data).
+- `UrbanSystem.condition / capacity / service_coverage` → the `TARGETS` edge (all three source grains); `Barrier.severity_score / affected_stakeholder` → `FACES`; `Vulnerability.exposure_score / sensitivity_score / adaptive_capacity_score` → `EXPERIENCES`. Each described one city's instance of a shared node.
+- `condition` becomes `enums.system_condition`.
+
+### Decision 38: the plan's own name survives on PRESCRIBES; cited cases are Actions
+
+- `PRESCRIBES` (Plan → Solution) gains `local_label` only: the plan's short name for the prescribed thing ("Cool Roofs for Communities"), kept when the mention folds onto a shared Solution. `local_text` was not added: the verbatim quote already lives in the evidence row behind `claim_ids`, and a second free-text slot on an edge drifts into a per-plan description. The same rule applies to the goal edges in Decision 41.
+- A deployment that a plan cites in another city ("Rotterdam did this in 2015") is an Action in that city (`IMPLEMENTS` + `DEPLOYED_IN`), which Decision 39 makes possible. `IMPLEMENTED_IN` gains no `deployment_year`: there is one edge per (Solution, Jurisdiction), a city deploys a class many times, and a second cited year would be a conflict. (Its existing `deployment_context`, `zone_type`, `area_km2`, `population_density`, `land_use_type` have the same one-edge problem and are flagged for the same treatment in a later version.)
+
+### Decision 39: Action without a parent Plan; status values defined; `is_pilot`; `alternative_names`
+
+- Definition widened (core#231): "a specific activity that an actor has proposed, committed to or carried out in a particular place and timeframe"; a Plan is usual, not required. 2,567 of 12,663 Actions (20%) had no `SPECIFIES` on 2026-10-05.
+- `Action.status` and `PRESCRIBES.implementation_stage` share `enums.action_status`, which carries a definition per value (the bare id list made the extractor return nothing for "no action to date"; adaptbase-core's `VALUE_GLOSSES` copy is deleted once these reach its prompts). Added `not_started` (declared, nothing done; `committed` now means adopted and resourced) and `on_hold` (began, paused). Both were being folded into `committed`, which under dated observations (Decision 40) hides exactly the stalled-action signal a progress report gives. `cancelled` added to `implementation_stage` for parity.
+- `Action.is_pilot` (boolean, written only when true) instead of a `pilot` status value: pilot-ness is orthogonal to status. 219 Actions had "pilot" in the name.
+- `alternative_names` on Action and Plan; the legacy key `aliases` written by core's promotion function is renamed to it (a forward migration of that function precedes the rename run: 35 Plans and 123 Solutions carried `aliases` on 2026-10-05).
+- `action_kind` (ontology#18 §3) is withdrawn: the five kinds work inside the researcher, are not aligned with the IPCC action types already bound on Solution, and have no measured agreement.
+
+### Decision 40: progress-type properties are dated observations
+
+A status is true as of a date. v1.0 kept one undated scalar, promotion kept the first value, and a newer value was filed as a conflict; the CDP status refresh and the Houston status brief were about to produce second observations at scale. Every progress-type property now has a sibling `<property>_observations: array<object{value, as_of, as_of_basis, source_type, claim_ids}>`, and the scalar is derived (latest `as_of`; on a tie, the existing value). `as_of` is the date the status describes, not the document date; `as_of_basis` (stated | document_date | reporting_cycle) says how the date is known, so two observations are compared on their bases, not only their dates. Covered: `Action.status`, `Action.financing_status`, `CapitalProject.construction_phase`, `CapitalProject.financing_status`, `Plan.plan_status`, `PRESCRIBES.implementation_stage`, `FundingAllocation.funding_status`. `Plan.plan_status` becomes an enum (`draft | adopted | under_review | superseded | expired`) so a series of it can be compared. Shape chosen: on the node (the `array<object>` precedent is `WORKS_BY.technical_components`; the source of a status is often not a graph entity, e.g. a committee agenda pack). Rejected: a `Plan —REPORTS_ON→ Action {status, as_of}` edge, which needs progress reports to be Plans. Properties that already pair a value with a year (`Jurisdiction.population` + `population_year`, `Indicator.measured_value` + `recorded_year`) are dated snapshots and stay as they are.
+
+### Decision 41: plan goal wording on the instance-grain goal edges only
+
+`SETS` (Plan → ResilienceGoal), `PURSUES` (Action → ResilienceGoal) and `DEMONSTRATES_PROGRESS_ON` (Outcome → ResilienceGoal) gain `local_label`: the plan's own goal wording ("Goal WR1: Live with water") kept when it is mapped to one of the 22 CRF goals. 66 / 179 / 24 edges had been rejected for carrying it. `CONTRIBUTES_TO` (Solution → ResilienceGoal) gets **nothing**: both ends are shared nodes, so one label slot would carry Houston's wording for every city's green roofs. Its existing free-text `contribution_description` is restricted to class-level text ("green roofs absorb rainfall, reducing runoff"), the same treatment Decision 35 gives `Solution.description`; and its definition's reference to a non-existent `TARGETS_GOAL` edge is corrected to `PURSUES`. Where a rejected `CONTRIBUTES_TO` started from a "Solution" that is really a named programme, the Decision 35 retype turns it into `PURSUES` and the wording lands there.
+
+### Decision 42: no flood parent, and the urban heat island is not a hazard; the ResilienceGoal hint
+
+ontology#19 asked for three things. Anthony took one and declined two (2026-10-06).
+
+- **Taken:** the `ResilienceGoal` `extract_hint` now excludes a plan's own goal numbers, headings and pillars (78% of ResilienceGoal rejects were these; their wording now has a home in Decision 41).
+- **Declined: a parent `Flood` term** above the four flood leaves. A generic "flooding" is not folded into a flood type, and the vocabulary gets no parent to hold it. The 190 generic flood units (1,523 staged edges in 88 plans) stay unpromoted; they can be re-judged against the leaves or re-extracted later, but not promoted to a parent that does not exist. The Hazard hint now says so.
+- **Declined: "urban heat island" as a synonym of *Extreme hot weather*.** The urban heat island is not a hazard: it is an urban condition that amplifies heat. The v1.0 hints used it as a hazard example (`Hazard`, `MITIGATES`, `PRODUCES`, `ADDRESSES`); v1.1 removes those examples and the Hazard hint says not to emit it as a Hazard. The hazard is the heat the text describes. Measures that cool the city stay Solutions (cool roofs, urban forest and tree canopy, cool pavement), and heat island mapping stays a Solution concept (*Urban heat mapping*).
+- No parent for "storms" or "extreme weather" either.
+
+### Decision 43: the finance model rebuilt around FundingAllocation (replaces core#298 O1–O5 and #342 §12)
+
+The extraction exists so that patterns can be read across cities: what share each city funds federally, who borrows and who pays as they go, which programmes fund the most adaptation, where the gap is. Three v1.0 faults blocked that: `financing_model` mixed *who pays* and *in what form* on one axis; every mention of a kind ("grant", "PPP") became its own `FinancialInstrument` node (75 nodes named "grant"); and `amount_usd` sat on funders and instruments that other cities share. A fourth: the funding fact was an edge keyed (action, FUNDED_BY, funder), so two awards in two years held one amount, and one award paying for three actions was copied and summed three times. Full rationale and worked examples: `review/FINANCE-MODEL-PROPOSAL.md`.
+
+- **Nodes.** Organisations that give money are `Stakeholder` (core#298 §4.1; governments pay as Stakeholders, never as Jurisdictions, #342 §13 2a). `FinancingSource` is renamed **`FundingStream`** and narrowed to a named pot of money with an owner (HMGP, Green Climate Fund, Oakland General Fund, Measure FF); `source_type` becomes `stream_type`, `amount_usd` becomes `max_award` + currency. New **`FundingAllocation`**: one flow of money as a source states it, carrying `amount`, `currency`, `amount_qualifier`, period, `funding_status` (a dated series), and the two comparison axes. `FinancialInstrument` is narrowed to one specific issued instrument (a bond issue, a loan, a lease); `amount_usd` and free-text `issuer` removed.
+- **Generic kinds are never nodes.** "Grants", "a loan", "ground lease", "PPP" are enum values on the allocation. This reverses the 2026-10-05 choice in #342 §12.1 (one shared `FinancialInstrument` node per kind): core#298 already makes a generic *funder* a property, and one rule means every "share of actions using bonds" is one `GROUP BY` instead of a union of enum values with nodes-of-kind.
+- **Two closed axes replace `financing_model`** (deprecated, each value mapped in `enums.json`): `source_tier` (local_government | regional_or_state | national | international_multilateral | private | philanthropic | utility_ratepayer | mixed) and `instrument_class` (grant | debt | own_revenue | fee_or_levy | tax_based | private_investment | public_private_partnership | risk_transfer | land_or_in_kind | blended | other), with the 22 `instrument_type` values nested under the classes (`loan`, `tax_abatement`, `insurance`, `ground_lease` added; community land trust, developer agreement and investment fund deliberately not).
+- **Edges.** `FundingAllocation —FUNDS→ Action | CapitalProject {share_percent}`; `—PROVIDED_BY→ Stakeholder | FundingStream`; `—USES_INSTRUMENT→ FinancialInstrument` (retargeted from Action / CapitalProject); `FundingStream —ADMINISTERED_BY→ Stakeholder | Jurisdiction`; `FinancialInstrument —ISSUED_BY→ Stakeholder`. Retired: `FUNDED_BY` (both grains), `USES_INSTRUMENT` from Action and CapitalProject, `CHANNELS_THROUGH` (0 live edges). `CONTINGENT_ON` unchanged. Net: 60 → 63 relationships, 48 → 50 predicate ids.
+- **Why a node and not edge properties (core#298 §4.4):** one award to several actions is the common case (Anthony, 2026-10-06), and a bare "funded through grants" then also has one home (an allocation with no `PROVIDED_BY`) instead of a separate `Action.funding_types[]` property, so every funding query reads one node type. Cost: one more hop for "who funds this action", flattened by a `v_action_funding` view in core; 930 staged `FUNDED_BY` / `CHANNELS_THROUGH` edges rewritten in a tracked run (no re-extraction; the evidence rows hold every value).
+- **Not in v1.1:** a `FundingAward` registry with external ids (USAspending, SAM); currency conversion (read-time, with a dated rate); repayment flows beyond the existing debt-service properties; delivery arrangements (developer agreements, land trusts) as finance.
 
 ---
 
