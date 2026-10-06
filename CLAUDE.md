@@ -13,7 +13,7 @@ vocabularies that model how cities adapt to climate change. Versioned JSON in
 `ontology/`, displayed by a browser-based viewer in `viewer/`, deployed to
 [ontology.adaptbase.us](https://ontology.adaptbase.us/) via GitHub Pages.
 
-**Current version:** v1.0 (2026-08-18)
+**Current version:** v1.1 (2026-10-06)
 
 ## Repo layout
 
@@ -47,7 +47,7 @@ No build step. D3 loads from a CDN. The viewer fetches `../ontology/...` relativ
 
 ## Editing the ontology
 
-- **Types and relationships** live in `ontology/ontology-v<version>.json`.
+- **Types and relationships** live in `ontology/ontology-v<version>.jsonld` (JSON-LD since v1.0).
 - **Controlled vocabularies** live in `ontology/vocabularies/*.json` and are loaded by
   both the viewer (read-only) and the editor (read/write via the editor server).
 - The editor (`viewer/editor.html` + `scripts/editor-server.py`) writes new versions to
@@ -61,10 +61,19 @@ No build step. D3 loads from a CDN. The viewer fetches `../ontology/...` relativ
 - **Minor** (`v0.3` → `v0.4`) — ontology schema changes
 
 When bumping:
-1. Copy `ontology/ontology-v<current>.json` → `ontology/ontology-v<new>.json`; update
-   `version` and `update_note` inside.
-2. Prepend the new entry to `ontology/versions.json` (path: `../ontology/ontology-v<new>.json`).
-3. Update `**Current version:**` in this file and in `README.md`.
+1. Copy `ontology/ontology-v<current>.jsonld` → `ontology/ontology-v<new>.jsonld`; update
+   `version`, `update_note`, `updated`, a `version_notes` entry and `metadata` inside.
+   For a schema bump, prefer a migration script under `scripts/migrations/` (see
+   `v1_1_from_v1_0.py`) so the change is reproducible and each rule cites its decision.
+2. Prepend the new entry to `ontology/versions.json` (path: `../ontology/ontology-v<new>.jsonld`).
+3. Update `**Current version:**` in this file and in `README.md`; add the decisions to
+   `ontology/decisions-log.md`.
+4. If a vocabulary changed, run `uv run scripts/export/build_vocab_jsonld.py` to regenerate
+   the `.jsonld` twins, then `uv run scripts/export/generate_exports.py` (update its
+   `ONTOLOGY_SRC` to the new version first).
+5. A new vocabulary file must also be registered in `viewer/scripts/app.js` (`vocabFileMap`,
+   `renderVocabData`) and `viewer/scripts/ontology-adapter.js` (`VOCAB_PATHS`, `resolveLabel`);
+   a new type in both files' cluster maps and in `viewer/scripts/editor-app.js`.
 
 ## Key design decisions
 

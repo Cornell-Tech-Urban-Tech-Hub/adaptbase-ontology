@@ -5,7 +5,7 @@ maps the entities, relationships, and vocabularies needed to organize, compare, 
 analyze how cities respond to climate hazards.
 
 **Live viewer:** [ontology.adaptbase.us](https://ontology.adaptbase.us/)
-**Current version:** v1.0 (2026-08-18)
+**Current version:** v1.1 (2026-10-06)
 
 ---
 
@@ -14,7 +14,24 @@ analyze how cities respond to climate hazards.
 This is the running inbox for things to address in upcoming cycles. We populate it as
 issues come up; items here are the next things we work on.
 
-- _Add planned improvements here._
+- **Hazard hierarchy** — a parent *Flood* term with leaf → parent `broader` links, and
+  "urban heat island" as a synonym of *Extreme hot weather* (ontology#19). Deferred from
+  v1.1 (Decision 42) until core's resolver, search and MCP tools can expand a parent to
+  its children; 190 generic flood units wait in staging meanwhile.
+- **Read the concept list once.** `vocabularies/solution-concepts.json` v0 (112 concepts)
+  was seeded mechanically in v1.1; core#321 §4.3 asks for one full read by Anthony and
+  Fengze before core seeds it. Then grow it through the proposal queue.
+- **`IMPLEMENTED_IN` deployment properties** (`deployment_context`, `zone_type`,
+  `area_km2`, `population_density`, `land_use_type`) have the one-edge-per-pair problem
+  Decision 38 found for `deployment_year`; move or drop them.
+- **Finance follow-ons** (Decision 43 §10): a `FundingAward` registry with external ids
+  (USAspending, SAM); currency conversion at read time; repayment flows.
+- **A population-group concept node** so equity intent can be lifted from
+  `Action.target_populations` onto edges (Decision 36, v1.2 candidate).
+- **`Action.action_kind`** (ontology#18 §3) once the kinds are aligned with IPCC action
+  types and inter-run agreement is measured; and a Mechanism concept list (CQ-43).
+- **`instrument_type` gaps** not taken in v1.1: community land trust, developer
+  agreement, investment fund — decide whether any is an instrument at all.
 
 > **For Claude / future planning sessions:** Before starting any non-trivial change,
 > read this section. If your work intersects an item, advance that item rather than
