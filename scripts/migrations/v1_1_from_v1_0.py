@@ -14,6 +14,7 @@ the decision it implements.
 """
 
 import json
+from copy import deepcopy
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
@@ -324,6 +325,17 @@ def main() -> None:
         "plan's own goal numbers, headings or pillars ('Goal WR1', 'Vision 04', pillar "
         "titles); those are the plan's wording and go in local_label on the SETS or PURSUES "
         "edge that links to the CRF goal."
+    )
+
+    # ------------------------------------------------------------------ Decision 42: UHI is not a hazard
+    T["Hazard"]["extract_hint"] = (
+        "Look for named climate threats, weather extremes, or environmental stressors — "
+        "e.g., 'extreme heat', 'coastal flooding', 'drought', 'sea level rise'. Also look for "
+        "non-climate shocks when flagged (earthquakes, pandemics). Use the most specific "
+        "hazard the text states. The urban heat island is not a hazard: it is an urban "
+        "condition that amplifies heat, so do not emit it as a Hazard; the hazard is the "
+        "heat the text describes. A generic 'flooding' with no type stated is not folded "
+        "into a flood type."
     )
 
     # ------------------------------------------------------------------ Finance (Decision 43)
@@ -702,6 +714,60 @@ def main() -> None:
                 prop("claim_ids", "array<uuid>", True)
             )
 
+    # Decision 42: relationship hints stop using the heat island as a hazard example
+    (mit,) = R("MITIGATES")
+    mit["extract_hint"] = mit["extract_hint"].replace(
+        "'reduces heat island effect'", "'reduces exposure to extreme heat'"
+    )
+    (prod,) = R("PRODUCES", "Solution")
+    prod["extract_hint"] = prod["extract_hint"].replace(
+        "'permeable pavement has been shown to reduce urban heat island effect as a co-benefit'",
+        "'permeable pavement has been shown to lower surface temperatures as a co-benefit'",
+    )
+    for r in R("ADDRESSES", "Plan"):
+        r["extract_hint"] = r["extract_hint"].replace(
+            "'assesses urban heat island risk under 2050 conditions'",
+            "'assesses extreme heat risk under 2050 conditions'",
+        )
+
+    # Decision 44 (ontology#4): a capital project's outcomes go through the Action it realizes
+    rels[:] = [
+        r
+        for r in rels
+        if not (r["id"] == "PRODUCES" and r["source"] == "CapitalProject")
+    ]
+    (res,) = R("RESULTS_IN")
+    res["notes"] += (
+        " v1.1 (Decision 44): also the only path for a capital project's outcomes — "
+        "CapitalProject —REALIZES→ Action —RESULTS_IN→ Outcome. CapitalProject PRODUCES "
+        "Outcome was removed (ontology#4)."
+    )
+
+    # Decision 44 (ontology#13): an Action or CapitalProject can be anchored to a named site
+    for src in ("Action", "CapitalProject"):
+        (dj,) = R("DEPLOYED_IN", src, "Jurisdiction")
+        dp = deepcopy(dj)
+        dp["target"] = "Place"
+        dp["definition"] = (
+            f"The {src} takes place at this named site: a park, river, creek, "
+            "watershed, street or facility."
+        )
+        dp["notes"] = (
+            "v1.1 (Decision 44, ontology#13). Site-level anchoring: same predicate as "
+            "DEPLOYED_IN Jurisdiction, a second target grain. The Place keeps WITHIN its "
+            "Jurisdiction for the city rollup; record DEPLOYED_IN the Jurisdiction too when "
+            "the text states it."
+        )
+        dp["extract_hint"] = (
+            "Look for a proper-named site where the work happens — 'wetland restoration in "
+            "the Carruthers Creek watershed', 'flood-proofing Morningside Park', 'SuDS on Via "
+            "Pacini'. Not the city itself (that is DEPLOYED_IN Jurisdiction) and not a "
+            "generic place ('parks', 'the waterfront')."
+        )
+        dp["@id"] = f"ab:{src[0].lower() + src[1:]}DeployedInPlace"
+        dp["rdfs:range"] = {"@id": "ab:Place"}
+        rels.insert(rels.index(dj) + 1, dp)
+
     # Finance edges (Decision 43)
     retired = {
         ("FUNDED_BY", "Action"),
@@ -991,7 +1057,9 @@ def main() -> None:
         "SETS / PURSUES / PRESCRIBES; the finance model is rebuilt around a FundingAllocation node "
         "with two comparison axes (source_tier, instrument_class), FinancingSource becomes "
         "FundingStream, FUNDED_BY / CHANNELS_THROUGH are retired. The hazard vocabulary is "
-        "unchanged (flood parent and UHI synonym deferred, Decision 42)."
+        "unchanged: no flood parent term, and the urban heat island is not a hazard "
+        "(Decision 42). An Action or CapitalProject can be DEPLOYED_IN a named Place, and a "
+        "capital project's outcomes go through the Action it realizes (Decision 44)."
     )
     o["version_notes"].insert(
         0,
@@ -1018,7 +1086,7 @@ def main() -> None:
                 },
                 {
                     "type": "added",
-                    "text": "vocabularies/solution-concepts.json (112 concepts, v0) bound to Solution.concept_id; solution-categories + governance_and_policy category (5 subcategories) and 4 non-tech subcategories elsewhere, 92 → 101 (Decision 35)",
+                    "text": "vocabularies/solution-concepts.json (101 concepts, v0, reviewed) bound to Solution.concept_id; solution-categories + governance_and_policy category (5 subcategories) and 4 non-tech subcategories elsewhere, 92 → 101 (Decision 35)",
                 },
                 {
                     "type": "removed",
@@ -1050,7 +1118,15 @@ def main() -> None:
                 },
                 {
                     "type": "changed",
-                    "text": "ResilienceGoal extract_hint excludes a plan's own goal numbering and headings (Decision 42)",
+                    "text": "ResilienceGoal extract_hint excludes a plan's own goal numbering and headings; Hazard and relationship hints no longer use the urban heat island as a hazard (Decision 42)",
+                },
+                {
+                    "type": "added",
+                    "text": "DEPLOYED_IN Action → Place and CapitalProject → Place: site-level anchoring (Decision 44, ontology#13)",
+                },
+                {
+                    "type": "removed",
+                    "text": "PRODUCES CapitalProject → Outcome; a project's outcomes go CapitalProject REALIZES Action RESULTS_IN Outcome (Decision 44, ontology#4)",
                 },
                 {
                     "type": "added",
@@ -1496,6 +1572,7 @@ def main() -> None:
 
     # ------------------------------------------------------------------ solution-concepts.json (new)
     seed = load(CONCEPT_SEED)
+    unmapped_cdp = load(CONCEPT_SEED.with_name("solution-concepts-unmapped-cdp.json"))
     sub2cat = {s["id"]: c["id"] for c in cats for s in c["subcategories"]}
     concepts = []
     for x in seed:
@@ -1519,8 +1596,11 @@ def main() -> None:
         {
             "_source": "v1.1 (Decision 35) seed: the 115 CDP 2023 controlled action labels (adaptbase-core cdp_solution_crosswalk.json; every label is a concept or an alias), the Solution names reused by two or more plans in the graph on 2026-10-01 (adaptbase-core#321 §2.6 d), and solution-categories subcategories that name a concrete intervention.",
             "_usage": "Solution.concept_id. Each concept carries the category_id, subcategory_id and ipcc_action_types that the seeder copies onto the Solution node; extraction never writes those three.",
+            "_review": "Reviewed 2026-10-06 (Anthony; the remaining rows were settled on the reviewer's rule 'if we can't classify it more narrowly, we shouldn't record it'). Decision 35 records the outcome. unmapped_cdp_labels are CDP controlled labels that deliberately map to no concept: a CDP action carrying only those gets no IMPLEMENTS edge.",
+            "_revision_plan": "Provisional until the plan corpus is fully extracted. Once every plan in the corpus has been extracted, review this list again against what plans actually prescribe: the concepts proposed through the queue, Solutions left without a concept_id, the dropped umbrellas (green infrastructure, urban greening, ecosystem-based adaptation) and the unmapped CDP labels. Revise it in one versioned pass (decisions-log entry, ontology version bump). Tracked in README > Future ontology improvements.",
             "_note": "Governed, growing list: closed to the extractor (a class not on the list is emitted with proposed: true and reviewed), open through the proposal queue. New concepts arrive as a PR to this file with added_in set; deprecation keeps the id with status: deprecated and replaced_by. cdp_labels records which CDP controlled labels fold into the concept, for the CDP import. aliases are identity-grade synonyms for the resolver.",
             "concepts": concepts,
+            "unmapped_cdp_labels": unmapped_cdp,
         },
     )
     print(f"wrote vocabularies/solution-concepts.json: {len(concepts)} concepts")

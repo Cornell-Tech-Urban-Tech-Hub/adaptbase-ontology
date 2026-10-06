@@ -14,13 +14,12 @@ analyze how cities respond to climate hazards.
 This is the running inbox for things to address in upcoming cycles. We populate it as
 issues come up; items here are the next things we work on.
 
-- **Hazard hierarchy** — a parent *Flood* term with leaf → parent `broader` links, and
-  "urban heat island" as a synonym of *Extreme hot weather* (ontology#19). Deferred from
-  v1.1 (Decision 42) until core's resolver, search and MCP tools can expand a parent to
-  its children; 190 generic flood units wait in staging meanwhile.
-- **Read the concept list once.** `vocabularies/solution-concepts.json` v0 (112 concepts)
-  was seeded mechanically in v1.1; core#321 §4.3 asks for one full read by Anthony and
-  Fengze before core seeds it. Then grow it through the proposal queue.
+- **Re-review the Solution concept list after the full extraction.** `vocabularies/solution-concepts.json`
+  (101 concepts) was reviewed on 2026-10-06 on the rule "if we can't classify it more
+  narrowly, we shouldn't record it" (Decision 35). It is provisional: once every plan in the
+  corpus has been extracted, review it again against what plans actually prescribe (proposed
+  concepts, Solutions with no `concept_id`, the dropped umbrellas, the 22 unmapped CDP labels)
+  and revise it in one versioned pass.
 - **`IMPLEMENTED_IN` deployment properties** (`deployment_context`, `zone_type`,
   `area_km2`, `population_density`, `land_use_type`) have the one-edge-per-pair problem
   Decision 38 found for `deployment_year`; move or drop them.

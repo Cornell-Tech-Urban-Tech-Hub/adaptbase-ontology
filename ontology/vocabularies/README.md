@@ -38,6 +38,8 @@ These vocabularies sync with Supabase database tables:
     `category_id`, `subcategory_id`, `ipcc_action_types`, `cdp_labels`, `status`, `added_in`
   - Usage: `Solution.concept_id`. Closed to the extractor; grows only through the proposal
     queue (a PR to this file). Deprecate with `status: deprecated` + `replaced_by`
+  - 101 concepts, reviewed 2026-10-06; `unmapped_cdp_labels` lists the 22 CDP labels that map
+    to no concept. Provisional: re-reviewed once the full plan corpus is extracted
 
 ### Enum-Based Vocabularies
 

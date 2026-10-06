@@ -12,6 +12,14 @@ This log documents key design decisions in the ontology development process, inc
 
 ---
 
+## Decision 44 (v1.1): site-level anchoring, and one path for a capital project's outcomes
+
+- **`DEPLOYED_IN` may target `Place`** (ontology#13), from Action and from CapitalProject, beside the existing Jurisdiction target. Until now `Place` had one edge (`WITHIN` Jurisdiction), so a named site ("wetland restoration in the Carruthers Creek watershed", "flood-proofing Morningside Park") could not be tied to the action that happens there; 6–9% of CDP 2023 action rows name such a site. Fengze's option B (extend `DEPLOYED_IN`) over option A (a new `LOCATED_AT`): it is the same relation at a finer grain, and the existing multi-target pattern carries it. The Place keeps `WITHIN` its Jurisdiction for the city rollup.
+- **`CapitalProject —PRODUCES→ Outcome` removed** (ontology#4). A capital project's outcomes go `CapitalProject —REALIZES→ Action —RESULTS_IN→ Outcome`, one path instead of two parallel ones. `PRODUCES` is again only the class-level `Solution → Outcome` edge; it keeps the IRI it shipped with (`ab:solutionProducesOutcome`), per Decision 34's rule that shipped IRIs are never renamed. In core, live `CapitalProject PRODUCES` edges are re-pointed through the realized Action where one exists; otherwise they stay as evidence until an Action is recorded.
+- Net v1.1: 64 relationships, 50 predicate ids.
+
+---
+
 ## Decisions 35–43 (v1.1): the single bump of 2026-10-06
 
 **Date:** 2026-10-06
@@ -29,6 +37,16 @@ A Solution property must be true of every deployment of the class. "Green roofs 
 - New `vocabularies/solution-concepts.json`, bound to `Solution.concept_id`: the tier below the 12 categories and 101 subcategories, seeded (v0, 112 concepts) from the 115 CDP 2023 controlled action labels (every label is a concept or an alias of one), the names reused by two or more plans in the graph, and the subcategories that name a concrete intervention. Closed to the extractor (an unlisted class is emitted `proposed: true`), open through a maintainer-reviewed proposal queue; new entries arrive as a PR to this file. `tech_enabled` is not on the concept or the node (core#321 D7).
 - `category_id`, `subcategory_id` and `ipcc_action_types` are **derived**: copied from the concept by the seeder when `concept_id` is set, never written by extraction, present exactly when the concept is. `category_id` was "required" at 1.7% fill; the required flag is dropped and the question goes away. Two writers (an extractor's category and a judge's concept on one node) were the risk; one writer removes it. The copy is stored, not resolved at read time, so category queries stay cheap; re-seeding is a step of every version adoption.
 - `solution-categories.json` gains a `governance_and_policy` category (zoning, codes, mandates, retreat, governance bodies) and non-tech subcategories (resilience hubs, heat action planning, informal-settlement upgrading, water demand management). Vendor-grain subcategory names are kept for id stability in core's `vocabulary_terms`.
+
+**Review of the concept list (2026-10-06).** Anthony reviewed the seeded list with a triage page (21 judgment calls, 37 boundary checks, 54 routine rows) and settled it on one rule: *if we can't classify it more narrowly, we shouldn't record it*. 112 → 101 concepts:
+
+- Dropped as umbrellas: *Green infrastructure*, *Urban greening*, *Ecosystem-based adaptation*, *Critical infrastructure hardening*, *Economic and livelihood diversification*. A plan that names nothing narrower gets no Solution; its Action stays.
+- Dropped as out of scope (mitigation or housing policy): *Solar photovoltaics*, *Renewable energy*, *Energy efficiency*, *Fleet electrification*, *Transit-oriented development*, *Affordable and climate-safe housing*. Battery storage and microgrids (backup power) stay.
+- Dropped as another type: *Adaptation and resilience planning* (a Plan), *Climate risk and vulnerability assessment* (PlanningData), *Climate mainstreaming*; and *Fisheries management* (rural-sector rules).
+- Ecosystem-based adaptation split, per Anthony's note: land use gets its own concept (*Adaptive land-use planning and management*, beside *Hazard-based zoning*), because land use is among a city government's strongest powers; forest management joins tree canopy (*Urban forest and tree canopy*); *Community-based natural resource management*, *Payments for ecosystem services* and *Species and genetic conservation* stand alone; soil conservation joins *Slope and erosion control*.
+- Narrowed: *Air quality monitoring and management*, *Climate-sensitive disease surveillance and prevention*, *Food access and redistribution* (diet and procurement policy labels removed).
+- 22 of the 115 CDP labels now map to no concept, each listed with its reason in the file's `unmapped_cdp_labels`; a CDP action carrying only those gets no `IMPLEMENTS`.
+- **The list is provisional.** It will be reviewed again once every plan in the corpus has been extracted, against what plans actually prescribe: concepts proposed through the queue, Solutions left without a `concept_id`, the dropped umbrellas and the unmapped CDP labels. That revision is one versioned pass with its own decisions-log entry (README › Future ontology improvements; the file's `_revision_plan`).
 
 **Alternatives rejected:** keeping `category_id` required and letting the migration fill it (core#321 §3.1: two writers); making it merely optional (ontology#20: leaves the derivation undeclared); resolving the three fields from the concept at read time (never stale, but every consumer breaks and every category query joins).
 
@@ -63,13 +81,14 @@ A status is true as of a date. v1.0 kept one undated scalar, promotion kept the 
 
 `SETS` (Plan → ResilienceGoal), `PURSUES` (Action → ResilienceGoal) and `DEMONSTRATES_PROGRESS_ON` (Outcome → ResilienceGoal) gain `local_label`: the plan's own goal wording ("Goal WR1: Live with water") kept when it is mapped to one of the 22 CRF goals. 66 / 179 / 24 edges had been rejected for carrying it. `CONTRIBUTES_TO` (Solution → ResilienceGoal) gets **nothing**: both ends are shared nodes, so one label slot would carry Houston's wording for every city's green roofs. Its existing free-text `contribution_description` is restricted to class-level text ("green roofs absorb rainfall, reducing runoff"), the same treatment Decision 35 gives `Solution.description`; and its definition's reference to a non-existent `TARGETS_GOAL` edge is corrected to `PURSUES`. Where a rejected `CONTRIBUTES_TO` started from a "Solution" that is really a named programme, the Decision 35 retype turns it into `PURSUES` and the wording lands there.
 
-### Decision 42: hazard vocabulary unchanged; the ResilienceGoal hint only
+### Decision 42: no flood parent, and the urban heat island is not a hazard; the ResilienceGoal hint
 
-ontology#19 asked for three things. Taken: the `ResilienceGoal` `extract_hint` now excludes a plan's own goal numbers, headings and pillars (78% of ResilienceGoal rejects were these; their wording now has a home in Decision 41). **Deferred, recorded here so they can be revisited:**
+ontology#19 asked for three things. Anthony took one and declined two (2026-10-06).
 
-- *A parent `Flood` term above the four flood leaves*, with a leaf → parent `broader` link, so that 190 generic "flooding" units (1,523 staged edges in 88 plans; 11 plans say nothing more specific) can enter the graph at the precision the text states. Deferred because it would be the first hierarchy in the hazard vocabulary and every consumer (resolver, search, MCP tools) would have to expand a parent to its children before any query is correct; Anthony accepts the units staying in the staging queue (`not_ready`) and a later re-judge or re-extraction. If taken up: "inundation" currently listed under *River flood* belongs on the parent; `cdp-hazard-crosswalk.json`'s `broader` matches become exact.
-- *"Urban heat island" / "heat island effect" as `undrr_terms` of* Extreme hot weather. The ontology's own hints name UHI but no term covers it; review folded 108 mentions and rejected 24. Deferred with the same reasoning; the alternative, removing UHI from the hints, was not taken either.
-- No parent for "storms" or "extreme weather" in any case: they span several C40/Arup categories.
+- **Taken:** the `ResilienceGoal` `extract_hint` now excludes a plan's own goal numbers, headings and pillars (78% of ResilienceGoal rejects were these; their wording now has a home in Decision 41).
+- **Declined: a parent `Flood` term** above the four flood leaves. A generic "flooding" is not folded into a flood type, and the vocabulary gets no parent to hold it. The 190 generic flood units (1,523 staged edges in 88 plans) stay unpromoted; they can be re-judged against the leaves or re-extracted later, but not promoted to a parent that does not exist. The Hazard hint now says so.
+- **Declined: "urban heat island" as a synonym of *Extreme hot weather*.** The urban heat island is not a hazard: it is an urban condition that amplifies heat. The v1.0 hints used it as a hazard example (`Hazard`, `MITIGATES`, `PRODUCES`, `ADDRESSES`); v1.1 removes those examples and the Hazard hint says not to emit it as a Hazard. The hazard is the heat the text describes. Measures that cool the city stay Solutions (cool roofs, urban forest and tree canopy, cool pavement), and heat island mapping stays a Solution concept (*Urban heat mapping*).
+- No parent for "storms" or "extreme weather" either.
 
 ### Decision 43: the finance model rebuilt around FundingAllocation (replaces core#298 O1–O5 and #342 §12)
 

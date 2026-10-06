@@ -3,7 +3,7 @@
   "@id": "https://ontology.adaptbase.us/ont/",
   "@type": "owl:Ontology",
   "version": "v1.1",
-  "update_note": "v1.1 — the single bump planned in core worklist item 4, cut from the 2026-10-06 decision set (Decisions 35–43). Solution keeps only class-level properties and binds to a new governed solution-concepts vocabulary; deployment context moves to Action and to the asserting edges (IMPLEMENTS, TARGETS, FACES, EXPERIENCES, PRESCRIBES); Action no longer needs a parent Plan, gains equity_focus / target_populations / is_pilot / alternative_names, and its status (with every other progress-type property) becomes a dated observation series with defined values; plan goal wording lives in local_label on SETS / PURSUES / PRESCRIBES; the finance model is rebuilt around a FundingAllocation node with two comparison axes (source_tier, instrument_class), FinancingSource becomes FundingStream, FUNDED_BY / CHANNELS_THROUGH are retired. The hazard vocabulary is unchanged (flood parent and UHI synonym deferred, Decision 42).",
+  "update_note": "v1.1 — the single bump planned in core worklist item 4, cut from the 2026-10-06 decision set (Decisions 35–43). Solution keeps only class-level properties and binds to a new governed solution-concepts vocabulary; deployment context moves to Action and to the asserting edges (IMPLEMENTS, TARGETS, FACES, EXPERIENCES, PRESCRIBES); Action no longer needs a parent Plan, gains equity_focus / target_populations / is_pilot / alternative_names, and its status (with every other progress-type property) becomes a dated observation series with defined values; plan goal wording lives in local_label on SETS / PURSUES / PRESCRIBES; the finance model is rebuilt around a FundingAllocation node with two comparison axes (source_tier, instrument_class), FinancingSource becomes FundingStream, FUNDED_BY / CHANNELS_THROUGH are retired. The hazard vocabulary is unchanged: no flood parent term, and the urban heat island is not a hazard (Decision 42). An Action or CapitalProject can be DEPLOYED_IN a named Place, and a capital project's outcomes go through the Action it realizes (Decision 44).",
   "updated": "2026-10-06T12:00:00.000Z",
   "domain": "urban-climate-adaptation",
   "domain_label": "Urban Climate Adaptation and Resilience Solutions",
@@ -218,7 +218,7 @@
         }
       ],
       "notes": "Slow-onset stresses (sea level rise, environmental degradation) map here under the environmental cluster in the UNDRR HIPs 2025 structure.",
-      "extract_hint": "Look for named climate threats, weather extremes, or environmental stressors — e.g., 'urban heat island', 'coastal flooding', 'drought', 'sea level rise'. Also look for non-climate shocks when flagged (earthquakes, pandemics).",
+      "extract_hint": "Look for named climate threats, weather extremes, or environmental stressors — e.g., 'extreme heat', 'coastal flooding', 'drought', 'sea level rise'. Also look for non-climate shocks when flagged (earthquakes, pandemics). Use the most specific hazard the text states. The urban heat island is not a hazard: it is an urban condition that amplifies heat, so do not emit it as a Hazard; the hazard is the heat the text describes. A generic 'flooding' with no type stated is not folded into a flood type.",
       "@id": "ab:Hazard",
       "@type": "owl:Class"
     },
@@ -2010,7 +2010,7 @@
       ],
       "cardinality": "many-to-many",
       "notes": "Core relationship in the solutions domain. is_primary distinguishes the primary hazard from co-addressed hazards.",
-      "extract_hint": "Look for claims that a solution addresses, reduces, or protects against a specific hazard — e.g., 'designed to mitigate urban flooding', 'reduces heat island effect'.",
+      "extract_hint": "Look for claims that a solution addresses, reduces, or protects against a specific hazard — e.g., 'designed to mitigate urban flooding', 'reduces exposure to extreme heat'.",
       "@id": "ab:mitigates",
       "@type": "owl:ObjectProperty",
       "rdfs:domain": {
@@ -2388,7 +2388,7 @@
       ],
       "cardinality": "one-to-many",
       "notes": "Aggregates effectiveness, co-benefits, and failure modes. The outcome_type property differentiates. For instance-level outcomes from specific deployments, see RESULTS_IN (Action → Outcome).",
-      "extract_hint": "Look for documented results of a solution type — e.g., 'green roofs typically reduce stormwater runoff by 30-50%', 'permeable pavement has been shown to reduce urban heat island effect as a co-benefit', 'system failures reported during extreme events'. Class-level effects only — what this kind of solution is known to produce. If the outcome is a measured result of one specific deployment, do not use PRODUCES; emit RESULTS_IN from the implementing Action instead.",
+      "extract_hint": "Look for documented results of a solution type — e.g., 'green roofs typically reduce stormwater runoff by 30-50%', 'permeable pavement has been shown to lower surface temperatures as a co-benefit', 'system failures reported during extreme events'. Class-level effects only — what this kind of solution is known to produce. If the outcome is a measured result of one specific deployment, do not use PRODUCES; emit RESULTS_IN from the implementing Action instead.",
       "@id": "ab:solutionProducesOutcome",
       "@type": "owl:ObjectProperty",
       "rdfs:subPropertyOf": {
@@ -2440,7 +2440,7 @@
         }
       ],
       "cardinality": "one-to-many",
-      "notes": "Distinct from PRODUCES (Solution → Outcome) which captures class-level knowledge. RESULTS_IN captures what a specific action in a specific place actually produced — including failure modes. Enables the evidence chain: Action RESULTS_IN Outcome, Outcome DEMONSTRATES_PROGRESS_ON ResilienceGoal.",
+      "notes": "Distinct from PRODUCES (Solution → Outcome) which captures class-level knowledge. RESULTS_IN captures what a specific action in a specific place actually produced — including failure modes. Enables the evidence chain: Action RESULTS_IN Outcome, Outcome DEMONSTRATES_PROGRESS_ON ResilienceGoal. v1.1 (Decision 44): also the only path for a capital project's outcomes — CapitalProject —REALIZES→ Action —RESULTS_IN→ Outcome. CapitalProject PRODUCES Outcome was removed (ontology#4).",
       "extract_hint": "Look for specific, located results — e.g., 'the rain garden program in District 5 reduced local flooding by 40%', 'the cooling center initiative failed to reach elderly residents during the 2025 heat wave'. If the claim is general knowledge about what a solution type can produce rather than a measured result of this specific deployment, use PRODUCES from the Solution instead.",
       "@id": "ab:resultsIn",
       "@type": "owl:ObjectProperty",
@@ -3086,7 +3086,7 @@
       ],
       "cardinality": "many-to-many",
       "notes": "Unified relationship replacing former ADDRESSES_HAZARD + RISK_ASSESSED_IN pair. Use assessment_scope to distinguish depth of treatment.",
-      "extract_hint": "Look for hazards identified in plan risk assessments or targeted by adaptation strategies — e.g., 'addresses coastal flooding', 'assesses urban heat island risk under 2050 conditions', 'targets increasing wildfire risk'.",
+      "extract_hint": "Look for hazards identified in plan risk assessments or targeted by adaptation strategies — e.g., 'addresses coastal flooding', 'assesses extreme heat risk under 2050 conditions', 'targets increasing wildfire risk'.",
       "@id": "ab:planAddressesHazard",
       "@type": "owl:ObjectProperty",
       "rdfs:subPropertyOf": {
@@ -3453,6 +3453,34 @@
     {
       "id": "DEPLOYED_IN",
       "label": "deployed in",
+      "source": "Action",
+      "target": "Place",
+      "definition": "The Action takes place at this named site: a park, river, creek, watershed, street or facility.",
+      "properties": [
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": false
+        }
+      ],
+      "cardinality": "many-to-many",
+      "notes": "v1.1 (Decision 44, ontology#13). Site-level anchoring: same predicate as DEPLOYED_IN Jurisdiction, a second target grain. The Place keeps WITHIN its Jurisdiction for the city rollup; record DEPLOYED_IN the Jurisdiction too when the text states it.",
+      "extract_hint": "Look for a proper-named site where the work happens — 'wetland restoration in the Carruthers Creek watershed', 'flood-proofing Morningside Park', 'SuDS on Via Pacini'. Not the city itself (that is DEPLOYED_IN Jurisdiction) and not a generic place ('parks', 'the waterfront').",
+      "@id": "ab:actionDeployedInPlace",
+      "@type": "owl:ObjectProperty",
+      "rdfs:subPropertyOf": {
+        "@id": "ab:deployedIn"
+      },
+      "rdfs:domain": {
+        "@id": "ab:Action"
+      },
+      "rdfs:range": {
+        "@id": "ab:Place"
+      }
+    },
+    {
+      "id": "DEPLOYED_IN",
+      "label": "deployed in",
       "source": "CapitalProject",
       "target": "Jurisdiction",
       "definition": "The capital project is sited at or targets this location. Provides a direct spatial link from budget-document line items to places — needed for risk-shed overlap analysis (does this CIP project sit in a hazard zone?).",
@@ -3476,6 +3504,34 @@
       },
       "rdfs:range": {
         "@id": "ab:Jurisdiction"
+      }
+    },
+    {
+      "id": "DEPLOYED_IN",
+      "label": "deployed in",
+      "source": "CapitalProject",
+      "target": "Place",
+      "definition": "The CapitalProject takes place at this named site: a park, river, creek, watershed, street or facility.",
+      "properties": [
+        {
+          "id": "claim_ids",
+          "type": "array<uuid>",
+          "required": false
+        }
+      ],
+      "cardinality": "many-to-many",
+      "notes": "v1.1 (Decision 44, ontology#13). Site-level anchoring: same predicate as DEPLOYED_IN Jurisdiction, a second target grain. The Place keeps WITHIN its Jurisdiction for the city rollup; record DEPLOYED_IN the Jurisdiction too when the text states it.",
+      "extract_hint": "Look for a proper-named site where the work happens — 'wetland restoration in the Carruthers Creek watershed', 'flood-proofing Morningside Park', 'SuDS on Via Pacini'. Not the city itself (that is DEPLOYED_IN Jurisdiction) and not a generic place ('parks', 'the waterfront').",
+      "@id": "ab:capitalProjectDeployedInPlace",
+      "@type": "owl:ObjectProperty",
+      "rdfs:subPropertyOf": {
+        "@id": "ab:deployedIn"
+      },
+      "rdfs:domain": {
+        "@id": "ab:CapitalProject"
+      },
+      "rdfs:range": {
+        "@id": "ab:Place"
       }
     },
     {
@@ -3572,59 +3628,6 @@
       },
       "rdfs:range": {
         "@id": "ab:Stakeholder"
-      }
-    },
-    {
-      "id": "PRODUCES",
-      "label": "produces",
-      "source": "CapitalProject",
-      "target": "Outcome",
-      "definition": "The capital project produces this outcome — typically a quantified asset-protection benefit, monetized co-benefit, or operational result. Mirrors Solution PRODUCES Outcome at the project grain. This is the attachment point for project-level monetized co-benefits (Outcome.monetized_value_usd, value_recurrence, beneficiary_program — added v0.2).",
-      "properties": [
-        {
-          "id": "outcome_type",
-          "type": "enum",
-          "required": true,
-          "note": "Category of outcome. Values from outcome_type in enums (effectiveness_indicator, co_benefit, failure_mode, maladaptation, other).",
-          "vocabulary_binding": {
-            "vocab": "enums",
-            "field": "outcome_type"
-          },
-          "ab:boundToVocabulary": {
-            "@id": "abv:enums-outcome_type"
-          }
-        },
-        {
-          "id": "evidence_level",
-          "type": "enum",
-          "required": false,
-          "vocabulary_binding": {
-            "vocab": "enums",
-            "field": "evidence_level"
-          },
-          "ab:boundToVocabulary": {
-            "@id": "abv:enums-evidence_level"
-          }
-        },
-        {
-          "id": "claim_ids",
-          "type": "array<uuid>",
-          "required": true
-        }
-      ],
-      "cardinality": "one-to-many",
-      "notes": "v0.2. Mirrors Solution PRODUCES Outcome. Project-level outcomes are typically monetized (avoided damages, revenue stability, operational savings) and tagged with beneficiary_program to capture cross-program ripple effects (transit, parks, public safety, etc.).",
-      "extract_hint": "Look for documented project benefits — e.g., 'project protects $500M in coastal property', 'reduces stormwater treatment cost by $2M/yr', 'avoids an estimated $80M in flood damages over the asset life'. Capture monetized_value_usd, value_recurrence, and beneficiary_program on the resulting Outcome.",
-      "@id": "ab:capitalProjectProducesOutcome",
-      "@type": "owl:ObjectProperty",
-      "rdfs:subPropertyOf": {
-        "@id": "ab:produces"
-      },
-      "rdfs:domain": {
-        "@id": "ab:CapitalProject"
-      },
-      "rdfs:range": {
-        "@id": "ab:Outcome"
       }
     },
     {
@@ -4671,10 +4674,10 @@
   ],
   "metadata": {
     "types_count": 22,
-    "relationships_count": 63,
+    "relationships_count": 64,
     "vocabularies_count": 36,
     "change_history": [
-      "v1.1 (2026-10-06): Solution → class-level only + solution-concepts; deployment context to Action and edges; dated status observations; plan goal wording on edges; finance rebuilt around FundingAllocation (FinancingSource → FundingStream). 22 types, 63 relationships, 50 predicate ids.",
+      "v1.1 (2026-10-06): Solution → class-level only + solution-concepts; deployment context to Action and edges; dated status observations; plan goal wording on edges; finance rebuilt around FundingAllocation (FinancingSource → FundingStream). 22 types, 64 relationships, 50 predicate ids.",
       "v1.0 (2026-08-18): Migrated ontology source to JSON-LD — context.jsonld, ontology-v1.0.jsonld, and 8 vocabulary .jsonld files with @id/@type throughout; CI-generated OWL/Turtle/SKOS exports; two live vocabulary-binding bugs fixed along the way. No schema change (still 21 types, 60 relationships, 48 predicate ids).",
       "v0.8 (2026-08-13): Catalog-node edge re-anchoring — seven deployment-fact edges moved from the shared Solution node to Action grain (USES_INSTRUMENT, IMPLEMENTED_BY, GENERATES, REDUCES_EXPOSURE, SHIFTS_RISK_TO as source; PARTICIPATES_IN, SUPPLIES as target); precedence rules added to PRODUCES/RESULTS_IN and IMPLEMENTED_IN; 60 edges unchanged in count",
       "v0.7 (2026-07-07): Merged GovernanceStructure into Stakeholder — org_form, authority_level, and mandate_description become optional Stakeholder properties; GOVERNS (→ Plan) retargeted to Stakeholder → Plan; MEMBER_OF retargeted to Stakeholder → Stakeholder; GovernanceStructure type removed (reverses v0.3)",
@@ -4723,7 +4726,7 @@
     {
       "version": "v1.1",
       "date": "2026-10-06",
-      "summary": "v1.1 — the single bump planned in core worklist item 4, cut from the 2026-10-06 decision set (Decisions 35–43). Solution keeps only class-level properties and binds to a new governed solution-concepts vocabulary; deployment context moves to Action and to the asserting edges (IMPLEMENTS, TARGETS, FACES, EXPERIENCES, PRESCRIBES); Action no longer needs a parent Plan, gains equity_focus / target_populations / is_pilot / alternative_names, and its status (with every other progress-type property) becomes a dated observation series with defined values; plan goal wording lives in local_label on SETS / PURSUES / PRESCRIBES; the finance model is rebuilt around a FundingAllocation node with two comparison axes (source_tier, instrument_class), FinancingSource becomes FundingStream, FUNDED_BY / CHANNELS_THROUGH are retired. The hazard vocabulary is unchanged (flood parent and UHI synonym deferred, Decision 42).",
+      "summary": "v1.1 — the single bump planned in core worklist item 4, cut from the 2026-10-06 decision set (Decisions 35–43). Solution keeps only class-level properties and binds to a new governed solution-concepts vocabulary; deployment context moves to Action and to the asserting edges (IMPLEMENTS, TARGETS, FACES, EXPERIENCES, PRESCRIBES); Action no longer needs a parent Plan, gains equity_focus / target_populations / is_pilot / alternative_names, and its status (with every other progress-type property) becomes a dated observation series with defined values; plan goal wording lives in local_label on SETS / PURSUES / PRESCRIBES; the finance model is rebuilt around a FundingAllocation node with two comparison axes (source_tier, instrument_class), FinancingSource becomes FundingStream, FUNDED_BY / CHANNELS_THROUGH are retired. The hazard vocabulary is unchanged: no flood parent term, and the urban heat island is not a hazard (Decision 42). An Action or CapitalProject can be DEPLOYED_IN a named Place, and a capital project's outcomes go through the Action it realizes (Decision 44).",
       "changes": [
         {
           "type": "added",
@@ -4743,7 +4746,7 @@
         },
         {
           "type": "added",
-          "text": "vocabularies/solution-concepts.json (112 concepts, v0) bound to Solution.concept_id; solution-categories + governance_and_policy category (5 subcategories) and 4 non-tech subcategories elsewhere, 92 → 101 (Decision 35)"
+          "text": "vocabularies/solution-concepts.json (101 concepts, v0, reviewed) bound to Solution.concept_id; solution-categories + governance_and_policy category (5 subcategories) and 4 non-tech subcategories elsewhere, 92 → 101 (Decision 35)"
         },
         {
           "type": "removed",
@@ -4775,7 +4778,15 @@
         },
         {
           "type": "changed",
-          "text": "ResilienceGoal extract_hint excludes a plan's own goal numbering and headings (Decision 42)"
+          "text": "ResilienceGoal extract_hint excludes a plan's own goal numbering and headings; Hazard and relationship hints no longer use the urban heat island as a hazard (Decision 42)"
+        },
+        {
+          "type": "added",
+          "text": "DEPLOYED_IN Action → Place and CapitalProject → Place: site-level anchoring (Decision 44, ontology#13)"
+        },
+        {
+          "type": "removed",
+          "text": "PRODUCES CapitalProject → Outcome; a project's outcomes go CapitalProject REALIZES Action RESULTS_IN Outcome (Decision 44, ontology#4)"
         },
         {
           "type": "added",

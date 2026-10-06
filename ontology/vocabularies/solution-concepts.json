@@ -1,6 +1,8 @@
 {
   "_source": "v1.1 (Decision 35) seed: the 115 CDP 2023 controlled action labels (adaptbase-core cdp_solution_crosswalk.json; every label is a concept or an alias), the Solution names reused by two or more plans in the graph on 2026-10-01 (adaptbase-core#321 §2.6 d), and solution-categories subcategories that name a concrete intervention.",
   "_usage": "Solution.concept_id. Each concept carries the category_id, subcategory_id and ipcc_action_types that the seeder copies onto the Solution node; extraction never writes those three.",
+  "_review": "Reviewed 2026-10-06 (Anthony; the remaining rows were settled on the reviewer's rule 'if we can't classify it more narrowly, we shouldn't record it'). Decision 35 records the outcome. unmapped_cdp_labels are CDP controlled labels that deliberately map to no concept: a CDP action carrying only those gets no IMPLEMENTS edge.",
+  "_revision_plan": "Provisional until the plan corpus is fully extracted. Once every plan in the corpus has been extracted, review this list again against what plans actually prescribe: the concepts proposed through the queue, Solutions left without a concept_id, the dropped umbrellas (green infrastructure, urban greening, ecosystem-based adaptation) and the unmapped CDP labels. Revise it in one versioned pass (decisions-log entry, ontology version bump). Tracked in README > Future ontology improvements.",
   "_note": "Governed, growing list: closed to the extractor (a class not on the list is emitted with proposed: true and reviewed), open through the proposal queue. New concepts arrive as a PR to this file with added_in set; deprecation keeps the id with status: deprecated and replaced_by. cdp_labels records which CDP controlled labels fold into the concept, for the CDP import. aliases are identity-grade synonyms for the resolver.",
   "concepts": [
     {
@@ -468,27 +470,6 @@
       "added_in": "v1.1"
     },
     {
-      "id": "green_infrastructure",
-      "name": "Green infrastructure",
-      "aliases": [
-        "green and blue infrastructure",
-        "blue-green infrastructure",
-        "GI",
-        "nature-based stormwater management"
-      ],
-      "definition": "Vegetated and soil-based systems that manage stormwater and provide ecosystem services, used as the umbrella class when the text names no specific measure.",
-      "category_id": "nature",
-      "subcategory_id": "natural_water_drainage_(bioswales,_rain_gardens,_w",
-      "ipcc_action_types": [
-        "ecosystem_based"
-      ],
-      "cdp_labels": [
-        "Green infrastructure"
-      ],
-      "status": "active",
-      "added_in": "v1.1"
-    },
-    {
       "id": "rain_garden",
       "name": "Rain garden",
       "aliases": [
@@ -645,43 +626,31 @@
     },
     {
       "id": "urban_tree_planting",
-      "name": "Urban tree planting",
+      "name": "Urban forest and tree canopy",
       "aliases": [
         "tree planting",
         "street trees",
         "urban forest",
         "tree canopy expansion",
         "urban forestry",
-        "reforestation"
+        "reforestation",
+        "tree canopy",
+        "forest management",
+        "sustainable forest management",
+        "silviculture",
+        "afforestation"
       ],
-      "definition": "Planting and maintaining trees in streets, parks and private land for shade, cooling and stormwater benefit.",
+      "definition": "Planting, protecting and managing trees and forest cover in and around the city for shade, cooling, slope stability and stormwater benefit.",
       "category_id": "nature",
       "subcategory_id": "urban_greening_(green_spaces,_street_trees,_parks,",
       "ipcc_action_types": [
         "ecosystem_based"
       ],
       "cdp_labels": [
-        "Afforestation and reforestation"
+        "Afforestation and reforestation",
+        "Sustainable forest management",
+        "Silvicultural options"
       ],
-      "status": "active",
-      "added_in": "v1.1"
-    },
-    {
-      "id": "urban_greening",
-      "name": "Urban greening",
-      "aliases": [
-        "green spaces",
-        "parks and open space",
-        "greening programme",
-        "pocket parks"
-      ],
-      "definition": "Adding vegetated public space in the urban fabric, used when the text names no specific measure.",
-      "category_id": "nature",
-      "subcategory_id": "urban_greening_(green_spaces,_street_trees,_parks,",
-      "ipcc_action_types": [
-        "ecosystem_based"
-      ],
-      "cdp_labels": [],
       "status": "active",
       "added_in": "v1.1"
     },
@@ -723,8 +692,7 @@
       ],
       "cdp_labels": [
         "Protected areas",
-        "Watershed preservation",
-        "Preservation of local and regional agricultural space"
+        "Watershed preservation"
       ],
       "status": "active",
       "added_in": "v1.1"
@@ -743,38 +711,7 @@
         "ecosystem_based"
       ],
       "cdp_labels": [
-        "Biodiversity monitoring",
-        "Increasing biological diversity"
-      ],
-      "status": "active",
-      "added_in": "v1.1"
-    },
-    {
-      "id": "ecosystem_based_adaptation",
-      "name": "Ecosystem-based adaptation",
-      "aliases": [
-        "EbA",
-        "nature-based solutions",
-        "NbS",
-        "ecosystem-based management"
-      ],
-      "definition": "Using ecosystems and their services to reduce climate risk, as an umbrella class when no specific measure is named.",
-      "category_id": "nature",
-      "subcategory_id": "ecosystem_based_adaptation_eba",
-      "ipcc_action_types": [
-        "ecosystem_based"
-      ],
-      "cdp_labels": [
-        "Ecosystem-based management",
-        "Community-based natural resource management",
-        "Adaptive land-use management",
-        "Sustainable forest management",
-        "Silvicultural options",
-        "Soil and water conservation",
-        "Soil retention strategies",
-        "Payments for ecosystem services",
-        "Assisted migration or managed translocation",
-        "Ex situ conservation and seed banks"
+        "Biodiversity monitoring"
       ],
       "status": "active",
       "added_in": "v1.1"
@@ -821,29 +758,6 @@
       "added_in": "v1.1"
     },
     {
-      "id": "fisheries_management",
-      "name": "Fisheries management",
-      "aliases": [
-        "fishing quotas",
-        "fisheries co-management",
-        "overfishing control"
-      ],
-      "definition": "Rules and institutions that keep fisheries within sustainable limits.",
-      "category_id": "nature",
-      "subcategory_id": "biodiversity_protection,_ecosystem_monitoring_and_",
-      "ipcc_action_types": [
-        "institutional"
-      ],
-      "cdp_labels": [
-        "Fisheries management",
-        "Fishing quotas",
-        "Fisheries co-management",
-        "Controlling overfishing"
-      ],
-      "status": "active",
-      "added_in": "v1.1"
-    },
-    {
       "id": "erosion_control",
       "name": "Slope and erosion control",
       "aliases": [
@@ -859,7 +773,10 @@
         "structural_physical",
         "ecosystem_based"
       ],
-      "cdp_labels": [],
+      "cdp_labels": [
+        "Soil and water conservation",
+        "Soil retention strategies"
+      ],
       "status": "active",
       "added_in": "v1.1"
     },
@@ -1088,24 +1005,6 @@
       "added_in": "v1.1"
     },
     {
-      "id": "affordable_housing",
-      "name": "Affordable and climate-safe housing",
-      "aliases": [
-        "affordable housing",
-        "social housing",
-        "housing affordability"
-      ],
-      "definition": "Housing programmes that keep vulnerable residents in safe, affordable homes; recorded as a Solution only when framed as adaptation.",
-      "category_id": "buildings",
-      "subcategory_id": "resilient_building_design,_planning_and_constructi",
-      "ipcc_action_types": [
-        "social"
-      ],
-      "cdp_labels": [],
-      "status": "active",
-      "added_in": "v1.1"
-    },
-    {
       "id": "permeable_pavement",
       "name": "Permeable pavement",
       "aliases": [
@@ -1122,28 +1021,6 @@
       ],
       "cdp_labels": [
         "Permeable pavements"
-      ],
-      "status": "active",
-      "added_in": "v1.1"
-    },
-    {
-      "id": "infrastructure_hardening",
-      "name": "Critical infrastructure hardening",
-      "aliases": [
-        "hazard-resistant infrastructure",
-        "infrastructure resilience",
-        "asset hardening",
-        "infrastructure retrofit"
-      ],
-      "definition": "Strengthening or protecting infrastructure assets against hazards, used when the asset class is not specific.",
-      "category_id": "infrastructure",
-      "subcategory_id": "infrastructure_inspection_and_hardening",
-      "ipcc_action_types": [
-        "structural_physical"
-      ],
-      "cdp_labels": [
-        "Hazard resistant infrastructure design and construction",
-        "Traditional technologies and methods"
       ],
       "status": "active",
       "added_in": "v1.1"
@@ -1262,27 +1139,6 @@
       "added_in": "v1.1"
     },
     {
-      "id": "solar_pv",
-      "name": "Solar photovoltaics",
-      "aliases": [
-        "solar panels",
-        "rooftop solar",
-        "solar PV",
-        "community solar"
-      ],
-      "definition": "Solar electricity generation, recorded as a Solution when framed as resilience.",
-      "category_id": "energy",
-      "subcategory_id": "virtual_power_plants,_distributed_energy_resource_",
-      "ipcc_action_types": [
-        "structural_physical"
-      ],
-      "cdp_labels": [
-        "Renewable energy technologies"
-      ],
-      "status": "active",
-      "added_in": "v1.1"
-    },
-    {
       "id": "grid_hardening",
       "name": "Grid hardening",
       "aliases": [
@@ -1330,44 +1186,6 @@
       "definition": "Managing vegetation near power lines to prevent outages and ignition.",
       "category_id": "energy",
       "subcategory_id": "vegetation_management",
-      "ipcc_action_types": [
-        "structural_physical"
-      ],
-      "cdp_labels": [],
-      "status": "active",
-      "added_in": "v1.1"
-    },
-    {
-      "id": "renewable_energy",
-      "name": "Renewable energy",
-      "aliases": [
-        "renewable energy",
-        "clean energy",
-        "biofuels"
-      ],
-      "definition": "Renewable generation other than solar PV, recorded when framed as resilience.",
-      "category_id": "energy",
-      "subcategory_id": "virtual_power_plants,_distributed_energy_resource_",
-      "ipcc_action_types": [
-        "structural_physical"
-      ],
-      "cdp_labels": [
-        "Second-generation biofuels"
-      ],
-      "status": "active",
-      "added_in": "v1.1"
-    },
-    {
-      "id": "energy_efficiency",
-      "name": "Energy efficiency",
-      "aliases": [
-        "energy efficiency programme",
-        "efficiency upgrades",
-        "demand response"
-      ],
-      "definition": "Reducing energy demand in buildings and systems.",
-      "category_id": "buildings",
-      "subcategory_id": "building_management_systems_for_energy_efficiency_",
       "ipcc_action_types": [
         "structural_physical"
       ],
@@ -1435,25 +1253,6 @@
       "added_in": "v1.1"
     },
     {
-      "id": "fleet_electrification",
-      "name": "Fleet electrification",
-      "aliases": [
-        "electric vehicles",
-        "EV charging",
-        "electric buses",
-        "fleet electrification"
-      ],
-      "definition": "Electrifying vehicles and fleets, recorded when framed as resilience.",
-      "category_id": "transportation",
-      "subcategory_id": "fleet_electrification_and_charging_systems",
-      "ipcc_action_types": [
-        "structural_physical"
-      ],
-      "cdp_labels": [],
-      "status": "active",
-      "added_in": "v1.1"
-    },
-    {
       "id": "evacuation_route",
       "name": "Evacuation routes and logistics",
       "aliases": [
@@ -1467,23 +1266,6 @@
       "ipcc_action_types": [
         "institutional",
         "structural_physical"
-      ],
-      "cdp_labels": [],
-      "status": "active",
-      "added_in": "v1.1"
-    },
-    {
-      "id": "transit_oriented_development",
-      "name": "Transit-oriented development",
-      "aliases": [
-        "TOD",
-        "compact development"
-      ],
-      "definition": "Dense, mixed-use development around transit, recorded when framed as resilience.",
-      "category_id": "transportation",
-      "subcategory_id": "traffic_management,_curb_management,_congestion_re",
-      "ipcc_action_types": [
-        "institutional"
       ],
       "cdp_labels": [],
       "status": "active",
@@ -1575,7 +1357,7 @@
     },
     {
       "id": "air_quality_programme",
-      "name": "Air quality programme",
+      "name": "Air quality monitoring and management",
       "aliases": [
         "air quality initiatives",
         "clean air",
@@ -1600,14 +1382,14 @@
     },
     {
       "id": "disease_surveillance",
-      "name": "Disease surveillance and prevention",
+      "name": "Climate-sensitive disease surveillance and prevention",
       "aliases": [
         "disease prevention",
         "vector-borne disease surveillance",
         "vaccination programme",
         "public health surveillance"
       ],
-      "definition": "Monitoring and preventing climate-sensitive disease.",
+      "definition": "Monitoring and preventing diseases whose spread climate change affects, including vector-borne and heat-related illness.",
       "category_id": "health",
       "subcategory_id": "disease_surveillance,_pathogen_detection_and_respo",
       "ipcc_action_types": [
@@ -1616,9 +1398,7 @@
       ],
       "cdp_labels": [
         "Disease prevention measures",
-        "Vaccination programs",
-        "Essential public health services",
-        "Public health policies to improve nutrition (including improved access to healthy foods)"
+        "Vaccination programs"
       ],
       "status": "active",
       "added_in": "v1.1"
@@ -1731,15 +1511,15 @@
     },
     {
       "id": "food_security_programme",
-      "name": "Food security programme",
+      "name": "Food access and redistribution",
       "aliases": [
         "food access",
         "food donation",
         "food redistribution",
-        "food procurement policy",
-        "sustainable diets"
+        "food banks",
+        "emergency food supply"
       ],
-      "definition": "Programmes and policies that keep food affordable and available, recorded when framed as adaptation.",
+      "definition": "Keeping food available to households through disruption: redistributing surplus, emergency food access and market access for local producers.",
       "category_id": "food",
       "subcategory_id": "food_waste_reduction",
       "ipcc_action_types": [
@@ -1748,13 +1528,7 @@
       ],
       "cdp_labels": [
         "Food donation and redistribution of food surplus",
-        "Citizen dietary shift",
-        "Community engagement/awareness campaigns on the climate and health benefits of sustainable healthy diets",
-        "Engagement with retailers (including restaurants) to expand and encourage sustainable, healthy food choices",
-        "Financial support to improve market access for local food producers",
-        "Municipal/jurisdictional food procurement policies that align with guidelines for sustainable, healthy diets (including school procurement, etc.)",
-        "Municipal/jurisdictional food procurement policies that support sustainable food production practices (including school procurement, etc.)",
-        "Public policies to encourage citizen dietary shift to sustainable, healthy diets (including incentivizing purchase of low-carbon foods, plant-based or alternative proteins)"
+        "Financial support to improve market access for local food producers"
       ],
       "status": "active",
       "added_in": "v1.1"
@@ -1886,47 +1660,6 @@
       "added_in": "v1.1"
     },
     {
-      "id": "economic_diversification",
-      "name": "Economic and livelihood diversification",
-      "aliases": [
-        "livelihood diversification",
-        "economic diversification"
-      ],
-      "definition": "Reducing dependence on climate-exposed livelihoods and sectors.",
-      "category_id": "finance",
-      "subcategory_id": "adaptation_finance_mechanisms",
-      "ipcc_action_types": [
-        "institutional",
-        "social"
-      ],
-      "cdp_labels": [
-        "Economic diversification measures",
-        "Livelihood diversification"
-      ],
-      "status": "active",
-      "added_in": "v1.1"
-    },
-    {
-      "id": "climate_risk_assessment",
-      "name": "Climate risk and vulnerability assessment",
-      "aliases": [
-        "vulnerability assessment",
-        "risk assessment",
-        "asset risk modelling",
-        "climate risk analysis"
-      ],
-      "definition": "A structured assessment of hazards, exposure and vulnerability.",
-      "category_id": "finance",
-      "subcategory_id": "asset_risk_modeling,_vulnerability_analysis_and_re",
-      "ipcc_action_types": [
-        "institutional",
-        "social"
-      ],
-      "cdp_labels": [],
-      "status": "active",
-      "added_in": "v1.1"
-    },
-    {
       "id": "managed_retreat",
       "name": "Managed retreat",
       "aliases": [
@@ -1969,28 +1702,6 @@
       "cdp_labels": [
         "Land zoning laws (including restrict development in at risk areas)",
         "Easements"
-      ],
-      "status": "active",
-      "added_in": "v1.1"
-    },
-    {
-      "id": "adaptation_plan",
-      "name": "Adaptation and resilience planning",
-      "aliases": [
-        "climate adaptation plan",
-        "resilience strategy",
-        "targeted hazard plan",
-        "adaptive management"
-      ],
-      "definition": "A planning process or instrument for adaptation, recorded as a Solution only when a plan prescribes planning as a measure.",
-      "category_id": "governance_and_policy",
-      "subcategory_id": "adaptation_planning_process",
-      "ipcc_action_types": [
-        "institutional"
-      ],
-      "cdp_labels": [
-        "Development of targeted plan/program to address hazard(s) selected",
-        "Adaptive management"
       ],
       "status": "active",
       "added_in": "v1.1"
@@ -2260,24 +1971,6 @@
       "added_in": "v1.1"
     },
     {
-      "id": "climate_mainstreaming",
-      "name": "Climate mainstreaming in policy",
-      "aliases": [
-        "mainstreaming",
-        "climate lens",
-        "climate screening of projects"
-      ],
-      "definition": "Requiring climate risk to be considered in routine decisions.",
-      "category_id": "governance_and_policy",
-      "subcategory_id": "adaptation_governance",
-      "ipcc_action_types": [
-        "institutional"
-      ],
-      "cdp_labels": [],
-      "status": "active",
-      "added_in": "v1.1"
-    },
-    {
       "id": "informal_settlement_upgrading",
       "name": "Informal settlement upgrading",
       "aliases": [
@@ -2295,6 +1988,205 @@
       "cdp_labels": [],
       "status": "active",
       "added_in": "v1.1"
+    },
+    {
+      "id": "land_use_planning",
+      "name": "Adaptive land-use planning and management",
+      "aliases": [
+        "adaptive land-use management",
+        "land-use planning for resilience",
+        "agricultural land preservation",
+        "farmland protection"
+      ],
+      "definition": "Using land-use plans and controls to steer development and preserve land in response to climate risk, beyond rules for specific hazard zones.",
+      "category_id": "governance_and_policy",
+      "subcategory_id": "land_use_and_zoning",
+      "ipcc_action_types": [
+        "institutional"
+      ],
+      "cdp_labels": [
+        "Adaptive land-use management",
+        "Preservation of local and regional agricultural space"
+      ],
+      "status": "active",
+      "added_in": "v1.1"
+    },
+    {
+      "id": "community_based_nrm",
+      "name": "Community-based natural resource management",
+      "aliases": [
+        "CBNRM",
+        "community forestry",
+        "community resource management"
+      ],
+      "definition": "Communities managing local forests, water, land or fisheries under agreed rights and rules.",
+      "category_id": "nature",
+      "subcategory_id": "ecosystem_based_adaptation_eba",
+      "ipcc_action_types": [
+        "ecosystem_based",
+        "social"
+      ],
+      "cdp_labels": [
+        "Community-based natural resource management"
+      ],
+      "status": "active",
+      "added_in": "v1.1"
+    },
+    {
+      "id": "payments_for_ecosystem_services",
+      "name": "Payments for ecosystem services",
+      "aliases": [
+        "PES",
+        "ecosystem service payments",
+        "conservation payments"
+      ],
+      "definition": "Paying landowners or communities to maintain ecosystems that provide services such as water regulation or flood storage.",
+      "category_id": "finance",
+      "subcategory_id": "adaptation_finance_mechanisms",
+      "ipcc_action_types": [
+        "institutional"
+      ],
+      "cdp_labels": [
+        "Payments for ecosystem services"
+      ],
+      "status": "active",
+      "added_in": "v1.1"
+    },
+    {
+      "id": "species_conservation",
+      "name": "Species and genetic conservation",
+      "aliases": [
+        "seed banks",
+        "assisted migration",
+        "managed translocation",
+        "ex situ conservation",
+        "biodiversity enhancement"
+      ],
+      "definition": "Protecting species and genetic diversity at risk from climate change, in place or by relocation and storage.",
+      "category_id": "nature",
+      "subcategory_id": "biodiversity_protection,_ecosystem_monitoring_and_",
+      "ipcc_action_types": [
+        "ecosystem_based"
+      ],
+      "cdp_labels": [
+        "Assisted migration or managed translocation",
+        "Ex situ conservation and seed banks",
+        "Increasing biological diversity"
+      ],
+      "status": "active",
+      "added_in": "v1.1"
+    }
+  ],
+  "unmapped_cdp_labels": [
+    {
+      "label": "Green infrastructure",
+      "was": "green_infrastructure",
+      "reason": "Umbrella term; a plan that names nothing narrower gets no Solution (review 2026-10-06)."
+    },
+    {
+      "label": "Fisheries management",
+      "was": "fisheries_management",
+      "reason": "Rural-sector rules rarely in city plans (review 2026-10-06)."
+    },
+    {
+      "label": "Fishing quotas",
+      "was": "fisheries_management",
+      "reason": "Rural-sector rules rarely in city plans (review 2026-10-06)."
+    },
+    {
+      "label": "Fisheries co-management",
+      "was": "fisheries_management",
+      "reason": "Rural-sector rules rarely in city plans (review 2026-10-06)."
+    },
+    {
+      "label": "Controlling overfishing",
+      "was": "fisheries_management",
+      "reason": "Rural-sector rules rarely in city plans (review 2026-10-06)."
+    },
+    {
+      "label": "Renewable energy technologies",
+      "was": "solar_pv",
+      "reason": "Mitigation or housing policy, outside the adaptation catalog (review 2026-10-06)."
+    },
+    {
+      "label": "Second-generation biofuels",
+      "was": "renewable_energy",
+      "reason": "Mitigation or housing policy, outside the adaptation catalog (review 2026-10-06)."
+    },
+    {
+      "label": "Ecosystem-based management",
+      "was": "ecosystem_based_adaptation",
+      "reason": "Umbrella term; a plan that names nothing narrower gets no Solution (review 2026-10-06)."
+    },
+    {
+      "label": "Hazard resistant infrastructure design and construction",
+      "was": "infrastructure_hardening",
+      "reason": "Umbrella term; a plan that names nothing narrower gets no Solution (review 2026-10-06)."
+    },
+    {
+      "label": "Traditional technologies and methods",
+      "was": "infrastructure_hardening",
+      "reason": "Umbrella term; a plan that names nothing narrower gets no Solution (review 2026-10-06)."
+    },
+    {
+      "label": "Development of targeted plan/program to address hazard(s) selected",
+      "was": "adaptation_plan",
+      "reason": "A plan is a Plan node, not a Solution (review 2026-10-06)."
+    },
+    {
+      "label": "Adaptive management",
+      "was": "adaptation_plan",
+      "reason": "A plan is a Plan node, not a Solution (review 2026-10-06)."
+    },
+    {
+      "label": "Essential public health services",
+      "was": "disease_surveillance",
+      "reason": "Too general to classify (review 2026-10-06)."
+    },
+    {
+      "label": "Public health policies to improve nutrition (including improved access to healthy foods)",
+      "was": "disease_surveillance",
+      "reason": "Health policy, not adaptation (review 2026-10-06)."
+    },
+    {
+      "label": "Citizen dietary shift",
+      "was": "food_security_programme",
+      "reason": "Diet or procurement policy: health or mitigation, not adaptation (review 2026-10-06)."
+    },
+    {
+      "label": "Community engagement/awareness campaigns on the climate and health benefits of sustainable healthy diets",
+      "was": "food_security_programme",
+      "reason": "Diet or procurement policy: health or mitigation, not adaptation (review 2026-10-06)."
+    },
+    {
+      "label": "Engagement with retailers (including restaurants) to expand and encourage sustainable, healthy food choices",
+      "was": "food_security_programme",
+      "reason": "Diet or procurement policy: health or mitigation, not adaptation (review 2026-10-06)."
+    },
+    {
+      "label": "Municipal/jurisdictional food procurement policies that align with guidelines for sustainable, healthy diets (including school procurement, etc.)",
+      "was": "food_security_programme",
+      "reason": "Diet or procurement policy: health or mitigation, not adaptation (review 2026-10-06)."
+    },
+    {
+      "label": "Municipal/jurisdictional food procurement policies that support sustainable food production practices (including school procurement, etc.)",
+      "was": "food_security_programme",
+      "reason": "Diet or procurement policy: health or mitigation, not adaptation (review 2026-10-06)."
+    },
+    {
+      "label": "Public policies to encourage citizen dietary shift to sustainable, healthy diets (including incentivizing purchase of low-carbon foods, plant-based or alternative proteins)",
+      "was": "food_security_programme",
+      "reason": "Diet or procurement policy: health or mitigation, not adaptation (review 2026-10-06)."
+    },
+    {
+      "label": "Economic diversification measures",
+      "was": "economic_diversification",
+      "reason": "Umbrella term; a plan that names nothing narrower gets no Solution (review 2026-10-06)."
+    },
+    {
+      "label": "Livelihood diversification",
+      "was": "economic_diversification",
+      "reason": "Umbrella term; a plan that names nothing narrower gets no Solution (review 2026-10-06)."
     }
   ]
 }
