@@ -26,3 +26,4 @@ mining/corpus/plans/
 
 # JSON-LD RDF exports (CI-generated from ontology/*.jsonld, not committed source)
 /exports/
+.mcp.json
