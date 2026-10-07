@@ -107,7 +107,8 @@ Advances: —
 **L-4 · MAJOR · Hazard is the one catalog node that still carries one-place facts.**
 Location: `Hazard.{frequency, severity, trend, return_period, climate_scenario, climate_scenario_other_description, projection_year}` — seven of its ten properties.
 Evidence: Decision 35/37's rule — "a catalog node never holds a value that depends on one place or one plan" — moved `condition/capacity/service_coverage`, `severity_score`, and the three vulnerability scores to edges, but "coastal_flood has return_period 1-in-100 under SSP5-8.5 by 2050" is Miami's fact, not the class's; the second city to assert a different value is a conflict on a node shared by every plan in the corpus. The Hazard `notes` do not even mention the issue. `AFFECTED_BY (Jurisdiction → Hazard)` already carries `indicators` (JSONB) and `source_dataset` for exactly this content, and `Plan ADDRESSES Hazard` carries `assessment_scope/assessment_year`.
-Fix: move the seven properties to `AFFECTED_BY` (jurisdiction-grain) and/or `Plan ADDRESSES Hazard` (plan-grain, where `climate_scenario`/`projection_year` sit naturally beside `assessment_year`). Hazard keeps `hazard_id`, `hazard_category`, `hazard_source`, `c40_arup_category`. This is the one place the v1.1 principle was not finished.
+Fix: move the seven properties to `Plan ADDRESSES Hazard` (plan-grain, where `climate_scenario`/`projection_year` sit naturally beside `assessment_year`). Hazard keeps `hazard_id`, `hazard_category`, `hazard_source`, `c40_arup_category`. This is the one place the v1.1 principle was not finished.
+*Revised 2026-10-07 (Anthony; see §5.2):* this originally read "to `AFFECTED_BY` (jurisdiction-grain) and/or `Plan ADDRESSES Hazard`". `AFFECTED_BY` is dropped as a destination. It is one edge per jurisdiction–hazard pair, shared by every plan for that city and by every reference dataset, so two plans' values would collide on it, which is L-4's problem one level down.
 Advances: — (new; the biggest single consistency-with-principle item)
 
 **L-5 · MAJOR · `BLOCKS` and `REQUIRES` attach instance-grain nodes to the shared Solution.**
@@ -332,7 +333,7 @@ Fix: cut to the current file list (now correct in its top half), the JSON-LD twi
 |---|---|---|---|---|
 | 1 | **Structural validator** `scripts/check_ontology.py` + CI step (domain/range, cardinality enum, binding resolution, inline==block, manifest `bound_to`/`terms_count`, id charset, cross-entry alias/term collisions, concept→subcategory→category, twins `--check`). | P-10, C-1, C-4, V-5 | S | Every other item below is verifiable by it; it prevents the fourth recurrence of the stale-binding bug. |
 | 2 | **Fix the four dangling type-level bindings and normalise the 36 inline enums** to one rule; coordinate with the core researcher-rule change so bound properties keep being filled. | C-1, C-2 | S (ontology) / M (core prompt) | Mechanical errors in the live schema; cheap once #1 exists. |
-| 3 | **Move Hazard's seven one-place properties to `AFFECTED_BY` / `Plan ADDRESSES Hazard`.** | L-4, A-7c | M | Completes the v1.1 principle; unblocks the longitudinal-risk query; Hazard becomes a pure catalog node. |
+| 3 | **Move Hazard's seven one-place properties to `Plan ADDRESSES Hazard` only** (revised 2026-10-07, §5.2). | L-4, A-7c | M | Completes the v1.1 principle; unblocks the longitudinal-risk query; Hazard becomes a pure catalog node. |
 | 4 | **Decide Mechanism node vs property, then fix the vocabulary.** Live data: 807 Mechanism nodes, all singleton free-text names, `mechanism_type` filled on 4. Recommended: retire the `Mechanism` type and `WORKS_BY`; add `Solution.mechanisms: array<enum>` bound to a widened `mechanism_vocabulary` (institutional/informational values legitimised; `restore` merged into `restore_regenerate`; `_other_description` added); re-judge the 807 phrases against the enum in core. | L-1, C-3 | S (ontology) / M (core re-judge) | Removes a literal contradiction and converts an unusable node population into a queryable dimension; the Mechanism concept list becomes the gate for reinstating a node. |
 | 5 | **UrbanSystem vocabulary pass:** remove Solution-shaped and population-shaped systems; populate or delete the two empty sectors; add solid waste / cultural heritage; one definition per term. | L-2, L-3, P-8, Y-3 | M | `OPERATES_ON` and `TARGETS` are only as good as this list; `system_id` is a required field. |
 | 6 | **Hazard leaf clean-up:** definitions with boundaries for the three ambiguous pairs, de-dupe `undrr_terms`, split SLR/erosion, add `water_stress`, normalise ids. | L-9, C-9 | S–M | Directly improves extraction precision on the most-used catalog type; the CDP crosswalk already shows where it hurts. |
@@ -342,3 +343,103 @@ Fix: cut to the current file list (now correct in its top half), the JSON-LD twi
 | 10 | **Solution-categories tier review in the same pass as the concept re-review:** merge the v1.1 code/zoning duplicate, fix `reflective_coatings`, cut the 24 concept-less subcategories (or give them concepts), re-key `gcom_hazard_focus` to HIPs ids, clean ids with `legacy_id`, decide the tier-1 axis. Plus fold Supplier into Stakeholder. | P-4, P-5, C-9, Y-2 | L | Largest payoff for category-level analytics but depends on the full-extraction evidence the README already says to wait for; schedule it as the concept re-review, not before. |
 
 Documentation items that should ride along but are not migration-script work: rewrite `framework-crosswalk.md` to v1.1 (A-1); cut `vocabularies/README.md` to what is true (A-2); sweep `design_notes` and `notes` for retired ids (V-5); regenerate the decisions-log evolution table (C-12); one deprecation convention (C-11); `_usage` strings (C-10). Items I would **not** take up: compound/cascading hazards and NbS preconditions (correctly deferred in the Opus round; nothing in v1.1 changes that); a parent Flood term (Decision 42 stands); re-splitting Infrastructure from UrbanSystem (the `TARGETS`-edge move was the right resolution).
+
+---
+
+## 5. Addendum (2026-10-07): decisions from the core repo for v1.2
+
+*Added after the review, from the Probable Futures integration plan in
+adaptbase-core (`_planning/to-do/PROBABLE-FUTURES-HAZARD-DATA-PLAN.md` §10,
+`_planning/to-do/HAZARD-CONTEXT-TO-ADDRESSES-PLAN.md`). Decisions are
+Anthony's, 2026-10-07; they are proposals for Fengze's review like the rest
+of this document. Live counts are from read-only queries of core on
+2026-10-07.*
+
+### 5.1 `AFFECTED_BY` (Jurisdiction → Hazard): one entry per source
+
+**Today.** `AFFECTED_BY` declares a required scalar `source_dataset` and an
+`indicators` object. In the live graph:
+
+- The 4,615 edges imported from WRI carry `source` (not `source_dataset`)
+  and `indicators`. None has the required property.
+- Of the 826 edges extracted from plan text, 23 carry `source_dataset`
+  meaning *the dataset the plan cites* (e.g. London → Subsidence: "BGS's
+  Property Subsidence Assessment dataset"), and 91 carry `indicators`.
+- 113 edges are supported by both WRI and a plan document, because core
+  allows one edge per (subject, predicate, object).
+
+Core is adding Probable Futures (CC BY 4.0, 31 maps on a 22 km grid, six
+warming levels) alongside WRI. Its values stay in a table outside the graph,
+and the graph gets an `AFFECTED_BY` edge where a stated materiality rule says
+the hazard is material. One edge may then be supported by WRI, Probable
+Futures and the city's own plan at once.
+
+**Change.**
+
+- Add a required `sources` object keyed by source id. Each entry has
+  `kind: dataset | plan_document`.
+  - *dataset* entries: `dataset_version`, `materiality_rule` (`id`,
+    `version`), the maps or indicators that passed (each tagged direct or
+    indirect, with a direction), a score such as `frequency_ratio`, and
+    `indicators`.
+  - *plan_document* entry: `cited_datasets` (array of strings). **Edges
+    extracted from plan text are kept** as this entry; it carries no scalar
+    hazard characterisation (§5.2).
+- Deprecate the top-level `source_dataset` and `indicators`.
+- Definition: "This jurisdiction is affected by this hazard, supported by
+  one or more sources: a reference dataset under a stated materiality rule,
+  or a plan document. One edge per jurisdiction–hazard pair; sources are
+  never merged or averaged."
+- `notes`: drop the WRI-specific wording. `extract_hint`: keep the plan-text
+  guidance.
+- `claim_ids` stays optional; dataset entries are derived, as V-1 already
+  proposes.
+
+### 5.2 L-4 narrowed: a plan's hazard details go on `ADDRESSES` only
+
+Live: **388 plan statements from 85 plans sit on 36 of the 50 Hazard
+nodes** (`frequency` 252, `trend` 50, `projection_year` 40,
+`return_period` 31, `severity` 14, `climate_scenario` 1). The node keeps
+only the first one promoted. Coastal flood's `frequency` is "typically",
+from Berkeley's plan; San Francisco's "approximately twice per year" and
+NYC's "1% annual chance" lost.
+
+**Change.** Remove the seven properties from `Hazard`. Declare them on
+`ADDRESSES` for the `Plan → Hazard` pair only (not `Action → Hazard` or
+`ResilienceGoal → Hazard`), with the same types and enums. Add a Hazard
+`notes` line: "a plan's characterisation of a hazard is on its `ADDRESSES`
+edge; the node holds only the vocabulary term." Core moves the 388
+statements onto the plans' `ADDRESSES` edges (all 388 trace to a Plan; 36
+already have the edge).
+
+### 5.3 Jurisdiction
+
+- **`geometry` is the one coordinate representation.** Live, coordinates
+  sit in the declared `geometry` (a Point on 143) *and* in operational
+  `latitude` / `longitude` keys (1,061). Keep `geometry` as declared; core
+  migrates the 1,061 into it.
+- **Reword `geometry`'s note** from "Polygons deliberately excluded to avoid
+  ODbL contamination from OSM" to "Polygons only from sources whose licence
+  allows redistribution; never from OSM." Core plans area-weighted sampling
+  of gridded data over jurisdiction boundaries; the licence rule stays, and
+  the blanket exclusion goes.
+- **`jurisdiction_kind` stays required.** It is set on 0 of 1,924 today;
+  core fills it from Wikidata P31.
+- **`climate_zone`**: name the source in the note. Probable Futures'
+  climate-zones map at 1.0°C, mapped to the five groups by Köppen letter.
+
+### 5.4 Hazard vocabulary (with item 6)
+
+When `water_stress` is added, core links Probable Futures' water-balance and
+drought-likelihood maps to it directly, alongside `drought`. Id
+normalisation is fine; core keys its map-to-hazard links by `hazard_id` and
+re-keys in the submodule-bump PR.
+
+### 5.5 Design note
+
+Add one: *large quantitative reference data (climate projections,
+indicators at scale) lives in tables outside the graph; the graph carries
+edges derived from it by a stated, versioned rule, with per-source
+provenance.* This records why Probable Futures adds no node type, and sets
+the pattern for later datasets.
+
