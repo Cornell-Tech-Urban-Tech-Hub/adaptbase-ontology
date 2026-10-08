@@ -28,6 +28,12 @@ issues come up; items here are the next things we work on.
   types and inter-run agreement is measured; and a Mechanism concept list (CQ-43).
 - **`instrument_type` gaps** not taken in v1.1: community land trust, developer
   agreement, investment fund — decide whether any is an instrument at all.
+- **v1.3: a pruning pass.** Delete entity types, edge pairs and properties the extracted
+  plans don't use, measured after the extraction prompt review on a re-extracted sample
+  (many "unused" classifications are ones the extractor never asked for). Census of
+  2026-10-08 in adaptbase-core `_planning/to-do/ONTOLOGY-V1.3-PRUNING-CENSUS.md`:
+  Supplier (2 nodes), CapitalProject (6 of 114 plans), PlanningData (48% with no edges)
+  are the first to examine.
 - **Left out of v1.2 on purpose** (review FABLE-ONTOLOGY-REVIEW-2026-10-06): Mechanism
   node vs property (item 4: kept); the Solution-categories tier review and folding Supplier
   into Stakeholder (item 10: with the concept re-review above); re-anchoring `BLOCKS` /
