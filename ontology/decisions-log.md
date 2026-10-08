@@ -1,14 +1,83 @@
 # Ontology Design Decisions Log
 
-**Project:** Resilience Scanner - Climate Adaptation Solutions Ontology  
-**Version:** 1.1  
-**Last Updated:** 2026-10-06
+**Project:** AdaptBase ontology  
+**Version:** 1.2  
+**Last Updated:** 2026-10-08
 
 ---
 
 ## Purpose
 
 This log documents key design decisions in the ontology development process, including rationale, alternatives considered, and implications for future work.
+
+---
+
+## Decisions 45–53 (v1.2): the bump of 2026-10-08
+
+**Date:** 2026-10-08
+**Context:** The input was the top-to-bottom review `review/FABLE-ONTOLOGY-REVIEW-2026-10-06.md` (PR #23): its top-10 change list (§4) and the addendum of decisions from adaptbase-core (§5, including §5.6 after Fengze's review). Anthony settled the remaining choices on 2026-10-08 from side-by-side diagrams drawn on the live graph, each with the no-change option first. The adoption plan is adaptbase-core `_planning/to-do/ONTOLOGY-V1.2-ADOPTION-PLAN.md`. The migration is `scripts/migrations/v1_2_from_v1_1.py`, with the definitions seeded from `scripts/migrations/v1_2_definitions.json`; every rule cites the decision below.
+
+Not in v1.2, on purpose: retiring Mechanism (review item 4: kept as it is, 807 nodes and 871 edges); the Solution-categories tier review and folding Supplier into Stakeholder (item 10: with the concept re-review); FEMA CRS / benefit-cost crosswalk labels (agreed, deferred); a Climate Bonds crosswalk (personal-use licence); the Weitz taxonomy as anything more than a completeness checklist.
+
+### Decision 45: a plan's characterisation of a hazard lives on its ADDRESSES edge
+
+`Hazard.frequency`, `severity`, `trend`, `return_period`, `climate_scenario`, `climate_scenario_other_description` and `projection_year` move to `ADDRESSES`, `Plan → Hazard` pair only. There is one Hazard node per hazard type, shared by every city and plan, so the node kept the first plan's statement and lost every other: coastal flood's `frequency` was "typically occur" (Berkeley's plan), while San Francisco's "approximately twice per year" and NYC's "1% annual chance" were lost. Live: 388 statements from 85 plans on 36 of the 50 nodes. The rule against this was decided on 2026-07-13 and Decisions 35/37 applied it to Solution, UrbanSystem, Barrier and Vulnerability; Hazard was the one catalog node left (review L-4).
+
+**Alternative rejected:** `AFFECTED_BY` (Jurisdiction → Hazard) as a second destination, which the review first proposed. It is one edge per jurisdiction and hazard, shared by every plan for that city and by every reference dataset, so two plans' values would collide there: the same problem one level down. Not on `Action → Hazard` or `ResilienceGoal → Hazard` either.
+
+### Decision 46: a plan's own hazard figures also go on ADDRESSES
+
+`ADDRESSES` (Plan → Hazard) gains `indicators`: quantified figures the plan states (`{"flooded_area_square_miles": 440}`), as stated. 91 plan-extracted `AFFECTED_BY` edges carry such figures today; they are the plan's statement, so they follow Decision 45, and the `AFFECTED_BY` plan_documents entry (Decision 47) carries none.
+
+### Decision 47: AFFECTED_BY holds one entry per source; reference data stays outside the graph
+
+`AFFECTED_BY` gets a required `sources` object keyed by source id, each entry `kind: dataset | plan_document`. A dataset entry records the dataset version, the materiality rule (id, version) under which the hazard counts as material, the maps or indicators that passed and a score; the plan_documents entry records the datasets the plan cites. Entries are never merged or averaged, and each has its own evidence, so one source can be withdrawn without touching the others. The top-level `source_dataset` and `indicators` are removed.
+
+Why: the 4,615 edges imported from WRI wrote `source`, not the required `source_dataset`; 23 plan-extracted edges used `source_dataset` to mean the dataset the plan cites; 113 edges are supported by WRI and a plan at once; and Probable Futures (CC BY 4.0) is being added beside WRI. One scalar cannot hold three sources.
+
+With it, a design note: large quantitative reference data (climate projections, indicators at scale) lives in tables outside the graph, and the graph carries edges derived from it by a stated, versioned rule with per-source provenance. This is why Probable Futures adds no node type.
+
+### Decision 48: Jurisdiction has one coordinate field
+
+`geometry` (GeoJSON; a Wikidata P625 Point by default) is the only coordinate representation. Consumers wrote coordinates twice (a `geometry` Point on 143 jurisdictions, undeclared `latitude` / `longitude` on 1,061), and 67 of the 130 with both disagree, mostly because a same-named city's point was attached to the wrong node. The fix in a consumer is a reported backfill from the verified QID plus a misattribution worklist, never a copy. The polygon note changes from "deliberately excluded to avoid ODbL contamination" to "only from sources whose licence allows redistribution; never from OSM", so licensed boundaries can be used for area-weighted sampling. `climate_zone` names its source (Probable Futures' climate-zones map at 1.0 °C, by Köppen letter). `jurisdiction_kind` stays required and may be filled from Wikidata P31.
+
+### Decision 49: Action.resilience_contribution
+
+An optional enum: `adapted` (the action makes the acting party's own assets or activities resilient) or `enabling` (it builds the resilience of others). The split is the EU Taxonomy's (Regulation (EU) 2020/852, Art. 11 and 16), not the Climate Bonds Resilience Taxonomy's, so it carries no licence restriction. New block `enums.resilience_contribution`.
+
+### Decision 50: a fact the ontology asked for twice is kept once
+
+- `outcome_type` and `evidence_level` leave `PRODUCES` (Solution → Outcome) and `RESULTS_IN`; they live on the Outcome. Live: 12,390 edge values, 34 disagreeing with the node, 401 present only on the edge (a consumer copies those to the node before removing the edge key).
+- `ISSUES.adoption_status` is removed: the dated `Plan.plan_status_observations` (Decision 40) is the home (review L-10).
+- The five `IMPLEMENTED_IN` deployment properties are removed (review A-4; README item); a deployment's site is `Action DEPLOYED_IN Place`.
+- `REDUCES.mechanism_of_reduction` loses `reduces_exposure` (that is `REDUCES_EXPOSURE`, at deployment grain since v0.8); `multi_pathway` becomes `both` (review L-13).
+- **Kept:** `PRESCRIBES.implementation_stage`. The review (L-11) proposed dropping it, but Decision 40 has just given it dated observations; reversing that one version later is churn.
+- Cardinalities corrected to match their own notes: `IMPLEMENTS`, `ISSUES`, `SUPERSEDES`, `IMPLEMENTED_BY` → many-to-many (review C-4; 55 Outcomes already have more than one producer under `PRODUCES` / `RESULTS_IN`, which stay one-to-many by definition).
+
+### Decision 51: one "other names" field on every named type; identity hygiene
+
+- `alternative_names` on every type whose nodes are named and matched by name: Stakeholder, FundingStream, Supplier, Mechanism, Barrier, EnablingCondition, Vulnerability, CapitalProject, Place and FinancialInstrument join Solution, Plan and Action; `Jurisdiction.aliases` is renamed to match. The fixed lists (Hazard, UrbanSystem, ResilienceGoal) keep their synonyms in their vocabulary files. Not added to Outcome, Indicator, ExposureUnit, PlanningData or FundingAllocation, which are described, not named.
+- Anthony's reason, over the recommendation to wait: every merge absorbs a name, and keeping those names is knowledge that stops the next mention becoming a duplicate. Two conditions come with it: every name a merge adds is backed by its own evidence row, so undoing a bad merge removes its names (a wrong name otherwise repeats the wrong match on every later mention); and for registry types a name match proposes a candidate, never a merge, since identity stays on verified ids.
+- `Place.place_type` gains `waterbody`, `street`, `facility`, `neighbourhood_area`, and `WITHIN` gains a `Place → Place` pair (review L-8).
+- `ExposureUnit` and `Vulnerability` gain `name` (required) and `description`; `Stakeholder.name` becomes required (review L-7, C-5).
+
+### Decision 54: Mechanism gets the other-description it was already told to use
+
+`mechanism_type`'s note has said since v0.4 "use other + mechanism_type_other_description for outliers", but the property was never declared, so a consumer that polices keys against the ontology could not store the description. Found live on 2026-10-08, when the extractor started choosing from the list: 16 of 49 mechanisms chose `other` (composting, waste-to-biofuel, sedimentation, filtration, evaporation, disassembly) and none could say what. `mechanism_type_other_description` (string, optional) is declared like `vuln_type_other_description`. The clustering of those outliers around waste and water treatment is noted for the v1.3 vocabulary pass, not acted on here.
+
+### Decision 52: provenance is the evidence store
+
+`claim_ids` stays optional on every edge, and no `Claim` type is declared (review item 9 as amended by Fengze). In the consuming store, provenance is one evidence row per value: source chunk or URL, excerpt, method and `as_of`. Live, 0 of 80,493 edges carry `claim_ids` and importers reject the key; declaring it required would describe a field that is never filled. A design note records the rule.
+
+### Decision 53: vocabularies — hazard definitions and one split; Solution-shaped urban systems retired
+
+**Hazards.** Every hazard has a one-line definition that states its boundary with its nearest neighbour (heat_wave is a discrete multi-day event; extreme_hot_weather is a hotter season or climate). Live, a search for heat waves found 17 of the 53 plans that address heat, because the other 36 were filed under extreme hot weather. Shared `undrr_terms` are de-duplicated (no term belongs to two hazards). `water_stress` is added beside `drought` (a chronic gap between demand and supply, as against a temporary precipitation shortfall; Probable Futures' water-balance map links to it). `rcc.sea_level_rise`, "Sea Level Rise / Coastal Erosion", named two hazards; it keeps its id and now means sea level rise, and `coastal_erosion` is new. Of its 615 live links, 268 mention only sea level, 45 only erosion, 26 both and 276 neither in their stored excerpt; a consumer re-files them. **Ids are not renamed** (review C-9): `vector-borne_disease` and the other hyphenated or dotted ids are keys in consumers' crosswalks, importers and staged data, and nobody reading the graph sees them.
+
+**Urban systems.** Every system has a definition, and one rule: an urban system is something a city has whether or not it adapts; a thing that is itself an intervention is a Solution. Ten terms are retired with `status: deprecated`, `deprecated_in` and `replaced_by` (the systems to use instead): green roofs and walls, permeable surfaces, constructed wetlands and bioswales, early warning, evacuation and sheltering, resilience hubs, hard engineering, disease monitoring, insurance markets, and vulnerable populations (a population group). Live, "Permeable pavements OPERATES_ON Permeable Surfaces" was a solution operating on itself; the ten carry 453 links. `cultural_heritage_sites`, `solid_waste_management` and `public_health_services` are added. **Not** the review's L-3: the two sectors with no subsectors (agriculture and food systems; emergency and disaster management) are in use as sector-level nodes (468 and 224 links) and stay.
+
+**Bindings.** Four type-level bindings named enum blocks that do not exist (`ipcc_action_types`, `actor_type`, `condition_type`, `barrier_type`); they now name `ipcc_action_type`, `implementing_actor_type` and `enabling_condition_type` (Barrier and EnablingCondition share the six domains). Seven inline enums are bound to the block that already held their values; the inline values are kept and `scripts/check_ontology.py` fails if the two copies differ (review C-1, C-2).
+
+**Checker.** `scripts/check_ontology.py` replaces the v0.3 LLM experiment as the repo's validator and runs on every PR (review P-10).
 
 ---
 

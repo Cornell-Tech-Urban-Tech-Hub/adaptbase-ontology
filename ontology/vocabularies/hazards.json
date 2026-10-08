@@ -1,7 +1,7 @@
 {
   "_source": "Primary structure: UNDRR-ISC Hazard Information Profiles (HIPs) 2025 — 7 of 8 hazard clusters (Extraterrestrial omitted as out of scope for urban climate adaptation). Hazards within clusters draw from C40/Arup Climate Hazard Typology (city-level climate hazards) and Resilient Cities Catalysts (RCC) taxonomy (non-climate acute shocks and slow-onset stresses).",
-  "_usage": "hazards.hazards_addressed[].hazard_id and hazard_category",
-  "_note": "Restructured in v0.1.1 from C40/Arup-primary to HIPs 2025-primary. Each cluster carries c40_arup_categories[] for legacy crosswalk. Each hazard carries c40_arup_category (the legacy C40/Arup parent), hazard_source ('c40_arup' or 'rcc'), and undrr_terms[] for matching UNDRR-framed source documents. The previous rcc_non_climate and rcc_slow_onset buckets were dissolved — their contents now sit in their proper HIPs clusters (Technological, Societal, Geohazards, Environmental).",
+  "_usage": "Hazard.hazard_id, Hazard.hazard_category",
+  "_note": "Restructured in v0.1.1 from C40/Arup-primary to HIPs 2025-primary. Each cluster carries c40_arup_categories[] for legacy crosswalk. Each hazard carries c40_arup_category (the legacy C40/Arup parent), hazard_source ('c40_arup' or 'rcc'), and undrr_terms[] for matching UNDRR-framed source documents. The previous rcc_non_climate and rcc_slow_onset buckets were dissolved — their contents now sit in their proper HIPs clusters (Technological, Societal, Geohazards, Environmental). v1.2: every hazard has a one-line definition stating its boundary with its nearest neighbour; water_stress and coastal_erosion added; rcc.sea_level_rise now means sea level rise only; overlapping undrr_terms de-duplicated (Decision 53).",
   "categories": [
     {
       "id": "meteorological_hydrological",
@@ -42,7 +42,8 @@
             "tidal flooding",
             "coastal inundation",
             "marine flood"
-          ]
+          ],
+          "definition": "Flooding of coastal land by the sea: high tides, king tides or storm-driven water above normal levels. Use storm_surge for the surge itself and rcc.sea_level_rise for the slow rise in mean sea level."
         },
         {
           "id": "flash_surface_flood",
@@ -55,7 +56,8 @@
             "pluvial flood",
             "surface runoff flooding",
             "urban flood"
-          ]
+          ],
+          "definition": "Flooding from intense rainfall that overwhelms drainage or soil before reaching a river (pluvial, surface-water or urban flooding), including flash floods in small, steep catchments. Use river_flood when a river overtops its banks."
         },
         {
           "id": "groundwater_flood",
@@ -66,7 +68,8 @@
             "groundwater flood",
             "groundwater flooding",
             "rising groundwater"
-          ]
+          ],
+          "definition": "Flooding caused by the water table rising above the ground surface or into basements and underground structures."
         },
         {
           "id": "river_flood",
@@ -77,9 +80,9 @@
             "riverine flood",
             "fluvial flood",
             "river flooding",
-            "river overflow",
-            "inundation"
-          ]
+            "river overflow"
+          ],
+          "definition": "Flooding when a river, stream or lake overtops its banks or defences (fluvial flooding). Use flash_surface_flood for rainfall flooding away from watercourses."
         },
         {
           "id": "cyclone_hurricane_typhoon",
@@ -92,7 +95,8 @@
             "typhoon",
             "cyclone",
             "severe tropical cyclone"
-          ]
+          ],
+          "definition": "A tropical cyclone of hurricane or typhoon strength (sustained winds of about 119 km/h or more), with its wind, rain and surge treated as one event. Use tropical_storm for weaker systems."
         },
         {
           "id": "severe_wind",
@@ -107,7 +111,8 @@
             "downburst",
             "dust storm",
             "sand storm"
-          ]
+          ],
+          "definition": "Damaging wind not from a tropical cyclone or tornado: windstorms, extratropical storms, derechos, downbursts, and dust or sand storms."
         },
         {
           "id": "tornado",
@@ -118,7 +123,8 @@
             "tornado",
             "twister",
             "funnel cloud"
-          ]
+          ],
+          "definition": "A rotating column of air in contact with the ground, typically from a thunderstorm."
         },
         {
           "id": "tropical_storm",
@@ -129,7 +135,8 @@
             "tropical storm",
             "tropical depression",
             "subtropical storm"
-          ]
+          ],
+          "definition": "A tropical cyclone below hurricane or typhoon strength (tropical depression or tropical storm)."
         },
         {
           "id": "heavy_snow",
@@ -142,7 +149,8 @@
             "blizzard",
             "snow storm",
             "heavy snowfall"
-          ]
+          ],
+          "definition": "Heavy snowfall, snowstorms and blizzards that disrupt movement, load structures or isolate places."
         },
         {
           "id": "rain_storm",
@@ -155,7 +163,8 @@
             "heavy rainfall",
             "extreme precipitation",
             "convective rainfall"
-          ]
+          ],
+          "definition": "Intense or prolonged rainfall as a weather event. Use flash_surface_flood or river_flood when the text describes the resulting flooding."
         },
         {
           "id": "extreme_hot_weather",
@@ -165,8 +174,12 @@
           "undrr_terms": [
             "extreme heat",
             "severe heat",
-            "high temperature"
-          ]
+            "high temperature",
+            "hot days",
+            "rising temperatures",
+            "warmer summers"
+          ],
+          "definition": "Hot conditions as a seasonal or long-term regime: hotter summers, more hot days and nights, rising average temperatures. Use heat_wave for a discrete multi-day event."
         },
         {
           "id": "heat_wave",
@@ -176,9 +189,9 @@
           "undrr_terms": [
             "heat wave",
             "heatwave",
-            "heat stress",
             "extreme heat event"
-          ]
+          ],
+          "definition": "A discrete event of several consecutive days with temperatures above a local threshold. Use extreme_hot_weather for hotter seasons or a warmer climate in general."
         },
         {
           "id": "cold_wave",
@@ -189,7 +202,8 @@
             "cold wave",
             "cold spell",
             "cold surge"
-          ]
+          ],
+          "definition": "A discrete event of several consecutive days with temperatures below a local threshold. Use extreme_cold_weather for cold seasons or frost in general."
         },
         {
           "id": "extreme_cold_weather",
@@ -201,7 +215,8 @@
             "severe cold",
             "hard freeze",
             "frost"
-          ]
+          ],
+          "definition": "Cold conditions as a seasonal or recurring regime: severe winters, hard freezes and frost. Use cold_wave for a discrete multi-day event."
         },
         {
           "id": "ice_hail_freezing_rain",
@@ -215,7 +230,8 @@
             "hail",
             "hailstorm",
             "sleet"
-          ]
+          ],
+          "definition": "Ice storms, freezing rain, glaze, sleet and hail."
         },
         {
           "id": "fog",
@@ -227,7 +243,8 @@
             "dense fog",
             "freezing fog",
             "advection fog"
-          ]
+          ],
+          "definition": "Fog dense enough to disrupt transport or operations."
         },
         {
           "id": "electrical_storm",
@@ -239,7 +256,8 @@
             "thunderstorm",
             "electrical storm",
             "convective storm"
-          ]
+          ],
+          "definition": "Thunderstorms and lightning as a hazard to people, structures or power and communication systems."
         },
         {
           "id": "storm_surge",
@@ -251,7 +269,8 @@
             "storm tide",
             "coastal surge",
             "tidal surge"
-          ]
+          ],
+          "definition": "A temporary rise of sea level driven by a storm's winds and low pressure. Use coastal_flood for tidal flooding without a storm, and cyclone_hurricane_typhoon when the whole cyclone is the subject."
         },
         {
           "id": "drought",
@@ -264,10 +283,24 @@
             "hydrological drought",
             "agricultural drought",
             "meteorological drought",
-            "water shortage",
-            "water stress",
             "socioeconomic drought"
-          ]
+          ],
+          "definition": "A prolonged period of below-normal precipitation that leaves too little water for ecosystems, agriculture or supply (meteorological, agricultural or hydrological drought). Use water_stress when demand persistently outstrips supply, with or without a dry spell."
+        },
+        {
+          "id": "water_stress",
+          "name": "Water stress",
+          "c40_arup_category": "water_scarcity",
+          "hazard_source": "c40_arup",
+          "undrr_terms": [
+            "water stress",
+            "water scarcity",
+            "water shortage",
+            "chronic water shortage",
+            "baseline water stress"
+          ],
+          "added_in": "v1.2",
+          "definition": "A chronic gap between water demand and available supply, from overuse, growth or a declining resource, whether or not there is a drought. Use drought for a temporary shortfall in precipitation."
         }
       ]
     },
@@ -296,7 +329,8 @@
             "snow avalanche",
             "ice avalanche",
             "slab avalanche"
-          ]
+          ],
+          "definition": "A rapid flow of snow or ice down a slope."
         },
         {
           "id": "landslide",
@@ -310,7 +344,8 @@
             "mudflow",
             "debris avalanche",
             "slope failure"
-          ]
+          ],
+          "definition": "The movement of rock, earth or debris down a slope, including debris flows and mudslides. Use rockfall for falling rock and rcc.liquefaction for earthquake-driven ground failure."
         },
         {
           "id": "rockfall",
@@ -322,7 +357,8 @@
             "rock fall",
             "rock slide",
             "rockslide"
-          ]
+          ],
+          "definition": "Rock falling, bouncing or sliding from a steep slope or cliff."
         },
         {
           "id": "subsidence",
@@ -332,10 +368,26 @@
           "undrr_terms": [
             "subsidence",
             "ground subsidence",
-            "land subsidence",
-            "ground settlement",
             "sinkholes"
-          ]
+          ],
+          "definition": "A sudden or localised sinking of the ground, such as a sinkhole or collapse. Use rcc.subsidence_chronic for gradual, widespread sinking over years."
+        },
+        {
+          "id": "coastal_erosion",
+          "name": "Coastal erosion",
+          "c40_arup_category": null,
+          "hazard_source": "rcc",
+          "undrr_terms": [
+            "coastal erosion",
+            "shoreline erosion",
+            "shoreline retreat",
+            "beach erosion",
+            "cliff erosion",
+            "dune erosion"
+          ],
+          "added_in": "v1.2",
+          "_note": "v1.2 (Decision 53): split from rcc.sea_level_rise ('Sea Level Rise / Coastal Erosion'), which named two hazards. The id has no rcc. prefix; hazard_source carries the source.",
+          "definition": "The loss of land, beaches, dunes or cliffs at the coast to waves, currents and storms, including shoreline retreat. Use rcc.sea_level_rise for the rise in sea level itself."
         },
         {
           "id": "tsunami",
@@ -347,7 +399,8 @@
             "tsunami",
             "seismic sea wave",
             "tidal wave"
-          ]
+          ],
+          "definition": "A series of sea waves caused by the displacement of water, usually by an earthquake or landslide."
         },
         {
           "id": "rcc.earthquake",
@@ -358,7 +411,8 @@
             "earthquake",
             "seismic event",
             "seismic shock"
-          ]
+          ],
+          "definition": "Ground shaking from a sudden release of energy in the earth's crust."
         },
         {
           "id": "rcc.volcanic_activity",
@@ -371,7 +425,8 @@
             "lava flow",
             "ash fall",
             "pyroclastic flow"
-          ]
+          ],
+          "definition": "Eruptions and their effects: lava, ash fall, gases and pyroclastic flows."
         },
         {
           "id": "rcc.liquefaction",
@@ -383,7 +438,8 @@
             "liquefaction",
             "soil liquefaction",
             "seismic liquefaction"
-          ]
+          ],
+          "definition": "Ground losing strength and behaving like a liquid during earthquake shaking."
         },
         {
           "id": "rcc.subsidence_chronic",
@@ -395,7 +451,8 @@
             "land subsidence",
             "anthropogenic subsidence",
             "ground settling"
-          ]
+          ],
+          "definition": "Gradual, widespread sinking of the land over years, from groundwater extraction, soil compaction or peat loss. Use subsidence for a sudden, local collapse."
         }
       ]
     },
@@ -423,7 +480,8 @@
             "bush fire",
             "wildland fire",
             "woodland fire"
-          ]
+          ],
+          "definition": "Uncontrolled fire in forest or woodland, including bushfires and wildfire at the urban edge."
         },
         {
           "id": "land_fire",
@@ -436,19 +494,21 @@
             "savanna fire",
             "grass fire",
             "scrubland fire"
-          ]
+          ],
+          "definition": "Uncontrolled fire in grassland, savanna or scrub."
         },
         {
           "id": "rcc.sea_level_rise",
-          "name": "Sea Level Rise / Coastal Erosion",
+          "name": "Sea level rise",
           "c40_arup_category": null,
           "hazard_source": "rcc",
           "undrr_terms": [
             "sea level rise",
-            "coastal erosion",
-            "shoreline retreat",
-            "relative sea level rise"
-          ]
+            "sea-level rise",
+            "relative sea level rise",
+            "rising sea levels"
+          ],
+          "definition": "The long-term rise in mean sea level and its chronic effects: permanent inundation of low land and higher baselines for tides and surges. Use coastal_erosion for loss of shoreline material and coastal_flood for flooding events."
         },
         {
           "id": "rcc.environmental_degradation",
@@ -460,7 +520,8 @@
             "ecosystem degradation",
             "land degradation",
             "soil degradation"
-          ]
+          ],
+          "definition": "The decline of soil, land, water or ecosystem quality from human pressure, such as contamination or degraded land. Use rcc.loss_of_biodiversity when species or habitat loss is the subject."
         },
         {
           "id": "rcc.loss_of_biodiversity",
@@ -472,7 +533,8 @@
             "species loss",
             "habitat loss",
             "ecosystem collapse"
-          ]
+          ],
+          "definition": "The loss of species, habitats or ecosystems."
         },
         {
           "id": "rcc.poor_air_quality",
@@ -484,7 +546,8 @@
             "poor air quality",
             "particulate matter",
             "smog"
-          ]
+          ],
+          "definition": "Persistent or recurring air pollution (particulate matter, ozone, smog) at levels harmful to health."
         },
         {
           "id": "rcc.invasive_species",
@@ -495,7 +558,8 @@
             "invasive species",
             "alien species",
             "biological invasion"
-          ]
+          ],
+          "definition": "Non-native species that spread and harm ecosystems, agriculture or infrastructure."
         }
       ]
     },
@@ -516,12 +580,11 @@
           "c40_arup_category": "insects_and_microorganisms",
           "hazard_source": "c40_arup",
           "undrr_terms": [
-            "epidemic",
             "airborne disease",
             "respiratory disease outbreak",
-            "airborne pathogen",
-            "pandemic"
-          ]
+            "airborne pathogen"
+          ],
+          "definition": "Disease spread through the air between people or from the environment, such as influenza or respiratory epidemics. Use rcc.disease_outbreak when the text names an outbreak without its mode of transmission."
         },
         {
           "id": "insect_infestation",
@@ -533,7 +596,8 @@
             "locust infestation",
             "pest outbreak",
             "agricultural pest"
-          ]
+          ],
+          "definition": "Outbreaks of insects or other pests that damage crops, forests, buildings or stored goods."
         },
         {
           "id": "vector-borne_disease",
@@ -547,7 +611,8 @@
             "malaria",
             "dengue",
             "mosquito-borne disease"
-          ]
+          ],
+          "definition": "Disease carried by mosquitoes, ticks or other vectors, such as dengue, malaria or Lyme disease."
         },
         {
           "id": "water-borne_disease",
@@ -559,7 +624,8 @@
             "water-borne disease",
             "waterborne epidemic",
             "water contamination (biological)"
-          ]
+          ],
+          "definition": "Disease spread through contaminated water, such as cholera."
         },
         {
           "id": "rcc.disease_outbreak",
@@ -572,7 +638,8 @@
             "epidemic",
             "pandemic",
             "infectious disease outbreak"
-          ]
+          ],
+          "definition": "An outbreak, epidemic or pandemic when the text does not state how it spreads. Use air-borne_disease, vector-borne_disease or water-borne_disease when it does."
         }
       ]
     },
@@ -595,7 +662,8 @@
           "undrr_terms": [
             "ocean acidification",
             "acidification of the ocean"
-          ]
+          ],
+          "definition": "The fall in seawater pH from absorbed carbon dioxide, harming marine life and fisheries."
         },
         {
           "id": "salt_water_intrusion",
@@ -607,7 +675,8 @@
             "saltwater intrusion",
             "salinity intrusion",
             "seawater intrusion"
-          ]
+          ],
+          "definition": "Seawater moving into freshwater aquifers, rivers or soils."
         },
         {
           "id": "rcc.hazmat_accident",
@@ -619,7 +688,8 @@
             "chemical spill",
             "toxic release",
             "industrial accident"
-          ]
+          ],
+          "definition": "An accidental release of hazardous chemicals or materials, such as an industrial spill."
         }
       ]
     },
@@ -646,7 +716,8 @@
             "cyber incident",
             "cybersecurity breach",
             "ICT system failure"
-          ]
+          ],
+          "definition": "A deliberate attack on, or failure of, digital and communication systems that disrupts city services."
         },
         {
           "id": "rcc.power_outage",
@@ -658,7 +729,8 @@
             "blackout",
             "grid failure",
             "electrical outage"
-          ]
+          ],
+          "definition": "A loss of electricity supply over an area, whatever its cause. Use rcc.infrastructure_failure for failures of other systems."
         },
         {
           "id": "rcc.infrastructure_failure",
@@ -670,7 +742,8 @@
             "critical infrastructure failure",
             "system failure",
             "cascading infrastructure failure"
-          ]
+          ],
+          "definition": "The failure of critical infrastructure other than the power supply, such as a dam, bridge or water main, including cascading failures."
         },
         {
           "id": "rcc.nuclear_incident",
@@ -682,7 +755,8 @@
             "nuclear accident",
             "radiological incident",
             "radiation release"
-          ]
+          ],
+          "definition": "An accident or release at a nuclear facility."
         }
       ]
     },
@@ -708,7 +782,8 @@
             "riot",
             "social unrest",
             "civil disorder"
-          ]
+          ],
+          "definition": "Riots, civil disorder and sustained social unrest."
         },
         {
           "id": "rcc.terrorist_attack",
@@ -719,7 +794,8 @@
             "terrorist attack",
             "terrorism",
             "violent attack"
-          ]
+          ],
+          "definition": "Deliberate violence intended to cause fear or harm to further political or ideological aims."
         },
         {
           "id": "rcc.financial_economic_crisis",
@@ -731,7 +807,8 @@
             "economic crisis",
             "economic shock",
             "recession"
-          ]
+          ],
+          "definition": "A financial crisis, recession or economic shock that hits city revenues, jobs or households."
         }
       ]
     }

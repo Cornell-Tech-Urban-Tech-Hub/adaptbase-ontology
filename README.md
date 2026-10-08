@@ -5,7 +5,7 @@ maps the entities, relationships, and vocabularies needed to organize, compare, 
 analyze how cities respond to climate hazards.
 
 **Live viewer:** [ontology.adaptbase.us](https://ontology.adaptbase.us/)
-**Current version:** v1.1 (2026-10-06)
+**Current version:** v1.2 (2026-10-08)
 
 ---
 
@@ -20,9 +20,6 @@ issues come up; items here are the next things we work on.
   corpus has been extracted, review it again against what plans actually prescribe (proposed
   concepts, Solutions with no `concept_id`, the dropped umbrellas, the 22 unmapped CDP labels)
   and revise it in one versioned pass.
-- **`IMPLEMENTED_IN` deployment properties** (`deployment_context`, `zone_type`,
-  `area_km2`, `population_density`, `land_use_type`) have the one-edge-per-pair problem
-  Decision 38 found for `deployment_year`; move or drop them.
 - **Finance follow-ons** (Decision 43 §10): a `FundingAward` registry with external ids
   (USAspending, SAM); currency conversion at read time; repayment flows.
 - **A population-group concept node** so equity intent can be lifted from
@@ -31,6 +28,20 @@ issues come up; items here are the next things we work on.
   types and inter-run agreement is measured; and a Mechanism concept list (CQ-43).
 - **`instrument_type` gaps** not taken in v1.1: community land trust, developer
   agreement, investment fund — decide whether any is an instrument at all.
+- **v1.3: a pruning pass.** Delete entity types, edge pairs and properties the extracted
+  plans don't use, measured after the extraction prompt review on a re-extracted sample
+  (many "unused" classifications are ones the extractor never asked for). Census of
+  2026-10-08 in adaptbase-core `_planning/to-do/ONTOLOGY-V1.3-PRUNING-CENSUS.md`:
+  Supplier (2 nodes), CapitalProject (6 of 114 plans), PlanningData (48% with no edges)
+  are the first to examine.
+- **Left out of v1.2 on purpose** (review FABLE-ONTOLOGY-REVIEW-2026-10-06): Mechanism
+  node vs property (item 4: kept); the Solution-categories tier review and folding Supplier
+  into Stakeholder (item 10: with the concept re-review above); re-anchoring `BLOCKS` /
+  `REQUIRES` (L-5); a `HazardEvent` type (P-2); `_usd` money fields → amount + currency
+  (C-7); `derived_from` on Hazard / UrbanSystem / ResilienceGoal category fields (L-12); CRF
+  goal descriptions (Y-1); hazard id normalisation (C-9: declined, ids are keys in consumers).
+- **Framework crosswalk and vocabularies README** still describe pre-v1 models in places
+  (review A-1, A-2); rewrite them to current ids.
 
 > **For Claude / future planning sessions:** Before starting any non-trivial change,
 > read this section. If your work intersects an item, advance that item rather than
@@ -48,11 +59,11 @@ graph spans planning, engineering, financing, implementation, governance, and ev
 **Design principles**
 
 - **Solutions are classified by what they ARE, not what they DO.** Function is expressed
-  as typed relationships (`MITIGATES`, `OPERATES_ON`, `USES_MECHANISM`) rather than baked
+  as typed relationships (`MITIGATES`, `OPERATES_ON`, `WORKS_BY`) rather than baked
   into the taxonomy.
 - **Vocabularies are guidance, not rigid constraints.** Validation is advisory, so
   edge cases and new terms don't break extraction.
-- **Provenance is first-class.** Every value can trace back to a claim with a source URL.
+- **Provenance is first-class.** Every value traces to an evidence row with its source (Decision 52).
 
 The ontology binds to several external frameworks where they exist (C40/Arup Climate
 Hazard Typology, IPCC AR6 adaptation action types, City Resilience Framework 2024,

@@ -1,8 +1,8 @@
 {
   "@context": "../context.jsonld",
   "_source": "Primary structure: UNDRR-ISC Hazard Information Profiles (HIPs) 2025 — 7 of 8 hazard clusters (Extraterrestrial omitted as out of scope for urban climate adaptation). Hazards within clusters draw from C40/Arup Climate Hazard Typology (city-level climate hazards) and Resilient Cities Catalysts (RCC) taxonomy (non-climate acute shocks and slow-onset stresses).",
-  "_usage": "hazards.hazards_addressed[].hazard_id and hazard_category",
-  "_note": "Restructured in v0.1.1 from C40/Arup-primary to HIPs 2025-primary. Each cluster carries c40_arup_categories[] for legacy crosswalk. Each hazard carries c40_arup_category (the legacy C40/Arup parent), hazard_source ('c40_arup' or 'rcc'), and undrr_terms[] for matching UNDRR-framed source documents. The previous rcc_non_climate and rcc_slow_onset buckets were dissolved — their contents now sit in their proper HIPs clusters (Technological, Societal, Geohazards, Environmental).",
+  "_usage": "Hazard.hazard_id, Hazard.hazard_category",
+  "_note": "Restructured in v0.1.1 from C40/Arup-primary to HIPs 2025-primary. Each cluster carries c40_arup_categories[] for legacy crosswalk. Each hazard carries c40_arup_category (the legacy C40/Arup parent), hazard_source ('c40_arup' or 'rcc'), and undrr_terms[] for matching UNDRR-framed source documents. The previous rcc_non_climate and rcc_slow_onset buckets were dissolved — their contents now sit in their proper HIPs clusters (Technological, Societal, Geohazards, Environmental). v1.2: every hazard has a one-line definition stating its boundary with its nearest neighbour; water_stress and coastal_erosion added; rcc.sea_level_rise now means sea level rise only; overlapping undrr_terms de-duplicated (Decision 53).",
   "categories": [
     {
       "id": "meteorological_hydrological",
@@ -44,6 +44,7 @@
             "coastal inundation",
             "marine flood"
           ],
+          "definition": "Flooding of coastal land by the sea: high tides, king tides or storm-driven water above normal levels. Use storm_surge for the surge itself and rcc.sea_level_rise for the slow rise in mean sea level.",
           "@id": "abv:hazards-coastal_flood",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -65,6 +66,7 @@
             "surface runoff flooding",
             "urban flood"
           ],
+          "definition": "Flooding from intense rainfall that overwhelms drainage or soil before reaching a river (pluvial, surface-water or urban flooding), including flash floods in small, steep catchments. Use river_flood when a river overtops its banks.",
           "@id": "abv:hazards-flash_surface_flood",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -84,6 +86,7 @@
             "groundwater flooding",
             "rising groundwater"
           ],
+          "definition": "Flooding caused by the water table rising above the ground surface or into basements and underground structures.",
           "@id": "abv:hazards-groundwater_flood",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -102,9 +105,9 @@
             "riverine flood",
             "fluvial flood",
             "river flooding",
-            "river overflow",
-            "inundation"
+            "river overflow"
           ],
+          "definition": "Flooding when a river, stream or lake overtops its banks or defences (fluvial flooding). Use flash_surface_flood for rainfall flooding away from watercourses.",
           "@id": "abv:hazards-river_flood",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -126,6 +129,7 @@
             "cyclone",
             "severe tropical cyclone"
           ],
+          "definition": "A tropical cyclone of hurricane or typhoon strength (sustained winds of about 119 km/h or more), with its wind, rain and surge treated as one event. Use tropical_storm for weaker systems.",
           "@id": "abv:hazards-cyclone_hurricane_typhoon",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -149,6 +153,7 @@
             "dust storm",
             "sand storm"
           ],
+          "definition": "Damaging wind not from a tropical cyclone or tornado: windstorms, extratropical storms, derechos, downbursts, and dust or sand storms.",
           "@id": "abv:hazards-severe_wind",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -168,6 +173,7 @@
             "twister",
             "funnel cloud"
           ],
+          "definition": "A rotating column of air in contact with the ground, typically from a thunderstorm.",
           "@id": "abv:hazards-tornado",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -187,6 +193,7 @@
             "tropical depression",
             "subtropical storm"
           ],
+          "definition": "A tropical cyclone below hurricane or typhoon strength (tropical depression or tropical storm).",
           "@id": "abv:hazards-tropical_storm",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -208,6 +215,7 @@
             "snow storm",
             "heavy snowfall"
           ],
+          "definition": "Heavy snowfall, snowstorms and blizzards that disrupt movement, load structures or isolate places.",
           "@id": "abv:hazards-heavy_snow",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -229,6 +237,7 @@
             "extreme precipitation",
             "convective rainfall"
           ],
+          "definition": "Intense or prolonged rainfall as a weather event. Use flash_surface_flood or river_flood when the text describes the resulting flooding.",
           "@id": "abv:hazards-rain_storm",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -246,8 +255,12 @@
           "undrr_terms": [
             "extreme heat",
             "severe heat",
-            "high temperature"
+            "high temperature",
+            "hot days",
+            "rising temperatures",
+            "warmer summers"
           ],
+          "definition": "Hot conditions as a seasonal or long-term regime: hotter summers, more hot days and nights, rising average temperatures. Use heat_wave for a discrete multi-day event.",
           "@id": "abv:hazards-extreme_hot_weather",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -265,9 +278,9 @@
           "undrr_terms": [
             "heat wave",
             "heatwave",
-            "heat stress",
             "extreme heat event"
           ],
+          "definition": "A discrete event of several consecutive days with temperatures above a local threshold. Use extreme_hot_weather for hotter seasons or a warmer climate in general.",
           "@id": "abv:hazards-heat_wave",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -287,6 +300,7 @@
             "cold spell",
             "cold surge"
           ],
+          "definition": "A discrete event of several consecutive days with temperatures below a local threshold. Use extreme_cold_weather for cold seasons or frost in general.",
           "@id": "abv:hazards-cold_wave",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -307,6 +321,7 @@
             "hard freeze",
             "frost"
           ],
+          "definition": "Cold conditions as a seasonal or recurring regime: severe winters, hard freezes and frost. Use cold_wave for a discrete multi-day event.",
           "@id": "abv:hazards-extreme_cold_weather",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -329,6 +344,7 @@
             "hailstorm",
             "sleet"
           ],
+          "definition": "Ice storms, freezing rain, glaze, sleet and hail.",
           "@id": "abv:hazards-ice_hail_freezing_rain",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -349,6 +365,7 @@
             "freezing fog",
             "advection fog"
           ],
+          "definition": "Fog dense enough to disrupt transport or operations.",
           "@id": "abv:hazards-fog",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -369,6 +386,7 @@
             "electrical storm",
             "convective storm"
           ],
+          "definition": "Thunderstorms and lightning as a hazard to people, structures or power and communication systems.",
           "@id": "abv:hazards-electrical_storm",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -389,6 +407,7 @@
             "coastal surge",
             "tidal surge"
           ],
+          "definition": "A temporary rise of sea level driven by a storm's winds and low pressure. Use coastal_flood for tidal flooding without a storm, and cyclone_hurricane_typhoon when the whole cyclone is the subject.",
           "@id": "abv:hazards-storm_surge",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -409,11 +428,33 @@
             "hydrological drought",
             "agricultural drought",
             "meteorological drought",
-            "water shortage",
-            "water stress",
             "socioeconomic drought"
           ],
+          "definition": "A prolonged period of below-normal precipitation that leaves too little water for ecosystems, agriculture or supply (meteorological, agricultural or hydrological drought). Use water_stress when demand persistently outstrips supply, with or without a dry spell.",
           "@id": "abv:hazards-drought",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:hazards-meteorological_hydrological"
+          },
+          "skos:inScheme": {
+            "@id": "abv:hazards"
+          }
+        },
+        {
+          "id": "water_stress",
+          "name": "Water stress",
+          "c40_arup_category": "water_scarcity",
+          "hazard_source": "c40_arup",
+          "undrr_terms": [
+            "water stress",
+            "water scarcity",
+            "water shortage",
+            "chronic water shortage",
+            "baseline water stress"
+          ],
+          "added_in": "v1.2",
+          "definition": "A chronic gap between water demand and available supply, from overuse, growth or a declining resource, whether or not there is a drought. Use drought for a temporary shortfall in precipitation.",
+          "@id": "abv:hazards-water_stress",
           "@type": "skos:Concept",
           "skos:broader": {
             "@id": "abv:hazards-meteorological_hydrological"
@@ -455,6 +496,7 @@
             "ice avalanche",
             "slab avalanche"
           ],
+          "definition": "A rapid flow of snow or ice down a slope.",
           "@id": "abv:hazards-avalanche",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -477,6 +519,7 @@
             "debris avalanche",
             "slope failure"
           ],
+          "definition": "The movement of rock, earth or debris down a slope, including debris flows and mudslides. Use rockfall for falling rock and rcc.liquefaction for earthquake-driven ground failure.",
           "@id": "abv:hazards-landslide",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -497,6 +540,7 @@
             "rock slide",
             "rockslide"
           ],
+          "definition": "Rock falling, bouncing or sliding from a steep slope or cliff.",
           "@id": "abv:hazards-rockfall",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -514,11 +558,35 @@
           "undrr_terms": [
             "subsidence",
             "ground subsidence",
-            "land subsidence",
-            "ground settlement",
             "sinkholes"
           ],
+          "definition": "A sudden or localised sinking of the ground, such as a sinkhole or collapse. Use rcc.subsidence_chronic for gradual, widespread sinking over years.",
           "@id": "abv:hazards-subsidence",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:hazards-geohazards"
+          },
+          "skos:inScheme": {
+            "@id": "abv:hazards"
+          }
+        },
+        {
+          "id": "coastal_erosion",
+          "name": "Coastal erosion",
+          "c40_arup_category": null,
+          "hazard_source": "rcc",
+          "undrr_terms": [
+            "coastal erosion",
+            "shoreline erosion",
+            "shoreline retreat",
+            "beach erosion",
+            "cliff erosion",
+            "dune erosion"
+          ],
+          "added_in": "v1.2",
+          "_note": "v1.2 (Decision 53): split from rcc.sea_level_rise ('Sea Level Rise / Coastal Erosion'), which named two hazards. The id has no rcc. prefix; hazard_source carries the source.",
+          "definition": "The loss of land, beaches, dunes or cliffs at the coast to waves, currents and storms, including shoreline retreat. Use rcc.sea_level_rise for the rise in sea level itself.",
+          "@id": "abv:hazards-coastal_erosion",
           "@type": "skos:Concept",
           "skos:broader": {
             "@id": "abv:hazards-geohazards"
@@ -538,6 +606,7 @@
             "seismic sea wave",
             "tidal wave"
           ],
+          "definition": "A series of sea waves caused by the displacement of water, usually by an earthquake or landslide.",
           "@id": "abv:hazards-tsunami",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -557,6 +626,7 @@
             "seismic event",
             "seismic shock"
           ],
+          "definition": "Ground shaking from a sudden release of energy in the earth's crust.",
           "@id": "abv:hazards-rcc.earthquake",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -578,6 +648,7 @@
             "ash fall",
             "pyroclastic flow"
           ],
+          "definition": "Eruptions and their effects: lava, ash fall, gases and pyroclastic flows.",
           "@id": "abv:hazards-rcc.volcanic_activity",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -598,6 +669,7 @@
             "soil liquefaction",
             "seismic liquefaction"
           ],
+          "definition": "Ground losing strength and behaving like a liquid during earthquake shaking.",
           "@id": "abv:hazards-rcc.liquefaction",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -618,6 +690,7 @@
             "anthropogenic subsidence",
             "ground settling"
           ],
+          "definition": "Gradual, widespread sinking of the land over years, from groundwater extraction, soil compaction or peat loss. Use subsidence for a sudden, local collapse.",
           "@id": "abv:hazards-rcc.subsidence_chronic",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -659,6 +732,7 @@
             "wildland fire",
             "woodland fire"
           ],
+          "definition": "Uncontrolled fire in forest or woodland, including bushfires and wildfire at the urban edge.",
           "@id": "abv:hazards-forest_fire",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -680,6 +754,7 @@
             "grass fire",
             "scrubland fire"
           ],
+          "definition": "Uncontrolled fire in grassland, savanna or scrub.",
           "@id": "abv:hazards-land_fire",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -691,15 +766,16 @@
         },
         {
           "id": "rcc.sea_level_rise",
-          "name": "Sea Level Rise / Coastal Erosion",
+          "name": "Sea level rise",
           "c40_arup_category": null,
           "hazard_source": "rcc",
           "undrr_terms": [
             "sea level rise",
-            "coastal erosion",
-            "shoreline retreat",
-            "relative sea level rise"
+            "sea-level rise",
+            "relative sea level rise",
+            "rising sea levels"
           ],
+          "definition": "The long-term rise in mean sea level and its chronic effects: permanent inundation of low land and higher baselines for tides and surges. Use coastal_erosion for loss of shoreline material and coastal_flood for flooding events.",
           "@id": "abv:hazards-rcc.sea_level_rise",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -720,6 +796,7 @@
             "land degradation",
             "soil degradation"
           ],
+          "definition": "The decline of soil, land, water or ecosystem quality from human pressure, such as contamination or degraded land. Use rcc.loss_of_biodiversity when species or habitat loss is the subject.",
           "@id": "abv:hazards-rcc.environmental_degradation",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -740,6 +817,7 @@
             "habitat loss",
             "ecosystem collapse"
           ],
+          "definition": "The loss of species, habitats or ecosystems.",
           "@id": "abv:hazards-rcc.loss_of_biodiversity",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -760,6 +838,7 @@
             "particulate matter",
             "smog"
           ],
+          "definition": "Persistent or recurring air pollution (particulate matter, ozone, smog) at levels harmful to health.",
           "@id": "abv:hazards-rcc.poor_air_quality",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -779,6 +858,7 @@
             "alien species",
             "biological invasion"
           ],
+          "definition": "Non-native species that spread and harm ecosystems, agriculture or infrastructure.",
           "@id": "abv:hazards-rcc.invasive_species",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -812,12 +892,11 @@
           "c40_arup_category": "insects_and_microorganisms",
           "hazard_source": "c40_arup",
           "undrr_terms": [
-            "epidemic",
             "airborne disease",
             "respiratory disease outbreak",
-            "airborne pathogen",
-            "pandemic"
+            "airborne pathogen"
           ],
+          "definition": "Disease spread through the air between people or from the environment, such as influenza or respiratory epidemics. Use rcc.disease_outbreak when the text names an outbreak without its mode of transmission.",
           "@id": "abv:hazards-air-borne_disease",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -838,6 +917,7 @@
             "pest outbreak",
             "agricultural pest"
           ],
+          "definition": "Outbreaks of insects or other pests that damage crops, forests, buildings or stored goods.",
           "@id": "abv:hazards-insect_infestation",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -860,6 +940,7 @@
             "dengue",
             "mosquito-borne disease"
           ],
+          "definition": "Disease carried by mosquitoes, ticks or other vectors, such as dengue, malaria or Lyme disease.",
           "@id": "abv:hazards-vector-borne_disease",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -880,6 +961,7 @@
             "waterborne epidemic",
             "water contamination (biological)"
           ],
+          "definition": "Disease spread through contaminated water, such as cholera.",
           "@id": "abv:hazards-water-borne_disease",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -901,6 +983,7 @@
             "pandemic",
             "infectious disease outbreak"
           ],
+          "definition": "An outbreak, epidemic or pandemic when the text does not state how it spreads. Use air-borne_disease, vector-borne_disease or water-borne_disease when it does.",
           "@id": "abv:hazards-rcc.disease_outbreak",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -937,6 +1020,7 @@
             "ocean acidification",
             "acidification of the ocean"
           ],
+          "definition": "The fall in seawater pH from absorbed carbon dioxide, harming marine life and fisheries.",
           "@id": "abv:hazards-ocean_acidification",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -957,6 +1041,7 @@
             "salinity intrusion",
             "seawater intrusion"
           ],
+          "definition": "Seawater moving into freshwater aquifers, rivers or soils.",
           "@id": "abv:hazards-salt_water_intrusion",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -977,6 +1062,7 @@
             "toxic release",
             "industrial accident"
           ],
+          "definition": "An accidental release of hazardous chemicals or materials, such as an industrial spill.",
           "@id": "abv:hazards-rcc.hazmat_accident",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -1017,6 +1103,7 @@
             "cybersecurity breach",
             "ICT system failure"
           ],
+          "definition": "A deliberate attack on, or failure of, digital and communication systems that disrupts city services.",
           "@id": "abv:hazards-rcc.cyber_attack",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -1037,6 +1124,7 @@
             "grid failure",
             "electrical outage"
           ],
+          "definition": "A loss of electricity supply over an area, whatever its cause. Use rcc.infrastructure_failure for failures of other systems.",
           "@id": "abv:hazards-rcc.power_outage",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -1057,6 +1145,7 @@
             "system failure",
             "cascading infrastructure failure"
           ],
+          "definition": "The failure of critical infrastructure other than the power supply, such as a dam, bridge or water main, including cascading failures.",
           "@id": "abv:hazards-rcc.infrastructure_failure",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -1077,6 +1166,7 @@
             "radiological incident",
             "radiation release"
           ],
+          "definition": "An accident or release at a nuclear facility.",
           "@id": "abv:hazards-rcc.nuclear_incident",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -1116,6 +1206,7 @@
             "social unrest",
             "civil disorder"
           ],
+          "definition": "Riots, civil disorder and sustained social unrest.",
           "@id": "abv:hazards-rcc.riot_civil_unrest",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -1135,6 +1226,7 @@
             "terrorism",
             "violent attack"
           ],
+          "definition": "Deliberate violence intended to cause fear or harm to further political or ideological aims.",
           "@id": "abv:hazards-rcc.terrorist_attack",
           "@type": "skos:Concept",
           "skos:broader": {
@@ -1155,6 +1247,7 @@
             "economic shock",
             "recession"
           ],
+          "definition": "A financial crisis, recession or economic shock that hits city revenues, jobs or households.",
           "@id": "abv:hazards-rcc.financial_economic_crisis",
           "@type": "skos:Concept",
           "skos:broader": {
