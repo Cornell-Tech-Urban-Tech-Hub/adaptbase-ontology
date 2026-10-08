@@ -467,6 +467,10 @@ the pattern for later datasets.
   - *Climate Bonds Resilience Taxonomy (CBRT v1).* Its licence is personal-use
     only, so no CBRT content enters this repo; a concept-to-CBRT crosswalk is
     **dropped**. Core may read it privately to find missing concepts.
+  - *FEMA Community Rating System and benefit-cost categories:* agreed as
+    crosswalk labels on solution concepts (CRS activities, BCA project types)
+    plus a CRS-class table in core, but **deferred past v1.2**; not part of
+    this bump (core `_planning/to-do/FEMA-CRS-BCA-TAXONOMY-PLAN.md`).
   - **Add `Action.resilience_contribution`** (enum: `adapted` — makes the
     acting party's own asset or activity resilient; `enabling` — builds the
     resilience of others). The split is the EU Taxonomy's (Regulation (EU)
