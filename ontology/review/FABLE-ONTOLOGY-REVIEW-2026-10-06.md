@@ -458,9 +458,12 @@ the pattern for later datasets.
   evidence store; §5.3 coordinates are a reported backfill plus a
   misattribution worklist, not a copy.
 - **Two taxonomies considered:**
-  - *Weitz Urban Adaptation Tech Taxonomy (2025-05-15).* `solution-categories`
-    already carries all 90 of its families verbatim; the decision on
-    re-deriving tier 1 (item 10 / P-4 / P-5) is pending.
+  - *Weitz Urban Adaptation Tech Taxonomy (2025-05-15).* Tiers 1 and 2 of
+    `solution-categories` already are Weitz (11 sectors, 90 families, verbatim).
+    **Decision: keep the existing Solution catalog plan (core #321) unchanged;
+    no crosswalk is stored.** Weitz is used only as a completeness check when
+    the concept list is re-reviewed: every Weitz family should end up with
+    concepts or a plain reason why not (67 of 90 have concepts today).
   - *Climate Bonds Resilience Taxonomy (CBRT v1).* Its licence is personal-use
     only, so no CBRT content enters this repo; a concept-to-CBRT crosswalk is
     **dropped**. Core may read it privately to find missing concepts.
