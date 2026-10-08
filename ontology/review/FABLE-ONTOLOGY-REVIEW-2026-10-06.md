@@ -443,3 +443,30 @@ edges derived from it by a stated, versioned rule, with per-source
 provenance.* This records why Probable Futures adds no node type, and sets
 the pattern for later datasets.
 
+### 5.6 Decisions after Fengze's review (Anthony, 2026-10-08)
+
+- **Item 4 (retire Mechanism): not in v1.2.** `Mechanism` and `WORKS_BY` stay
+  as they are (807 nodes, 871 edges). Revisit separately.
+- **Evidence moves: in place, with a run-scoped rollback**, not a new row with
+  `supersedes`. Each edited row records its before-image and the editing run's
+  id in `metadata._remediation`, the before-images are also written to a backup
+  file, and a rollback script restores a run. This is now the single rule for
+  backfill and remediation (core `PROPERTY-EVIDENCE-CONVENTION.md` §7a), as
+  Fengze asked: one mechanism, not two. It applies to the §5.2 Hazard move.
+- **Fengze's other points are accepted:** item 2 waits for the core `_bucket`
+  rule; item 9 keeps `claim_ids` optional and states that provenance is the
+  evidence store; §5.3 coordinates are a reported backfill plus a
+  misattribution worklist, not a copy.
+- **Two taxonomies considered:**
+  - *Weitz Urban Adaptation Tech Taxonomy (2025-05-15).* `solution-categories`
+    already carries all 90 of its families verbatim; the decision on
+    re-deriving tier 1 (item 10 / P-4 / P-5) is pending.
+  - *Climate Bonds Resilience Taxonomy (CBRT v1).* Its licence is personal-use
+    only, so no CBRT content enters this repo; a concept-to-CBRT crosswalk is
+    **dropped**. Core may read it privately to find missing concepts.
+  - **Add `Action.resilience_contribution`** (enum: `adapted` — makes the
+    acting party's own asset or activity resilient; `enabling` — builds the
+    resilience of others). The split is the EU Taxonomy's (Regulation (EU)
+    2020/852, Art. 11 and Art. 16), not CBRT's, so it carries no licence
+    restriction. Optional; filled by extraction and the property-fill lane.
+
