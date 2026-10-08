@@ -1,8 +1,8 @@
 {
   "_source": "Advanced urban systems taxonomy for climate adaptation. Multi-tiered hierarchy mapping physical, ecological, and socio-economic urban subsystems.",
-  "_usage": "urban_systems.systems_affected[].system_id and sector",
+  "_usage": "UrbanSystem.system_id, UrbanSystem.sector, UrbanSystem.subsector",
   "_sync_with": "None - conceptual taxonomy for classification",
-  "_note": "This taxonomy enables precise classification of where a solution is deployed and what it protects. Supports interdependency analysis and critical bottleneck identification. v0.1.1: added informal_service_systems subsector under socioeconomic_health to capture service provision filled by informal actors where formal systems are absent — addresses IPCC AR6 Ch. 6 critique that ISO 37120 misses informal urban systems entirely.",
+  "_note": "This taxonomy enables precise classification of where a solution is deployed and what it protects. Supports interdependency analysis and critical bottleneck identification. v0.1.1: added informal_service_systems subsector under socioeconomic_health to capture service provision filled by informal actors where formal systems are absent — addresses IPCC AR6 Ch. 6 critique that ISO 37120 misses informal urban systems entirely. v1.2: every system has a definition. Rule: an urban system is something a city has whether or not it adapts; a thing that is itself an intervention is a Solution. Ten terms are retired (status: deprecated, replaced_by: the systems to use instead; an empty list means none). Sector ids may be used as system_id for sector-level links.",
   "sectors": [
     {
       "id": "built_environment",
@@ -16,17 +16,20 @@
             {
               "id": "high_density_residential",
               "name": "High-Density / Multi-Family",
-              "examples": "Apartment blocks, high-rises"
+              "examples": "Apartment blocks, high-rises",
+              "definition": "Multi-family housing: apartment blocks, high-rises and dense row housing."
             },
             {
               "id": "low_density_residential",
               "name": "Low-Density / Single-Family",
-              "examples": "Suburban tracts"
+              "examples": "Suburban tracts",
+              "definition": "Single-family and other low-density housing, typical of suburbs."
             },
             {
               "id": "informal_settlements",
               "name": "Informal Settlements / Slums",
-              "examples": "Highly vulnerable areas lacking formal infrastructure"
+              "examples": "Highly vulnerable areas lacking formal infrastructure",
+              "definition": "Housing built without formal tenure, planning or services."
             }
           ]
         },
@@ -37,17 +40,20 @@
             {
               "id": "central_business_districts",
               "name": "Central Business Districts (CBDs)",
-              "examples": "Downtown commercial cores"
+              "examples": "Downtown commercial cores",
+              "definition": "Downtown commercial cores and dense office districts."
             },
             {
               "id": "heavy_industry",
               "name": "Heavy Industry / Manufacturing",
-              "examples": "Industrial parks, factories"
+              "examples": "Industrial parks, factories",
+              "definition": "Factories, industrial parks and manufacturing plants."
             },
             {
               "id": "logistics_warehousing",
               "name": "Logistics & Warehousing",
-              "examples": "Distribution centers, storage facilities"
+              "examples": "Distribution centers, storage facilities",
+              "definition": "Distribution centres, warehouses and storage facilities."
             }
           ]
         },
@@ -58,17 +64,27 @@
             {
               "id": "healthcare_facilities",
               "name": "Healthcare Facilities",
-              "examples": "Hospitals, clinics, emergency medical centers"
+              "examples": "Hospitals, clinics, emergency medical centers",
+              "definition": "Hospitals, clinics and other buildings where health care is delivered."
             },
             {
               "id": "educational_facilities",
               "name": "Educational Facilities",
-              "examples": "Schools, universities, research centers"
+              "examples": "Schools, universities, research centers",
+              "definition": "Schools, colleges and universities."
             },
             {
               "id": "government_emergency",
               "name": "Government & Emergency Response",
-              "examples": "Municipal buildings, fire stations, police stations, EOCs"
+              "examples": "Municipal buildings, fire stations, police stations, EOCs",
+              "definition": "Public buildings for government and emergency services: city halls, fire and police stations, emergency operations centres, and the shelters and warning operations run from them."
+            },
+            {
+              "id": "cultural_heritage_sites",
+              "name": "Cultural Heritage Sites",
+              "examples": "Historic buildings, monuments, archaeological sites",
+              "added_in": "v1.2",
+              "definition": "Historic buildings, monuments, archaeological sites and cultural landscapes."
             }
           ]
         },
@@ -79,22 +95,26 @@
             {
               "id": "floodplains_coastal",
               "name": "Floodplains & Low-Lying Coastal Zones",
-              "examples": "High flood risk areas"
+              "examples": "High flood risk areas",
+              "definition": "Low-lying land in river floodplains and along the coast, including its shorelines, riverbanks and flood defences."
             },
             {
               "id": "steep_slopes",
               "name": "Steep Slopes",
-              "examples": "Landslide and erosion risk zones"
+              "examples": "Landslide and erosion risk zones",
+              "definition": "Hillsides and slopes prone to landslides and erosion."
             },
             {
               "id": "brownfields_reclaimed",
               "name": "Brownfields & Reclaimed Land",
-              "examples": "Former industrial sites, landfills"
+              "examples": "Former industrial sites, landfills",
+              "definition": "Former industrial land, landfills and reclaimed sites."
             },
             {
               "id": "subsurface_space",
               "name": "Subsurface Space",
-              "examples": "Basements, underground parking, tunnels"
+              "examples": "Basements, underground parking, tunnels",
+              "definition": "Underground space: basements, underground parking, utility vaults and tunnels."
             }
           ]
         }
@@ -112,22 +132,26 @@
             {
               "id": "arterial_roads",
               "name": "Arterial Roads & Highways",
-              "examples": "Major roadways, expressways"
+              "examples": "Major roadways, expressways",
+              "definition": "Major roads, highways and expressways."
             },
             {
               "id": "local_streets",
               "name": "Local/Municipal Street Networks",
-              "examples": "Neighborhood streets, collector roads"
+              "examples": "Neighborhood streets, collector roads",
+              "definition": "Neighbourhood and collector streets, including their sidewalks, parking and right-of-way."
             },
             {
               "id": "bridges_tunnels",
               "name": "Bridges, Tunnels, and Viaducts",
-              "examples": "Critical crossing infrastructure"
+              "examples": "Critical crossing infrastructure",
+              "definition": "Bridges, tunnels and viaducts."
             },
             {
               "id": "active_mobility",
               "name": "Active Mobility Networks",
-              "examples": "Pedestrian paths, cycling infrastructure, greenways"
+              "examples": "Pedestrian paths, cycling infrastructure, greenways",
+              "definition": "Walking and cycling infrastructure: paths, bike lanes and greenway trails."
             }
           ]
         },
@@ -138,17 +162,20 @@
             {
               "id": "rail_networks",
               "name": "Rail Networks",
-              "examples": "Subway/Underground, light rail, commuter rail"
+              "examples": "Subway/Underground, light rail, commuter rail",
+              "definition": "Subway, light rail and commuter rail lines."
             },
             {
               "id": "bus_systems",
               "name": "Bus Rapid Transit (BRT) & Surface Bus",
-              "examples": "Bus lanes, bus networks"
+              "examples": "Bus lanes, bus networks",
+              "definition": "Bus networks, bus lanes and bus rapid transit."
             },
             {
               "id": "transit_nodes",
               "name": "Transit Nodes",
-              "examples": "Stations, terminals, depots, maintenance yards"
+              "examples": "Stations, terminals, depots, maintenance yards",
+              "definition": "Stations, terminals, depots and maintenance yards."
             }
           ]
         },
@@ -159,17 +186,20 @@
             {
               "id": "maritime_ports",
               "name": "Maritime Ports & Harbors",
-              "examples": "Seaports highly exposed to sea-level rise"
+              "examples": "Seaports highly exposed to sea-level rise",
+              "definition": "Seaports and harbours."
             },
             {
               "id": "airports",
               "name": "Airports",
-              "examples": "Runways, terminal infrastructure"
+              "examples": "Runways, terminal infrastructure",
+              "definition": "Runways, terminals and airport facilities."
             },
             {
               "id": "freight_rail",
               "name": "Freight Rail Yards",
-              "examples": "Cargo rail terminals"
+              "examples": "Cargo rail terminals",
+              "definition": "Freight rail lines and cargo yards."
             }
           ]
         }
@@ -187,17 +217,20 @@
             {
               "id": "source_water",
               "name": "Source Water",
-              "examples": "Reservoirs, aquifers, surface catchments"
+              "examples": "Reservoirs, aquifers, surface catchments",
+              "definition": "Where drinking water comes from: reservoirs, aquifers, rivers and catchments."
             },
             {
               "id": "treatment_facilities",
               "name": "Treatment Facilities",
-              "examples": "Desalination plants, purification centers, water treatment plants"
+              "examples": "Desalination plants, purification centers, water treatment plants",
+              "definition": "Plants that make water safe to drink, including desalination."
             },
             {
               "id": "distribution_networks",
               "name": "Distribution Networks",
-              "examples": "Pumping stations, water mains, storage tanks"
+              "examples": "Pumping stations, water mains, storage tanks",
+              "definition": "Pumping stations, mains and storage that carry treated water to users."
             }
           ]
         },
@@ -208,17 +241,20 @@
             {
               "id": "collection_networks",
               "name": "Collection Networks",
-              "examples": "Storm sewers, combined sewer systems"
+              "examples": "Storm sewers, combined sewer systems",
+              "definition": "Storm sewers and combined sewers that collect runoff."
             },
             {
               "id": "outfalls_discharge",
               "name": "Outfalls & Discharge Points",
-              "examples": "Stormwater discharge infrastructure"
+              "examples": "Stormwater discharge infrastructure",
+              "definition": "Points where stormwater or combined sewage discharges to a water body."
             },
             {
               "id": "surface_conveyance",
               "name": "Surface Conveyance",
-              "examples": "Culverts, drainage channels, swales"
+              "examples": "Culverts, drainage channels, swales",
+              "definition": "Open drainage that carries runoff on the surface: channels, ditches, culverts and swales."
             }
           ]
         },
@@ -229,17 +265,27 @@
             {
               "id": "wastewater_treatment",
               "name": "Wastewater Treatment Plants (WWTPs)",
-              "examples": "Sewage treatment facilities"
+              "examples": "Sewage treatment facilities",
+              "definition": "Plants that treat sewage."
             },
             {
               "id": "sanitary_sewers",
               "name": "Sanitary Sewer Networks",
-              "examples": "Underground sewer pipes"
+              "examples": "Underground sewer pipes",
+              "definition": "Pipes that carry sewage to treatment."
             },
             {
               "id": "decentralized_sanitation",
               "name": "Decentralized Sanitation",
-              "examples": "Septic systems, localized treatment"
+              "examples": "Septic systems, localized treatment",
+              "definition": "On-site and local sanitation: septic systems and small treatment units."
+            },
+            {
+              "id": "solid_waste_management",
+              "name": "Solid Waste Management",
+              "examples": "Collection, transfer stations, recycling, landfills",
+              "added_in": "v1.2",
+              "definition": "Formal collection, transfer, recycling and disposal of solid waste, including landfills. Use informal_solid_waste for waste pickers and informal recycling."
             }
           ]
         },
@@ -250,12 +296,20 @@
             {
               "id": "hard_engineering",
               "name": "Hard Engineering",
-              "examples": "Seawalls, levees, tidal barrages, dikes"
+              "examples": "Seawalls, levees, tidal barrages, dikes",
+              "definition": "Retired in v1.2: seawalls, levees and barrages are Solutions, not urban systems. Link them to the floodplain, shoreline or waterway they protect.",
+              "status": "deprecated",
+              "deprecated_in": "v1.2",
+              "replaced_by": [
+                "floodplains_coastal",
+                "managed_waterways"
+              ]
             },
             {
               "id": "managed_waterways",
               "name": "Managed Waterways",
-              "examples": "Canals, dredged channels, flood control structures"
+              "examples": "Canals, dredged channels, flood control structures",
+              "definition": "Engineered waterways and their control structures: canals, dredged channels, pumping stations and flood gates."
             }
           ]
         }
@@ -273,17 +327,20 @@
             {
               "id": "centralized_power",
               "name": "Centralized Power Plants",
-              "examples": "Fossil fuel, nuclear, large-scale hydro"
+              "examples": "Fossil fuel, nuclear, large-scale hydro",
+              "definition": "Large power plants: fossil, nuclear and large hydro."
             },
             {
               "id": "distributed_generation",
               "name": "Decentralized / Distributed Generation",
-              "examples": "Rooftop solar, micro-turbines, CHP"
+              "examples": "Rooftop solar, micro-turbines, CHP",
+              "definition": "Small-scale generation near users: rooftop solar, small turbines and combined heat and power."
             },
             {
               "id": "district_systems",
               "name": "District Heating & Cooling",
-              "examples": "Centralized thermal distribution systems"
+              "examples": "Centralized thermal distribution systems",
+              "definition": "Networks that distribute heating or cooling from a central plant."
             }
           ]
         },
@@ -294,22 +351,26 @@
             {
               "id": "transmission_lines",
               "name": "High-Voltage Transmission",
-              "examples": "Transmission lines, towers, overhead cables"
+              "examples": "Transmission lines, towers, overhead cables",
+              "definition": "High-voltage transmission lines and towers."
             },
             {
               "id": "substations",
               "name": "Substations & Transformers",
-              "examples": "High vulnerability to flooding"
+              "examples": "High vulnerability to flooding",
+              "definition": "Substations and transformers."
             },
             {
               "id": "local_grid",
               "name": "Local Grid / Last-Mile Distribution",
-              "examples": "Distribution lines, underground cables"
+              "examples": "Distribution lines, underground cables",
+              "definition": "Low-voltage distribution lines and cables to buildings."
             },
             {
               "id": "energy_storage",
               "name": "Energy Storage",
-              "examples": "Grid-scale batteries, pumped hydro"
+              "examples": "Grid-scale batteries, pumped hydro",
+              "definition": "Grid-scale storage such as batteries and pumped hydro."
             }
           ]
         },
@@ -320,17 +381,20 @@
             {
               "id": "data_centers",
               "name": "Data Centers",
-              "examples": "High cooling needs, heatwave vulnerability"
+              "examples": "High cooling needs, heatwave vulnerability",
+              "definition": "Facilities that house servers and network equipment."
             },
             {
               "id": "physical_networks",
               "name": "Physical Networks",
-              "examples": "Fiber optics, underground cables"
+              "examples": "Fiber optics, underground cables",
+              "definition": "Fibre and cable networks for telecommunications."
             },
             {
               "id": "wireless_networks",
               "name": "Wireless Networks",
-              "examples": "Cell towers, emergency radio repeaters"
+              "examples": "Cell towers, emergency radio repeaters",
+              "definition": "Cell towers, radio repeaters and other wireless infrastructure."
             }
           ]
         }
@@ -348,17 +412,20 @@
             {
               "id": "parks_plazas",
               "name": "Public Parks & Plazas",
-              "examples": "Urban parks, squares, recreational areas"
+              "examples": "Urban parks, squares, recreational areas",
+              "definition": "Public parks, squares and recreational open space."
             },
             {
               "id": "streetscapes_canopies",
               "name": "Streetscapes & Urban Canopies",
-              "examples": "Street trees, parklets, boulevard plantings"
+              "examples": "Street trees, parklets, boulevard plantings",
+              "definition": "Street trees and planting along streets, and the tree canopy they form."
             },
             {
               "id": "institutional_grounds",
               "name": "Institutional Grounds",
-              "examples": "Cemeteries, golf courses, campus landscapes"
+              "examples": "Cemeteries, golf courses, campus landscapes",
+              "definition": "Landscaped grounds of campuses, cemeteries and golf courses."
             }
           ]
         },
@@ -369,17 +436,42 @@
             {
               "id": "constructed_wetlands",
               "name": "Constructed Wetlands & Bioswales",
-              "examples": "Engineered natural filtration systems"
+              "examples": "Engineered natural filtration systems",
+              "definition": "Retired in v1.2: constructed wetlands and bioswales are Solutions, not urban systems. Link them to the drainage or riparian system they serve.",
+              "status": "deprecated",
+              "deprecated_in": "v1.2",
+              "replaced_by": [
+                "surface_conveyance",
+                "riparian_zones",
+                "wastewater_treatment"
+              ]
             },
             {
               "id": "permeable_surfaces",
               "name": "Permeable Surfaces",
-              "examples": "Pervious pavement, infiltration areas"
+              "examples": "Pervious pavement, infiltration areas",
+              "definition": "Retired in v1.2: permeable paving is a Solution, not an urban system. Link it to the streets, parks or drainage it is built in.",
+              "status": "deprecated",
+              "deprecated_in": "v1.2",
+              "replaced_by": [
+                "local_streets",
+                "parks_plazas",
+                "surface_conveyance"
+              ]
             },
             {
               "id": "green_roofs_walls",
               "name": "Green Roofs & Vertical Gardens",
-              "examples": "Building-integrated vegetation"
+              "examples": "Building-integrated vegetation",
+              "definition": "Retired in v1.2: a green roof is a Solution, not an urban system. Link it to the building system it sits on.",
+              "status": "deprecated",
+              "deprecated_in": "v1.2",
+              "replaced_by": [
+                "high_density_residential",
+                "low_density_residential",
+                "central_business_districts",
+                "built_environment"
+              ]
             }
           ]
         },
@@ -390,17 +482,20 @@
             {
               "id": "urban_forests",
               "name": "Urban Forests & Greenbelts",
-              "examples": "Protected woodland areas, buffer zones"
+              "examples": "Protected woodland areas, buffer zones",
+              "definition": "Woodlands, greenbelts and protected natural areas in and around the city."
             },
             {
               "id": "coastal_buffers",
               "name": "Coastal Buffers",
-              "examples": "Mangroves, salt marshes, dune systems"
+              "examples": "Mangroves, salt marshes, dune systems",
+              "definition": "Natural coastal ecosystems that buffer the shore: mangroves, salt marshes, dunes and reefs."
             },
             {
               "id": "riparian_zones",
               "name": "Riparian Zones",
-              "examples": "Riverbanks, floodplains, stream corridors"
+              "examples": "Riverbanks, floodplains, stream corridors",
+              "definition": "Land and vegetation along rivers and streams."
             }
           ]
         }
@@ -418,17 +513,35 @@
             {
               "id": "vulnerable_populations",
               "name": "Vulnerable Population Demographics",
-              "examples": "Elderly, low-income, disabled communities"
+              "examples": "Elderly, low-income, disabled communities",
+              "definition": "Retired in v1.2: a population group, not an urban system. Use ExposureUnit.affected_group or Action.target_populations.",
+              "status": "deprecated",
+              "deprecated_in": "v1.2",
+              "replaced_by": []
             },
             {
               "id": "disease_monitoring",
               "name": "Vector-Borne Disease Monitoring",
-              "examples": "Surveillance systems, prevention programs"
+              "examples": "Surveillance systems, prevention programs",
+              "definition": "Retired in v1.2: disease surveillance is a Solution, not an urban system. Link it to public_health_services.",
+              "status": "deprecated",
+              "deprecated_in": "v1.2",
+              "replaced_by": [
+                "public_health_services"
+              ]
             },
             {
               "id": "emergency_medical",
               "name": "Emergency Medical Services (EMS)",
-              "examples": "Ambulance capacity, first responders"
+              "examples": "Ambulance capacity, first responders",
+              "definition": "Ambulance services and first responders."
+            },
+            {
+              "id": "public_health_services",
+              "name": "Public Health Services",
+              "examples": "Health departments, disease surveillance, vector control",
+              "added_in": "v1.2",
+              "definition": "Public health functions of the city: health departments, disease surveillance, vector control and health programmes."
             }
           ]
         },
@@ -439,17 +552,20 @@
             {
               "id": "supply_chains",
               "name": "Local Supply Chains",
-              "examples": "Food security, essential goods distribution"
+              "examples": "Food security, essential goods distribution",
+              "definition": "The networks that supply food and essential goods to the city."
             },
             {
               "id": "retail_services",
               "name": "Retail & Service Sectors",
-              "examples": "Commercial activity, local businesses"
+              "examples": "Commercial activity, local businesses",
+              "definition": "Shops, services and local businesses."
             },
             {
               "id": "informal_economies",
               "name": "Informal Economies",
-              "examples": "Street vendors, unregistered labor - highly vulnerable"
+              "examples": "Street vendors, unregistered labor - highly vulnerable",
+              "definition": "Unregistered work and trade, such as street vending and day labour."
             }
           ]
         },
@@ -460,12 +576,20 @@
             {
               "id": "community_networks",
               "name": "Community Networks & NGOs",
-              "examples": "Local organizations, civic groups"
+              "examples": "Local organizations, civic groups",
+              "definition": "Community organisations, civic groups, NGOs and the social ties between residents, including the community facilities they run."
             },
             {
               "id": "resilience_hubs",
               "name": "Resilience Hubs",
-              "examples": "Community centers equipped for off-grid survival"
+              "examples": "Community centers equipped for off-grid survival",
+              "definition": "Retired in v1.2: a resilience hub is a Solution, not an urban system. Link it to the community or emergency system it serves.",
+              "status": "deprecated",
+              "deprecated_in": "v1.2",
+              "replaced_by": [
+                "community_networks",
+                "government_emergency"
+              ]
             }
           ]
         },
@@ -477,37 +601,44 @@
             {
               "id": "informal_water_supply",
               "name": "Informal Water Supply",
-              "examples": "Water vendors, tanker trucks, private boreholes serving communities without piped supply"
+              "examples": "Water vendors, tanker trucks, private boreholes serving communities without piped supply",
+              "definition": "Water from vendors, tankers and private boreholes where there is no piped supply."
             },
             {
               "id": "informal_sanitation",
               "name": "Informal Sanitation",
-              "examples": "Pit latrines, manual desludging services, decentralized community toilets"
+              "examples": "Pit latrines, manual desludging services, decentralized community toilets",
+              "definition": "Pit latrines, manual emptying and shared community toilets."
             },
             {
               "id": "informal_solid_waste",
               "name": "Informal Solid Waste & Recycling",
-              "examples": "Waste pickers, informal recyclers, neighborhood collection arrangements"
+              "examples": "Waste pickers, informal recyclers, neighborhood collection arrangements",
+              "definition": "Waste pickers, informal recyclers and neighbourhood collection arrangements."
             },
             {
               "id": "informal_transport",
               "name": "Informal Transport",
-              "examples": "Paratransit, jitneys, motorcycle taxis, informal minibus networks"
+              "examples": "Paratransit, jitneys, motorcycle taxis, informal minibus networks",
+              "definition": "Paratransit: minibuses, jitneys and motorcycle taxis."
             },
             {
               "id": "informal_energy",
               "name": "Informal Energy Provision",
-              "examples": "Unmetered grid connections, charcoal/biomass markets, shared generators"
+              "examples": "Unmetered grid connections, charcoal/biomass markets, shared generators",
+              "definition": "Unmetered connections, charcoal and biomass markets, and shared generators."
             },
             {
               "id": "community_disaster_response",
               "name": "Community-Led Disaster Response",
-              "examples": "Mutual aid networks, neighborhood watch, volunteer evacuation coordination, faith-based response"
+              "examples": "Mutual aid networks, neighborhood watch, volunteer evacuation coordination, faith-based response",
+              "definition": "Mutual aid, volunteer and faith-based networks that respond to disasters."
             },
             {
               "id": "informal_food_systems",
               "name": "Informal Food Systems",
-              "examples": "Street vendors, wet markets, urban subsistence agriculture, mutual food banks"
+              "examples": "Street vendors, wet markets, urban subsistence agriculture, mutual food banks",
+              "definition": "Street food, wet markets, subsistence farming and community food banks."
             }
           ]
         }
@@ -525,12 +656,14 @@
             {
               "id": "building_codes",
               "name": "Building Codes & Standards",
-              "examples": "Construction regulations, energy codes"
+              "examples": "Construction regulations, energy codes",
+              "definition": "The rules that govern how buildings are designed and built."
             },
             {
               "id": "zoning_planning",
               "name": "Zoning & Spatial Planning",
-              "examples": "Land use regulations, development controls"
+              "examples": "Land use regulations, development controls",
+              "definition": "Land-use rules and the planning system that controls development."
             }
           ]
         },
@@ -541,12 +674,19 @@
             {
               "id": "municipal_finance",
               "name": "Municipal Finance",
-              "examples": "Green bonds, resilience budgets, climate funds"
+              "examples": "Green bonds, resilience budgets, climate funds",
+              "definition": "The city's budget, revenues, debt and reserves."
             },
             {
               "id": "insurance_markets",
               "name": "Insurance Markets",
-              "examples": "Parametric insurance, property risk markets"
+              "examples": "Parametric insurance, property risk markets",
+              "definition": "Retired in v1.2: climate insurance is a Solution. Link insurance-related actions to municipal_finance.",
+              "status": "deprecated",
+              "deprecated_in": "v1.2",
+              "replaced_by": [
+                "municipal_finance"
+              ]
             }
           ]
         },
@@ -557,12 +697,26 @@
             {
               "id": "early_warning",
               "name": "Early Warning Systems (EWS)",
-              "examples": "Alert systems, monitoring networks"
+              "examples": "Alert systems, monitoring networks",
+              "definition": "Retired in v1.2: an early-warning system is a Solution, not an urban system. Link it to the emergency services it supports.",
+              "status": "deprecated",
+              "deprecated_in": "v1.2",
+              "replaced_by": [
+                "government_emergency",
+                "emergency__disaster_management"
+              ]
             },
             {
               "id": "evacuation_sheltering",
               "name": "Evacuation & Sheltering",
-              "examples": "Evacuation protocols, emergency shelters"
+              "examples": "Evacuation protocols, emergency shelters",
+              "definition": "Retired in v1.2: evacuation and sheltering are Solutions, not urban systems. Link them to the emergency services or buildings involved.",
+              "status": "deprecated",
+              "deprecated_in": "v1.2",
+              "replaced_by": [
+                "government_emergency",
+                "emergency__disaster_management"
+              ]
             }
           ]
         }

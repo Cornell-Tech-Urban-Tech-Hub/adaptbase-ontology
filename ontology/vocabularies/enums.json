@@ -1241,5 +1241,22 @@
         "description": "The figure is a share of a larger stated total."
       }
     ]
+  },
+  "resilience_contribution": {
+    "_source": "EU Taxonomy for sustainable activities, Regulation (EU) 2020/852, Art. 11 (adapted activities) and Art. 16 (enabling activities)",
+    "_usage": "Action.resilience_contribution",
+    "_note": "v1.2 (Decision 49). Whose resilience an action builds.",
+    "values": [
+      {
+        "id": "adapted",
+        "name": "Adapted",
+        "description": "Makes the acting party's own assets, operations or services resilient (a utility floodproofing its own substation)."
+      },
+      {
+        "id": "enabling",
+        "name": "Enabling",
+        "description": "Builds the resilience of other people, assets or the city as a whole (a heat warning service, a grant programme for homeowners)."
+      }
+    ]
   }
 }

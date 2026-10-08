@@ -13,7 +13,7 @@ vocabularies that model how cities adapt to climate change. Versioned JSON in
 `ontology/`, displayed by a browser-based viewer in `viewer/`, deployed to
 [ontology.adaptbase.us](https://ontology.adaptbase.us/) via GitHub Pages.
 
-**Current version:** v1.1 (2026-10-06)
+**Current version:** v1.2 (2026-10-08)
 
 ## Repo layout
 
@@ -64,14 +64,16 @@ When bumping:
 1. Copy `ontology/ontology-v<current>.jsonld` → `ontology/ontology-v<new>.jsonld`; update
    `version`, `update_note`, `updated`, a `version_notes` entry and `metadata` inside.
    For a schema bump, prefer a migration script under `scripts/migrations/` (see
-   `v1_1_from_v1_0.py`) so the change is reproducible and each rule cites its decision.
+   `v1_2_from_v1_1.py`) so the change is reproducible and each rule cites its decision.
 2. Prepend the new entry to `ontology/versions.json` (path: `../ontology/ontology-v<new>.jsonld`).
 3. Update `**Current version:**` in this file and in `README.md`; add the decisions to
    `ontology/decisions-log.md`.
 4. If a vocabulary changed, run `uv run scripts/export/build_vocab_jsonld.py` to regenerate
-   the `.jsonld` twins, then `uv run scripts/export/generate_exports.py` (update its
-   `ONTOLOGY_SRC` to the new version first).
-5. A new vocabulary file must also be registered in `viewer/scripts/app.js` (`vocabFileMap`,
+   the `.jsonld` twins, then `uv run scripts/export/generate_exports.py` (it reads the newest
+   version in `versions.json`).
+5. Run `uv run scripts/check_ontology.py` (CI runs it on every PR): domain/range,
+   cardinality, bindings, manifest, vocabulary terms, definitions, deprecations, twins.
+6. A new vocabulary file must also be registered in `viewer/scripts/app.js` (`vocabFileMap`,
    `renderVocabData`) and `viewer/scripts/ontology-adapter.js` (`VOCAB_PATHS`, `resolveLabel`);
    a new type in both files' cluster maps and in `viewer/scripts/editor-app.js`.
 
@@ -79,10 +81,10 @@ When bumping:
 
 - **Solutions classified by identity, not function.** What a solution IS, not what it
   does; function is expressed via typed relationships (`MITIGATES`, `OPERATES_ON`,
-  `USES_MECHANISM`).
+  `WORKS_BY`).
 - **Vocabularies are guidance, not hard constraints.** Validation is advisory, not
   blocking.
-- **Claims as provenance.** Every extracted value traces to a claim UUID with a source.
+- **Evidence as provenance.** Every value traces to an evidence row (source chunk or URL, excerpt, method, as_of) in the consuming store; `claim_ids` is optional (Decision 52).
 - All non-obvious design calls go in `ontology/decisions-log.md`.
 
 ## `research/`
