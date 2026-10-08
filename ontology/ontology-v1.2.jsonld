@@ -243,6 +243,12 @@
           }
         },
         {
+          "id": "mechanism_type_other_description",
+          "type": "string",
+          "required": false,
+          "note": "Free-text description when mechanism_type = other (Decision 54)."
+        },
+        {
           "id": "description",
           "type": "string",
           "required": false,
@@ -4880,6 +4886,10 @@
         {
           "type": "added",
           "text": "Action.resilience_contribution {adapted, enabling}, enums.resilience_contribution (Decision 49)"
+        },
+        {
+          "type": "added",
+          "text": "Mechanism.mechanism_type_other_description — the property mechanism_type's note has pointed at since v0.4 but never declared (Decision 54)"
         },
         {
           "type": "removed",

@@ -61,6 +61,10 @@ An optional enum: `adapted` (the action makes the acting party's own assets or a
 - `Place.place_type` gains `waterbody`, `street`, `facility`, `neighbourhood_area`, and `WITHIN` gains a `Place → Place` pair (review L-8).
 - `ExposureUnit` and `Vulnerability` gain `name` (required) and `description`; `Stakeholder.name` becomes required (review L-7, C-5).
 
+### Decision 54: Mechanism gets the other-description it was already told to use
+
+`mechanism_type`'s note has said since v0.4 "use other + mechanism_type_other_description for outliers", but the property was never declared, so a consumer that polices keys against the ontology could not store the description. Found live on 2026-10-08, when the extractor started choosing from the list: 16 of 49 mechanisms chose `other` (composting, waste-to-biofuel, sedimentation, filtration, evaporation, disassembly) and none could say what. `mechanism_type_other_description` (string, optional) is declared like `vuln_type_other_description`. The clustering of those outliers around waste and water treatment is noted for the v1.3 vocabulary pass, not acted on here.
+
 ### Decision 52: provenance is the evidence store
 
 `claim_ids` stays optional on every edge, and no `Claim` type is declared (review item 9 as amended by Fengze). In the consuming store, provenance is one evidence row per value: source chunk or URL, excerpt, method and `as_of`. Live, 0 of 80,493 edges carry `claim_ids` and importers reject the key; declaring it required would describe a field that is never filled. A design note records the rule.

@@ -285,6 +285,25 @@ def main() -> None:
         ],
     )
 
+    # ---------------------------------------- Mechanism: the escape value's description
+    # mechanism_type's note has told the extractor since v0.4 to "use other +
+    # mechanism_type_other_description for outliers", but no such property was
+    # ever declared, so the extractor could not write the description (found
+    # by the 2026-10-08 classification A/B: 16 of 49 mechanisms chose other —
+    # composting, biofuels, sedimentation, filtration — and none could say
+    # what). Declared like Vulnerability.vuln_type_other_description.
+    add_props(
+        T["Mechanism"],
+        [
+            prop(
+                "mechanism_type_other_description",
+                "string",
+                note="Free-text description when mechanism_type = other (Decision 54).",
+            )
+        ],
+        after="mechanism_type",
+    )
+
     # ------------------------------------------------------------- P3. duplicated edge properties
     for r in R("PRODUCES", "Solution", "Outcome") + R("RESULTS_IN", "Action", "Outcome"):
         drop_props(r, ["outcome_type", "evidence_level"])
@@ -586,6 +605,7 @@ def main() -> None:
                 {"type": "changed", "text": "AFFECTED_BY: required `sources` object, one entry per source (dataset | plan_document); top-level source_dataset and indicators removed (Decision 47)"},
                 {"type": "changed", "text": "Jurisdiction: geometry is the one coordinate field; polygon note reworded to redistributable sources only; climate_zone source named; aliases → alternative_names (Decisions 48, 51)"},
                 {"type": "added", "text": "Action.resilience_contribution {adapted, enabling}, enums.resilience_contribution (Decision 49)"},
+                {"type": "added", "text": "Mechanism.mechanism_type_other_description — the property mechanism_type's note has pointed at since v0.4 but never declared (Decision 54)"},
                 {"type": "removed", "text": "outcome_type and evidence_level on PRODUCES (Solution → Outcome) and RESULTS_IN; ISSUES.adoption_status; the five IMPLEMENTED_IN deployment properties; reduces_exposure on REDUCES.mechanism_of_reduction (multi_pathway → both) (Decision 50)"},
                 {"type": "changed", "text": "Cardinality: IMPLEMENTS, ISSUES, SUPERSEDES, IMPLEMENTED_BY → many-to-many (review C-4)"},
                 {"type": "added", "text": "alternative_names on Stakeholder, FundingStream, Supplier, Mechanism, Barrier, EnablingCondition, Vulnerability, CapitalProject, Place, FinancialInstrument; one note on every type (Decision 51)"},
