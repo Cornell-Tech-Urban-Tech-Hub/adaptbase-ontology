@@ -1,4 +1,4 @@
-@import url('./tokens.css');
+@import url('./tokens.css?v=ui16');
 
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -47,10 +47,16 @@ body {
   display: block;
 }
 .brand-divider {
-  width: 1px; height: 22px; background: var(--border-soft); flex-shrink: 0;
+  width: 1px; height: 0.8em; background: var(--border-soft); flex-shrink: 0;
 }
+/* The wordmark and site name at search.adaptbase.us's size, set once here
+   so the two scale together (2026-10-08). */
 .brand-title {
   display: flex; flex-direction: row; align-items: center; gap: var(--sp-3); line-height: 1.1; white-space: nowrap;
+  font-size: clamp(1.7rem, 2.5vw, 2.4rem);
+}
+@media (max-width: 767px) {
+  .brand-title { font-size: 1.45rem; }
 }
 a.brand-title {
   text-decoration: none;
@@ -61,7 +67,7 @@ a.brand-title:hover { text-decoration: none; }
 .brand-title .project-name {
   font-family: var(--font-sans);
   font-weight: 700;
-  font-size: 1.6rem;
+  font-size: 1em;
   color: var(--fg-1);
   letter-spacing: -0.035em;
   line-height: 1;
@@ -69,7 +75,7 @@ a.brand-title:hover { text-decoration: none; }
 .brand-title .brand-section {
   font-family: var(--font-sans);
   font-weight: 400;
-  font-size: 1.6rem;
+  font-size: 1em;
   color: var(--fg-3);
   letter-spacing: -0.025em;
   line-height: 1;
@@ -781,7 +787,7 @@ body.graph-fullscreen-open {
   .site-header { padding: 10px 12px; gap: var(--sp-3); flex-wrap: wrap; }
   .brand-lockup { min-width: 0; max-width: 100%; }
   .brand-title { white-space: nowrap; }
-  .brand-title .project-name, .brand-title .brand-section { font-size: var(--fs-sm); }
+  .brand-title .project-name, .brand-title .brand-section { font-size: 1em; }
   .header-actions { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
   .hero { padding: 12px; max-height: none; }
   .hero-kicker { display: none; }
