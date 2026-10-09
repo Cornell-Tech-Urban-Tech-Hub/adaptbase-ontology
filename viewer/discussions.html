@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Discussions — AdaptBase Ontology</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles/tokens.css" />
 <link rel="stylesheet" href="styles/app.css" />
 <style>
@@ -25,12 +22,12 @@
   font-family: var(--font-display);
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
-  color: var(--sodium);
+  color: var(--ink);
 }
 
 .discussions-header p {
   font-size: 1.125rem;
-  color: var(--sodium-dim);
+  color: var(--fg-3);
   line-height: 1.6;
 }
 
@@ -50,13 +47,13 @@
 .section-header h2 {
   font-family: var(--font-display);
   font-size: 1.5rem;
-  color: var(--sodium);
+  color: var(--ink);
   margin: 0;
 }
 
 .section-count {
   font-size: 0.875rem;
-  color: var(--sodium-dim);
+  color: var(--fg-3);
   font-weight: 500;
 }
 
@@ -94,7 +91,7 @@
 .discussion-item-title {
   font-weight: 600;
   font-size: 1.125rem;
-  color: var(--sodium);
+  color: var(--ink);
   margin: 0;
   flex: 1;
 }
@@ -104,7 +101,7 @@
   align-items: center;
   gap: 1rem;
   font-size: 0.875rem;
-  color: var(--sodium-dim);
+  color: var(--fg-3);
 }
 
 .discussion-item-label {
@@ -123,7 +120,7 @@
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  color: var(--sodium-dim);
+  color: var(--fg-3);
 }
 
 .discussion-item-comments svg {
@@ -138,7 +135,7 @@
 .group-header {
   font-weight: 600;
   font-size: 1rem;
-  color: var(--sodium);
+  color: var(--ink);
   margin-bottom: 1rem;
   padding-left: 0.5rem;
   border-left: 3px solid var(--blue);
@@ -147,7 +144,7 @@
 .loading {
   text-align: center;
   padding: 4rem 2rem;
-  color: var(--sodium-dim);
+  color: var(--fg-3);
   font-size: 1.125rem;
 }
 
@@ -163,7 +160,7 @@
 .empty {
   text-align: center;
   padding: 3rem 2rem;
-  color: var(--sodium-dim);
+  color: var(--fg-3);
   font-size: 1rem;
 }
 
@@ -179,14 +176,14 @@
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
-  color: var(--sodium-dim);
+  color: var(--fg-3);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
 .tab:hover {
-  color: var(--sodium);
+  color: var(--ink);
 }
 
 .tab.active {
@@ -207,11 +204,20 @@
 
 <header class="site-header">
   <div class="brand-lockup">
-    <a href="index.html" class="brand-title">
-      <span class="project-name">AdaptBase</span>
+    <div class="brand-title">
+      <a href="index.html" class="project-name" style="text-decoration:none">AdaptBase</a>
       <span class="brand-divider" aria-hidden="true"></span>
-      <span class="brand-section">Ontology</span>
-    </a>
+      <details class="site-switch">
+        <summary class="brand-section" aria-label="Ontology. Switch AdaptBase site">Ontology<svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+        <nav class="site-switch-menu" aria-label="AdaptBase sites">
+          <a href="https://search.adaptbase.us/"><b>Graph</b><span>Search and explore the knowledge graph</span></a>
+          <a href="https://plans.adaptbase.us/"><b>Plans</b><span>The library of adaptation and resilience plans</span></a>
+          <a href="https://ontology.adaptbase.us/" aria-current="page"><b>Ontology</b><span>The types and relationships behind the graph</span></a>
+          <hr />
+          <a href="https://www.adaptbase.us/"><b>AdaptBase</b><span>About the project</span></a>
+        </nav>
+      </details>
+    </div>
   </div>
 
   <div class="header-actions">
@@ -427,5 +433,6 @@
 })();
 </script>
 
+<script src="scripts/site-switch.js?v=ui15"></script>
 </body>
 </html>

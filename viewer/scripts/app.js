@@ -762,8 +762,8 @@ document.addEventListener('DOMContentLoaded', async () => {
           </div>`;
         } else {
           return `<div class="result" data-idx="${i}" data-kind="edge" data-sid="${r.l.source.id}" data-tid="${r.l.target.id}" data-eid="${r.l.id}">
-            <span class="swatch" style="background:#B31B1B"></span>
-            <span><em style="font-family:'Instrument Serif',serif; font-style:italic; color:var(--carnelian);">${escapeHtml(r.l.label)}</em> <span style="color:var(--fg-4); font-size:11px;">${escapeHtml(r.l.source.label)} → ${escapeHtml(r.l.target.label)}</span></span>
+            <span class="swatch" style="background:#D7263D"></span>
+            <span><em style="font-style:normal; font-weight:600; color:var(--ink);">${escapeHtml(r.l.label)}</em> <span style="color:var(--fg-4); font-size:11px;">${escapeHtml(r.l.source.label)} → ${escapeHtml(r.l.target.label)}</span></span>
             <span class="kind">rel</span>
           </div>`;
         }

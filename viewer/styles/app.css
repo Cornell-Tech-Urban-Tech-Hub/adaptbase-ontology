@@ -56,21 +56,23 @@ a.brand-title {
   text-decoration: none;
 }
 a.brand-title:hover { text-decoration: none; }
+/* The wordmark, as search.adaptbase.us and plans.adaptbase.us set it:
+   "AdaptBase" bold and tight in ink, then the site's name in grey. */
 .brand-title .project-name {
-  font-family: var(--font-mono);
-  font-weight: 500;
-  font-size: var(--fs-md);
-  color: var(--fg-brand);
-  letter-spacing: 0.10em;
-  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 1.6rem;
+  color: var(--fg-1);
+  letter-spacing: -0.035em;
+  line-height: 1;
 }
 .brand-title .brand-section {
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: var(--fs-md);
-  color: var(--fg-1);
-  font-variation-settings: "opsz" 24;
-  letter-spacing: -0.01em;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 1.6rem;
+  color: var(--fg-3);
+  letter-spacing: -0.025em;
+  line-height: 1;
 }
 
 .header-actions {
@@ -109,21 +111,21 @@ a.brand-title:hover { text-decoration: none; }
   gap: 6px;
 }
 .btn-primary {
-  background: var(--carnelian);
+  background: var(--ink);
   color: white;
 }
-.btn-primary:hover { background: var(--carnelian-deep); }
+.btn-primary:hover { background: var(--ink-2); }
 .btn-secondary {
   background: transparent;
   color: var(--fg-1);
   border-color: var(--ink);
 }
-.btn-secondary:hover { background: rgba(18,20,23,0.06); }
+.btn-secondary:hover { background: rgba(0, 0, 0, 0.06); }
 .btn-ghost {
   background: transparent;
   color: var(--fg-2);
 }
-.btn-ghost:hover { background: rgba(18,20,23,0.06); color: var(--fg-1); }
+.btn-ghost:hover { background: rgba(0, 0, 0, 0.06); color: var(--fg-1); }
 
 .version-select {
   font-family: var(--font-mono);
@@ -217,8 +219,7 @@ a.brand-title:hover { text-decoration: none; }
 .hero h1 {
   font-family: var(--font-display);
   font-size: var(--fs-xl);
-  font-weight: 500;
-  font-variation-settings: "opsz" 32;
+  font-weight: 700;
   line-height: 1.1;
   margin: 0;
   color: var(--fg-1);
@@ -251,8 +252,7 @@ a.brand-title:hover { text-decoration: none; }
 .stat .num {
   font-family: var(--font-display);
   font-size: var(--fs-lg);
-  font-weight: 500;
-  font-variation-settings: "opsz" 28;
+  font-weight: 700;
   color: var(--fg-1);
 }
 .stat .lbl {
@@ -269,7 +269,7 @@ a.brand-title:hover { text-decoration: none; }
   transition: background var(--dur-fast) var(--ease-standard);
 }
 .stat-link:hover {
-  background: rgba(18,20,23,0.06);
+  background: rgba(0, 0, 0, 0.06);
 }
 .stat-link:hover .lbl {
   color: var(--fg-2);
@@ -310,7 +310,7 @@ a.brand-title:hover { text-decoration: none; }
   transition: background var(--dur-fast) var(--ease-standard);
 }
 .stat-list-item:hover {
-  background: rgba(18,20,23,0.06);
+  background: rgba(0, 0, 0, 0.06);
 }
 .stat-list-item .swatch {
   width: 8px;
@@ -397,8 +397,8 @@ a.brand-title:hover { text-decoration: none; }
   content: "";
   position: absolute; inset: 0;
   background-image:
-    linear-gradient(to right, rgba(18,20,23,0.035) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(18,20,23,0.035) 1px, transparent 1px);
+    linear-gradient(to right, rgba(0, 0, 0, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.035) 1px, transparent 1px);
   background-size: 48px 48px;
   pointer-events: none;
   mask-image: radial-gradient(ellipse at center, black 40%, transparent 95%);
@@ -409,7 +409,7 @@ a.brand-title:hover { text-decoration: none; }
 .graph-overlay {
   position: absolute;
   z-index: 3;
-  background: rgba(251, 250, 246, 0.92);
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: saturate(140%) blur(8px);
   -webkit-backdrop-filter: saturate(140%) blur(8px);
   border: 1px solid var(--border-soft);
@@ -427,7 +427,7 @@ a.brand-title:hover { text-decoration: none; }
   align-items: center;
   gap: var(--sp-4);
   padding: 14px;
-  background: rgba(251, 250, 246, 0.94);
+  background: rgba(255, 255, 255, 0.94);
   border-bottom: 1px solid var(--border-hair);
   backdrop-filter: saturate(140%) blur(8px);
   -webkit-backdrop-filter: saturate(140%) blur(8px);
@@ -475,8 +475,8 @@ a.brand-title:hover { text-decoration: none; }
   transition: border-color var(--dur-fast) var(--ease-standard);
 }
 .search-wrap input:focus {
-  border-color: var(--carnelian);
-  box-shadow: 0 0 0 2px rgba(179,27,27,0.15);
+  /* No focus ring (2026-10-08): the caret marks focus. */
+  border-color: var(--border-firm);
 }
 .search-wrap svg {
   position: absolute;
@@ -516,8 +516,7 @@ a.brand-title:hover { text-decoration: none; }
   transition: border-color var(--dur-fast) var(--ease-standard);
 }
 .graph-search input:focus {
-  border-color: var(--carnelian);
-  box-shadow: 0 0 0 2px rgba(179,27,27,0.12);
+  border-color: var(--border-firm);
   background: var(--bg-1);
 }
 .graph-search .search-results {
@@ -604,7 +603,7 @@ a.brand-title:hover { text-decoration: none; }
 .graph-legend .legend-row {
   width: 100%;
 }
-.legend-row:hover { background: rgba(18,20,23,0.05); color: var(--fg-1); }
+.legend-row:hover { background: rgba(0, 0, 0, 0.05); color: var(--fg-1); }
 .legend-row.off { opacity: 0.3; }
 .legend-row.off:hover { opacity: 0.55; }
 .legend-row .dot {
@@ -679,7 +678,7 @@ a.brand-title:hover { text-decoration: none; }
   box-shadow: 0 1px 2px rgba(0,0,0,0.2);
   transition: left var(--dur-fast) var(--ease-standard);
 }
-.toggle.on { background: var(--carnelian); }
+.toggle.on { background: var(--ink); }
 .toggle.on::after { left: 16px; }
 
 .zoom-btns {
@@ -821,7 +820,7 @@ body.graph-fullscreen-open {
     padding: 10px 14px;
     border-radius: 999px;
     border: 1px solid var(--border-soft);
-    background: rgba(251, 250, 246, 0.95);
+    background: rgba(255, 255, 255, 0.95);
     color: var(--fg-1);
     font-family: var(--font-sans);
     font-size: var(--fs-sm);
@@ -873,11 +872,10 @@ body.graph-fullscreen-open {
 .inspector-empty h3 {
   font-family: var(--font-display);
   font-size: var(--fs-lg);
-  font-weight: 500;
+  font-weight: 700;
   color: var(--fg-1);
   margin: 0;
   line-height: 1.16;
-  font-variation-settings: "opsz" 28;
 }
 .inspector-empty p {
   color: var(--fg-3);
@@ -996,8 +994,7 @@ body.graph-fullscreen-open {
   line-height: 1.1;
   letter-spacing: -0.015em;
   margin: 0;
-  font-weight: 500;
-  font-variation-settings: "opsz" 36;
+  font-weight: 700;
   color: var(--fg-1);
   text-wrap: balance;
 }
@@ -1015,10 +1012,10 @@ body.graph-fullscreen-open {
 }
 .inspector-header .edge-label {
   font-family: var(--font-accent);
-  font-style: italic;
+  font-style: normal;
   font-size: var(--fs-lg);
-  color: var(--carnelian);
-  font-weight: 400;
+  color: var(--ink);
+  font-weight: 600;
   display: block;
   margin-top: 6px;
 }
@@ -1037,7 +1034,7 @@ body.graph-fullscreen-open {
   justify-content: center;
   transition: background var(--dur-fast) var(--ease-standard), color var(--dur-fast) var(--ease-standard);
 }
-.close-btn:hover { background: rgba(18,20,23,0.06); color: var(--fg-1); }
+.close-btn:hover { background: rgba(0, 0, 0, 0.06); color: var(--fg-1); }
 
 .inspector-tabs {
   display: flex;
@@ -1063,7 +1060,7 @@ body.graph-fullscreen-open {
 .tab-btn:hover { color: var(--fg-1); }
 .tab-btn.active {
   color: var(--fg-1);
-  border-bottom-color: var(--carnelian);
+  border-bottom-color: var(--ink);
 }
 .tab-btn .badge {
   display: inline-block;
@@ -1076,7 +1073,7 @@ body.graph-fullscreen-open {
   border-radius: 999px;
   font-weight: 500;
 }
-.tab-btn.active .badge { background: var(--carnelian); color: white; }
+.tab-btn.active .badge { background: var(--ink); color: white; }
 
 .inspector-body {
   flex: 1;
@@ -1159,16 +1156,16 @@ body.graph-fullscreen-open {
 }
 
 .chip-vocab {
-  background: rgba(179, 27, 27, 0.06);
+  background: rgba(215, 38, 61, 0.06);
   color: var(--carnelian);
-  border: 1px solid rgba(179, 27, 27, 0.18);
+  border: 1px solid rgba(215, 38, 61, 0.18);
   cursor: pointer;
   transition: background var(--dur-fast) var(--ease-standard);
 }
 .chip-vocab::before { content: "⬡ "; font-size: 9px; }
 .chip-vocab:hover {
-  background: rgba(179, 27, 27, 0.12);
-  border-color: var(--carnelian);
+  background: var(--fog);
+  border-color: var(--ink);
 }
 
 /* properties list */
@@ -1256,17 +1253,17 @@ body.graph-fullscreen-open {
   letter-spacing: 0.04em;
   padding: 2px 8px;
   border-radius: 999px;
-  background: rgba(179, 27, 27, 0.06);
+  background: rgba(215, 38, 61, 0.06);
   color: var(--carnelian);
-  border: 1px solid rgba(179, 27, 27, 0.18);
+  border: 1px solid rgba(215, 38, 61, 0.18);
   cursor: pointer;
   width: fit-content;
   transition: background var(--dur-fast) var(--ease-standard);
 }
 .vocab-tag::before { content: "⬡ "; }
 .vocab-tag:hover {
-  background: rgba(179, 27, 27, 0.12);
-  border-color: var(--carnelian);
+  background: var(--fog);
+  border-color: var(--ink);
 }
 
 /* neighbor list */
@@ -1293,9 +1290,9 @@ body.graph-fullscreen-open {
 .neighbor .dot { width: 9px; height: 9px; border-radius: 50%; }
 .neighbor .label .rel {
   font-family: var(--font-accent);
-  font-style: italic;
+  font-style: normal;
   font-size: var(--fs-sm);
-  color: var(--carnelian);
+  color: var(--fg-3);
   display: block;
 }
 .neighbor .label .name {
@@ -1334,7 +1331,7 @@ body.graph-fullscreen-open {
 .comment .avatar {
   width: 36px; height: 36px;
   border-radius: 50%;
-  background: var(--carnelian);
+  background: var(--ink);
   color: white;
   font-family: var(--font-sans);
   font-weight: 600;
@@ -1471,8 +1468,7 @@ body.graph-fullscreen-open {
   width: 100%;
 }
 .composer textarea:focus {
-  border-color: var(--carnelian);
-  box-shadow: 0 0 0 2px rgba(179,27,27,0.12);
+  border-color: var(--border-firm);
 }
 .composer .bar {
   display: flex;
@@ -1502,7 +1498,7 @@ body.graph-fullscreen-open {
   top: 0;
   width: 100%;
   height: 100%;
-  background: rgba(18, 20, 23, 0.5);
+  background: rgba(0, 0, 0, 0.5);
   align-items: center;
   justify-content: center;
 }
@@ -1522,8 +1518,7 @@ body.graph-fullscreen-open {
 .modal-content h3 {
   font-family: var(--font-display);
   font-size: var(--fs-xl);
-  font-weight: 500;
-  font-variation-settings: "opsz" 36;
+  font-weight: 700;
   letter-spacing: -0.015em;
   line-height: 1.15;
   margin: 0 0 var(--sp-4) 0;
@@ -1550,13 +1545,13 @@ body.graph-fullscreen-open {
               border-color var(--dur-fast) var(--ease-standard);
 }
 .modal-buttons button:hover {
-  background: rgba(18,20,23,0.06);
+  background: rgba(0, 0, 0, 0.06);
   border-color: var(--border-firm);
 }
 .modal-buttons button.primary {
-  background: var(--carnelian);
+  background: var(--ink);
   color: white;
-  border-color: var(--carnelian);
+  border-color: var(--ink);
 }
 .modal-buttons button.primary:hover {
   background: var(--carnelian-deep);
@@ -1625,7 +1620,7 @@ body.graph-fullscreen-open {
 }
 .vocab-badge-type { font-weight: 600; }
 .vocab-external .vocab-badge-type {
-  background: rgba(179, 27, 27, 0.08);
+  background: rgba(215, 38, 61, 0.08);
   color: var(--carnelian);
 }
 .vocab-ref {
@@ -1785,8 +1780,8 @@ body.graph-fullscreen-open {
 }
 .rel-label {
   font-family: var(--font-accent);
-  font-style: italic;
-  color: var(--carnelian);
+  font-style: normal; font-weight: 600;
+  color: var(--ink);
   white-space: nowrap;
 }
 
@@ -1835,9 +1830,9 @@ body.graph-fullscreen-open {
   margin-top: var(--sp-3);
 }
 .comment-new-link:hover {
-  border-color: var(--carnelian);
-  color: var(--carnelian);
-  background: rgba(179, 27, 27, 0.04);
+  border-color: var(--ink);
+  color: var(--ink);
+  background: var(--fog);
 }
 
 .comment-error {
@@ -1916,6 +1911,70 @@ body.graph-fullscreen-open {
   flex-shrink: 0;
 }
 .change-badge-added   { background: rgba(22, 130, 60, 0.12); color: #16823c; }
-.change-badge-removed { background: rgba(179, 27, 27, 0.10); color: var(--carnelian); }
+.change-badge-removed { background: rgba(215, 38, 61, 0.10); color: var(--carnelian); }
 .change-badge-changed { background: rgba(30, 77, 216, 0.10); color: var(--blueprint); }
 .change-badge-fixed   { background: rgba(180, 120, 0, 0.12); color: #b47800; }
+
+/* ---- AdaptBase site switcher ----
+   The site name beside the wordmark opens a menu of the AdaptBase sites.
+   The same block is on search.adaptbase.us, plans.adaptbase.us and
+   ontology.adaptbase.us (2026-10-08); colours are literal so it renders
+   alike on all three. Size comes from each site's .brand-section. */
+.site-switch { position: relative; }
+.site-switch > summary {
+  list-style: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  margin: -4px -6px;
+  border-radius: 6px;
+  user-select: none;
+}
+.site-switch > summary::-webkit-details-marker { display: none; }
+.site-switch > summary:hover,
+.site-switch[open] > summary { color: #111111; background: #f4f4f5; }
+.site-switch > summary:focus-visible { outline: 2px solid #111111; outline-offset: 2px; }
+.site-switch .chev { width: 0.5em; height: 0.5em; flex: none; transition: transform 0.15s ease; }
+.site-switch[open] .chev { transform: rotate(180deg); }
+.site-switch-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: -6px;
+  z-index: 300;
+  min-width: 300px;
+  padding: 6px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 10px 28px -14px rgba(0, 0, 0, 0.2);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  letter-spacing: normal;
+  white-space: normal;
+}
+.site-switch-menu a {
+  display: grid;
+  gap: 2px;
+  padding: 9px 12px;
+  border-radius: 6px;
+  color: #111111;
+  text-decoration: none;
+}
+.site-switch-menu a:hover,
+.site-switch-menu a:focus-visible { background: #f4f4f5; outline: none; text-decoration: none; color: #111111; }
+.site-switch-menu b { font-size: 0.95rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.2; }
+.site-switch-menu span { font-size: 0.8rem; color: #6b6b6b; line-height: 1.35; }
+.site-switch-menu a[aria-current="page"] b::after { content: " · you are here"; font-weight: 400; font-size: 0.8rem; color: #6b6b6b; }
+.site-switch-menu hr { border: 0; border-top: 1px solid rgba(0, 0, 0, 0.08); margin: 6px 4px; }
+/* Narrow screens: the menu spans the width under the header instead of
+   hanging off the site name, which ran it off the right edge. */
+@media (max-width: 560px) {
+  .site-switch-menu {
+    position: fixed;
+    top: 58px;
+    left: 12px;
+    right: 12px;
+    min-width: 0;
+  }
+}

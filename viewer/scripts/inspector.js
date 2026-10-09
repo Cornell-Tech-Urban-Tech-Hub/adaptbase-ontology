@@ -261,7 +261,7 @@
         ${renderHeader({
           kind: 'Relationship',
           cluster: l.id,
-          clusterColor: '#B31B1B',
+          clusterColor: '#D7263D',
           title,
         })}
         ${renderTabs('detail', counts)}

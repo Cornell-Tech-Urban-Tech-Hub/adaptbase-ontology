@@ -1,35 +1,32 @@
 /* =========================================================================
-   Urban Tech Hub — Design System
-   Colors + Typography foundations
+   AdaptBase — design tokens
+   2026-10-08: the AdaptBase sites share the Harvard deck's look
+   (www.adaptbase.us/hbs-adaptation-finance-demo/): white ground,
+   near-black Helvetica for everything (no webfonts), ink controls, the
+   deck's red kept for emphasis — as search.adaptbase.us and
+   plans.adaptbase.us have it. It replaced the Urban Tech Hub system
+   (paper, Fraunces, Inter Tight, JetBrains Mono, carnelian). Token names
+   are kept so the viewer's CSS keeps working; the four font tokens all
+   resolve to one family now.
    ========================================================================= */
 
-/* --- Fonts (Google Fonts — see fonts/README.md for substitution notes) --- */
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
-
 :root {
-  /* =====================================================================
-     COLOR SYSTEM
-     Philosophy: Carnelian anchors the brand (Cornell heritage).
-     Ink + concrete greys evoke architecture + city.
-     Accent hues (blueprint, sodium, chlorophyll) come from urban
-     infrastructure — wayfinding, street lamps, park canopies.
-     ===================================================================== */
+  /* --- Brand core: the deck's red (replaced Cornell carnelian) --- */
+  --carnelian:         #D7263D;
+  --carnelian-deep:    #B01E33;
+  --carnelian-bright:  #E4002B;
+  --accent-rgb:        215, 38, 61;
 
-  /* --- Brand core --- */
-  --carnelian:         #B31B1B;  /* Cornell's signature red */
-  --carnelian-deep:    #8C1515;  /* Shadow / hover */
-  --carnelian-bright:  #E4002B;  /* Electric moment — sparingly */
-
-  /* --- Neutrals: ink → paper --- */
-  --ink:               #121417;  /* Near-black, warm-cool neutral */
-  --ink-2:             #2A2D33;  /* Body text on light */
-  --graphite:          #4A4F57;  /* Secondary text */
-  --concrete:          #8A8F98;  /* Tertiary, muted */
-  --mist:              #C7CAD1;  /* Hairlines, disabled */
-  --stone:             #E3E5E9;  /* Panel dividers */
-  --fog:               #EFF0F3;  /* Subtle surface */
-  --paper:             #F7F6F2;  /* Warm off-white — primary canvas */
-  --paper-2:           #FBFAF6;  /* Elevated surface */
+  /* --- Neutrals: ink → white, the deck's --- */
+  --ink:               #111111;
+  --ink-2:             #333333;
+  --graphite:          #6B6B6B;
+  --concrete:          #8A8A8A;
+  --mist:              #C7C7C7;
+  --stone:             #E4E4E7;
+  --fog:               #F4F4F5;
+  --paper:             #FFFFFF;
+  --paper-2:           #FFFFFF;
   --white:             #FFFFFF;
 
   /* --- Urban accents (use w/ intention, one per composition) --- */
@@ -48,7 +45,7 @@
   --fg-4:              var(--concrete);
   --fg-inverse:        var(--paper);
   --fg-brand:          var(--carnelian);
-  --fg-link:           var(--carnelian-deep);
+  --fg-link:           var(--ink);
 
   --bg-1:              var(--paper);      /* Page */
   --bg-2:              var(--paper-2);    /* Card */
@@ -64,23 +61,20 @@
   --status-danger:     var(--carnelian-bright);
 
   /* --- Borders --- */
-  --border-hair:       rgba(18, 20, 23, 0.08);
-  --border-soft:       rgba(18, 20, 23, 0.14);
-  --border-firm:       rgba(18, 20, 23, 0.24);
+  --border-hair:       rgba(0, 0, 0, 0.08);
+  --border-soft:       rgba(0, 0, 0, 0.12);
+  --border-firm:       rgba(0, 0, 0, 0.24);
   --border-ink:        var(--ink);
 
   /* =====================================================================
-     TYPOGRAPHY
-     Display: Fraunces (variable serif, slight opticals — editorial warmth)
-     UI/Body: Inter Tight (neutral, legible, architecture-friendly)
-     Mono:    JetBrains Mono (research / data)
-     Accent:  Instrument Serif (italic, rare — pull-quotes + taglines)
+     TYPOGRAPHY — one family: Helvetica Neue / Helvetica / Arial.
+     Headings bold and tight, labels small caps in the same face.
      ===================================================================== */
 
-  --font-display:  'Fraunces', 'Times New Roman', Georgia, serif;
-  --font-sans:     'Inter Tight', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
-  --font-mono:     'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
-  --font-accent:   'Instrument Serif', 'Fraunces', Georgia, serif;
+  --font-display:  "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-sans:     "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono:     "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-accent:   "Helvetica Neue", Helvetica, Arial, sans-serif;
 
   /* --- Type scale (fluid-ish, set in rem; 1rem = 16px) --- */
   --fs-xs:    0.8125rem;  /* 13 */
@@ -145,9 +139,9 @@
      SHADOWS — low-contrast; paper-on-paper feel
      ===================================================================== */
   --shadow-0: none;
-  --shadow-1: 0 1px 0 rgba(18,20,23,0.04), 0 1px 2px rgba(18,20,23,0.04);
-  --shadow-2: 0 1px 0 rgba(18,20,23,0.04), 0 6px 16px -6px rgba(18,20,23,0.10);
-  --shadow-3: 0 2px 0 rgba(18,20,23,0.04), 0 18px 40px -12px rgba(18,20,23,0.18);
+  --shadow-1: 0 1px 0 rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-2: 0 1px 0 rgba(0, 0, 0, 0.04), 0 6px 16px -6px rgba(0, 0, 0, 0.10);
+  --shadow-3: 0 2px 0 rgba(0, 0, 0, 0.04), 0 18px 40px -12px rgba(0, 0, 0, 0.18);
   --shadow-inset: inset 0 0 0 1px var(--border-soft);
 
   /* =====================================================================
@@ -186,8 +180,7 @@
 h1.display {
   font-family: var(--font-display);
   font-size: var(--fs-5xl);
-  font-weight: 500;
-  font-variation-settings: "opsz" 144, "SOFT" 30;
+  font-weight: 700;
   line-height: var(--lh-tight);
   letter-spacing: var(--ls-tight);
   color: var(--fg-1);
@@ -197,8 +190,7 @@ h1.display {
 h1, [data-type="h1"] {
   font-family: var(--font-display);
   font-size: var(--fs-4xl);
-  font-weight: 500;
-  font-variation-settings: "opsz" 96;
+  font-weight: 700;
   line-height: var(--lh-tight);
   letter-spacing: var(--ls-tight);
   color: var(--fg-1);
@@ -208,8 +200,7 @@ h1, [data-type="h1"] {
 h2, [data-type="h2"] {
   font-family: var(--font-display);
   font-size: var(--fs-3xl);
-  font-weight: 500;
-  font-variation-settings: "opsz" 48;
+  font-weight: 700;
   line-height: var(--lh-snug);
   letter-spacing: var(--ls-snug);
   color: var(--fg-1);
@@ -290,7 +281,7 @@ code, .code, [data-type="code"] {
 
 .quote, [data-type="quote"] {
   font-family: var(--font-accent);
-  font-style: italic;
+  font-style: normal;
   font-size: var(--fs-2xl);
   font-weight: 400;
   line-height: var(--lh-snug);

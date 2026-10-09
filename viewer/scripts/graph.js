@@ -3,15 +3,22 @@
 // getNodeById, getEdgesForNode, etc.
 
 (function () {
-  // Cluster colors used by the inspector (node dots, kicker line) — not for graph node fill
+  // Cluster colors: the graph's flat node fills, the legend dots, and the
+  // inspector's kicker. 2026-10-08: nodes are drawn as flat discs in these
+  // colours, as search.adaptbase.us draws its graph (they were pale fills
+  // with a coloured outline). Solution keeps red — the deck's red now.
   const CLUSTER_COLORS = {
-    'Solution': '#B31B1B',  // carnelian
+    'Solution': '#D7263D',  // the deck's red
     'Risk':     '#6B4C9A',  // purple
-    'Context':  '#2E7D4F',  // chlorophyll
-    'Programs': '#1E4DD8',  // blueprint
-    'Finance':  '#4A4F57',  // graphite
-    'Outcomes': '#D4900A',  // warm amber
+    'Context':  '#2E7D4F',  // green
+    'Programs': '#1E4DD8',  // blue
+    'Finance':  '#6B6B6B',  // grey
+    'Outcomes': '#D4900A',  // amber
   };
+  // Ink and the page ground, for the canvas (it cannot read CSS variables).
+  const INK = '#111111';
+  const PAPER_RGB = '255, 255, 255';
+  const LABEL_FONT = '"Helvetica Neue", Helvetica, Arial, sans-serif';
 
   // Two-ring layout: high-degree inner, low-degree outer
   const LAYOUT_CONFIG = {
@@ -261,7 +268,7 @@
         const row = document.createElement('div');
         row.className = 'legend-row';
         row.dataset.cluster = c;
-        const dotFill = c === 'Solution' ? CLUSTER_COLORS[c] : hexToSoftFill(CLUSTER_COLORS[c]);
+        const dotFill = CLUSTER_COLORS[c]; // flat, as the nodes are drawn
         row.innerHTML = `
           <span class="dot" style="background:${dotFill}; border-color:${CLUSTER_COLORS[c]}"></span>
           <span>${c}</span>
@@ -453,7 +460,7 @@
         ctx.arc(0, 0, sepRadius, sec.startAngle, sec.endAngle);
         ctx.closePath();
         ctx.fill();
-        ctx.strokeStyle = `rgba(18,20,23,${0.12 * pieFade})`;
+        ctx.strokeStyle = `rgba(17,17,17,${0.12 * pieFade})`;
         ctx.lineWidth = 0.8;
         ctx.setLineDash([6, 4]);
         ctx.beginPath();
@@ -550,14 +557,15 @@
       (selectedNode && (l.source === selectedNode || l.target === selectedNode)) ||
       (hoverNode && (l.source === hoverNode || l.target === hoverNode));
 
+    // Ink hairlines; a highlighted edge is ink at full strength.
     if (isDim) {
-      ctx.strokeStyle = 'rgba(18,20,23,0.03)';
+      ctx.strokeStyle = 'rgba(17,17,17,0.03)';
       ctx.lineWidth = 0.6;
     } else if (isHighlight) {
-      ctx.strokeStyle = '#B31B1B';
+      ctx.strokeStyle = INK;
       ctx.lineWidth = 1.6;
     } else {
-      ctx.strokeStyle = 'rgba(18,20,23,0.10)';
+      ctx.strokeStyle = 'rgba(17,17,17,0.12)';
       ctx.lineWidth = 0.7;
     }
 
@@ -574,7 +582,7 @@
 
     // Arrowheads at both ends
     const arrSize = isHighlight ? 13 : 8;
-    ctx.fillStyle = isHighlight ? ctx.strokeStyle : 'rgba(18,20,23,0.06)';
+    ctx.fillStyle = isHighlight ? ctx.strokeStyle : 'rgba(17,17,17,0.08)';
 
     // Target-end arrow — angle matches curve tangent at endpoint
     let targetAngle;
@@ -627,45 +635,22 @@
 
     const color = colorFor(n.cluster);
 
-    // Outer selection ring
-    if (isSel) {
-      ctx.strokeStyle = '#B31B1B';
-      ctx.lineWidth = 2;
+    // Outer ring: ink, marking the selection (and, lighter, the hover).
+    if (isSel || isHov) {
+      ctx.strokeStyle = isSel ? INK : 'rgba(17,17,17,0.45)';
+      ctx.lineWidth = isSel ? 2 : 1.4;
       ctx.beginPath();
       ctx.arc(n.x, n.y, r + 6, 0, Math.PI * 2);
       ctx.stroke();
     }
 
-    // Fill
-    if (n.cluster === 'Solution' || isSel) {
-      ctx.fillStyle = color;
-    } else {
-      ctx.fillStyle = hexToSoftFill(color);
-    }
+    // A flat disc in the cluster colour (search.adaptbase.us's node style).
+    ctx.fillStyle = color;
     ctx.beginPath();
     ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
     ctx.fill();
 
-    // Stroke
-    ctx.strokeStyle = color;
-    ctx.lineWidth = isSel ? 2 : (isHov ? 1.6 : 1.2);
-    ctx.stroke();
-
     ctx.restore();
-  }
-
-  function hexToSoftFill(hex) {
-    // render the color at ~10% over paper
-    const r = parseInt(hex.slice(1,3),16);
-    const g = parseInt(hex.slice(3,5),16);
-    const b = parseInt(hex.slice(5,7),16);
-    // blend with paper #FBFAF6
-    const a = 0.14;
-    const pr = 251, pg = 250, pb = 246;
-    const rr = Math.round(r*a + pr*(1-a));
-    const gg = Math.round(g*a + pg*(1-a));
-    const bb = Math.round(b*a + pb*(1-a));
-    return `rgb(${rr},${gg},${bb})`;
   }
 
   function drawLabel(n) {
@@ -674,7 +659,7 @@
     const isHov = n === hoverNode;
 
     ctx.save();
-    ctx.font = `${isSel ? 600 : 500} ${isSel ? 22 : 20}px "Inter Tight", system-ui, sans-serif`;
+    ctx.font = `${isSel ? 700 : 600} ${isSel ? 22 : 20}px ${LABEL_FONT}`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
 
@@ -685,11 +670,11 @@
     const lh = 19 + padY * 2;
     const ly = n.y + r + 6;
 
-    // paper backdrop for label legibility
-    ctx.fillStyle = 'rgba(251, 250, 246, 0.88)';
+    // white backdrop for label legibility
+    ctx.fillStyle = `rgba(${PAPER_RGB}, 0.88)`;
     ctx.fillRect(n.x - lw / 2, ly - padY, lw, lh);
 
-    ctx.fillStyle = '#121417';
+    ctx.fillStyle = INK;
     ctx.fillText(label, n.x, ly);
     ctx.restore();
   }
@@ -714,26 +699,30 @@
       ly += vOffset;
     }
 
+    // The predicate in small caps on a white tag, as the deck labels its
+    // edges (it was red italic serif in a red box).
     ctx.save();
-    ctx.font = `italic 700 18px "Instrument Serif", "Fraunces", Georgia, serif`;
+    ctx.font = `600 15px ${LABEL_FONT}`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
+    const text = String(l.label).toUpperCase();
+    if ('letterSpacing' in ctx) ctx.letterSpacing = '1px';
 
-    const metrics = ctx.measureText(l.label);
+    const metrics = ctx.measureText(text);
     const padX = 10, padY = 5;
     const w = metrics.width + padX * 2;
-    const h = 24 + padY;
+    const h = 22 + padY;
 
-    ctx.fillStyle = 'rgba(251, 250, 246, 0.95)';
-    ctx.strokeStyle = 'rgba(179,27,27,0.4)';
+    ctx.fillStyle = `rgba(${PAPER_RGB}, 0.96)`;
+    ctx.strokeStyle = 'rgba(17,17,17,0.18)';
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.rect(lx - w / 2, ly - h / 2, w, h);
     ctx.fill();
     ctx.stroke();
 
-    ctx.fillStyle = '#B31B1B';
-    ctx.fillText(l.label, lx, ly + 1);
+    ctx.fillStyle = INK;
+    ctx.fillText(text, lx, ly + 1);
     ctx.restore();
   }
 
