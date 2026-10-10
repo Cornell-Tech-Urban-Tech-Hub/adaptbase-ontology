@@ -1,8 +1,8 @@
 # Ontology Design Decisions Log
 
 **Project:** AdaptBase ontology  
-**Version:** 1.2  
-**Last Updated:** 2026-10-08
+**Version:** 1.3  
+**Last Updated:** 2026-10-10
 
 ---
 
@@ -12,9 +12,9 @@ This log documents key design decisions in the ontology development process, inc
 
 ---
 
-## Decision 55 (proposed for v1.3): a public body says which government it belongs to
+## Decision 55 (v1.3): a public body says which government it belongs to
 
-**Date:** 2026-10-10 · **Status:** proposed, not in a released version
+**Date:** 2026-10-10 · **Status:** accepted by Anthony 2026-10-10; released as v1.3 (`scripts/migrations/v1_3_from_v1_2.py`)
 **Context:** Reviewing the staging backlog in adaptbase-core, Anthony met "Ministry of Housing", "Department of Public Works", "City Council" and "Mayor's Office" across 200+ governments. Of 6,317 live Stakeholders, about 400 carry a generic "Ministry of X / Department of Y" name and 144 names are shared by more than one node ("city council" 20, "mayor's office" 7). Stakeholders never merge by name (registry identity, Decision 51), so each node's meaning lives only in the plan it came from: nothing in the graph says *whose* ministry it is, a reviewer cannot tell two of them apart, and a query cannot join them. `MEMBER_OF` is membership of a body, not belonging to a government; `GOVERNS → Jurisdiction` is governing authority, which a housing ministry does not hold over its country.
 
 **Decision:** add one edge, `Stakeholder BELONGS_TO Jurisdiction`: the stakeholder is a body of this jurisdiction's government — a city department, a regional authority, a national ministry or agency. Public bodies only; NGOs, companies, universities, community groups and international organisations take no `BELONGS_TO`. `stakeholder_type` carries the level (`municipal_government`, `regional_government`, `national_government`) and the edge points at the matching Jurisdiction: the city for a municipal body, the country for a national one.
