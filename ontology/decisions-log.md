@@ -1,14 +1,29 @@
 # Ontology Design Decisions Log
 
 **Project:** AdaptBase ontology  
-**Version:** 1.2  
-**Last Updated:** 2026-10-08
+**Version:** 1.3  
+**Last Updated:** 2026-10-10
 
 ---
 
 ## Purpose
 
 This log documents key design decisions in the ontology development process, including rationale, alternatives considered, and implications for future work.
+
+---
+
+## Decision 55 (v1.3): a public body says which government it belongs to
+
+**Date:** 2026-10-10 · **Status:** accepted by Anthony 2026-10-10; released as v1.3 (`scripts/migrations/v1_3_from_v1_2.py`)
+**Context:** Reviewing the staging backlog in adaptbase-core, Anthony met "Ministry of Housing", "Department of Public Works", "City Council" and "Mayor's Office" across 200+ governments. Of 6,317 live Stakeholders, about 400 carry a generic "Ministry of X / Department of Y" name and 144 names are shared by more than one node ("city council" 20, "mayor's office" 7). Stakeholders never merge by name (registry identity, Decision 51), so each node's meaning lives only in the plan it came from: nothing in the graph says *whose* ministry it is, a reviewer cannot tell two of them apart, and a query cannot join them. `MEMBER_OF` is membership of a body, not belonging to a government; `GOVERNS → Jurisdiction` is governing authority, which a housing ministry does not hold over its country.
+
+**Decision:** add one edge, `Stakeholder BELONGS_TO Jurisdiction`: the stakeholder is a body of this jurisdiction's government — a city department, a regional authority, a national ministry or agency. Public bodies only; NGOs, companies, universities, community groups and international organisations take no `BELONGS_TO`. `stakeholder_type` carries the level (`municipal_government`, `regional_government`, `national_government`) and the edge points at the matching Jurisdiction: the city for a municipal body, the country for a national one.
+
+**Identity:** two Stakeholders with the same normalised name (or `alternative_names` entry) and the same `BELONGS_TO` target are the same body. This is the first name-based identity rule for a registry type, and it is safe only because the jurisdiction disambiguates it ("Ministry of Health" of Ghana ≠ of Colombia).
+
+**Alternatives considered:** (1) no change, qualify the name ("Ministry of Health (Ghana)") — free, but lives in a string no query can follow; (3) a hierarchy edge, `Stakeholder PART_OF Stakeholder` (division → department → government) — more faithful, but needs "Government of X" parent nodes that mostly do not exist and plans rarely state the chart. Anthony chose (2) alone on 2026-10-10.
+
+**Population:** inferred, not extracted: the plan a Stakeholder was extracted from gives its city; a level label from the name and sentence gives city vs country. adaptbase-core runs the inference into a reviewable report before anything is written.
 
 ---
 
