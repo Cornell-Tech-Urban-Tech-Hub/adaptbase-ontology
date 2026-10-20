@@ -6,6 +6,12 @@
 
 ---
 
+## Decision 56 — 39 solution concepts from the live graph (2026-10-19, v1.4)
+
+adaptbase-core #424 mapped the 6,165 live Solution nodes onto this list: 2,281 matched an existing concept (by name, alias, CDP label, plural fold, or a claude-fable-5-1 judge pass). Among the rest, the judge named reusable adaptation interventions the list lacked; the candidates were folded, placed in the solution-categories hierarchy beside their nearest existing concepts, and kept when 4 or more graph nodes back them (Anthony, 2026-10-19). The 39 added here are those. Umbrella terms (green infrastructure, nature-based solutions) stay off the list by the 2026-10-06 rule; mitigation measures and general policy are out of scope.
+
+Added: urban_green_space, drought_tolerant_landscaping, seismic_retrofit, depaving, public_drinking_water_point, green_wall, stormwater_infiltration_system, district_cooling, critical_facility_hardening, business_continuity_planning, vacant_lot_greening, professional_resilience_training, deployable_flood_barrier, climate_risk_and_vulnerability_assessment, climate_resilient_public_space, green_street, resilient_construction_workforce_training, real_time_stormwater_control, occupational_heat_protection_standard, heat_adaptive_scheduling, participatory_monitoring, cool_route, drainage_maintenance, climate_risk_screening, climate_risk_modelling, sewerage_network_expansion, cooling_device_distribution, green_schoolyard, climate_informed_asset_management, institutional_capacity_building, source_water_protection, water_pipeline_renewal, soil_amendment, mental_health_support_service, urban_ventilation_corridor, controlled_environment_agriculture, land_raising, groundwater_level_control, post_disaster_psychosocial_support.
+
 ## Purpose
 
 This log documents key design decisions in the ontology development process, including rationale, alternatives considered, and implications for future work.
