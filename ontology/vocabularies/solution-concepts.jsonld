@@ -2581,6 +2581,1053 @@
       "skos:topConceptOf": {
         "@id": "abv:solution-concepts"
       }
+    },
+    {
+      "id": "urban_green_space",
+      "name": "Urban green space",
+      "aliases": [
+        "Public parks and green space",
+        "Urban park",
+        "Park system expansion",
+        "Public realm greening",
+        "Ground-level urban greening",
+        "Urban green space creation",
+        "Urban green space provision"
+      ],
+      "definition": "Creating, expanding, improving or protecting parks and other vegetated open spaces within the built-up area to provide cooling, infiltration, flood storage and recreation.",
+      "category_id": "nature",
+      "subcategory_id": "urban_greening_(green_spaces,_street_trees,_parks,",
+      "ipcc_action_types": [
+        "structural_physical",
+        "ecosystem_based"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-urban_green_space",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "drought_tolerant_landscaping",
+      "name": "Drought-tolerant landscaping",
+      "aliases": [
+        "Water-wise landscaping",
+        "Xeriscaping",
+        "Native landscaping",
+        "Native plant landscaping",
+        "Native and drought-tolerant landscaping",
+        "Turf replacement",
+        "Low-water landscaping"
+      ],
+      "definition": "Replacing irrigated lawns and ornamental plantings with native, drought-adapted or low-water vegetation and surfaces that need little or no irrigation.",
+      "category_id": "water",
+      "subcategory_id": "leak_detection,_water_efficiency,_and_evaporation_",
+      "ipcc_action_types": [
+        "ecosystem_based",
+        "structural_physical"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-drought_tolerant_landscaping",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "seismic_retrofit",
+      "name": "Seismic retrofit",
+      "aliases": [
+        "Seismic building retrofit",
+        "Seismic structural retrofit",
+        "Seismic home retrofit",
+        "Soft-story seismic retrofit",
+        "Earthquake retrofit",
+        "Seismic strengthening",
+        "Seismic retrofit of unreinforced masonry buildings"
+      ],
+      "definition": "Strengthening existing buildings and structures so they resist earthquake shaking and collapse, addressing a geophysical rather than climate hazard.",
+      "category_id": "buildings",
+      "subcategory_id": "resilient_building_design,_planning_and_constructi",
+      "ipcc_action_types": [
+        "structural_physical"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-seismic_retrofit",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "depaving",
+      "name": "Depaving",
+      "aliases": [
+        "De-sealing",
+        "Surface de-sealing and greening",
+        "Soil de-sealing",
+        "Impervious surface reduction",
+        "Paved surface reduction",
+        "Depaving and greening of hard surfaces",
+        "Road narrowing and depaving"
+      ],
+      "definition": "Removing, narrowing or avoiding sealed surfaces and replacing them with soil and vegetation so that rain infiltrates and ground surfaces stay cooler.",
+      "category_id": "infrastructure",
+      "subcategory_id": "permeable_surfaces",
+      "ipcc_action_types": [
+        "structural_physical",
+        "ecosystem_based"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-depaving",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "public_drinking_water_point",
+      "name": "Public drinking water point",
+      "aliases": [
+        "Public drinking fountain",
+        "Public drinking water fountain",
+        "Public drinking water station",
+        "Public hydration station",
+        "Public hydration point",
+        "Public drinking water access point",
+        "Drinking fountain"
+      ],
+      "definition": "Free drinking fountains or refill stations in public spaces that help people stay hydrated during hot weather.",
+      "category_id": "health",
+      "subcategory_id": "public_cooling_facilities",
+      "ipcc_action_types": [
+        "structural_physical",
+        "social"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-public_drinking_water_point",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "green_wall",
+      "name": "Green wall",
+      "aliases": [
+        "Green facade",
+        "Green façade",
+        "Living wall",
+        "Vertical greening",
+        "Vertical garden",
+        "Building facade greening"
+      ],
+      "definition": "Vegetation grown on building facades or vertical structures to cool surfaces, insulate buildings and manage runoff.",
+      "category_id": "buildings",
+      "subcategory_id": "reflective_coatings_(cool_roof,_green_roof)",
+      "ipcc_action_types": [
+        "structural_physical",
+        "ecosystem_based"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-green_wall",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "stormwater_infiltration_system",
+      "name": "Stormwater infiltration system",
+      "aliases": [
+        "Infiltration trench",
+        "French drain",
+        "Soakaway",
+        "Infiltration soakaway",
+        "Infiltration well",
+        "Stormwater drainage well",
+        "Biopore infiltration hole"
+      ],
+      "definition": "A buried trench, soakaway, well or borehole filled with gravel or open to the soil that receives stormwater runoff and lets it infiltrate into the ground.",
+      "category_id": "water",
+      "subcategory_id": "stormwater_drainage_systems",
+      "ipcc_action_types": [
+        "structural_physical"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-stormwater_infiltration_system",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "district_cooling",
+      "name": "District cooling",
+      "aliases": [
+        "District cooling system",
+        "District cooling network",
+        "Seawater district cooling",
+        "Centralised cooling network",
+        "Chilled water district network"
+      ],
+      "definition": "A centralised plant and pipe network that produces chilled water and distributes it to multiple buildings for space cooling.",
+      "category_id": "buildings",
+      "subcategory_id": "efficient_cooling_systems_(heat_pumps,_efficient_f",
+      "ipcc_action_types": [
+        "structural_physical"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-district_cooling",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "critical_facility_hardening",
+      "name": "Critical facility hardening",
+      "aliases": [
+        "Critical facility resilience retrofit",
+        "Critical infrastructure resilience retrofit",
+        "Critical infrastructure hardening",
+        "Critical infrastructure flood protection",
+        "Civic facility hardening",
+        "Critical facility electrical hardening and redundancy",
+        "School infrastructure resilience retrofit"
+      ],
+      "definition": "Retrofitting, flood-proofing, weatherproofing and adding redundancy to critical facilities and networks so they keep operating through hazard events.",
+      "category_id": "infrastructure",
+      "subcategory_id": "infrastructure_inspection_and_hardening",
+      "ipcc_action_types": [
+        "structural_physical"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-critical_facility_hardening",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "business_continuity_planning",
+      "name": "Business continuity planning",
+      "aliases": [
+        "Business continuity plan",
+        "Business continuity training",
+        "Business resilience assessment",
+        "Business resilience planning",
+        "Continuity of operations planning",
+        "Small business resilience programme"
+      ],
+      "definition": "Plans, assessments and support that help businesses, organisations and essential services keep operating through hazard events and recover afterwards.",
+      "category_id": "governance_and_policy",
+      "subcategory_id": "adaptation_planning_process",
+      "ipcc_action_types": [
+        "institutional",
+        "social"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-business_continuity_planning",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "vacant_lot_greening",
+      "name": "Vacant lot greening",
+      "aliases": [
+        "Pocket park",
+        "Pocket green space",
+        "Vacant lot activation",
+        "Vacant lot revitalisation",
+        "Vacant lot revitalization",
+        "Vacant lot and public space reclamation"
+      ],
+      "definition": "Converting a vacant or underused lot into a small vegetated public open space that provides shade, cooling and infiltration.",
+      "category_id": "nature",
+      "subcategory_id": "urban_greening_(green_spaces,_street_trees,_parks,",
+      "ipcc_action_types": [
+        "structural_physical",
+        "ecosystem_based"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-vacant_lot_greening",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "professional_resilience_training",
+      "name": "Professional resilience training",
+      "aliases": [
+        "Resilience capacity-building training",
+        "Resilience leadership training",
+        "Resilience workforce training",
+        "Building professional resilience training",
+        "Water utility operator training",
+        "Government staff risk communication training",
+        "Practitioner resilience training"
+      ],
+      "definition": "Training and knowledge programmes that build the skills of officials, practitioners and utility operators to plan and deliver climate adaptation.",
+      "category_id": "communication_and_community",
+      "subcategory_id": "commmunity_engagement_platforms_for_planning,_educ",
+      "ipcc_action_types": [
+        "social",
+        "institutional"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-professional_resilience_training",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "deployable_flood_barrier",
+      "name": "Deployable flood barrier",
+      "aliases": [
+        "Demountable flood barrier",
+        "Temporary flood barrier",
+        "Temporary deployable flood barrier",
+        "Removable flood barrier",
+        "Mobile flood barrier",
+        "Sandbagging"
+      ],
+      "definition": "A temporary or demountable barrier erected along streets, buildings or riverbanks when flooding is forecast and removed afterwards.",
+      "category_id": "water",
+      "subcategory_id": "engineered_flood_defenses_(seawalls,_levees,_revet",
+      "ipcc_action_types": [
+        "structural_physical"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-deployable_flood_barrier",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "climate_risk_and_vulnerability_assessment",
+      "name": "Climate risk and vulnerability assessment",
+      "aliases": [
+        "Climate vulnerability assessment",
+        "Climate risk assessment",
+        "Multi-hazard risk assessment",
+        "Resilience assessment",
+        "Neighbourhood vulnerability assessment",
+        "Building and infrastructure vulnerability assessment",
+        "Vulnerability mapping"
+      ],
+      "definition": "A systematic assessment of how exposed, sensitive and adaptive a place, its services, buildings and infrastructure are to climate hazards, used to set adaptation priorities.",
+      "category_id": "planning_and_monitoring",
+      "subcategory_id": "decision_support_for_climate_adaptation_planning_a",
+      "ipcc_action_types": [
+        "institutional"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-climate_risk_and_vulnerability_assessment",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "climate_resilient_public_space",
+      "name": "Climate-resilient public space",
+      "aliases": [
+        "Climate-resilient public space design",
+        "Flood park",
+        "Water square",
+        "Multifunctional resilient park",
+        "Multifunctional flood-mitigating open space",
+        "Multifunctional public green space",
+        "Resilient public space"
+      ],
+      "definition": "Designing parks, plazas and streets so they manage heat and store or slow floodwater while remaining usable during extreme conditions.",
+      "category_id": "nature",
+      "subcategory_id": "urban_greening_(green_spaces,_street_trees,_parks,",
+      "ipcc_action_types": [
+        "structural_physical",
+        "ecosystem_based"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-climate_resilient_public_space",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "green_street",
+      "name": "Green street",
+      "aliases": [
+        "Green street retrofit",
+        "Green streets programme",
+        "Green street design",
+        "Right-of-way green infrastructure",
+        "Streetscape green infrastructure",
+        "Multifunctional street redesign"
+      ],
+      "definition": "A street retrofitted with trees, planted swales, permeable surfaces and subsurface storage that capture runoff and provide shade.",
+      "category_id": "nature",
+      "subcategory_id": "urban_greening_(green_spaces,_street_trees,_parks,",
+      "ipcc_action_types": [
+        "structural_physical",
+        "ecosystem_based"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-green_street",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "resilient_construction_workforce_training",
+      "name": "Resilient construction workforce training",
+      "aliases": [
+        "Construction workforce training",
+        "Construction workforce training and certification",
+        "Construction professional accreditation",
+        "Safe construction skills training",
+        "Climate resilience workforce development",
+        "Builder training for resilient construction"
+      ],
+      "definition": "Training and accrediting builders, tradespeople, engineers and inspectors so that hazard-resistant construction and retrofit standards are applied in practice.",
+      "category_id": "communication_and_community",
+      "subcategory_id": "commmunity_engagement_platforms_for_planning,_educ",
+      "ipcc_action_types": [
+        "social",
+        "institutional"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-resilient_construction_workforce_training",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "real_time_stormwater_control",
+      "name": "Real-time stormwater control",
+      "aliases": [
+        "Real-time drainage control",
+        "Smart stormwater control",
+        "Adaptive drainage control structure operation",
+        "Remote monitoring and automated control of flood structures",
+        "Drainage control elevation management",
+        "Automated flood gate operation"
+      ],
+      "definition": "Remote monitoring and automated or managed operation of gates, weirs, pumps and drainage control levels to regulate stormwater and floodwater as conditions change.",
+      "category_id": "water",
+      "subcategory_id": "stormwater_drainage_systems",
+      "ipcc_action_types": [
+        "structural_physical",
+        "institutional"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-real_time_stormwater_control",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "occupational_heat_protection_standard",
+      "name": "Occupational heat protection standard",
+      "aliases": [
+        "Occupational heat protection",
+        "Occupational heat protection regulation",
+        "Occupational heat safety standard",
+        "Outdoor worker heat protection standard",
+        "Outdoor worker heat safety standard",
+        "Workplace heat standard",
+        "Heat illness prevention standard"
+      ],
+      "definition": "Rules and workplace practices such as rest, shade, hydration and work-pause requirements that protect indoor and outdoor workers from heat stress.",
+      "category_id": "health",
+      "subcategory_id": "heat_action_planning",
+      "ipcc_action_types": [
+        "institutional"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-occupational_heat_protection_standard",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "heat_adaptive_scheduling",
+      "name": "Heat-adaptive scheduling",
+      "aliases": [
+        "Heat-adaptive activity scheduling",
+        "Heat-adjusted work scheduling",
+        "Outdoor work schedule adjustment",
+        "Climate-adaptive recreation programming",
+        "Heat-adjusted school scheduling",
+        "Activity rescheduling for heat"
+      ],
+      "definition": "Shifting the timing, location or format of outdoor work, school, recreation and public activities to avoid the hottest periods of the day or season.",
+      "category_id": "health",
+      "subcategory_id": "heat_action_planning",
+      "ipcc_action_types": [
+        "social",
+        "institutional"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-heat_adaptive_scheduling",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "participatory_monitoring",
+      "name": "Participatory monitoring",
+      "aliases": [
+        "Participatory community monitoring",
+        "Citizen science",
+        "Citizen science programme",
+        "Citizen science data platform",
+        "Community-based monitoring",
+        "Community science",
+        "Citizen monitoring"
+      ],
+      "definition": "Residents and volunteers collecting and sharing environmental and hazard observations that feed into monitoring, early warning and planning.",
+      "category_id": "communication_and_community",
+      "subcategory_id": "commmunity_engagement_platforms_for_planning,_educ",
+      "ipcc_action_types": [
+        "social"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-participatory_monitoring",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "cool_route",
+      "name": "Cool route",
+      "aliases": [
+        "Cool corridor",
+        "Cool route network",
+        "Cool islands and routes network",
+        "Shaded active travel route",
+        "Shaded pedestrian route",
+        "Cool walking route"
+      ],
+      "definition": "A designated pedestrian or cycling route, or connected network of routes, lined with shade, vegetation, water and rest points so people can move safely during heat.",
+      "category_id": "health",
+      "subcategory_id": "public_cooling_facilities",
+      "ipcc_action_types": [
+        "structural_physical",
+        "ecosystem_based"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-cool_route",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "drainage_maintenance",
+      "name": "Drainage maintenance",
+      "aliases": [
+        "Stormwater drainage maintenance",
+        "Drain maintenance and cleaning",
+        "Drainage system inspection and maintenance",
+        "Drain inlet maintenance",
+        "Street sweeping and drain inlet maintenance",
+        "Stormwater drainage maintenance regulation",
+        "Drain cleaning"
+      ],
+      "definition": "Routine inspection, cleaning and upkeep of drains, gullies, inlets, culverts and other stormwater assets so the network retains its design capacity during storms.",
+      "category_id": "water",
+      "subcategory_id": "stormwater_drainage_systems",
+      "ipcc_action_types": [
+        "structural_physical",
+        "institutional"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-drainage_maintenance",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "climate_risk_screening",
+      "name": "Climate risk screening",
+      "aliases": [
+        "Climate risk screening tool",
+        "Climate risk screening checklist",
+        "Resilience screening tool",
+        "Resilience screening of capital projects",
+        "Climate risk screening of capital projects",
+        "Project resilience screening"
+      ],
+      "definition": "A tool or procedure that checks proposed projects, assets or investments against climate hazards and resilience criteria before they are approved or funded.",
+      "category_id": "planning_and_monitoring",
+      "subcategory_id": "decision_support_for_climate_adaptation_planning_a",
+      "ipcc_action_types": [
+        "institutional"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-climate_risk_screening",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "climate_risk_modelling",
+      "name": "Climate risk modelling",
+      "aliases": [
+        "Climate risk modeling",
+        "Climate risk analytics",
+        "Predictive risk analytics",
+        "Probabilistic risk simulation",
+        "Multi-hazard risk analytics",
+        "AI-based multi-hazard risk analytics",
+        "Uncertainty-based risk modelling"
+      ],
+      "definition": "Data-driven analytics that combine hazard, exposure and vulnerability information to quantify, simulate and forecast risk across one or more hazards.",
+      "category_id": "planning_and_monitoring",
+      "subcategory_id": "climate_analytics,_hazard_forecasting_and_weather_",
+      "ipcc_action_types": [
+        "institutional"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-climate_risk_modelling",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "sewerage_network_expansion",
+      "name": "Sewerage network expansion",
+      "aliases": [
+        "Sanitary sewer network expansion",
+        "Sewer network extension",
+        "Septic-to-sewer conversion",
+        "Centralised sewerage system",
+        "Centralized sewerage system",
+        "Sewerage expansion"
+      ],
+      "definition": "Extending the piped wastewater network to areas relying on septic systems or lacking sanitation so that sewage is collected and treated centrally.",
+      "category_id": "water",
+      "subcategory_id": "water_treatment,_filtration,_and_distributed_treat",
+      "ipcc_action_types": [
+        "structural_physical"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-sewerage_network_expansion",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "cooling_device_distribution",
+      "name": "Cooling device distribution",
+      "aliases": [
+        "Cooling appliance distribution",
+        "Cooling equipment distribution",
+        "Cooling kit distribution",
+        "Fan distribution",
+        "Air conditioner distribution",
+        "Air conditioning unit distribution"
+      ],
+      "definition": "Providing fans, air conditioners or other cooling devices and kits to heat-vulnerable households and facilities.",
+      "category_id": "health",
+      "subcategory_id": "heat_action_planning",
+      "ipcc_action_types": [
+        "social",
+        "structural_physical"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-cooling_device_distribution",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "green_schoolyard",
+      "name": "Green schoolyard",
+      "aliases": [
+        "Green schoolyards",
+        "Schoolyard greening",
+        "Schoolyard cooling and greening",
+        "Schoolyard depaving",
+        "School ground greening",
+        "Green playground"
+      ],
+      "definition": "Replacing paved school grounds with trees, planting and permeable surfaces to reduce heat and runoff and provide outdoor learning space.",
+      "category_id": "nature",
+      "subcategory_id": "urban_greening_(green_spaces,_street_trees,_parks,",
+      "ipcc_action_types": [
+        "structural_physical",
+        "ecosystem_based"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-green_schoolyard",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "climate_informed_asset_management",
+      "name": "Climate-informed asset management",
+      "aliases": [
+        "Risk-based infrastructure asset management",
+        "Risk-based asset management",
+        "Digital asset management system",
+        "Climate risk-informed asset management",
+        "Resilient asset management",
+        "Climate-informed asset management plan"
+      ],
+      "definition": "Tracking the condition and climate risk exposure of infrastructure assets and incorporating that risk into their planning, maintenance, renewal and investment decisions.",
+      "category_id": "infrastructure",
+      "subcategory_id": "predictive_maintenance_and_repair",
+      "ipcc_action_types": [
+        "institutional"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-climate_informed_asset_management",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "institutional_capacity_building",
+      "name": "Institutional capacity building",
+      "aliases": [
+        "Municipal staff capacity building",
+        "Municipal capacity building",
+        "Local government capacity building",
+        "Public sector capacity building",
+        "Government capacity building",
+        "Municipal data analytics capacity",
+        "Online training platform"
+      ],
+      "definition": "Training, staffing, data and tooling that strengthen the ability of government institutions to plan and deliver adaptation.",
+      "category_id": "governance_and_policy",
+      "subcategory_id": "adaptation_governance",
+      "ipcc_action_types": [
+        "institutional"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-institutional_capacity_building",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "source_water_protection",
+      "name": "Source water protection",
+      "aliases": [
+        "Source water protection programme",
+        "Drinking water source protection",
+        "Wellfield protection programme",
+        "Wellhead protection",
+        "Catchment protection for drinking water",
+        "Sustainable agriculture for source water protection"
+      ],
+      "definition": "Protecting and managing the catchments, recharge areas, wellfields and reservoirs that supply drinking water from pollution and degradation.",
+      "category_id": "water",
+      "subcategory_id": "groundwater_recharge,_watershed_protection,_aquife",
+      "ipcc_action_types": [
+        "ecosystem_based",
+        "institutional"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-source_water_protection",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "water_pipeline_renewal",
+      "name": "Water pipeline renewal",
+      "aliases": [
+        "Pipe network renewal",
+        "Water main replacement",
+        "Water pipe replacement",
+        "Water distribution network modernisation",
+        "Water distribution network modernization",
+        "Seismic retrofit of water pipelines",
+        "Seismically resilient water pipelines"
+      ],
+      "definition": "Replacing, modernising or strengthening water mains and distribution assets so the network withstands shocks and keeps delivering supply.",
+      "category_id": "water",
+      "subcategory_id": "pipeline_rehabilitation,_subsurface_inspection_and",
+      "ipcc_action_types": [
+        "structural_physical"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-water_pipeline_renewal",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "soil_amendment",
+      "name": "Soil amendment",
+      "aliases": [
+        "Compost and mulch soil amendment",
+        "Soil amendment for infiltration",
+        "Organic soil amendment",
+        "Soil health improvement",
+        "Soil decompaction",
+        "Compost amendment"
+      ],
+      "definition": "Decompacting soils and adding compost, mulch or other organic matter so they absorb and retain more water and better resist drought and erosion.",
+      "category_id": "nature",
+      "subcategory_id": "riparian_zone_protection,_erosion_control",
+      "ipcc_action_types": [
+        "ecosystem_based"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-soil_amendment",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "mental_health_support_service",
+      "name": "Mental health support service",
+      "aliases": [
+        "Mental health services",
+        "Mobile mental health services",
+        "Affordable mental health services",
+        "Psychosocial support service",
+        "Mental health and psychosocial support",
+        "Climate mental health services"
+      ],
+      "definition": "Accessible, affordable or mobile services that address stress, trauma and mental illness arising from disasters and prolonged climate stress.",
+      "category_id": "health",
+      "subcategory_id": "emergency_response_equipment,_mobile_units,_shelte",
+      "ipcc_action_types": [
+        "social"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-mental_health_support_service",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "urban_ventilation_corridor",
+      "name": "Urban ventilation corridor",
+      "aliases": [
+        "Urban ventilation corridors",
+        "Urban ventilation corridor design",
+        "Ventilation corridor",
+        "Wind corridor",
+        "Urban wind corridor",
+        "Urban air path"
+      ],
+      "definition": "An open corridor kept free of obstruction through planning and design so that wind can move through the city and disperse heat and pollution.",
+      "category_id": "planning_and_monitoring",
+      "subcategory_id": "urban_heat_island_mapping_and_planning",
+      "ipcc_action_types": [
+        "structural_physical",
+        "institutional"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-urban_ventilation_corridor",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "controlled_environment_agriculture",
+      "name": "Controlled-environment agriculture",
+      "aliases": [
+        "Greenhouse agriculture",
+        "Greenhouse food production",
+        "Indoor farming",
+        "Indoor agriculture",
+        "Vertical farming"
+      ],
+      "definition": "Growing food in greenhouses or indoor systems that shield crops from weather extremes and allow conditions to be regulated.",
+      "category_id": "food",
+      "subcategory_id": "urban_food_production_(controlled_environment_agri",
+      "ipcc_action_types": [
+        "structural_physical"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-controlled_environment_agriculture",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "land_raising",
+      "name": "Land raising",
+      "aliases": [
+        "Land elevation",
+        "Ground raising",
+        "Ground level raising",
+        "Site raising",
+        "Fill raising",
+        "Terrain raising"
+      ],
+      "definition": "Raising the ground level of a development site or district with fill so that it sits above expected flood levels.",
+      "category_id": "water",
+      "subcategory_id": "engineered_flood_defenses_(seawalls,_levees,_revet",
+      "ipcc_action_types": [
+        "structural_physical"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-land_raising",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "groundwater_level_control",
+      "name": "Groundwater level control",
+      "aliases": [
+        "Groundwater level management",
+        "Groundwater control pumping",
+        "Groundwater dewatering pumping",
+        "Groundwater dewatering",
+        "Groundwater table lowering",
+        "Groundwater level management for flood storage"
+      ],
+      "definition": "Pumping or drainage that lowers a rising groundwater table to protect buildings and infrastructure or to create subsurface flood storage.",
+      "category_id": "water",
+      "subcategory_id": "water_storage,_pumping_systems_and_pressure_manage",
+      "ipcc_action_types": [
+        "structural_physical"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-groundwater_level_control",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
+    },
+    {
+      "id": "post_disaster_psychosocial_support",
+      "name": "Post-disaster psychosocial support",
+      "aliases": [
+        "Post-disaster mental health support",
+        "Post-disaster mental health services",
+        "Psychological first aid",
+        "Disaster psychosocial support",
+        "Disaster mental health services",
+        "Post-disaster counselling"
+      ],
+      "definition": "Psychological first aid, counselling and mental health services provided to people affected by a hazard event in its aftermath.",
+      "category_id": "health",
+      "subcategory_id": "emergency_response_equipment,_mobile_units,_shelte",
+      "ipcc_action_types": [
+        "social"
+      ],
+      "cdp_labels": [],
+      "status": "active",
+      "added_in": "v1.4",
+      "@id": "abv:solution-concepts-post_disaster_psychosocial_support",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:solution-concepts"
+      }
     }
   ],
   "unmapped_cdp_labels": [
@@ -2695,6 +3742,7 @@
       "reason": "Umbrella term; a plan that names nothing narrower gets no Solution (review 2026-10-06)."
     }
   ],
+  "_proposals": "v1.4 (2026-10-19): 39 concepts proposed from the adaptbase-core Solution concept migration (#424 wave 2): a judge pass over 5,935 live Solutions named interventions the list lacked; candidates were folded, placed in the hierarchy and kept when 4+ graph nodes back them. Each carries added_in v1.4.",
   "@id": "abv:solution-concepts",
   "@type": "skos:ConceptScheme"
 }

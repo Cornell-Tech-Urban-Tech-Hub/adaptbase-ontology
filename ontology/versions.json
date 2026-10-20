@@ -1,5 +1,10 @@
 [
   {
+    "path": "../ontology/ontology-v1.4.jsonld",
+    "label": "v1.4",
+    "value": "v1.4"
+  },
+  {
     "path": "../ontology/ontology-v1.3.jsonld",
     "label": "v1.3",
     "value": "v1.3"
