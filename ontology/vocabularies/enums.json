@@ -1211,6 +1211,32 @@
       }
     ]
   },
+  "total_stage": {
+    "_source": "v1.6 (Decision 59; adaptbase-core#545)",
+    "_usage": "FundingTotal.total_stage",
+    "values": [
+      {
+        "id": "estimated_need",
+        "name": "Estimated need",
+        "description": "A cost estimate, or a sum still to be found ('£40m partnership funding required'; the costed total of a plan)."
+      },
+      {
+        "id": "budgeted",
+        "name": "Budgeted",
+        "description": "In an adopted budget or capital plan."
+      },
+      {
+        "id": "committed",
+        "name": "Committed",
+        "description": "Contracted, awarded or otherwise bound."
+      },
+      {
+        "id": "spent",
+        "name": "Spent",
+        "description": "Reported as disbursed ('£23.4m spent on flood defences since 2013')."
+      }
+    ]
+  },
   "amount_qualifier": {
     "_source": "v1.1 (Decision 43; adaptbase-core#298 §4.4)",
     "_usage": "FundingAllocation.amount_qualifier",

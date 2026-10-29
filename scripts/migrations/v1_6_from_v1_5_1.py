@@ -3,6 +3,8 @@
 
 Run with: uv run scripts/migrations/v1_6_from_v1_5_1.py
 Re-runnable: ontology-v1.6.jsonld and versions.json are rebuilt from v1.5.1.
+The enums.total_stage block lives in ontology/vocabularies/enums.json (added by hand
+with this version; the manifest row here binds to it).
 
 v1.6 is one decision (Decision 59, Anthony 2026-10-29, ontology#30): a stated
 total of money a source attributes to a purpose ("nearly $12 billion in capital
@@ -49,8 +51,8 @@ def funding_total(fa: dict, alt_names: dict) -> dict:
         "id": "FundingTotal",
         "label": "Funding Total",
         "definition": (
-            "A stated total of money that a source attributes to a purpose, a hazard, a system or "
-            "a vulnerability, without naming the projects it pays for: 'nearly $12 billion in "
+            "A stated total of money that a source attributes to a purpose: a hazard, a system, a "
+            "vulnerability, a plan or a goal, without naming the projects it pays for: 'nearly $12 billion in "
             "capital projects that address flood risk', '$46.5 billion in contributing elements'. "
             "A total is never added to another total, or to the allocations it includes: totals "
             "overlap (a project tagged for both flooding and heat sits in both) and a sum would "
@@ -88,6 +90,21 @@ def funding_total(fa: dict, alt_names: dict) -> dict:
                 ),
             },
             {
+                "id": "total_stage",
+                "type": "enum",
+                "required": False,
+                "values": ["estimated_need", "budgeted", "committed", "spent"],
+                "note": (
+                    "Stage of the money the total describes. estimated_need: a cost estimate or "
+                    "a sum still to be found ('£40m partnership funding required', the costed "
+                    "total of a plan); budgeted: in an adopted budget or capital plan; committed: "
+                    "contracted or awarded; spent: reported as disbursed ('£23.4m spent on flood "
+                    "defences since 2013'). Leave empty when the source does not say."
+                ),
+                "vocabulary_binding": {"vocab": "enums", "field": "total_stage"},
+                "ab:boundToVocabulary": {"@id": "abv:enums-total_stage"},
+            },
+            {
                 "id": "attribution_method",
                 "type": "string",
                 "required": False,
@@ -95,7 +112,10 @@ def funding_total(fa: dict, alt_names: dict) -> dict:
             },
             deepcopy(alt_names),
         ],
-        "vocabulary_bindings": [{"vocab": "enums", "field": "amount_qualifier"}],
+        "vocabulary_bindings": [
+            {"vocab": "enums", "field": "amount_qualifier"},
+            {"vocab": "enums", "field": "total_stage"},
+        ],
         "notes": (
             f"{D} Kept apart from FundingAllocation so that no sum of allocations can mix in a "
             "total. Points at its purposes with FOR_PURPOSE (a total for two hazards points at both; "
@@ -108,7 +128,9 @@ def funding_total(fa: dict, alt_names: dict) -> dict:
             "Look for a sum of money tied to a purpose and no single project: 'nearly $12 billion "
             "in capital projects that address flood risk', '$2 billion for heat', 'over $200 million "
             "in heat-vulnerable neighbourhoods'. Record amount (full base units), currency and years "
-            "as stated; link FOR_PURPOSE to each hazard, system, solution or vulnerability named and "
+            "as stated, and total_stage when the text says whether the money is an estimate, "
+            "budgeted, committed or spent; link FOR_PURPOSE to each hazard, system, solution, "
+            "vulnerability, plan or goal named and "
             "BUDGETED_BY to the government whose budget it is. If the text names the project the "
             "money pays for, it is a FundingAllocation, not a total."
         ),
@@ -144,13 +166,19 @@ def new_edges(rels: list) -> list:
         "and heat' → Flooding and Extreme heat). No edge records that two totals overlap; they "
         "are never added together."
     )
-    fp_hint = "Link each purpose the text attaches the total to: the hazard, system, solution or vulnerability it is 'for' or 'addresses'."
+    fp_hint = (
+        "Link each purpose the text attaches the total to: the hazard, system, solution or "
+        "vulnerability it is 'for' or 'addresses', or the plan or goal whose cost or budget it "
+        "states ('the Plan costs COP 147,125 million'; 'Priorities 1-3 total ...')."
+    )
     out = []
     for target, what, example in (
         ("Hazard", "climate hazard", "flood risk"),
         ("Solution", "kind of solution", "green infrastructure"),
         ("UrbanSystem", "urban system", "the stormwater system"),
         ("Vulnerability", "vulnerability", "heat vulnerability"),
+        ("Plan", "plan, or a named part of it", "the cost of Plan 4C 2014-2024, or of one of its axes"),
+        ("ResilienceGoal", "resilience goal", "the cost of Priorities 1-3"),
     ):
         out.append(
             edge(
@@ -246,9 +274,27 @@ def main() -> None:
         aq["bound_to"].append("FundingTotal.amount_qualifier")
         aq["description"] = "How an allocation or total amount is stated (Decisions 43, 59)."
 
+    if not any(v["id"] == "enums.total_stage" for v in o["vocabularies"]):
+        fs = by_id(o["vocabularies"], "enums.funding_status")
+        o["vocabularies"].insert(
+            o["vocabularies"].index(fs) + 1,
+            {
+                "id": "enums.total_stage",
+                "label": "Total stage",
+                "type": "internal",
+                "url": "",
+                "description": "Stage of the money a FundingTotal describes (Decision 59).",
+                "bound_to": ["FundingTotal.total_stage"],
+                "terms_count": 4,
+                "@id": "abv:enums-total_stage",
+                "@type": "skos:ConceptScheme",
+            },
+        )
+
     md = o["metadata"]
     md["types_count"] = len(types)
     md["relationships_count"] = len(rels)
+    md["vocabularies_count"] = len(o["vocabularies"])
     n_pred = len({r["id"] for r in rels})
     summary = (
         f"v1.6 (2026-10-29): FundingTotal — a stated total of money for a purpose, kept apart "
@@ -263,7 +309,8 @@ def main() -> None:
     o["update_note"] = (
         "v1.6 — one decision (Decision 59, 2026-10-29): a stated total of money a source "
         "attributes to a purpose is a FundingTotal, a type of its own so no sum mixes totals "
-        "with the allocations inside them. It points at its purposes (FOR_PURPOSE), the "
+        "with the allocations inside them. It points at its purposes (FOR_PURPOSE: a hazard, "
+        "system, solution, vulnerability, plan or goal), the "
         "government whose budget it reports (BUDGETED_BY), the allocations or totals the text "
         "says it includes (INCLUDES) and its funder (PROVIDED_BY). FundingAllocation is narrowed "
         "to lines that name what they fund."
@@ -276,8 +323,9 @@ def main() -> None:
             "date": DATE,
             "summary": o["update_note"],
             "changes": [
-                {"type": "added", "text": "FundingTotal type: label, amount, currency, amount_qualifier, period_start_year, period_end_year, scope_basis, attribution_method, alternative_names; instance type (Decision 59)"},
-                {"type": "added", "text": "FOR_PURPOSE (FundingTotal → Hazard | Solution | UrbanSystem | Vulnerability) (Decision 59)"},
+                {"type": "added", "text": "FundingTotal type: label, amount, currency, amount_qualifier, period_start_year, period_end_year, scope_basis, total_stage, attribution_method, alternative_names; instance type (Decision 59)"},
+                {"type": "added", "text": "FOR_PURPOSE (FundingTotal → Hazard | Solution | UrbanSystem | Vulnerability | Plan | ResilienceGoal) (Decision 59)"},
+                {"type": "added", "text": "enums.total_stage: estimated_need | budgeted | committed | spent, bound to FundingTotal.total_stage (Decision 59)"},
                 {"type": "added", "text": "BUDGETED_BY (FundingTotal → Jurisdiction), many-to-one (Decision 59)"},
                 {"type": "added", "text": "INCLUDES (FundingTotal → FundingAllocation | FundingTotal), only where the text states it (Decision 59)"},
                 {"type": "added", "text": "PROVIDED_BY gains FundingTotal → Stakeholder | FundingStream (Decision 59)"},
