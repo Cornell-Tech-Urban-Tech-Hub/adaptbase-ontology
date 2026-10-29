@@ -1,10 +1,25 @@
 # Ontology Design Decisions Log
 
 **Project:** AdaptBase ontology  
-**Version:** 1.3  
-**Last Updated:** 2026-10-10
+**Version:** 1.6  
+**Last Updated:** 2026-10-29
 
 ---
+
+## Decision 59 — a stated total of money for a purpose is a FundingTotal (2026-10-29, v1.6)
+
+adaptbase-core #545: New York City's FY2026 Climate Budgeting report states most of its adaptation money as totals tied to a purpose ("nearly $12 billion in capital projects that address flood risk", "$2 billion for heat", "$46.5 billion in contributing elements"), not as project lines. `FundingAllocation` must FUND an Action or CapitalProject, so the extractor had nowhere to put a total, and 25 of the trial's 62 amounts were dropped at staging as edge-less.
+
+Anthony chose (ontology#30, 2026-10-29) a new type rather than loosening FundingAllocation, so that no sum of allocations can mix in a total and count the same money twice:
+
+1. **`FundingTotal`**: a stated total a source attributes to a purpose. Properties `label`, `amount` (full base units, Decision 58), `currency`, `amount_qualifier`, `period_start_year`, `period_end_year`, `scope_basis` (`purpose` | `contributing_elements` | `other`), `total_stage` (`estimated_need` | `budgeted` | `committed` | `spent`: whether the money is a cost estimate or still to be found, in an adopted budget, bound, or paid out; a corpus sample mixed all four, Greater Manchester's £23.4m spent beside its £40m still required), `attribution_method` (the source's own tagging method, e.g. Climate Budgeting) and `alternative_names`. The name claims neither that the money is reserved ("earmarked") nor that it is held in one pot ("pooled").
+2. **Edges.** `FOR_PURPOSE` → Hazard | Solution | UrbanSystem | Vulnerability | Plan | ResilienceGoal (a plan's costed total, or one axis or priority of it, is a total for that plan or goal: Cartagena's COP 147,125 million for Plan 4C and per-axis totals, Ibadan's cost of Priorities 1–3; without these targets such totals would have no edge and be dropped at staging); `BUDGETED_BY` → Jurisdiction (many-to-one); `INCLUDES` → FundingAllocation | FundingTotal, only where the text states the containment; `PROVIDED_BY` gains FundingTotal → Stakeholder | FundingStream.
+3. **No overlap edge.** A total points at its set of purposes (NYC's "both" total points at Flooding and Extreme heat). The definition says totals are never added to each other or to the allocations they include.
+4. **The untraced remainder** (total minus included allocations) is computed when read, never stored.
+5. **Identity: instance type.** Totals never merge across documents; next year's report gives a new node.
+6. **`FundingAllocation` is narrowed** to lines that name the Action or CapitalProject they fund.
+
+Known limit, accepted: documents rarely say which projects sit inside which total, so `INCLUDES` will be sparse and most totals will have no traced share at first. The Plan and ResilienceGoal targets and `total_stage` were added the same day, before the version was merged or applied anywhere, after a sample of about 15 cities' documents (adaptbase-core #545). 23 types, 77 relationships, 54 predicate ids.
 
 ## Decision 58 — money is written in full base units (2026-10-29, v1.5.1)
 

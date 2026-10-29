@@ -25,6 +25,7 @@
     'FinancingSource': 'Finance',   // ≤ v1.0
     'FundingStream': 'Finance',     // v1.1
     'FundingAllocation': 'Finance', // v1.1
+    'FundingTotal': 'Finance',      // v1.6
     'FinancialInstrument': 'Finance',
     'CapitalProject': 'Finance',
     // Outcomes — goals, results, measurement
