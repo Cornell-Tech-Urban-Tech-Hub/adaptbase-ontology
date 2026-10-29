@@ -6,6 +6,12 @@
 
 ---
 
+## Decision 58 — money is written in full base units (2026-10-29, v1.5.1)
+
+adaptbase-core #546: extracting New York City's FY2026 Climate Budgeting report, the property pass wrote a table row "$1,508.8" under "Funding (in Millions)" as `amount: 1508.8` with no currency, a million times too small; 36 of the trial's 67 amounts lost their scale. The note on `FundingAllocation.amount` read "As stated, never converted at extraction." Decision 43 meant no *currency* conversion (its own example writes $2.1M as 2100000), but the model read the note literally and copied the printed figure.
+
+The notes on `FundingAllocation.amount` and `FundingStream.max_award` now say what was meant: the full number in base currency units, with the scale the source states on the figure or in its table header applied ("$2.1M" → 2100000; "$1,508.8" under "Funding (in Millions)" → 1508800000), and never converted between currencies. Wording only: no type, relationship or vocabulary change. A scale field was considered and declined (Anthony, 2026-10-29): it would move the multiplication to every reader. adaptbase-core adds a prompt rule and a deterministic check that sends an amount which lost its scale or currency to human review (core PR #552).
+
 ## Decision 57 — 131 solution concepts from the revision pass (2026-10-20, v1.5)
 
 After adaptbase-core's #424 revision pass, 403 live Solutions carried a reviewed "no concept yet" marker: real measures from plans that none of the 140 concepts covered. Their proposed names were clustered (274 groups) and placed in the solution-categories hierarchy beside their nearest existing concepts; the placement recommended proposing 131, folding 80 into existing concepts and removing 37. Anthony took the recommendations as they stood (2026-10-20: "go with the recommendations, fix later"), so unlike Decision 56 this release keeps candidates backed by a single graph node (74 of the 131). Prune in a later pass as the corpus grows. Umbrella terms, mitigation and general policy stay out.
