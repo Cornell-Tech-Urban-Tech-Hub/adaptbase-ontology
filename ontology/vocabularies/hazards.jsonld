@@ -118,6 +118,36 @@
           }
         },
         {
+          "id": "flood_type_not_stated",
+          "name": "Flood (type not stated)",
+          "c40_arup_category": "flood",
+          "hazard_source": "c40_arup",
+          "undrr_terms": [
+            "flood",
+            "floods",
+            "flooding",
+            "flood risk",
+            "flood hazard"
+          ],
+          "broader_of": [
+            "river_flood",
+            "flash_surface_flood",
+            "coastal_flood",
+            "groundwater_flood"
+          ],
+          "added_in": "v1.7",
+          "_note": "v1.7 (Decision 60): the parent of the four flood types, for sources that say only 'flooding'.",
+          "definition": "Flooding where the passage names no type. Use only then: a passage that indicates the sea, a river, intense rainfall or groundwater takes coastal_flood, river_flood, flash_surface_flood or groundwater_flood.",
+          "@id": "abv:hazards-flood_type_not_stated",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:hazards-meteorological_hydrological"
+          },
+          "skos:inScheme": {
+            "@id": "abv:hazards"
+          }
+        },
+        {
           "id": "cyclone_hurricane_typhoon",
           "name": "Cyclone (Hurricane/Typhoon)",
           "c40_arup_category": "wind",
@@ -692,6 +722,27 @@
           ],
           "definition": "Gradual, widespread sinking of the land over years, from groundwater extraction, soil compaction or peat loss. Use subsidence for a sudden, local collapse.",
           "@id": "abv:hazards-rcc.subsidence_chronic",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:hazards-geohazards"
+          },
+          "skos:inScheme": {
+            "@id": "abv:hazards"
+          }
+        },
+        {
+          "id": "soil_erosion",
+          "name": "Soil erosion",
+          "c40_arup_category": null,
+          "hazard_source": "rcc",
+          "undrr_terms": [
+            "soil erosion",
+            "GH0403"
+          ],
+          "added_in": "v1.7",
+          "_note": "v1.7 (Decision 60): UNDRR-ISC HIPs 2025 GH0403, cluster Other Geohazard, next to Soil Degradation.",
+          "definition": "The inland loss of soil by water or wind. Use coastal_erosion for shoreline material and subsidence for ground that sinks.",
+          "@id": "abv:hazards-soil_erosion",
           "@type": "skos:Concept",
           "skos:broader": {
             "@id": "abv:hazards-geohazards"
