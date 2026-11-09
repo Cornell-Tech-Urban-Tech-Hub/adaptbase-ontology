@@ -263,6 +263,50 @@
       "skos:topConceptOf": {
         "@id": "abv:vulnerable-populations"
       }
+    },
+    {
+      "id": "pregnant_postpartum",
+      "name": "Pregnant and Postpartum People",
+      "description": "People who are pregnant or have recently given birth, for whom heat, smoke, flooding and disrupted care carry added health risk",
+      "added_in": "v1.7",
+      "@id": "abv:vulnerable-populations-pregnant_postpartum",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:vulnerable-populations"
+      }
+    },
+    {
+      "id": "informal_workers",
+      "name": "Informal Workers",
+      "description": "People working outside formal employment and its protections, such as street vendors, waste pickers and day laborers, who often lose income or work exposed during climate events",
+      "added_in": "v1.7",
+      "@id": "abv:vulnerable-populations-informal_workers",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:vulnerable-populations"
+      }
+    },
+    {
+      "id": "households_without_cooling",
+      "name": "Households without Cooling",
+      "description": "Households with no air conditioning or other working means of cooling their home during extreme heat",
+      "added_in": "v1.7",
+      "@id": "abv:vulnerable-populations-households_without_cooling",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:vulnerable-populations"
+      }
+    },
+    {
+      "id": "transit_dependent",
+      "name": "Transit-Dependent People",
+      "description": "People who rely on public transportation and have no private vehicle, which limits evacuation and access to cooling or services",
+      "added_in": "v1.7",
+      "@id": "abv:vulnerable-populations-transit_dependent",
+      "@type": "skos:Concept",
+      "skos:topConceptOf": {
+        "@id": "abv:vulnerable-populations"
+      }
     }
   ],
   "@id": "abv:vulnerable-populations",

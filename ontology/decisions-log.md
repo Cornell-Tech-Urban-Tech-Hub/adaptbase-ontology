@@ -1,10 +1,20 @@
 # Ontology Design Decisions Log
 
 **Project:** AdaptBase ontology  
-**Version:** 1.6  
-**Last Updated:** 2026-10-29
+**Version:** 1.7  
+**Last Updated:** 2026-11-09
 
 ---
+
+## Decision 60 — six vocabulary terms real plans needed (2026-11-09, v1.7)
+
+adaptbase-core staging review: terms plans use and the closed lists did not have. Anthony decided these on 2026-10-13 (flood, populations) and 2026-10-15 (soil erosion).
+
+1. **`flood_type_not_stated`, "Flood (type not stated)"**: the parent of River, Flash/surface, Coastal and Groundwater flood. Used only when the passage names no flood type. The vocabulary split flooding into four types with no umbrella, so a plan that said only "flooding" had nothing to attach to: 763 staged links across 116 documents were waiting on it when this shipped. A passage that indicates a type still takes that type.
+2. **`soil_erosion`** (UNDRR-ISC HIPs 2025, GH0403), in Geohazards: inland loss of soil by water or wind. Coastal erosion stays its own term. Keeps the hazard list attached to the UNDRR profiles.
+3. **Four vulnerable-population groups**: Pregnant and Postpartum People, Informal Workers, Households without Cooling, Transit-Dependent People.
+
+4. **FOR_PURPOSE no longer reaches Plan or ResilienceGoal.** Those two edges were added to v1.6 after adaptbase-core pinned it. On 2026-10-30 Anthony decided to delete them rather than widen the ontology, and core removed them from its database. `FundingTotal.total_stage`, added in the same later commit, stays.
 
 ## Decision 59 — a stated total of money for a purpose is a FundingTotal (2026-10-29, v1.6)
 
