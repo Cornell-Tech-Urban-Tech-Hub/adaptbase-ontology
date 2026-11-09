@@ -3,7 +3,7 @@
   "@id": "https://ontology.adaptbase.us/ont/",
   "@type": "owl:Ontology",
   "version": "v1.7",
-  "update_note": "v1.7 — one decision (Decision 60): six terms real plans needed. 'Flood (type not stated)', the parent of the four flood types, for a source that says only 'flooding'; 'Soil erosion' (UNDRR GH0403); and four vulnerable-population groups. Vocabulary only.",
+  "update_note": "v1.7 — one decision (Decision 60): six terms real plans needed. 'Flood (type not stated)', the parent of the four flood types, for a source that says only 'flooding'; 'Soil erosion' (UNDRR GH0403); and four vulnerable-population groups. Also removes the two FOR_PURPOSE edges to Plan and ResilienceGoal.",
   "updated": "2026-11-09T18:00:00.000Z",
   "domain": "urban-climate-adaptation",
   "domain_label": "Urban Climate Adaptation and Resilience Solutions",
@@ -1553,7 +1553,7 @@
     {
       "id": "FundingTotal",
       "label": "Funding Total",
-      "definition": "A stated total of money that a source attributes to a purpose: a hazard, a system, a vulnerability, a plan or a goal, without naming the projects it pays for: 'nearly $12 billion in capital projects that address flood risk', '$46.5 billion in contributing elements'. A total is never added to another total, or to the allocations it includes: totals overlap (a project tagged for both flooding and heat sits in both) and a sum would count the same money twice. Instance type: never merges across documents; next year's report gives a new node.",
+      "definition": "A stated total of money that a source attributes to a purpose, a hazard, a system or a vulnerability, without naming the projects it pays for: 'nearly $12 billion in capital projects that address flood risk', '$46.5 billion in contributing elements'. A total is never added to another total, or to the allocations it includes: totals overlap (a project tagged for both flooding and heat sits in both) and a sum would count the same money twice. Instance type: never merges across documents; next year's report gives a new node.",
       "properties": [
         {
           "id": "label",
@@ -1657,7 +1657,7 @@
         }
       ],
       "notes": "v1.6 (Decision 59). Kept apart from FundingAllocation so that no sum of allocations can mix in a total. Points at its purposes with FOR_PURPOSE (a total for two hazards points at both; there is no overlap edge between totals), at the government whose budget it reports with BUDGETED_BY, and at the allocations or smaller totals the text says sit inside it with INCLUDES. The untraced remainder (amount minus the allocations it includes) is computed when read, never stored.",
-      "extract_hint": "Look for a sum of money tied to a purpose and no single project: 'nearly $12 billion in capital projects that address flood risk', '$2 billion for heat', 'over $200 million in heat-vulnerable neighbourhoods'. Record amount (full base units), currency and years as stated, and total_stage when the text says whether the money is an estimate, budgeted, committed or spent; link FOR_PURPOSE to each hazard, system, solution, vulnerability, plan or goal named and BUDGETED_BY to the government whose budget it is. If the text names the project the money pays for, it is a FundingAllocation, not a total.",
+      "extract_hint": "Look for a sum of money tied to a purpose and no single project: 'nearly $12 billion in capital projects that address flood risk', '$2 billion for heat', 'over $200 million in heat-vulnerable neighbourhoods'. Record amount (full base units), currency and years as stated; link FOR_PURPOSE to each hazard, system, solution or vulnerability named and BUDGETED_BY to the government whose budget it is. If the text names the project the money pays for, it is a FundingAllocation, not a total.",
       "@id": "ab:FundingTotal",
       "@type": "owl:Class"
     },
@@ -4051,7 +4051,7 @@
       ],
       "cardinality": "many-to-many",
       "notes": "v1.6 (Decision 59). A total for two purposes points at both ('$1 billion that addresses both flooding and heat' → Flooding and Extreme heat). No edge records that two totals overlap; they are never added together.",
-      "extract_hint": "Link each purpose the text attaches the total to: the hazard, system, solution or vulnerability it is 'for' or 'addresses', or the plan or goal whose cost or budget it states ('the Plan costs COP 147,125 million'; 'Priorities 1-3 total ...').",
+      "extract_hint": "Link each purpose the text attaches the total to: the hazard, system, solution or vulnerability it is 'for' or 'addresses'.",
       "@id": "ab:fundingTotalForPurposeHazard",
       "@type": "owl:ObjectProperty",
       "rdfs:subPropertyOf": {
@@ -4079,7 +4079,7 @@
       ],
       "cardinality": "many-to-many",
       "notes": "v1.6 (Decision 59). A total for two purposes points at both ('$1 billion that addresses both flooding and heat' → Flooding and Extreme heat). No edge records that two totals overlap; they are never added together.",
-      "extract_hint": "Link each purpose the text attaches the total to: the hazard, system, solution or vulnerability it is 'for' or 'addresses', or the plan or goal whose cost or budget it states ('the Plan costs COP 147,125 million'; 'Priorities 1-3 total ...').",
+      "extract_hint": "Link each purpose the text attaches the total to: the hazard, system, solution or vulnerability it is 'for' or 'addresses'.",
       "@id": "ab:fundingTotalForPurposeSolution",
       "@type": "owl:ObjectProperty",
       "rdfs:subPropertyOf": {
@@ -4107,7 +4107,7 @@
       ],
       "cardinality": "many-to-many",
       "notes": "v1.6 (Decision 59). A total for two purposes points at both ('$1 billion that addresses both flooding and heat' → Flooding and Extreme heat). No edge records that two totals overlap; they are never added together.",
-      "extract_hint": "Link each purpose the text attaches the total to: the hazard, system, solution or vulnerability it is 'for' or 'addresses', or the plan or goal whose cost or budget it states ('the Plan costs COP 147,125 million'; 'Priorities 1-3 total ...').",
+      "extract_hint": "Link each purpose the text attaches the total to: the hazard, system, solution or vulnerability it is 'for' or 'addresses'.",
       "@id": "ab:fundingTotalForPurposeUrbanSystem",
       "@type": "owl:ObjectProperty",
       "rdfs:subPropertyOf": {
@@ -4135,7 +4135,7 @@
       ],
       "cardinality": "many-to-many",
       "notes": "v1.6 (Decision 59). A total for two purposes points at both ('$1 billion that addresses both flooding and heat' → Flooding and Extreme heat). No edge records that two totals overlap; they are never added together.",
-      "extract_hint": "Link each purpose the text attaches the total to: the hazard, system, solution or vulnerability it is 'for' or 'addresses', or the plan or goal whose cost or budget it states ('the Plan costs COP 147,125 million'; 'Priorities 1-3 total ...').",
+      "extract_hint": "Link each purpose the text attaches the total to: the hazard, system, solution or vulnerability it is 'for' or 'addresses'.",
       "@id": "ab:fundingTotalForPurposeVulnerability",
       "@type": "owl:ObjectProperty",
       "rdfs:subPropertyOf": {
@@ -4146,62 +4146,6 @@
       },
       "rdfs:range": {
         "@id": "ab:Vulnerability"
-      }
-    },
-    {
-      "id": "FOR_PURPOSE",
-      "label": "for purpose",
-      "source": "FundingTotal",
-      "target": "Plan",
-      "definition": "The source attributes the total to this plan, or a named part of it ('the cost of Plan 4C 2014-2024, or of one of its axes').",
-      "properties": [
-        {
-          "id": "claim_ids",
-          "type": "array<uuid>",
-          "required": true
-        }
-      ],
-      "cardinality": "many-to-many",
-      "notes": "v1.6 (Decision 59). A total for two purposes points at both ('$1 billion that addresses both flooding and heat' → Flooding and Extreme heat). No edge records that two totals overlap; they are never added together.",
-      "extract_hint": "Link each purpose the text attaches the total to: the hazard, system, solution or vulnerability it is 'for' or 'addresses', or the plan or goal whose cost or budget it states ('the Plan costs COP 147,125 million'; 'Priorities 1-3 total ...').",
-      "@id": "ab:fundingTotalForPurposePlan",
-      "@type": "owl:ObjectProperty",
-      "rdfs:subPropertyOf": {
-        "@id": "ab:forPurpose"
-      },
-      "rdfs:domain": {
-        "@id": "ab:FundingTotal"
-      },
-      "rdfs:range": {
-        "@id": "ab:Plan"
-      }
-    },
-    {
-      "id": "FOR_PURPOSE",
-      "label": "for purpose",
-      "source": "FundingTotal",
-      "target": "ResilienceGoal",
-      "definition": "The source attributes the total to this resilience goal ('the cost of Priorities 1-3').",
-      "properties": [
-        {
-          "id": "claim_ids",
-          "type": "array<uuid>",
-          "required": true
-        }
-      ],
-      "cardinality": "many-to-many",
-      "notes": "v1.6 (Decision 59). A total for two purposes points at both ('$1 billion that addresses both flooding and heat' → Flooding and Extreme heat). No edge records that two totals overlap; they are never added together.",
-      "extract_hint": "Link each purpose the text attaches the total to: the hazard, system, solution or vulnerability it is 'for' or 'addresses', or the plan or goal whose cost or budget it states ('the Plan costs COP 147,125 million'; 'Priorities 1-3 total ...').",
-      "@id": "ab:fundingTotalForPurposeResilienceGoal",
-      "@type": "owl:ObjectProperty",
-      "rdfs:subPropertyOf": {
-        "@id": "ab:forPurpose"
-      },
-      "rdfs:domain": {
-        "@id": "ab:FundingTotal"
-      },
-      "rdfs:range": {
-        "@id": "ab:ResilienceGoal"
       }
     },
     {
@@ -5251,10 +5195,10 @@
   ],
   "metadata": {
     "types_count": 23,
-    "relationships_count": 77,
+    "relationships_count": 75,
     "vocabularies_count": 38,
     "change_history": [
-      "v1.7 (2026-11-09): six vocabulary terms (Decision 60): Flood (type not stated), Soil erosion, and four vulnerable-population groups. 54 hazards, 25 population groups. No type or relationship changes: 23 types, 77 relationships.",
+      "v1.7 (2026-11-09): six vocabulary terms (Decision 60): Flood (type not stated), Soil erosion, and four vulnerable-population groups. 54 hazards, 25 population groups; FOR_PURPOSE no longer reaches Plan or ResilienceGoal: 23 types, 75 relationships.",
       "v1.6 (2026-10-29): FundingTotal — a stated total of money for a purpose, kept apart from FundingAllocation (Decision 59). New FOR_PURPOSE, BUDGETED_BY, INCLUDES; PROVIDED_BY gains FundingTotal. 23 types, 77 relationships, 54 predicate ids.",
       "v1.5.1 (2026-10-29): money notes reworded — amount and max_award are full numbers in base currency units, never currency-converted (Decision 58). Types, relationships and vocabularies unchanged.",
       "v1.5 (2026-10-20): 131 solution concepts added (Decision 57). Types and relationships unchanged.",
@@ -5329,7 +5273,7 @@
     {
       "version": "v1.7",
       "date": "2026-11-09",
-      "summary": "v1.7 — one decision (Decision 60): six terms real plans needed. 'Flood (type not stated)', the parent of the four flood types, for a source that says only 'flooding'; 'Soil erosion' (UNDRR GH0403); and four vulnerable-population groups. Vocabulary only.",
+      "summary": "v1.7 — one decision (Decision 60): six terms real plans needed. 'Flood (type not stated)', the parent of the four flood types, for a source that says only 'flooding'; 'Soil erosion' (UNDRR GH0403); and four vulnerable-population groups. Also removes the two FOR_PURPOSE edges to Plan and ResilienceGoal.",
       "changes": [
         {
           "type": "added",
@@ -5346,6 +5290,10 @@
         {
           "type": "changed",
           "text": "Hazard.extract_hint: a generic 'flooding' takes the new term and is never folded into a type the text does not name"
+        },
+        {
+          "type": "removed",
+          "text": "FOR_PURPOSE: FundingTotal -> Plan and -> ResilienceGoal, per Anthony's 2026-10-30 decision (Decision 60)"
         }
       ]
     },

@@ -14,7 +14,7 @@ adaptbase-core staging review: terms plans use and the closed lists did not have
 2. **`soil_erosion`** (UNDRR-ISC HIPs 2025, GH0403), in Geohazards: inland loss of soil by water or wind. Coastal erosion stays its own term. Keeps the hazard list attached to the UNDRR profiles.
 3. **Four vulnerable-population groups**: Pregnant and Postpartum People, Informal Workers, Households without Cooling, Transit-Dependent People.
 
-Vocabulary only: no type, relationship or property changes.
+4. **FOR_PURPOSE no longer reaches Plan or ResilienceGoal.** Those two edges were added to v1.6 after adaptbase-core pinned it. On 2026-10-30 Anthony decided to delete them rather than widen the ontology, and core removed them from its database. `FundingTotal.total_stage`, added in the same later commit, stays.
 
 ## Decision 59 — a stated total of money for a purpose is a FundingTotal (2026-10-29, v1.6)
 

@@ -6,11 +6,14 @@ Re-runnable: terms are added once; ontology-v1.7.jsonld and versions.json are re
 Then run scripts/export/build_vocab_jsonld.py for the vocabulary twins.
 
 v1.7 is one decision (Decision 60, Anthony 2026-10-13 and 2026-10-15): six vocabulary
-terms that real plans needed and the lists did not have. No type, relationship or
-property changes.
+terms that real plans needed and the lists did not have. It also takes out the two
+FOR_PURPOSE edges (FundingTotal -> Plan, -> ResilienceGoal) that were added to v1.6 after
+adaptbase-core pinned it: Anthony decided on 2026-10-30 to delete them rather than widen
+the ontology. Their wording is restored from the commit core pinned.
 """
 
 import json
+import subprocess
 from copy import deepcopy
 from pathlib import Path
 
@@ -21,6 +24,7 @@ DST = ONT / "ontology-v1.7.jsonld"
 HAZARDS = ONT / "vocabularies" / "hazards.json"
 POPULATIONS = ONT / "vocabularies" / "vulnerable-populations.json"
 VERSION = "v1.7"
+PINNED_V1_6 = "dc2a557"  # the v1.6 adaptbase-core pinned, before the two edges
 DATE = "2026-11-09"
 UPDATED = "2026-11-09T18:00:00.000Z"
 
@@ -114,6 +118,24 @@ def add_vocabulary_terms() -> tuple[int, int]:
 def main() -> None:
     n_haz, n_pop = add_vocabulary_terms()
     o = deepcopy(load(SRC))
+    pinned = json.loads(
+        subprocess.check_output(
+            ["git", "show", f"{PINNED_V1_6}:ontology/ontology-v1.6.jsonld"], cwd=REPO
+        )
+    )
+    o["relationships"] = [
+        r
+        for r in o["relationships"]
+        if not (r["id"] == "FOR_PURPOSE" and r["target"] in ("Plan", "ResilienceGoal"))
+    ]
+    ft, old_ft = by_id(o["types"], "FundingTotal"), by_id(pinned["types"], "FundingTotal")
+    for key in ("definition", "extract_hint"):
+        ft[key] = old_ft[key]
+    was = {(r["id"], r["target"]): r for r in pinned["relationships"] if r["id"] == "FOR_PURPOSE"}
+    for r in o["relationships"]:
+        if r["id"] == "FOR_PURPOSE":
+            r["extract_hint"] = was[(r["id"], r["target"])]["extract_hint"]
+    o["metadata"]["relationships_count"] = len(o["relationships"])
 
     hz = by_id(o["types"], "Hazard")
     hz["definition"] = hz["definition"].replace("50 specific hazards", f"{n_haz} specific hazards")
@@ -138,7 +160,7 @@ def main() -> None:
     summary = (
         f"v1.7 (2026-11-09): six vocabulary terms (Decision 60): Flood (type not stated), Soil "
         f"erosion, and four vulnerable-population groups. {n_haz} hazards, {n_pop} population "
-        f"groups. No type or relationship changes: {md['types_count']} types, "
+        f"groups; FOR_PURPOSE no longer reaches Plan or ResilienceGoal: {md['types_count']} types, "
         f"{md['relationships_count']} relationships."
     )
     md["change_history"] = [h for h in md.get("change_history", []) if not h.startswith("v1.7 ")]
@@ -149,7 +171,8 @@ def main() -> None:
     o["update_note"] = (
         "v1.7 — one decision (Decision 60): six terms real plans needed. 'Flood (type not "
         "stated)', the parent of the four flood types, for a source that says only 'flooding'; "
-        "'Soil erosion' (UNDRR GH0403); and four vulnerable-population groups. Vocabulary only."
+        "'Soil erosion' (UNDRR GH0403); and four vulnerable-population groups. Also removes the "
+        "two FOR_PURPOSE edges to Plan and ResilienceGoal."
     )
     o["version_notes"] = [n for n in o.get("version_notes", []) if n.get("version") != VERSION]
     o["version_notes"].insert(
@@ -163,6 +186,7 @@ def main() -> None:
                 {"type": "added", "text": "hazards.json: soil_erosion, UNDRR GH0403 (Decision 60)"},
                 {"type": "added", "text": "vulnerable-populations.json: Pregnant and Postpartum People, Informal Workers, Households without Cooling, Transit-Dependent People (Decision 60)"},
                 {"type": "changed", "text": "Hazard.extract_hint: a generic 'flooding' takes the new term and is never folded into a type the text does not name"},
+                {"type": "removed", "text": "FOR_PURPOSE: FundingTotal -> Plan and -> ResilienceGoal, per Anthony's 2026-10-30 decision (Decision 60)"},
             ],
         },
     )
