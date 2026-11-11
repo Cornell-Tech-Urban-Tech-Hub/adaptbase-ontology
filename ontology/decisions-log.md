@@ -6,6 +6,16 @@
 
 ---
 
+## Decision 61 — "Storm (type not stated)" (2026-11-11, v1.8)
+
+adaptbase-core staging review, Miami-area plans: the hazard list splits storms into Cyclone (Hurricane/Typhoon), Tropical storm, Storm surge, Rain storm, Electrical storm, Severe wind, Tornado, Heavy snow and Ice, hail, freezing rain, with no umbrella. A plan that says only "storms" had nothing to attach to: about 75 staged links from the ten Miami-area plans were waiting on it. Anthony decided on 2026-11-11 to add the parent term, following Decision 60's "Flood (type not stated)".
+
+1. **`storm_type_not_stated`, "Storm (type not stated)"**: the parent of the storm types. Used only when the passage names no type of storm. A passage that indicates a type still takes that type, decided from the words of the passage and never from where the city is.
+
+Considered and not done: a general wildfire term. Forest fire and Land fire cover the few staged mentions, and a second umbrella for seven links was not worth a term.
+
+The known cost: a search for hurricane actions does not find what is filed under the general term, and an umbrella invites use where a type could have been read. The rule above and the reviewer's per-mention read are the guard.
+
 ## Decision 60 — six vocabulary terms real plans needed (2026-11-09, v1.7)
 
 adaptbase-core staging review: terms plans use and the closed lists did not have. Anthony decided these on 2026-10-13 (flood, populations) and 2026-10-15 (soil erosion).
