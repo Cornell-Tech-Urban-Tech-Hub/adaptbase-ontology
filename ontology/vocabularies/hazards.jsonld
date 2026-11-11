@@ -234,6 +234,41 @@
           }
         },
         {
+          "id": "storm_type_not_stated",
+          "name": "Storm (type not stated)",
+          "c40_arup_category": null,
+          "hazard_source": "c40_arup",
+          "undrr_terms": [
+            "storm",
+            "storms",
+            "storm events",
+            "severe weather",
+            "coastal storm"
+          ],
+          "broader_of": [
+            "cyclone_hurricane_typhoon",
+            "tropical_storm",
+            "storm_surge",
+            "rain_storm",
+            "electrical_storm",
+            "severe_wind",
+            "tornado",
+            "heavy_snow",
+            "ice_hail_freezing_rain"
+          ],
+          "added_in": "v1.8",
+          "_note": "v1.8 (Decision 61): the parent of the storm types, for sources that say only 'storms'.",
+          "definition": "A storm where the passage names no type. Use only then: a passage that indicates a hurricane or typhoon, a tropical storm, storm surge, intense rainfall, lightning, damaging wind, a tornado, snow or ice takes cyclone_hurricane_typhoon, tropical_storm, storm_surge, rain_storm, electrical_storm, severe_wind, tornado, heavy_snow or ice_hail_freezing_rain.",
+          "@id": "abv:hazards-storm_type_not_stated",
+          "@type": "skos:Concept",
+          "skos:broader": {
+            "@id": "abv:hazards-meteorological_hydrological"
+          },
+          "skos:inScheme": {
+            "@id": "abv:hazards"
+          }
+        },
+        {
           "id": "heavy_snow",
           "name": "Heavy snow",
           "c40_arup_category": "precipitation",
