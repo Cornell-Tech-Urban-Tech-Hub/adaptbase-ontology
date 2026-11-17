@@ -5,7 +5,7 @@ maps the entities, relationships, and vocabularies needed to organize, compare, 
 analyze how cities respond to climate hazards.
 
 **Live viewer:** [ontology.adaptbase.us](https://ontology.adaptbase.us/)
-**Current version:** v1.8 (2026-11-11)
+**Current version:** v1.9 (2026-11-16)
 
 ---
 
@@ -20,6 +20,8 @@ issues come up; items here are the next things we work on.
   corpus has been extracted, review it again against what plans actually prescribe (proposed
   concepts, Solutions with no `concept_id`, the dropped umbrellas, the 22 unmapped CDP labels)
   and revise it in one versioned pass.
+- **Company directory follow-ons** (Decision 62): a parent-company link between Suppliers
+  for acquisitions; more `Supplier.role` values (software and data, financial services).
 - **Finance follow-ons** (Decision 43 §10): a `FundingAward` registry with external ids
   (USAspending, SAM); currency conversion at read time; repayment flows.
 - **A population-group concept node** so equity intent can be lifted from
@@ -32,11 +34,12 @@ issues come up; items here are the next things we work on.
   plans don't use, measured after the extraction prompt review on a re-extracted sample
   (many "unused" classifications are ones the extractor never asked for). Census of
   2026-10-08 in adaptbase-core `_planning/to-do/ONTOLOGY-V1.3-PRUNING-CENSUS.md`:
-  Supplier (2 nodes), CapitalProject (6 of 114 plans), PlanningData (48% with no edges)
-  are the first to examine.
+  CapitalProject (6 of 114 plans), PlanningData (48% with no edges) are the first to
+  examine. Supplier is no longer a candidate: v1.9 (Decision 62) builds the company
+  directory on it.
 - **Left out of v1.2 on purpose** (review FABLE-ONTOLOGY-REVIEW-2026-10-06): Mechanism
-  node vs property (item 4: kept); the Solution-categories tier review and folding Supplier
-  into Stakeholder (item 10: with the concept re-review above); re-anchoring `BLOCKS` /
+  node vs property (item 4: kept); the Solution-categories tier review (item 10: with the concept re-review above; its
+  other half, folding Supplier into Stakeholder, was closed by Decision 62); re-anchoring `BLOCKS` /
   `REQUIRES` (L-5); a `HazardEvent` type (P-2); `_usd` money fields → amount + currency
   (C-7); `derived_from` on Hazard / UrbanSystem / ResilienceGoal category fields (L-12); CRF
   goal descriptions (Y-1); hazard id normalisation (C-9: declined, ids are keys in consumers).

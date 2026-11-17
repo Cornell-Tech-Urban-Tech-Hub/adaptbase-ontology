@@ -1,10 +1,37 @@
 # Ontology Design Decisions Log
 
 **Project:** AdaptBase ontology  
-**Version:** 1.7  
-**Last Updated:** 2026-11-09
+**Version:** 1.9  
+**Last Updated:** 2026-11-16
 
 ---
+
+## Decision 62 — the company directory: Supplier profile, OFFERS, funding rounds (2026-11-16, v1.9)
+
+adaptbase-core is starting an ongoing research effort on the companies that sell adaptation solutions and the investors behind them (`_planning/to-do/SOLUTION-SUPPLIER-EXPANSION-PLAN.md`). The ontology could not hold it: a Supplier had a name and a four-value role, its only link was `SUPPLIES` to an Action, and money could only `FUND` an Action or a CapitalProject. On 2026-11-16 the graph held 79 Suppliers, 27 of them with no link at all. Anthony chose among options drawn on real nodes (four choices, the no-change option first in each).
+
+1. **`OFFERS` (Supplier → Solution)**, with `product_names`: the kinds of solution a company sells. v0.8 took `SUPPLIES` off Solution (Decision 33) because the extracted facts were one city's procurement, pinned to a node every city shares. `OFFERS` is a different fact: it is about the company and true wherever it sells, so it may sit on the shared node. Two rules keep it that way. It is written only from a source about the company itself (its own site, an investor's description, a market list), never inferred from one deployment. And readers treat `Solution ← OFFERS ← Supplier` as "who sells this kind of thing", never as "who supplied this city"; that question is `SUPPLIES` on the Action.
+2. **A funding round is a `FundingAllocation`.** `FUNDS` gains FundingAllocation → Supplier; the round is `PROVIDED_BY` each investor (an investment firm is a Stakeholder, its named fund a FundingStream). Anthony chose this over a direct investor-to-company link so that a round holds its amount once however many investors joined, and so rounds can be counted by year and kind ("the extra work is worthwhile for us to understand investment trends").
+3. **What the round model needs**, added with it and not on the options page:
+   - `FundingAllocation.round_type`, bound to the new `enums.round_type`: `pre_seed`, `seed`, `series_a`, `series_b`, `series_c_or_later`, `growth`, `grant`, `accelerator_cohort`, `debt`, `other`, `not_stated`. `instrument_class` still says what form the money takes.
+   - `is_lead` on the three FundingAllocation `PROVIDED_BY` pairs: which investor led is a fact about one investor in one round.
+   - `PROVIDED_BY` gains FundingAllocation → Supplier, for an investing company that is itself held as a Supplier.
+   - The FundingAllocation definition names a company as something an allocation can fund.
+4. **Three rules that come with the round model.**
+   - *A bare portfolio listing is still a node.* "One of our portfolio companies" is one allocation for that investor and that company, `round_type: not_stated`, no amount. A stated round found later for the same pair may be the same round; a reviewer decides, and the consuming store matches rounds of one company by kind and year.
+   - *No sum mixes company rounds with project money.* An allocation that FUNDS a Supplier is money invested in a company; one that FUNDS an Action or CapitalProject is money spent on adaptation work. Every reader that adds up amounts filters on the `FUNDS` target. This is Decision 59's rule for FundingTotal, applied again.
+   - *Amounts follow Decision 58*: full base units, never converted; the round's year is `period_start_year` = `period_end_year`.
+5. **Supplier profile**: `website`, `description` (one or two sentences written by the maintainers, never copied marketing text, no named people), `founded_year`, `operating_status` (`active` | `acquired` | `closed`). In adaptbase-core the website's registrable domain becomes a verified identifier for a Supplier, next to a Wikidata QID; a Supplier still never merges on its name.
+6. **`LOCATED_IN` gains Supplier → Jurisdiction**: the headquarters, city when known, otherwise country. `LOCATED_IN` now has two pairs, so the ExposureUnit pair's `@id` becomes `ab:exposureUnitLocatedInJurisdiction` under `ab:locatedIn`, as for every predicate with several pairs.
+7. **`SUPPLIES.product_names`**: a product's name is text on the link. There is no product node.
+
+Considered and not done: a direct `BACKS` link from investor to company (the option recommended to Anthony; he chose the round node); an Investor type (an investor is the Stakeholder or FundingStream a round is `PROVIDED_BY`); a Product type; any type for a named person; folding Supplier into Stakeholder (review 2026-10-06, item 10), which this decision closes by building on Supplier.
+
+Held for a later release: a parent-company link between Suppliers for acquisitions, and more `Supplier.role` values (software and data, financial services).
+
+The known costs. A round node exists for every investor-and-company pair even when the source says only "portfolio company", so most rounds will carry no kind and no amount at first. The same round reported by two sources is two nodes until they are matched. And FundingAllocation now covers two kinds of money that must never be added together; the guard is the rule in point 4 and a check in adaptbase-core, not the schema.
+
+23 types, 79 relationships, 55 predicate ids. Built by `scripts/migrations/v1_9_from_v1_8.py`.
 
 ## Decision 61 — "Storm (type not stated)" (2026-11-11, v1.8)
 

@@ -1237,6 +1237,68 @@
       }
     ]
   },
+  "round_type": {
+    "_source": "v1.9 (Decision 62)",
+    "_usage": "FundingAllocation.round_type",
+    "_note": "Only on an allocation that FUNDS a Supplier. The kind of round as the source names it; not_stated when a source says only that the investor backs the company.",
+    "values": [
+      {
+        "id": "pre_seed",
+        "name": "Pre-seed",
+        "description": "A pre-seed or angel round."
+      },
+      {
+        "id": "seed",
+        "name": "Seed",
+        "description": "A seed round."
+      },
+      {
+        "id": "series_a",
+        "name": "Series A",
+        "description": "A Series A round."
+      },
+      {
+        "id": "series_b",
+        "name": "Series B",
+        "description": "A Series B round."
+      },
+      {
+        "id": "series_c_or_later",
+        "name": "Series C or later",
+        "description": "A Series C or any later lettered round."
+      },
+      {
+        "id": "growth",
+        "name": "Growth or private equity",
+        "description": "A growth-equity or private-equity investment the source does not give a series letter."
+      },
+      {
+        "id": "grant",
+        "name": "Grant",
+        "description": "A grant or award to the company from a public or philanthropic funder ('an SBIR Phase II award')."
+      },
+      {
+        "id": "accelerator_cohort",
+        "name": "Accelerator or incubator cohort",
+        "description": "The company was taken into an accelerator or incubator cohort. May carry no money."
+      },
+      {
+        "id": "debt",
+        "name": "Debt",
+        "description": "A loan or venture debt to the company."
+      },
+      {
+        "id": "other",
+        "name": "Other",
+        "description": "A kind of round the source names that is none of the above."
+      },
+      {
+        "id": "not_stated",
+        "name": "Not stated",
+        "description": "The source says the investor backs the company and names no round ('one of our portfolio companies')."
+      }
+    ]
+  },
   "amount_qualifier": {
     "_source": "v1.1 (Decision 43; adaptbase-core#298 §4.4)",
     "_usage": "FundingAllocation.amount_qualifier",
