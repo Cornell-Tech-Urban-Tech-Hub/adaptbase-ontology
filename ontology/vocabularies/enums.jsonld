@@ -2378,6 +2378,125 @@
     "@id": "abv:enums-total_stage",
     "@type": "skos:ConceptScheme"
   },
+  "round_type": {
+    "_source": "v1.9 (Decision 62)",
+    "_usage": "FundingAllocation.round_type",
+    "_note": "Only on an allocation that FUNDS a Supplier. The kind of round as the source names it; not_stated when a source says only that the investor backs the company.",
+    "values": [
+      {
+        "id": "pre_seed",
+        "name": "Pre-seed",
+        "description": "A pre-seed or angel round.",
+        "@id": "abv:enums-round_type-pre_seed",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-round_type"
+        }
+      },
+      {
+        "id": "seed",
+        "name": "Seed",
+        "description": "A seed round.",
+        "@id": "abv:enums-round_type-seed",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-round_type"
+        }
+      },
+      {
+        "id": "series_a",
+        "name": "Series A",
+        "description": "A Series A round.",
+        "@id": "abv:enums-round_type-series_a",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-round_type"
+        }
+      },
+      {
+        "id": "series_b",
+        "name": "Series B",
+        "description": "A Series B round.",
+        "@id": "abv:enums-round_type-series_b",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-round_type"
+        }
+      },
+      {
+        "id": "series_c_or_later",
+        "name": "Series C or later",
+        "description": "A Series C or any later lettered round.",
+        "@id": "abv:enums-round_type-series_c_or_later",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-round_type"
+        }
+      },
+      {
+        "id": "growth",
+        "name": "Growth or private equity",
+        "description": "A growth-equity or private-equity investment the source does not give a series letter.",
+        "@id": "abv:enums-round_type-growth",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-round_type"
+        }
+      },
+      {
+        "id": "grant",
+        "name": "Grant",
+        "description": "A grant or award to the company from a public or philanthropic funder ('an SBIR Phase II award').",
+        "@id": "abv:enums-round_type-grant",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-round_type"
+        }
+      },
+      {
+        "id": "accelerator_cohort",
+        "name": "Accelerator or incubator cohort",
+        "description": "The company was taken into an accelerator or incubator cohort. May carry no money.",
+        "@id": "abv:enums-round_type-accelerator_cohort",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-round_type"
+        }
+      },
+      {
+        "id": "debt",
+        "name": "Debt",
+        "description": "A loan or venture debt to the company.",
+        "@id": "abv:enums-round_type-debt",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-round_type"
+        }
+      },
+      {
+        "id": "other",
+        "name": "Other",
+        "description": "A kind of round the source names that is none of the above.",
+        "@id": "abv:enums-round_type-other",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-round_type"
+        }
+      },
+      {
+        "id": "not_stated",
+        "name": "Not stated",
+        "description": "The source says the investor backs the company and names no round ('one of our portfolio companies').",
+        "@id": "abv:enums-round_type-not_stated",
+        "@type": "skos:Concept",
+        "skos:topConceptOf": {
+          "@id": "abv:enums-round_type"
+        }
+      }
+    ],
+    "@id": "abv:enums-round_type",
+    "@type": "skos:ConceptScheme"
+  },
   "amount_qualifier": {
     "_source": "v1.1 (Decision 43; adaptbase-core#298 §4.4)",
     "_usage": "FundingAllocation.amount_qualifier",
