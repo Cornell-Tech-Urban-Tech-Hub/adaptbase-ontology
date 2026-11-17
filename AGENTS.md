@@ -13,7 +13,7 @@ vocabularies that model how cities adapt to climate change. Versioned JSON in
 `ontology/`, displayed by a browser-based viewer in `viewer/`, deployed to
 [ontology.adaptbase.us](https://ontology.adaptbase.us/) via GitHub Pages.
 
-**Current version:** v1.7 (2026-11-09)
+**Current version:** v1.8 (2026-11-11)
 
 ## Repo layout
 
