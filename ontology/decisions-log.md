@@ -1,10 +1,26 @@
 # Ontology Design Decisions Log
 
 **Project:** AdaptBase ontology  
-**Version:** 1.9  
-**Last Updated:** 2026-11-16
+**Version:** 1.10  
+**Last Updated:** 2026-11-24
 
 ---
+
+## Decision 63 — whose figure, and how it was arrived at: `Indicator.value_basis` (2026-11-24, v1.10)
+
+adaptbase-core's landing page showed four outcome examples as results in the city whose document they came from, and none was (London's review citing Medellín's 2°C cooling; Minneapolis quoting 8,000 heat deaths in the United States). The cause is here: `Indicator.measured_value` was a free string with the hint "look for quantified metrics with numbers", and nothing recorded whose figure it was or how it was arrived at. adaptbase-core then read every `Outcome -MEASURED_BY-> Indicator` pair that carried a figure against its passage (383 pairs, `_planning/audits/OUTCOME-LOCALITY-AUDIT-20261124.md`): 172 were a result in the document's own place. The rest were another place's result cited as an example (21), a national or global figure (10), a projection or a value from earlier studies (70), damage from a hazard (59), or a status figure, a mismatch or a target (51). Anthony approved the fix on 2026-11-24.
+
+1. **`Indicator.measured_value` is a figure for the document's own place.** Observed, estimated or projected there. A figure from another city, a national or global figure, or a value quoted from studies is not recorded in it.
+2. **`Indicator.value_basis`**, bound to the new `enums.value_basis`: `measured` (observed or counted after the fact), `estimated` (an estimate or model result for something that happened or exists), `projected` (what a measure is expected to achieve, or a scenario). Set whenever `measured_value` is set. A reader that wants "what was measured" filters on it; a place's own projection stays in the graph and says what it is.
+3. **What is not an Outcome**, added to the Outcome and Indicator hints. Damage, deaths, losses or risk from a hazard are not the result of anything done. A result another city achieved, cited as an example, is not this document's Outcome. What a kind of solution does in general is an Outcome a Solution `PRODUCES`, never one an Action `RESULTS_IN`.
+
+Considered and not done: a place property on the Indicator. Once figures from elsewhere are not recorded, every figure is the document place's own, and a property for "this is someone else's figure" would give other cities' results a permanent home under the wrong city. A fourth basis value for figures quoted from studies: those belong to a kind of solution, not to a place, and where a general figure for a Solution should live is left for a later release. Using `Outcome.evidence_level`: it grades how rigorous a measurement is (anecdotal, measured, rigorously evaluated) and is empty on most Outcomes; whether a figure is a measurement at all is a different question.
+
+The known costs. A real result in another city (Medellín's corridors did cool the city) is no longer recorded from a document that only cites it; it enters the graph when Medellín's own documents are read. The rule depends on the extractor telling a case study from the document's own place, which a passage does not always make plain. And Outcomes with no figure carry the same problem in their names; this release does not reach them.
+
+In adaptbase-core the 383 pairs were sorted by a model judge with a hand-read sample. 96 pairs were removed on 2026-11-24 under a reversible run (165 nodes); the Indicators of the other 287 pairs get `value_basis` in a second run once v1.10 is pinned (`packages/importers/scripts/apply_outcome_locality.py`).
+
+23 types, 79 relationships, 55 predicate ids (unchanged). Built by `scripts/migrations/v1_10_from_v1_9.py`.
 
 ## Decision 62 — the company directory: Supplier profile, OFFERS, funding rounds (2026-11-16, v1.9)
 

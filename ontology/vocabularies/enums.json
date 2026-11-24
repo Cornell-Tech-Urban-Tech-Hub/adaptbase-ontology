@@ -89,6 +89,28 @@
       }
     ]
   },
+  "value_basis": {
+    "_source": "v1.10 (Decision 63)",
+    "_usage": "Indicator.value_basis",
+    "_note": "How the figure in Indicator.measured_value was arrived at. Set whenever measured_value is set. The figure itself always describes the document's own place.",
+    "values": [
+      {
+        "id": "measured",
+        "name": "Measured",
+        "description": "Observed, counted or recorded after the fact."
+      },
+      {
+        "id": "estimated",
+        "name": "Estimated",
+        "description": "An estimate or a model result for something that has happened or exists; the source says estimated, modeled or calculated."
+      },
+      {
+        "id": "projected",
+        "name": "Projected",
+        "description": "What a measure is expected to achieve, or the result of a scenario. Nothing has been observed yet."
+      }
+    ]
+  },
   "outcome_type": {
     "_usage": "Outcome.outcome_type, PRODUCES.outcome_type, RESULTS_IN.outcome_type",
     "values": [
