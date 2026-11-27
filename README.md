@@ -5,7 +5,7 @@ maps the entities, relationships, and vocabularies needed to organize, compare, 
 analyze how cities respond to climate hazards.
 
 **Live viewer:** [ontology.adaptbase.us](https://ontology.adaptbase.us/)
-**Current version:** v1.10 (2026-11-24)
+**Current version:** v1.11 (2026-11-27)
 
 ---
 
@@ -20,9 +20,10 @@ issues come up; items here are the next things we work on.
   corpus has been extracted, review it again against what plans actually prescribe (proposed
   concepts, Solutions with no `concept_id`, the dropped umbrellas, the 22 unmapped CDP labels)
   and revise it in one versioned pass.
-- **Outcome follow-ons** (Decision 63): where a figure quoted from studies for a kind of
-  solution should live (today it is not recorded); the same own-place rule for Outcomes that
-  carry a figure only in their name.
+- **Outcome follow-ons** (Decisions 63 and 64): where a figure quoted from studies for a kind
+  of solution should live (today it is not recorded); the same own-place rule for Outcomes
+  that carry a figure only in their name; whether an Outcome that no Action or Solution
+  produces belongs in the graph; moving a place's own result off a shared Solution node.
 - **Company directory follow-ons** (Decision 62): a parent-company link between Suppliers
   for acquisitions; more `Supplier.role` values (software and data, financial services).
 - **Finance follow-ons** (Decision 43 §10): a `FundingAward` registry with external ids

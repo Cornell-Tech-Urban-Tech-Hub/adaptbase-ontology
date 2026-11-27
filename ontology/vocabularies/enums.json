@@ -111,6 +111,38 @@
       }
     ]
   },
+  "outcome_basis": {
+    "_source": "v1.11 (Decision 64)",
+    "_usage": "Outcome.basis",
+    "_note": "Whether the Outcome happened, is expected, is a general effect of a kind of solution, or is a plan's own desired outcome. Set on every Outcome. measured, estimated and projected mean what they mean in value_basis; an Outcome with an Indicator that carries a figure takes that Indicator's value_basis.",
+    "values": [
+      {
+        "id": "measured",
+        "name": "Measured",
+        "description": "It happened in the document's own place, and the source observed or counted it after the fact."
+      },
+      {
+        "id": "estimated",
+        "name": "Estimated",
+        "description": "It happened or exists in the document's own place, and its size is an estimate or a model result."
+      },
+      {
+        "id": "projected",
+        "name": "Projected",
+        "description": "What the document expects an action or a solution to achieve in its own place. Nothing has been observed yet."
+      },
+      {
+        "id": "general",
+        "name": "General",
+        "description": "What a kind of solution does, in no particular place. Never on an Outcome an Action RESULTS_IN."
+      },
+      {
+        "id": "target",
+        "name": "Target",
+        "description": "A plan's own desired outcome: what the plan sets out to bring about, stated as an aim rather than as the expected result of one action."
+      }
+    ]
+  },
   "outcome_type": {
     "_usage": "Outcome.outcome_type, PRODUCES.outcome_type, RESULTS_IN.outcome_type",
     "values": [

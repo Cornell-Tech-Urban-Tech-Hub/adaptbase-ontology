@@ -1,10 +1,32 @@
 # Ontology Design Decisions Log
 
 **Project:** AdaptBase ontology  
-**Version:** 1.10  
-**Last Updated:** 2026-11-24
+**Version:** 1.11  
+**Last Updated:** 2026-11-27
 
 ---
+
+## Decision 64 — did it happen: `Outcome.basis` (2026-11-24, v1.11)
+
+Decision 63 said whose figure an Indicator holds and how it was arrived at. The same gap sat one level up. The type was defined as "a measured or observed result", but extraction also files what a plan promises under it, and nothing on the node told the two apart. adaptbase-core's second pass (`_planning/audits/OUTCOME-LOCALITY-AUDIT-20261124.md`, "Second pass") read every Outcome against its passage. Of the 1,661 in the graph on 2026-11-24, about 500 are something that happened, about 800 are what a plan says will happen, and about 330 are a general claim about a kind of solution. Public pages called all of them "outcomes recorded". Anthony chose among six options drawn on the same six real nodes (the no-change option first) on 2026-11-24: option B, with a plan's desired outcome as its own value.
+
+1. **`Outcome.basis`**, bound to the new `enums.outcome_basis`. Set on every Outcome.
+   - `measured`: it happened in the document's own place, and the source observed or counted it after the fact.
+   - `estimated`: it happened or exists there, and its size is an estimate or a model result.
+   - `projected`: what the document expects an action or a solution to achieve in its own place. Nothing has been observed yet.
+   - `general`: what a kind of solution does, in no particular place.
+   - `target`: a plan's own desired outcome, stated as an aim rather than as the expected result of one action ("Desired outcome: increased safety in communities", a row of a results framework).
+2. **The first three values are `Indicator.value_basis`'s words with the same meanings**, so one filter (`measured`, `estimated`) reads results at both levels. An Outcome with an Indicator that carries a `measured_value` takes that Indicator's `value_basis`.
+3. **`general` never sits on an Outcome an Action `RESULTS_IN`.** An Action is one place's activity; what a kind of solution does anywhere belongs to the Solution that `PRODUCES` it.
+4. **The definition is widened to what the type holds**: a result that was measured or estimated, one the document expects, a plan's own desired outcome, or what a kind of solution does in general. `basis` says which.
+
+Considered and not done. *Reusing `evidence_level` with an added `expected`*: it grades how rigorous a measurement is, has no place for "estimated", and Decision 63 turned the same reuse down for figures. *Putting the label on `RESULTS_IN` and `PRODUCES`*: 957 of the 1,661 Outcomes have no producing edge to carry it, and it would undo Decision 50, which moved Outcome properties off those edges. *Turning a plan's desired outcomes into `SETS` edges to the 22 City Resilience Framework goals*: the goals are too broad to hold a plan's specific aim, and the target figure would leave `Indicator.target`. *Holding the type to "only what happened"*: it would remove about 600 expected benefits that the landing page, the report builder and the nature-based solutions page use. *Folding `target` into `projected`*: Anthony chose a separate value so that targets set can be counted against results met.
+
+The known costs. `general` answers a second question (whose, not whether) in the same field; it is there because the graph's structure cannot carry it: a place's own results also hang off shared Solution nodes, and general claims also hang off nothing. Extraction has to tell "will" from "has" on every Outcome, and the test for Decision 63 showed that hints alone do not hold, so adaptbase-core holds an Outcome at its review step when `basis` is missing, is `general` under an Action, or disagrees with its Indicator. Whether an Outcome that nothing produces belongs in the graph at all is not decided here.
+
+In adaptbase-core the live Outcomes get `basis` in one reversible run once v1.11 is pinned (`packages/importers/scripts/apply_outcome_locality.py`), most of them from the audit's verdicts on file and the rest from their Indicator's `value_basis` or a read.
+
+23 types, 79 relationships, 55 predicate ids (unchanged). Built by `scripts/migrations/v1_11_from_v1_10.py`.
 
 ## Decision 63 — whose figure, and how it was arrived at: `Indicator.value_basis` (2026-11-24, v1.10)
 
