@@ -48,7 +48,8 @@ OUTCOME_BASIS = {
             "name": "Estimated",
             "description": (
                 "It happened or exists in the document's own place, and its size is an estimate "
-                "or a model result."
+                "or a model result. A modeled benefit of a measure not yet built, or of a future "
+                "scenario, is projected, whatever word the source uses."
             ),
         },
         {
@@ -94,8 +95,21 @@ OUTCOME_HINT_ADD = (
     "does, in no particular place; it belongs on an Outcome a Solution PRODUCES, never on one an "
     "Action RESULTS_IN. target: the plan's "
     "own desired outcome ('Desired outcome:', 'Target outcome:', a row of a results framework). "
-    "When the Outcome has an Indicator with a measured_value, basis is that Indicator's "
-    "value_basis."
+    "A modeled or estimated benefit of a measure that is not yet built, or of a future scenario "
+    "('under 2 feet of sea-level rise', 'by 2050', 'modeling shows that clustered trees would'), "
+    "is projected even when the passage says 'estimated': estimated is only for something that "
+    "has already happened or exists. When the Outcome has an Indicator with a measured_value, "
+    "basis is that Indicator's value_basis."
+)
+INDICATOR_HINT_ADD = (
+    " A figure a model gives for a measure not yet built, or for a future scenario, has "
+    "value_basis projected even when the passage says 'estimated'; estimated is for something "
+    "that has already happened or exists."
+)
+VALUE_BASIS_ESTIMATED = (
+    "An estimate or a model result for something that has happened or exists; the source says "
+    "estimated, modeled or calculated. A model result for a measure not yet built, or for a "
+    "future scenario, is projected."
 )
 
 
@@ -113,6 +127,10 @@ def by_id(items, id):
 
 def add_outcome_basis_block() -> int:
     e = load(ENUMS)
+    estimated = by_id(e["value_basis"]["values"], "estimated")
+    if estimated["description"] != VALUE_BASIS_ESTIMATED:
+        estimated["description"] = VALUE_BASIS_ESTIMATED
+        dump(ENUMS, e)
     if "outcome_basis" not in e:
         out = {}
         for k, v in e.items():
@@ -141,7 +159,9 @@ def outcome(o: dict) -> None:
             {
                 "id": "basis",
                 "type": "enum",
-                "required": False,
+                # required: every Outcome has one. adaptbase-core's extractor asks
+                # once more for a required classification it left empty.
+                "required": True,
                 "values": [v["id"] for v in OUTCOME_BASIS["values"]],
                 "note": (
                     f"{D} Whether the Outcome happened or is expected. measured (it happened and "
@@ -170,12 +190,19 @@ def outcome(o: dict) -> None:
         )
 
 
+def indicator(o: dict) -> None:
+    ind = by_id(o["types"], "Indicator")
+    if INDICATOR_HINT_ADD not in ind["extract_hint"]:
+        ind["extract_hint"] += INDICATOR_HINT_ADD
+
+
 def main() -> None:
     n_basis = add_outcome_basis_block()
     o = deepcopy(load(SRC))
     types, rels = o["types"], o["relationships"]
 
     outcome(o)
+    indicator(o)
 
     if not any(v["id"] == "enums.outcome_basis" for v in o["vocabularies"]):
         ev = by_id(o["vocabularies"], "enums.value_basis")
@@ -242,6 +269,10 @@ def main() -> None:
                 {
                     "type": "changed",
                     "text": "Outcome.extract_hint: set basis on every Outcome; general only under a Solution; an Outcome with a figure takes its Indicator's value_basis (Decision 64)",
+                },
+                {
+                    "type": "changed",
+                    "text": "Indicator.extract_hint and enums.value_basis: a model result for a measure not yet built, or for a future scenario, is projected even when the source says 'estimated' (Decision 64)",
                 },
             ],
         },

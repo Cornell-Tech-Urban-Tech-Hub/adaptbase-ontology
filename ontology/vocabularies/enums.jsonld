@@ -193,7 +193,7 @@
       {
         "id": "estimated",
         "name": "Estimated",
-        "description": "An estimate or a model result for something that has happened or exists; the source says estimated, modeled or calculated.",
+        "description": "An estimate or a model result for something that has happened or exists; the source says estimated, modeled or calculated. A model result for a measure not yet built, or for a future scenario, is projected.",
         "@id": "abv:enums-value_basis-estimated",
         "@type": "skos:Concept",
         "skos:topConceptOf": {

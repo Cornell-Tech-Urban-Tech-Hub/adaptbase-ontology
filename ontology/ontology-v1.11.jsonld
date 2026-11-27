@@ -755,7 +755,7 @@
         {
           "id": "basis",
           "type": "enum",
-          "required": false,
+          "required": true,
           "values": [
             "measured",
             "estimated",
@@ -797,7 +797,7 @@
         }
       ],
       "notes": "The outcome_type property differentiates between categories. Effectiveness indicators have additional Indicator children with baseline/target/measured values. v0.2 added monetized_value_usd, value_recurrence, valuation_method, and beneficiary_program for resilience-finance valuation. Outcomes attach to Solution (PRODUCES), Action (RESULTS_IN), or CapitalProject (PRODUCES). v0.3: FinancialInstrument may link here via CONTINGENT_ON for pay-for-success instruments. v1.11 (Decision 64). basis says whether the Outcome was measured, estimated, is projected, is a general effect of a kind of solution, or is a plan's own target; before v1.11 nothing on the node told a result from a promise.",
-      "extract_hint": "Look for reported results, measured impacts, observed benefits, or documented failures — e.g., 'reduced flood events by 40%', 'improved air quality as co-benefit', 'system failed during extreme heat event'. An Outcome is the result of something done. Damage, deaths, losses or risk from a hazard are not Outcomes. A result another city or country achieved, cited as an example, is not this document's Outcome: skip it. What a kind of solution does in general ('cool roofs lower indoor temperatures') is an Outcome a Solution PRODUCES, never one an Action RESULTS_IN. Set basis on every Outcome. measured: the passage reports it as something that happened and was observed or counted ('has reduced', 'were planted', 'met the goal in 2019'). estimated: it happened or exists and its size is an estimate or a model result ('an estimated', 'a study valued'). projected: what the document expects an action to achieve ('will reduce', 'is expected to', 'is meant to', 'could'). general: what a kind of solution does, in no particular place; it belongs on an Outcome a Solution PRODUCES, never on one an Action RESULTS_IN. target: the plan's own desired outcome ('Desired outcome:', 'Target outcome:', a row of a results framework). When the Outcome has an Indicator with a measured_value, basis is that Indicator's value_basis.",
+      "extract_hint": "Look for reported results, measured impacts, observed benefits, or documented failures — e.g., 'reduced flood events by 40%', 'improved air quality as co-benefit', 'system failed during extreme heat event'. An Outcome is the result of something done. Damage, deaths, losses or risk from a hazard are not Outcomes. A result another city or country achieved, cited as an example, is not this document's Outcome: skip it. What a kind of solution does in general ('cool roofs lower indoor temperatures') is an Outcome a Solution PRODUCES, never one an Action RESULTS_IN. Set basis on every Outcome. measured: the passage reports it as something that happened and was observed or counted ('has reduced', 'were planted', 'met the goal in 2019'). estimated: it happened or exists and its size is an estimate or a model result ('an estimated', 'a study valued'). projected: what the document expects an action to achieve ('will reduce', 'is expected to', 'is meant to', 'could'). general: what a kind of solution does, in no particular place; it belongs on an Outcome a Solution PRODUCES, never on one an Action RESULTS_IN. target: the plan's own desired outcome ('Desired outcome:', 'Target outcome:', a row of a results framework). A modeled or estimated benefit of a measure that is not yet built, or of a future scenario ('under 2 feet of sea-level rise', 'by 2050', 'modeling shows that clustered trees would'), is projected even when the passage says 'estimated': estimated is only for something that has already happened or exists. When the Outcome has an Indicator with a measured_value, basis is that Indicator's value_basis.",
       "@id": "ab:Outcome",
       "@type": "owl:Class"
     },
@@ -875,7 +875,7 @@
         }
       ],
       "notes": "Child of Outcome node. Captures quantified measurements. Baseline/target/measured_value structure supports before-after analysis and target tracking. v1.10 (Decision 63). measured_value holds a figure for the document's own place only, and value_basis says how it was arrived at; before v1.10 it held any figure the passage stated.",
-      "extract_hint": "Look for quantified metrics with numbers, units, baselines, or targets — e.g., 'reduced from 12 to 3 events per year', 'target: 50% reduction in heat-related mortality', 'baseline PM2.5 of 35 µg/m³'. Put a figure in measured_value only when it describes the document's own place, and say in value_basis whether it was measured, estimated or projected. Leave measured_value empty for a figure from another city, a national or global figure, or a value quoted from studies. A goal not yet reached goes in target.",
+      "extract_hint": "Look for quantified metrics with numbers, units, baselines, or targets — e.g., 'reduced from 12 to 3 events per year', 'target: 50% reduction in heat-related mortality', 'baseline PM2.5 of 35 µg/m³'. Put a figure in measured_value only when it describes the document's own place, and say in value_basis whether it was measured, estimated or projected. Leave measured_value empty for a figure from another city, a national or global figure, or a value quoted from studies. A goal not yet reached goes in target. A figure a model gives for a measure not yet built, or for a future scenario, has value_basis projected even when the passage says 'estimated'; estimated is for something that has already happened or exists.",
       "@id": "ab:Indicator",
       "@type": "owl:Class"
     },
@@ -5578,6 +5578,10 @@
         {
           "type": "changed",
           "text": "Outcome.extract_hint: set basis on every Outcome; general only under a Solution; an Outcome with a figure takes its Indicator's value_basis (Decision 64)"
+        },
+        {
+          "type": "changed",
+          "text": "Indicator.extract_hint and enums.value_basis: a model result for a measure not yet built, or for a future scenario, is projected even when the source says 'estimated' (Decision 64)"
         }
       ]
     },
